@@ -4,6 +4,8 @@ import { ShoppingCart, Heart } from "lucide-react";
 import useProducts from "../../hooks/Products/useProductData";
 import Loader from "../../layouts/Loader";
 import { renderStars } from "../../utils/ratingUtils";
+import { ring2 } from "ldrs";
+ring2.register();
 
 const colors = {
   primary: "#1e70d0",
@@ -63,6 +65,7 @@ const Products = () => {
   return (
     <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row gap-8">
+        {/* Filter Section */}
         <div className="w-full lg:w-1/3 h-[100%] border border-gray-200 rounded-md shadow-md p-3">
           <div className="mb-8">
             <h3
@@ -140,7 +143,9 @@ const Products = () => {
           </div>
         </div>
 
+        {/* Products Section */}
         <div className="w-full lg:w-3/4">
+          {/* Search and Filter Section */}
           <div className="flex justify-between items-center mb-6">
             <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
               <input
@@ -200,6 +205,7 @@ const Products = () => {
             <div className="text-center py-10 text-red-500">{error}</div>
           ) : (
             <>
+              {/* Products List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map((product) => (
                   <div
@@ -293,26 +299,14 @@ const Products = () => {
                   >
                     {loadMoreLoading ? (
                       <>
-                        <svg
-                          className="animate-spin h-5 w-5 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                          ></path>
-                        </svg>
+                        <l-ring-2
+                          size="20"
+                          stroke="3"
+                          stroke-length="0.25"
+                          bg-opacity="0.1"
+                          speed="0.8"
+                          color="#fff"
+                        ></l-ring-2>
                         Loading...
                       </>
                     ) : (
