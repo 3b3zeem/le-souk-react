@@ -67,7 +67,7 @@ const Products = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filter Section */}
         <div className="w-full lg:w-1/3 h-[100%] border border-gray-200 rounded-md shadow-md p-3">
-          <div className="mb-8">
+          <div className="mb-20">
             <h3
               className="relative inline-block font-bold text-2xl"
               style={{ color: colors.productName }}
@@ -132,7 +132,7 @@ const Products = () => {
             </div>
             <button
               onClick={handlePriceChange}
-              className="w-[100px] py-2 text-sm font-medium rounded-md cursor-pointer customEffect"
+              className="w-[100px] py-2 text-sm font-medium cursor-pointer customEffect"
               style={{
                 backgroundColor: colors.primary,
                 color: colors.lightText,
