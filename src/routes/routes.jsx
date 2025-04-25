@@ -10,6 +10,8 @@ const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("./../pages/Auth/Register/Register"));
 const Products = lazy(() => import("../pages/Products/Products.jsx"));
 const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
+const Cart = lazy(() => import("./../pages/Cart/Cart.jsx"));
+const WishList = lazy(() => import("./../pages/WishList/WishList.jsx"));
 
 const routes = createBrowserRouter([
   {
@@ -53,6 +55,22 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />
+          </Suspense>
+        ),
+      },
+      {
+        path: "cart",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Cart />
+          </Suspense>
+        ),
+      },
+      {
+        path: "wishlist",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <WishList />
           </Suspense>
         ),
       },

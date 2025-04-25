@@ -9,12 +9,12 @@ import {
   Heart,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-
 import "./Navbar.css";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
-
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../../context/Cart/CartContext";
+import { useWishlist } from "../../context/WishList/WishlistContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +23,21 @@ const Navbar = () => {
   const [isOpenUser, setIsOpenUser] = useState(false);
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
+  const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
 
   const isLoggedIn = !!user;
   const avatar = user?.image;
   const userName = user?.name;
   const isAdmin = localStorage.getItem("isAdmin");
+
+  const handleCartClick = () => {
+    navigate("/cart");
+  };
+
+  const handleWishlistClick = () => {
+    navigate("/wishlist");
+  };
 
   // Color variables
   const colors = {
@@ -98,27 +108,39 @@ const Navbar = () => {
 
         <div className="flex gap-4">
           {isLoggedIn ? (
-            <div
-              className="cursor-pointer relative"
-              onClick={() => setIsOpenUser((prev) => !prev)}
-            >
+            <div className="cursor-pointer relative">
               <div className="flex items-center gap-5">
                 <div className="flex justify-center gap-4">
                   <button
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    onClick={handleCartClick}
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <ShoppingCart size={20} className="text-gray-500" />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                        {cartCount}
+                      </span>
+                    )}
                   </button>
                   <button
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    onClick={handleWishlistClick}
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <Heart size={20} className="text-gray-500" />
+                    {wishlistCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                        {wishlistCount}
+                      </span>
+                    )}
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div
+                  className="flex items-center gap-2"
+                  onClick={() => setIsOpenUser((prev) => !prev)}
+                >
                   <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
                     Hello, {userName}
                   </p>
@@ -190,16 +212,28 @@ const Navbar = () => {
               <div className="flex items-center gap-3">
                 <div className="flex justify-center gap-4">
                   <button
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    onClick={handleCartClick}
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <ShoppingCart size={20} className="text-gray-500" />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                        {cartCount}
+                      </span>
+                    )}
                   </button>
                   <button
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    onClick={handleWishlistClick}
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <Heart size={20} className="text-gray-500" />
+                    {wishlistCount > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                        {wishlistCount}
+                      </span>
+                    )}
                   </button>
                 </div>
                 <button

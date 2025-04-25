@@ -5,6 +5,9 @@ import useProducts from "../../hooks/Products/useProductData";
 import Loader from "../../layouts/Loader";
 import { renderStars } from "../../utils/ratingUtils";
 import { ring2 } from "ldrs";
+import useWishlistCRUD from "../../hooks/WishList/useWishlist";
+import useCartCRUD from "../../hooks/Cart/UseCart";
+import toast from "react-hot-toast";
 ring2.register();
 
 const colors = {
@@ -35,6 +38,12 @@ const Products = () => {
     error,
     totalProducts,
   } = useProducts(searchQuery, selectedCategory, minPrice, maxPrice, perPage);
+  const { addToCart } = useCartCRUD();
+  const { addToWishlist } = useWishlistCRUD();
+  const [loadingStates, setLoadingStates] = useState({
+    cart: {},
+    wishlist: {},
+  });
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -60,6 +69,42 @@ const Products = () => {
 
   const handleLoadMore = () => {
     setPerPage((prevPerPage) => prevPerPage + 5);
+  };
+
+  const handleAddToCart = async (productId, quantity) => {
+    setLoadingStates((prev) => ({
+      ...prev,
+      cart: { ...prev.cart, [productId]: true },
+    }));
+    try {
+      await addToCart(productId, quantity);
+      toast.success("Product added to cart!");
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    } finally {
+      setLoadingStates((prev) => ({
+        ...prev,
+        cart: { ...prev.cart, [productId]: false },
+      }));
+    }
+  };
+
+  const handleAddToWishlist = async (productId) => {
+    setLoadingStates((prev) => ({
+      ...prev,
+      wishlist: { ...prev.wishlist, [productId]: true },
+    }));
+    try {
+      await addToWishlist(productId);
+      toast.success("Product added to wishlist!");
+    } catch (err) {
+      console.error("Error adding to wishlist:", err);
+    } finally {
+      setLoadingStates((prev) => ({
+        ...prev,
+        wishlist: { ...prev.wishlist, [productId]: false },
+      }));
+    }
   };
 
   return (
@@ -114,7 +159,8 @@ const Products = () => {
                 id="minPrice"
                 type="number"
                 placeholder="0 LE"
-                defaultValue={0}
+                value={minPrice}
+                onChange={(e) => setMinPrice(Number(e.target.value))}
                 className="w-1/2 p-2 border rounded-md text-sm"
                 style={{ borderColor: colors.borderLight }}
               />
@@ -212,11 +258,13 @@ const Products = () => {
                     key={product.id}
                     className="border overflow-hidden bg-gray-50 shadow-sm cursor-pointer"
                     style={{ borderColor: colors.borderLight }}
-                    onClick={() => {
-                      navigate(`/product/${product.id}`);
-                    }}
                   >
-                    <div className="flex justify-center items-center h-48 bg-white">
+                    <div
+                      className="flex justify-center items-center h-48 bg-white"
+                      onClick={() => {
+                        navigate(`/product/${product.id}`);
+                      }}
+                    >
                       <img
                         src={product.image}
                         alt={product.name}
@@ -227,6 +275,9 @@ const Products = () => {
                       <h3
                         className="text-base font-bold"
                         style={{ color: colors.text }}
+                        onClick={() => {
+                          navigate(`/product/${product.id}`);
+                        }}
                       >
                         {product.name}
                       </h3>
@@ -256,7 +307,13 @@ const Products = () => {
                         </p>
                         <div className="flex gap-2">
                           <button
-                            className="p-3 rounded-full border group hover:bg-[#569be1] hover:text-white transition duration-200 cursor-pointer"
+                            onClick={() => handleAddToCart(product.id, 1)}
+                            disabled={loadingStates.cart[product.id]}
+                            className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${
+                              loadingStates.cart[product.id]
+                                ? "bg-gray-200 cursor-not-allowed"
+                                : "hover:bg-[#569be1] hover:text-white"
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <ShoppingCart
@@ -264,8 +321,15 @@ const Products = () => {
                               className="text-gray-500 group-hover:text-white transition duration-200"
                             />
                           </button>
+
                           <button
-                            className="p-3 rounded-full border group hover:bg-[#569be1] hover:text-white transition duration-200 cursor-pointer"
+                            onClick={() => handleAddToWishlist(product.id)}
+                            disabled={loadingStates.wishlist[product.id]}
+                            className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${
+                              loadingStates.wishlist[product.id]
+                                ? "bg-gray-200 cursor-not-allowed"
+                                : "hover:bg-[#569be1] hover:text-white"
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <Heart

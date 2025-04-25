@@ -5,6 +5,8 @@ import React from "react";
 import Up_top from "./components/Up-to-top/Up-to-top";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/Auth/AuthContext";
+import { CartProvider } from "./context/Cart/CartContext";
+import { WishlistProvider } from "./context/WishList/WishlistContext";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -17,9 +19,13 @@ function App() {
   return (
     <React.Fragment>
       <AuthProvider>
-        <Up_top />
-        <RouterProvider router={routes} />
-        <Toaster position="top-center" reverseOrder={false} />
+        <CartProvider>
+          <WishlistProvider>
+            <Up_top />
+            <RouterProvider router={routes} />
+            <Toaster position="top-center" reverseOrder={false} />
+          </WishlistProvider>
+        </CartProvider>
       </AuthProvider>
     </React.Fragment>
   );
