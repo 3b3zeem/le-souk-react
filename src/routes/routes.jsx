@@ -8,6 +8,8 @@ const Home = lazy(() => import("../pages/Home/Home.jsx"));
 const Profile = lazy(() => import("../pages/User/Profile.jsx"));
 const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("./../pages/Auth/Register/Register"));
+const Products = lazy(() => import("../pages/Products/Products.jsx"));
+const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
 
 const routes = createBrowserRouter([
   {
@@ -35,6 +37,22 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Register />
+          </Suspense>
+        ),
+      },
+      {
+        path: "products",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Products />
+          </Suspense>
+        ),
+      },
+      {
+        path: "product/:id",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ProductId />
           </Suspense>
         ),
       },

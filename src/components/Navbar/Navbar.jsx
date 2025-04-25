@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { X, Menu, LayoutDashboard, User, LogOut } from "lucide-react";
+import {
+  X,
+  Menu,
+  LayoutDashboard,
+  User,
+  LogOut,
+  ShoppingCart,
+  Heart,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
@@ -73,7 +81,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 lg:gap-8">
           {navLinks.map((link, index) => (
             <Link
               key={index}
@@ -94,12 +102,29 @@ const Navbar = () => {
               className="cursor-pointer relative"
               onClick={() => setIsOpenUser((prev) => !prev)}
             >
-              <div className="flex items-center gap-2">
-                <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
-                  Hello, {userName}
-                </p>
-                <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                  <img src={avatar} alt={userName} className="rounded-full" />
+              <div className="flex items-center gap-5">
+                <div className="flex justify-center gap-4">
+                  <button
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <ShoppingCart size={20} className="text-gray-500" />
+                  </button>
+                  <button
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <Heart size={20} className="text-gray-500" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
+                    Hello, {userName}
+                  </p>
+                  <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
+                    <img src={avatar} alt={userName} className="rounded-full" />
+                  </div>
                 </div>
               </div>
 
@@ -162,12 +187,28 @@ const Navbar = () => {
         <div className="flex items-center space-x-2">
           {isLoggedIn ? (
             <>
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"
-              >
-                <Menu size={24} />
-              </button>
+              <div className="flex items-center gap-3">
+                <div className="flex justify-center gap-4">
+                  <button
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <ShoppingCart size={20} className="text-gray-500" />
+                  </button>
+                  <button
+                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer"
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <Heart size={20} className="text-gray-500" />
+                  </button>
+                </div>
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"
+                >
+                  <Menu size={24} />
+                </button>
+              </div>
             </>
           ) : (
             <>
