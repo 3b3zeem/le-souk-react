@@ -286,7 +286,7 @@ const Products = () => {
                   <button
                     onClick={handleLoadMore}
                     disabled={loadMoreLoading}
-                    className={`px-6 py-2 border rounded-md text-sm font-medium transition duration-200 flex items-center gap-2 ${
+                    className={`px-6 py-2 border rounded-md text-sm font-medium transition duration-200 flex items-center gap-2 cursor-pointer customEffect ${
                       loadMoreLoading
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-blue-600"
@@ -310,7 +310,7 @@ const Products = () => {
                         Loading...
                       </>
                     ) : (
-                      "Load More"
+                      <span>Load More</span>
                     )}
                   </button>
                 </div>
