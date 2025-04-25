@@ -1,0 +1,57 @@
+.customEffect {
+  position: relative;
+  overflow: hidden;
+}
+
+.customEffect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0%;
+  height: 100%;
+  background: #161616bb;
+  transition: all 0.4s ease-in-out;
+}
+
+.customEffect:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.customEffect span {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+
+
+.b-bottom {
+  position: relative;
+  text-transform: uppercase;
+  text-decoration: none;
+  /* font-size: .80rem; */
+  letter-spacing: .5px;
+  opacity: .9;
+  transition: .3s;
+}
+
+.b-bottom::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 5px;
+  border-radius: 2px;
+  background-color: #1A76D1;
+  bottom: -1px;
+  left: -5px;
+  z-index: -1;
+  opacity: 0;
+  transition: .3s;
+}
+
+.b-bottom:hover::after {
+  width: 100%;
+  opacity: 1;
+}
