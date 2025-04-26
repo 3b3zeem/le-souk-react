@@ -12,6 +12,32 @@ const useWishlistCRUD = () => {
   const { token } = useAuthContext();
   const { addItemToWishlist, removeItemFromWishlist } = useWishlist();
 
+  const fetchWishlist = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get(
+        "https://ecommerce.ershaad.net/api/wishlist/view",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const items = response.data.data;
+      console.log(items);
+      
+      setWishlistItems(items);
+      return items;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch wishlist");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const addToWishlist = async (productId) => {
     setLoading(true);
     setError(null);
@@ -84,39 +110,10 @@ const useWishlistCRUD = () => {
     }
   };
 
-  const viewWishlist = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      if (!token) {
-        toast.error("Please log in to add items to your wishlist.");
-        throw new Error("No authentication token found");
-      }
-
-      const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/wishlist/view",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const items = response.data.data;
-      setWishlistItems(items);
-      return items;
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch wishlist");
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return {
     addToWishlist,
     removeFromWishlist,
-    viewWishlist,
+    fetchWishlist,
     wishlistItems,
     loading,
     error,
