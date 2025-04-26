@@ -316,12 +316,12 @@ const Navbar = () => {
                 ))}
 
                 {/* User Dropdown with animation as before */}
-                <div
-                  className="cursor-pointer relative"
-                  onClick={() => setIsOpenUser((prev) => !prev)}
-                >
+                <div className="cursor-pointer relative">
                   {isLoggedIn && (
-                    <div className="flex items-center gap-2">
+                    <div
+                      className="flex items-center gap-2"
+                      onClick={() => setIsOpenUser((prev) => !prev)}
+                    >
                       <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
                         Hello, {userName}
                       </p>

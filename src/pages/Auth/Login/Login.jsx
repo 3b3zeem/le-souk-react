@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-screen">
+    <div className="flex flex-col md:flex-row w-full min-h-screen">
       {/* Left Panel - Dark blue with illustration */}
       <div
         className="w-full md:w-1/2 p-8 flex flex-col items-center justify-center text-center"
@@ -68,8 +68,8 @@ const Login = () => {
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="w-full md:w-1/2 p-8 flex items-center justify-center">
-        <div className="w-full max-w-md">
+      <div className="w-full md:w-1/2 p-8 flex items-center justify-center md:min-h-screen">
+        <div className="w-full max-w-md pb-16 md:pb-0">
           <div className="flex justify-center mb-4">
             <div className="p-4 bg-blue-500 rounded-lg">
               <Lock size={24} color="white" />

@@ -19,6 +19,7 @@ const Cart = () => {
     removeFromCart,
     fetchCart,
     setCartQuantity,
+    clearCart,
     error,
     success,
   } = useCartCRUD();
@@ -87,6 +88,14 @@ const Cart = () => {
     }
   };
 
+  const handleClearCart = async () => {
+    try {
+      await clearCart();
+    } catch (err) {
+      console.error("Error clearing wishlist:", err);
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="bg-gray-200 p-10 mb-10">
@@ -141,127 +150,139 @@ const Cart = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Products Section */}
-            <div className="lg:col-span-2 space-y-6">
-              {cartItems.map((item) => {
-                const isRemoving =
-                  loadingStates.remove[item.product.id] || false;
-                const isUpdatingQuantity =
-                  loadingStates.quantity[item.product.id] || false;
+          <div>
+            <div className="border-b-1 border-gray-300">
+              <button
+                onClick={handleClearCart}
+                className="px-4 py-2 bg-red-500 mb-5  text-white rounded-md customEffect cursor-pointer"
+              >
+                <span>Clear Cart</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Products Section */}
+              <div className="lg:col-span-2 space-y-6">
+                {cartItems.map((item) => {
+                  const isRemoving =
+                    loadingStates.remove[item.product.id] || false;
+                  const isUpdatingQuantity =
+                    loadingStates.quantity[item.product.id] || false;
 
-                return (
-                  <div
-                    key={item.product.id}
-                    className="flex gap-4 border-b pb-6"
-                    style={{ borderColor: colors.borderLight }}
-                  >
-                    <img
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className="w-24 h-24 object-cover"
-                    />
-                    <div className="flex-1">
-                      <h2
-                        className="font-semibold"
-                        style={{ color: colors.productName }}
-                      >
-                        {item.product.name}
-                      </h2>
-                      <p
-                        className="text-sm"
-                        style={{ color: colors.productName }}
-                      >
-                        ITEM NO: {item.product.id}
-                      </p>
-                      <p
-                        className="text-sm"
-                        style={{ color: colors.productName }}
-                      >
-                        SIZE: OS
-                      </p>
-                      <p
-                        className="text-sm"
-                        style={{ color: colors.productName }}
-                      >
-                        COLOR: Unknown
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.product.id,
-                              "dec",
-                              item.quantity
-                            )
-                          }
-                          disabled={
-                            isRemoving ||
-                            isUpdatingQuantity ||
-                            item.quantity <= 1
-                          }
-                          className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
-                          style={{ borderColor: colors.borderLight }}
+                  return (
+                    <div
+                      key={item.product.id}
+                      className="flex gap-4 border-b pb-6"
+                      style={{ borderColor: colors.borderLight }}
+                    >
+                      <img
+                        src={item.product.image}
+                        alt={item.product.name}
+                        className="w-24 h-24 object-cover"
+                      />
+                      <div className="flex-1">
+                        <h2
+                          className="font-semibold"
+                          style={{ color: colors.productName }}
                         >
-                          -
-                        </button>
-                        <span>{item.quantity}</span>
+                          {item.product.name}
+                        </h2>
+                        <p
+                          className="text-sm"
+                          style={{ color: colors.productName }}
+                        >
+                          ITEM NO: {item.product.id}
+                        </p>
+                        <p
+                          className="text-sm"
+                          style={{ color: colors.productName }}
+                        >
+                          SIZE: OS
+                        </p>
+                        <p
+                          className="text-sm"
+                          style={{ color: colors.productName }}
+                        >
+                          COLOR: Unknown
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.product.id,
+                                "dec",
+                                item.quantity
+                              )
+                            }
+                            disabled={
+                              isRemoving ||
+                              isUpdatingQuantity ||
+                              item.quantity <= 1
+                            }
+                            className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                            style={{ borderColor: colors.borderLight }}
+                          >
+                            -
+                          </button>
+                          <span>{item.quantity}</span>
+                          <button
+                            onClick={() =>
+                              handleQuantityChange(
+                                item.product.id,
+                                "inc",
+                                item.quantity
+                              )
+                            }
+                            disabled={isRemoving || isUpdatingQuantity}
+                            className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                            style={{ borderColor: colors.borderLight }}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex flex-col justify-between items-center">
+                        <p
+                          className="text-lg font-semibold"
+                          style={{ color: colors.primary }}
+                        >
+                          $
+                          {(Number(item.product.price) * item.quantity).toFixed(
+                            2
+                          )}
+                        </p>
                         <button
-                          onClick={() =>
-                            handleQuantityChange(
-                              item.product.id,
-                              "inc",
-                              item.quantity
-                            )
-                          }
+                          onClick={() => handleRemove(item.product.id)}
                           disabled={isRemoving || isUpdatingQuantity}
-                          className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
-                          style={{ borderColor: colors.borderLight }}
+                          className={`bg-[#d01e1e] text-white font-bold py-2 px-4 rounded cursor-pointer customEffect ${
+                            isRemoving ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
                         >
-                          +
+                          <span>
+                            {isRemoving ? "Removing..." : <Trash2 size={18} />}
+                          </span>
                         </button>
                       </div>
                     </div>
-                    <div className="flex flex-col justify-between items-center">
-                      <p className="text-lg font-semibold">
-                        $
-                        {(Number(item.product.price) * item.quantity).toFixed(
-                          2
-                        )}
-                      </p>
-                      <button
-                        onClick={() => handleRemove(item.product.id)}
-                        disabled={isRemoving || isUpdatingQuantity}
-                        className={`bg-[#d01e1e] text-white font-bold py-2 px-4 rounded me-5 cursor-pointer customEffect ${
-                          isRemoving ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
-                      >
-                        <span>
-                          {isRemoving ? "Removing..." : <Trash2 size={18} />}
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
 
-            {/* Summary Section */}
-            <div
-              className="border p-6 space-y-6 h-fit"
-              style={{ borderColor: colors.borderLight }}
-            >
-              <h2
-                className="text-lg font-bold border-b pb-4"
-                style={{
-                  borderColor: colors.lineBg,
-                  color: colors.productTitle,
-                }}
+              {/* Summary Section */}
+              <div
+                className="border p-6 space-y-6 h-fit"
+                style={{ borderColor: colors.borderLight }}
               >
-                SUMMARY
-              </h2>
+                <h2
+                  className="text-lg font-bold border-b pb-4"
+                  style={{
+                    borderColor: colors.lineBg,
+                    color: colors.productTitle,
+                  }}
+                >
+                  SUMMARY
+                </h2>
 
-              {/* <div>
+                {/* <div>
                 <p
                   className="text-sm mb-2"
                   style={{ color: colors.productName }}
@@ -286,44 +307,45 @@ const Cart = () => {
                 </div>
               </div> */}
 
-              <div className="flex justify-between text-sm">
-                <p style={{ color: colors.productName }}>Subtotal</p>
-                <p style={{ color: colors.productName }}>
-                  ${calculateSubtotal().toFixed(2)}
-                </p>
-              </div>
+                <div className="flex justify-between text-sm">
+                  <p style={{ color: colors.productName }}>Subtotal</p>
+                  <p style={{ color: colors.productName }}>
+                    ${calculateSubtotal().toFixed(2)}
+                  </p>
+                </div>
 
-              <div className="flex justify-between text-sm">
-                <p style={{ color: colors.productName }}>Shipping</p>
-                <p style={{ color: colors.productName }}>TBD</p>
-              </div>
+                <div className="flex justify-between text-sm">
+                  <p style={{ color: colors.productName }}>Shipping</p>
+                  <p style={{ color: colors.productName }}>TBD</p>
+                </div>
 
-              <div className="flex justify-between text-sm">
-                <p style={{ color: colors.productName }}>
-                  Sales Tax <span className="text-gray-400 text-xs">(i)</span>
-                </p>
-                <p style={{ color: colors.productName }}>TBD</p>
-              </div>
+                <div className="flex justify-between text-sm">
+                  <p style={{ color: colors.productName }}>
+                    Sales Tax <span className="text-gray-400 text-xs">(i)</span>
+                  </p>
+                  <p style={{ color: colors.productName }}>TBD</p>
+                </div>
 
-              <div
-                className="border-t pt-4 flex justify-between font-semibold"
-                style={{ borderColor: colors.lineBg }}
-              >
-                <p style={{ color: colors.productTitle }}>Estimated Total</p>
-                <p style={{ color: colors.productTitle }}>
-                  ${calculateSubtotal().toFixed(2)}
-                </p>
-              </div>
+                <div
+                  className="border-t pt-4 flex justify-between font-semibold"
+                  style={{ borderColor: colors.lineBg }}
+                >
+                  <p style={{ color: colors.productTitle }}>Estimated Total</p>
+                  <p style={{ color: colors.productTitle }}>
+                    ${calculateSubtotal().toFixed(2)}
+                  </p>
+                </div>
 
-              <button
-                className="w-full py-3 mt-4 customEffect cursor-pointer"
-                style={{
-                  backgroundColor: colors.primary,
-                  color: colors.lightText,
-                }}
-              >
-                <span>CHECKOUT</span>
-              </button>
+                <button
+                  className="w-full py-3 mt-4 customEffect cursor-pointer"
+                  style={{
+                    backgroundColor: colors.primary,
+                    color: colors.lightText,
+                  }}
+                >
+                  <span>CHECKOUT</span>
+                </button>
+              </div>
             </div>
           </div>
         )}

@@ -39,11 +39,15 @@ const Products = () => {
     totalProducts,
   } = useProducts(searchQuery, selectedCategory, minPrice, maxPrice, perPage);
   const { addToCart } = useCartCRUD();
-  const { addToWishlist } = useWishlistCRUD();
+  const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
   const [loadingStates, setLoadingStates] = useState({
     cart: {},
     wishlist: {},
   });
+
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -78,7 +82,6 @@ const Products = () => {
     }));
     try {
       await addToCart(productId, quantity);
-      toast.success("Product added to cart!");
     } catch (err) {
       console.error("Error adding to cart:", err);
     } finally {
@@ -89,22 +92,25 @@ const Products = () => {
     }
   };
 
-  const handleAddToWishlist = async (productId) => {
+  const handleToggleWishlist = async (productId) => {
     setLoadingStates((prev) => ({
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
     }));
     try {
-      await addToWishlist(productId);
-      toast.success("Product added to wishlist!");
+      await toggleWishlist(productId);
     } catch (err) {
-      console.error("Error adding to wishlist:", err);
+      console.error("Error toggling wishlist:", err);
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
         wishlist: { ...prev.wishlist, [productId]: false },
       }));
     }
+  };
+
+  const isProductInWishlist = (productId) => {
+    return wishlistItems.some((item) => item.id === productId);
   };
 
   return (
@@ -323,18 +329,29 @@ const Products = () => {
                           </button>
 
                           <button
-                            onClick={() => handleAddToWishlist(product.id)}
+                            onClick={() => handleToggleWishlist(product.id)}
                             disabled={loadingStates.wishlist[product.id]}
-                            className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${
+                            className={`p-3 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
                               loadingStates.wishlist[product.id]
-                                ? "bg-gray-200 cursor-not-allowed"
-                                : "hover:bg-[#569be1] hover:text-white"
+                                ? "opacity-50 cursor-not-allowed"
+                                : isProductInWishlist(product.id)
+                                ? "bg-red-100 hover:bg-red-200"
+                                : "hover:bg-[#569be1]"
                             }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <Heart
                               size={20}
-                              className="text-gray-500 group-hover:text-white transition duration-200"
+                              className={`${
+                                loadingStates.wishlist[product.id]
+                                  ? "text-gray-400"
+                                  : isProductInWishlist(product.id)
+                                  ? "text-red-500"
+                                  : "text-gray-500 hover:text-white"
+                              }`}
+                              fill={
+                                isProductInWishlist(product.id) ? "red" : "none"
+                              }
                             />
                           </button>
                         </div>

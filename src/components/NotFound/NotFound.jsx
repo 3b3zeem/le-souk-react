@@ -2,51 +2,78 @@ import React from "react";
 import { ChevronRight, House } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import "./NotFound.css";
+const colors = {
+  primary: "#1e70d0",
+  lightText: "#ffffff",
+  productTitle: "#4b5563",
+  productName: "#6b7280",
+  borderLight: "#e5e7eb",
+  lineBg: "#d1d5db",
+};
 
 const NotFound = () => {
   return (
-    <div className="w-full mx-auto pb-4 flex flex-col" dir="rtl">
-      <div className="bg-[#f5f5f9] py-3 px-6 mb-6">
-        <div className="container flex justify-between items-center">
-          <span className="text-xl text-gray-700 font-bold">
-            عفواً! لا يمكن العثور على هذه الصفحة.
+    <div
+      className="w-full mx-auto pb-8 flex flex-col min-h-screen"
+      style={{ backgroundColor: colors.borderLight }}
+    >
+      {/* Breadcrumb Section */}
+      <div
+        className="py-10 px-6 shadow-sm"
+        style={{ backgroundColor: colors.lineBg }}
+      >
+        <div className="container mx-auto flex justify-between items-center">
+          <span
+            className="text-xl font-semibold"
+            style={{ color: colors.productTitle }}
+          >
+            Oops! This page can't be found.
           </span>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             <Link to="/">
-              <House size={18} color="#4B5563" />
+              <House size={18} style={{ color: colors.productTitle }} />
             </Link>
-            <ChevronRight />
-            <span className="text-gray-600">404</span>
+            <ChevronRight size={18} style={{ color: colors.productTitle }} />
+            <span className="text-xl" style={{ color: colors.productName }}>
+              404
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center my-3">
+      {/* Main Content */}
+      <div className="flex flex-col justify-center items-center flex-grow">
         <span
-          className="text-9xl text-[#2b4861] font-semibold"
-          style={{ fontFamily: "'Rubik', sans-serif" }}
+          className="text-9xl font-bold tracking-tight"
+          style={{ color: colors.primary, fontFamily: "'Poppins', sans-serif" }}
         >
           404!
         </span>
         <span
-          className="text-[30px] text-[#000] my-4 font-bold"
-          style={{ fontFamily: "'Rubik', sans-serif" }}
+          className="text-3xl mt-4 mb-2 font-semibold"
+          style={{ color: colors.productTitle, fontFamily: "'Poppins', sans-serif" }}
         >
-          عفواً! هذه الصفحة غير موجودة.
+          Sorry! This page doesn't exist.
         </span>
-        <p className="p-0 m-0 text-[#777] text-[16px]">
-          نعتذر عن الإزعاج. انتقل إلى الصفحة الرئيسية أو تحقق
+        <p
+          className="text-center text-lg mb-2"
+          style={{ color: colors.productName }}
+        >
+          We’re sorry for the inconvenience. Let’s get you back on track.
         </p>
-        <p className="p-0 m-0 text-[#777] text-[16px]">
-          من أحدث حلولنا لاحتياجاتك المالية والتأمينية.
+        <p
+          className="text-center text-lg mb-6"
+          style={{ color: colors.productName }}
+        >
+          Head to the homepage or explore our latest solutions.
         </p>
 
         <Link
           to={"/"}
-          className="search px-[20px] py-[10px] mt-5 text-[16px] bg-[#2b4861] text-light text-decoration-none rounded"
+          className="px-5 py-3 text-md font-medium rounded shadow-md customEffect"
+          style={{ backgroundColor: colors.primary, color: colors.lightText }}
         >
-          <span>العودة إلى الصفحة الرئيسية</span>
+          <span>Back to Home</span>
         </Link>
       </div>
     </div>

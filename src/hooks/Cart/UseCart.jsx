@@ -18,7 +18,6 @@ const useCartCRUD = () => {
 
     try {
       if (!token) {
-        toast.error("Please log in to view your cart.");
         setCartItems([]);
         return;
       }
@@ -52,7 +51,6 @@ const useCartCRUD = () => {
     try {
       if (!token) {
         toast.error("Please log in to add items to your cart.");
-        throw new Error("No authentication token found");
       }
 
       const response = await axios.post(
@@ -70,12 +68,12 @@ const useCartCRUD = () => {
       );
       setSuccess(response.data.message);
       await addItemToCart();
+      toast.success(response.data.message);
       await fetchCart();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add to cart");
       await addItemToCart();
-      throw err;
     } finally {
       setLoading(false);
     }
@@ -111,7 +109,6 @@ const useCartCRUD = () => {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to remove from cart");
       await removeItemFromCart();
-      throw err;
     } finally {
       setLoading(false);
     }
@@ -142,6 +139,35 @@ const useCartCRUD = () => {
     } catch (err) {
       console.log("Error details:", err.response?.data);
       setError(err.response?.data?.message || "Failed to update quantity");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearCart = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+  
+    try {
+      const response = await axios.post(
+        "https://ecommerce.ershaad.net/api/cart/clear",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      setCartItems([]);
+      await removeItemFromCart();
+      toast.success(response.data.message);
+  
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to clear wishlist");
       throw err;
     } finally {
       setLoading(false);
@@ -154,6 +180,7 @@ const useCartCRUD = () => {
     removeFromCart,
     fetchCart,
     setCartQuantity,
+    clearCart,
     loading,
     error,
     success,

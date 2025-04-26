@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from "lucide-react";
 import useHomeData from "../../../hooks/HomeComponents/useHomeData";
@@ -16,7 +16,11 @@ const Products = () => {
     wishlist: {},
   });
   const { addToCart } = useCartCRUD();
-  const { addToWishlist } = useWishlistCRUD();
+  const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   const NextArrow = ({ onClick }) => (
     <button
@@ -84,7 +88,6 @@ const Products = () => {
     }));
     try {
       await addToCart(productId, quantity);
-      toast.success("Product added to cart!");
     } catch (err) {
       console.error("Error adding to cart:", err);
     } finally {
@@ -95,22 +98,25 @@ const Products = () => {
     }
   };
 
-  const handleAddToWishlist = async (productId) => {
+  const handleToggleWishlist = async (productId) => {
     setLoadingStates((prev) => ({
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
     }));
     try {
-      await addToWishlist(productId);
-      toast.success("Product added to wishlist!");
+      await toggleWishlist(productId);
     } catch (err) {
-      console.error("Error adding to wishlist:", err);
+      console.error("Error toggling wishlist:", err);
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
         wishlist: { ...prev.wishlist, [productId]: false },
       }));
     }
+  };
+
+  const isProductInWishlist = (productId) => {
+    return wishlistItems.some((item) => item.id === productId);
   };
 
   if (loading) {
@@ -184,11 +190,13 @@ const Products = () => {
                       />
                     </button>
                     <button
-                      onClick={() => handleAddToWishlist(product.id)}
+                      onClick={() => handleToggleWishlist(product.id)}
                       disabled={loadingStates.wishlist[product.id]}
                       className={`p-2 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
                         loadingStates.wishlist[product.id]
                           ? "opacity-50 cursor-not-allowed"
+                          : isProductInWishlist(product.id)
+                          ? "bg-red-100 hover:bg-red-200"
                           : "hover:bg-gray-100"
                       }`}
                       style={{ borderColor: colors.borderLight }}
@@ -198,8 +206,11 @@ const Products = () => {
                         className={`${
                           loadingStates.wishlist[product.id]
                             ? "text-gray-400"
+                            : isProductInWishlist(product.id)
+                            ? "text-red-500"
                             : "text-gray-500"
                         }`}
+                        fill={isProductInWishlist(product.id) ? "red" : "none"}
                       />
                     </button>
                   </div>
