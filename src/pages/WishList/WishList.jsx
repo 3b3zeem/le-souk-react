@@ -66,7 +66,6 @@ const WishList = () => {
     }));
     try {
       await addToCart(productId, quantity);
-      toast.success("Product added to cart!");
     } catch (err) {
       console.error("Error adding to cart:", err);
     } finally {

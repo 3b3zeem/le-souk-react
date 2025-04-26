@@ -154,12 +154,12 @@ const Cart = () => {
             <div className="border-b-1 border-gray-300">
               <button
                 onClick={handleClearCart}
-                className="px-4 py-2 bg-red-500 mb-5  text-white rounded-md customEffect cursor-pointer"
+                className="px-4 py-2 bg-red-500 mb-5 text-white rounded-md customEffect cursor-pointer"
               >
                 <span>Clear Cart</span>
               </button>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-5">
               {/* Products Section */}
               <div className="lg:col-span-2 space-y-6">
                 {cartItems.map((item) => {
