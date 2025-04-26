@@ -11,13 +11,12 @@ const colors = {
   lineBg: "#d1d5db",
 };
 
-const NotFound = () => {
+const NotFound = ({ productId }) => {
   return (
     <div
       className="w-full mx-auto pb-8 flex flex-col min-h-screen"
       style={{ backgroundColor: colors.borderLight }}
     >
-      {/* Breadcrumb Section */}
       <div
         className="py-10 px-6 shadow-sm"
         style={{ backgroundColor: colors.lineBg }}
@@ -27,7 +26,7 @@ const NotFound = () => {
             className="text-xl font-semibold"
             style={{ color: colors.productTitle }}
           >
-            Oops! This page can't be found.
+            Oops! This product can't be found.
           </span>
           <div className="flex items-center space-x-2">
             <Link to="/">
@@ -53,19 +52,21 @@ const NotFound = () => {
           className="text-3xl mt-4 mb-2 font-semibold"
           style={{ color: colors.productTitle, fontFamily: "'Poppins', sans-serif" }}
         >
-          Sorry! This page doesn't exist.
+          Product Not Found
         </span>
-        <p
-          className="text-center text-lg mb-2"
-          style={{ color: colors.productName }}
-        >
-          We’re sorry for the inconvenience. Let’s get you back on track.
-        </p>
+        {productId && (
+          <p
+            className="text-center text-lg mb-2"
+            style={{ color: colors.productName }}
+          >
+            No product found with ID: <strong>{productId}</strong>
+          </p>
+        )}
         <p
           className="text-center text-lg mb-6"
           style={{ color: colors.productName }}
         >
-          Head to the homepage or explore our latest solutions.
+          Let’s get you back on track.
         </p>
 
         <Link
@@ -79,5 +80,6 @@ const NotFound = () => {
     </div>
   );
 };
+
 
 export default NotFound;

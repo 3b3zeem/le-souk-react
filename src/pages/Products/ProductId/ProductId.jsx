@@ -8,6 +8,7 @@ import { renderStars } from "../../../utils/ratingUtils";
 import toast from "react-hot-toast";
 import Reviews from "../Reviews/Reviews";
 import Loader from "../../../layouts/Loader";
+import NotFound from "../../../components/NotFound/NotFound";
 
 const colors = {
   primary: "#1e70d0",
@@ -79,17 +80,7 @@ const ProductId = () => {
 
   if (productDetailsLoading) return <Loader />;
   if (productDetailsError)
-    return (
-      <div className="flex flex-col items-center justify-center py-14">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-10 py-16 rounded-md shadow-md max-w-md w-full text-center">
-          <div className="flex items-center justify-center mb-3">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-          </div>
-          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
-          <p className="text-sm">{productDetailsError}</p>
-        </div>
-      </div>
-    );
+    return <NotFound productId={productId} />;
   if (!productDetails)
     return (
       <div className="flex flex-col items-center justify-center py-10">

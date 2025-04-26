@@ -16,6 +16,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/Cart/CartContext";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 
+import logo from "../../assets/Images/3x/LEE SOUK LOGO 1Artboard 1 copy 5@3x.png";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hover, setHover] = useState(null);
@@ -87,9 +89,7 @@ const Navbar = () => {
         } px-6`}
       >
         <div className="flex items-center">
-          <div className="text-3xl font-bold" style={{ color: colors.primary }}>
-            Bazario
-          </div>
+          <img src={logo} width={150} alt="logo" />
         </div>
 
         <div className="flex items-center gap-4 lg:gap-8">
@@ -207,7 +207,7 @@ const Navbar = () => {
         } px-6`}
       >
         <div className="text-2xl font-bold" style={{ color: colors.primary }}>
-          Bazario
+          <img src={logo} width={150} alt="logo" />
         </div>
 
         <div className="flex items-center space-x-2">
@@ -285,12 +285,7 @@ const Navbar = () => {
               className="h-full w-[300px] bg-white flex flex-col"
             >
               <div className="flex justify-between items-center p-4 border-b">
-                <div
-                  className="text-2xl font-bold"
-                  style={{ color: colors.primary }}
-                >
-                  Bazario
-                </div>
+                <img src={logo} width={120} alt="logo" />
                 <button
                   onClick={() => setIsOpen(false)}
                   className="p-1 rounded bg-gray-200 cursor-pointer"
@@ -307,7 +302,7 @@ const Navbar = () => {
                     style={{
                       color: hover === index ? colors.primary : undefined,
                     }}
-                    className="cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]"
+                    className="cursor-pointer font-[500] transition ms-2 duration-200 ease-in-out b-bottom text-[.90rem]"
                     onMouseEnter={() => setHover(index)}
                     onMouseLeave={() => setHover(null)}
                   >
@@ -316,7 +311,7 @@ const Navbar = () => {
                 ))}
 
                 {/* User Dropdown with animation as before */}
-                <div className="cursor-pointer relative">
+                <div className="cursor-pointer relative ms-2">
                   {isLoggedIn && (
                     <div
                       className="flex items-center gap-2"
