@@ -19,7 +19,7 @@ const Products = () => {
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchWishlist();
@@ -127,7 +127,17 @@ const Products = () => {
   }
 
   if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-14">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-10 py-16 rounded-md shadow-md max-w-md w-full text-center">
+          <div className="flex items-center justify-center mb-3">
+            <AlertCircle className="h-8 w-8 text-red-500" />
+          </div>
+          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -147,16 +157,25 @@ const Products = () => {
                 src={product.image}
                 alt={product.name}
                 className="w-full h-48 object-contain p-4 group-hover:rotate-10 transition-transform duration-300 cursor-pointer"
-                onClick={() => {navigate(`/products/${product.id}`)}}
+                onClick={() => {
+                  navigate(`/products/${product.id}`);
+                }}
               />
               <div className="p-4 text-left">
-                <p className="text-xs uppercase text-gray-500 cursor-pointer" onClick={() => {navigate(`/products/${product.id}`)}}>
+                <p
+                  className="text-xs uppercase text-gray-500 cursor-pointer"
+                  onClick={() => {
+                    navigate(`/products/${product.id}`);
+                  }}
+                >
                   {product.category.name}
                 </p>
                 <h3
                   className="text-sm font-medium mt-1 cursor-pointer"
                   style={{ color: colors.text }}
-                  onClick={() => {navigate(`/products/${product.id}`)}}
+                  onClick={() => {
+                    navigate(`/products/${product.id}`);
+                  }}
                 >
                   {product.name}
                 </h3>

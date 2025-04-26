@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { ShoppingCart, CreditCard, Heart } from "lucide-react";
+import { ShoppingCart, CreditCard, Heart, AlertCircle, SearchX } from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import { renderStars } from "../../../utils/ratingUtils";
 import toast from "react-hot-toast";
 import Reviews from "../Reviews/Reviews";
+import Loader from "../../../layouts/Loader";
 
 const colors = {
   primary: "#1e70d0",
@@ -45,7 +46,7 @@ const ProductId = () => {
     try {
       await addToCart(productId, quantity);
     } catch (err) {
-      toast.error("Failed to add to cart");
+      toast.error(err);
     } finally {
       setLoadingStates((prev) => ({ ...prev, cart: false }));
     }
@@ -76,16 +77,33 @@ const ProductId = () => {
     toast.success("Redirecting to payment...");
   };
 
-  if (productDetailsLoading)
-    return <div className="text-center py-10">Loading...</div>;
+  if (productDetailsLoading) return <Loader />;
   if (productDetailsError)
     return (
-      <div className="text-center py-10 text-red-500">
-        Error: {productDetailsError}
+      <div className="flex flex-col items-center justify-center py-14">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-10 py-16 rounded-md shadow-md max-w-md w-full text-center">
+          <div className="flex items-center justify-center mb-3">
+            <AlertCircle className="h-8 w-8 text-red-500" />
+          </div>
+          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
+          <p className="text-sm">{productDetailsError}</p>
+        </div>
       </div>
     );
   if (!productDetails)
-    return <div className="text-center py-10">No product found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-10">
+        <div className="bg-gray-100 border border-gray-300 text-gray-700 px-6 py-4 rounded-md shadow-md max-w-md w-full text-center">
+          <div className="flex items-center justify-center mb-3">
+            <SearchX className="h-8 w-8 text-gray-400" />
+          </div>
+          <h2 className="text-lg font-bold mb-2">No Product Found</h2>
+          <p className="text-sm text-gray-600">
+            We couldn't find the product you're looking for.
+          </p>
+        </div>
+      </div>
+    );
 
   return (
     <div className="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">

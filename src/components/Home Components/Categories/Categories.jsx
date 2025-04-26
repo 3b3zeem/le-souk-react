@@ -63,7 +63,17 @@ const Categories = () => {
   }
 
   if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-14">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-10 py-16 rounded-md shadow-md max-w-md w-full text-center">
+          <div className="flex items-center justify-center mb-3">
+            <AlertCircle className="h-8 w-8 text-red-500" />
+          </div>
+          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
+          <p className="text-sm">{error}</p>
+        </div>
+      </div>
+    );
   }
 
   const colors = {
