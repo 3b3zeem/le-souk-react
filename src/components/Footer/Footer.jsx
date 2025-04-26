@@ -87,7 +87,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <img src={logo} alt="logo" width={150} />
+            <img src={logo} alt="logo" width={150} draggable={false} />
             <p className="text-sm my-6" style={{ color: colors.textSecondary }}>
               Phasellus ultricies aliqum volutpt utpat ullamcorper laoreet
               neque, a lacinia curabitur lacinia mollis

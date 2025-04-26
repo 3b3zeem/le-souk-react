@@ -7,6 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/Auth/AuthContext";
 import { CartProvider } from "./context/Cart/CartContext";
 import { WishlistProvider } from "./context/WishList/WishlistContext";
+import PreventImageDragAndRightClick from "./utils/PreventImageDragAndRightClick";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -21,6 +22,7 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
+            <PreventImageDragAndRightClick />
             <Up_top />
             <RouterProvider router={routes} />
             <Toaster position="top-center" reverseOrder={false} />
