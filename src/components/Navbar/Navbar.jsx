@@ -75,6 +75,7 @@ const Navbar = () => {
     setTimeout(() => {
       navigate("/login");
     }, 1000);
+    setIsOpenUser((prev) => !prev);
   };
 
   return (
@@ -166,7 +167,10 @@ const Navbar = () => {
                       </button>
                     )}
                     <button
-                      onClick={() => navigate("/profile")}
+                      onClick={() => {
+                        navigate("/profile");
+                        setIsOpenUser((prev) => !prev);
+                      }}
                       className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b"
                     >
                       <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
