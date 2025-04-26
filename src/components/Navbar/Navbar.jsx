@@ -16,7 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/Cart/CartContext";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 
-import logo from "../../assets/Images/3x/LEE SOUK LOGO 1Artboard 1 copy 5@3x.png";
+import logo from "../../assets/Images/3x/navbar.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

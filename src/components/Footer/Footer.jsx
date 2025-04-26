@@ -12,7 +12,8 @@ import {
   ChevronUp,
 } from "lucide-react";
 
-// متغير الألوان
+import logo from "../../assets/Images/3x/footer.png"
+
 const colors = {
   primary: "#1e70d0",
   secondary: "#475569",
@@ -86,13 +87,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
-            <h3
-              className="text-2xl font-bold mb-4"
-              style={{ color: colors.primary }}
-            >
-              Bazario
-            </h3>
-            <p className="text-sm mb-6" style={{ color: colors.textSecondary }}>
+            <img src={logo} alt="logo" width={150} />
+            <p className="text-sm my-6" style={{ color: colors.textSecondary }}>
               Phasellus ultricies aliqum volutpt utpat ullamcorper laoreet
               neque, a lacinia curabitur lacinia mollis
             </p>
