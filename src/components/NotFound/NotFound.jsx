@@ -48,26 +48,56 @@ const NotFound = ({ productId }) => {
         >
           404!
         </span>
-        <span
-          className="text-3xl mt-4 mb-2 font-semibold"
-          style={{ color: colors.productTitle, fontFamily: "'Poppins', sans-serif" }}
-        >
-          Product Not Found
-        </span>
-        {productId && (
-          <p
-            className="text-center text-lg mb-2"
-            style={{ color: colors.productName }}
-          >
-            No product found with ID: <strong>{productId}</strong>
-          </p>
+
+        {productId ? (
+          <>
+            <span
+              className="text-3xl mt-4 mb-2 font-semibold"
+              style={{
+                color: colors.productTitle,
+                fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              Product Not Found
+            </span>
+            <p
+              className="text-center text-lg mb-2"
+              style={{ color: colors.productName }}
+            >
+              No product found with ID: <strong>{productId}</strong>
+            </p>
+            <p
+              className="text-center text-lg mb-6"
+              style={{ color: colors.productName }}
+            >
+              Let’s get you back on track.
+            </p>
+          </>
+        ) : (
+          <>
+            <span
+              className="text-3xl mt-4 mb-2 font-semibold"
+              style={{
+                color: colors.productTitle,
+                fontFamily: "'Poppins', sans-serif",
+              }}
+            >
+              Sorry! This page doesn't exist.
+            </span>
+            <p
+              className="text-center text-lg"
+              style={{ color: colors.productName }}
+            >
+              We’re sorry for the inconvenience. Let’s get you back on track.
+            </p>
+            <p
+              className="text-center text-lg mb-6"
+              style={{ color: colors.productName }}
+            >
+              Head to the homepage or explore our latest solutions.
+            </p>
+          </>
         )}
-        <p
-          className="text-center text-lg mb-6"
-          style={{ color: colors.productName }}
-        >
-          Let’s get you back on track.
-        </p>
 
         <Link
           to={"/"}
@@ -80,6 +110,5 @@ const NotFound = ({ productId }) => {
     </div>
   );
 };
-
 
 export default NotFound;
