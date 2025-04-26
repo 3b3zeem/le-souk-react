@@ -182,7 +182,7 @@ const ProductId = () => {
               onChange={(e) =>
                 setQuantity(Math.max(1, parseInt(e.target.value)))
               }
-              className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               style={{ borderColor: colors.borderLight }}
             />
           </div>
