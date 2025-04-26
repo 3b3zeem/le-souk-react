@@ -1,11 +1,11 @@
 import React from "react";
 import Slider from "react-slick";
 import Loader from "../../../layouts/Loader";
-import useHomeData from "../../../hooks/HomeComponents/useHomeData";
+import useHome from "../../../hooks/HomeComponents/useHome";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Categories = () => {
-  const { categories, loading, error } = useHomeData();
+  const { categories, loading, error } = useHome();
 
   const NextArrow = ({ onClick }) => (
     <button

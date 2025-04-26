@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useHomeData = () => {
+const useHome = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,4 +35,4 @@ const useHomeData = () => {
   return { categories, products, loading, error };
 };
 
-export default useHomeData;
+export default useHome;

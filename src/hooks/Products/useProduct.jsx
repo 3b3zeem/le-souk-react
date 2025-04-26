@@ -15,6 +15,10 @@ const useProducts = (
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [totalProducts, setTotalProducts] = useState(0);
 
+  const [productDetails, setProductDetails] = useState(null);
+  const [productDetailsLoading, setProductDetailsLoading] = useState(false);
+  const [productDetailsError, setProductDetailsError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,7 +60,37 @@ const useProducts = (
     fetchData();
   }, [searchQuery, categoryId, minPrice, maxPrice, perPage]);
 
-  return { products, categories, loading, loadMoreLoading, error, totalProducts };
+  const fetchProductDetails = async (productId) => {
+    setProductDetailsLoading(true);
+    setProductDetailsError(null);
+    setProductDetails(null);
+
+    try {
+      const response = await axios.get(
+        `https://ecommerce.ershaad.net/api/products/${productId}`
+      );
+      setProductDetails(response.data.data);
+    } catch (err) {
+      setProductDetailsError(
+        err.response?.data?.message || "Failed to fetch product details"
+      );
+    } finally {
+      setProductDetailsLoading(false);
+    }
+  };
+
+  return {
+    products,
+    categories,
+    loading,
+    loadMoreLoading,
+    error,
+    totalProducts,
+    productDetails,
+    productDetailsLoading,
+    productDetailsError,
+    fetchProductDetails,
+  };
 };
 
 export default useProducts;

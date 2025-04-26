@@ -60,7 +60,7 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: "product/:id",
+        path: "products/:productId",
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />

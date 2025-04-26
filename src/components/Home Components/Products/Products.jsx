@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from "lucide-react";
-import useHomeData from "../../../hooks/HomeComponents/useHomeData";
+import useHome from "../../../hooks/HomeComponents/useHome";
 import Loader from "../../../layouts/Loader";
 import { Link } from "react-router-dom";
 import { renderStars } from "../../../utils/ratingUtils";
@@ -10,13 +11,15 @@ import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import toast from "react-hot-toast";
 
 const Products = () => {
-  const { products, loading, error } = useHomeData();
+  const { products, loading, error } = useHome();
   const [loadingStates, setLoadingStates] = useState({
     cart: {},
     wishlist: {},
   });
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchWishlist();
@@ -143,15 +146,17 @@ const Products = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-48 object-contain p-4 group-hover:rotate-10 transition-transform duration-300"
+                className="w-full h-48 object-contain p-4 group-hover:rotate-10 transition-transform duration-300 cursor-pointer"
+                onClick={() => {navigate(`/products/${product.id}`)}}
               />
               <div className="p-4 text-left">
-                <p className="text-xs uppercase text-gray-500">
+                <p className="text-xs uppercase text-gray-500 cursor-pointer" onClick={() => {navigate(`/products/${product.id}`)}}>
                   {product.category.name}
                 </p>
                 <h3
-                  className="text-sm font-medium mt-1"
+                  className="text-sm font-medium mt-1 cursor-pointer"
                   style={{ color: colors.text }}
+                  onClick={() => {navigate(`/products/${product.id}`)}}
                 >
                   {product.name}
                 </h3>

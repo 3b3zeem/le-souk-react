@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ShoppingCart, Heart } from "lucide-react";
-import useProducts from "../../hooks/Products/useProductData";
+import useProducts from "../../hooks/Products/useProduct";
 import Loader from "../../layouts/Loader";
 import { renderStars } from "../../utils/ratingUtils";
 import { ring2 } from "ldrs";
 import useWishlistCRUD from "../../hooks/WishList/useWishlist";
 import useCartCRUD from "../../hooks/Cart/UseCart";
-import toast from "react-hot-toast";
 ring2.register();
 
 const colors = {
@@ -268,7 +267,7 @@ const Products = () => {
                     <div
                       className="flex justify-center items-center h-48 bg-white"
                       onClick={() => {
-                        navigate(`/product/${product.id}`);
+                        navigate(`/products/${product.id}`);
                       }}
                     >
                       <img
