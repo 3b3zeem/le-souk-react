@@ -25,10 +25,10 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [hover, setHover] = useState(0);
 
-  const currentUserId = user.id;
+  const currentUserId = user?.id;
 
   const canEditReview = (review) => {
-    return currentUserId && review.user.id === currentUserId;
+    return currentUserId && review?.user?.id === currentUserId;
   };
 
   const handleSubmit = async () => {

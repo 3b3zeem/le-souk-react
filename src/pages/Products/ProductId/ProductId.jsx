@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import Reviews from "../Reviews/Reviews";
 import Loader from "../../../layouts/Loader";
 import NotFound from "../../../components/NotFound/NotFound";
+import { useAuthContext } from "../../../context/Auth/AuthContext";
 
 const colors = {
   primary: "#1e70d0",
@@ -40,11 +41,14 @@ const ProductId = () => {
     cart: false,
     wishlist: false,
   });
+    const { token } = useAuthContext();
 
   useEffect(() => {
     if (productId) {
       fetchProductDetails(productId);
-      fetchWishlist();
+      if (token) { 
+        fetchWishlist();
+      }
     }
   }, [productId]);
 
@@ -211,29 +215,23 @@ const ProductId = () => {
               </span>
             </button>
 
-            <button
-              onClick={() =>
-                productDetails && handleToggleWishlist(productDetails.id)
-              }
-              disabled={
-                productDetails
-                  ? loadingStates.wishlist[productDetails.id]
-                  : false
-              }
-              className={`p-2 rounded border border-gray-300 transition duration-200 cursor-pointer ${
-                productDetails && loadingStates.wishlist[productDetails.id]
-                  ? "opacity-50 cursor-not-allowed"
-                  : productDetails && isProductInWishlist(productDetails.id)
-                  ? "bg-red-100 hover:bg-red-200"
-                  : "hover:bg-gray-100"
-              }`}
-              style={{ borderColor: colors.borderLight }}
-            >
-              {productDetails && (
+            {productDetails?.id && (
+              <button
+                onClick={() => handleToggleWishlist(productDetails.id)}
+                disabled={loadingStates.wishlist?.[productDetails.id]}
+                className={`p-2 rounded border border-gray-300 transition duration-200 cursor-pointer ${
+                  loadingStates.wishlist?.[productDetails.id]
+                    ? "opacity-50 cursor-not-allowed"
+                    : isProductInWishlist(productDetails.id)
+                    ? "bg-red-100 hover:bg-red-200"
+                    : "hover:bg-gray-100"
+                }`}
+                style={{ borderColor: colors.borderLight }}
+              >
                 <Heart
                   size={25}
                   className={`${
-                    loadingStates.wishlist[productDetails.id]
+                    loadingStates.wishlist?.[productDetails.id]
                       ? "text-gray-400"
                       : isProductInWishlist(productDetails.id)
                       ? "text-red-500"
@@ -241,8 +239,8 @@ const ProductId = () => {
                   }`}
                   fill={isProductInWishlist(productDetails.id) ? "red" : "none"}
                 />
-              )}
-            </button>
+              </button>
+            )}
           </div>
         </div>
       </div>
