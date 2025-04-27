@@ -20,12 +20,12 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const { submitReview, editReview, deleteReview, loading, deleteLoading } =
     useReviews();
   const { user } = useAuthContext();
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [hover, setHover] = useState(0);
 
-  const currentUserId = user?.id;
+  const currentUserId = user?.user?.id;
 
   const canEditReview = (review) => {
     return currentUserId && review?.user?.id === currentUserId;
@@ -33,18 +33,35 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
 
   const handleSubmit = async () => {
     try {
+      if (!productId || isNaN(productId) || productId <= 0) {
+        toast.error("Invalid product ID.");
+        return;
+      }
+
+      if (rating < 1) {
+        toast.error("Please select a rating.");
+        return;
+      }
+      if (!feedback || feedback.trim() === "") {
+        toast.error("Please write a review.");
+        return;
+      }
+
       if (editingReviewId) {
         await editReview(productId, editingReviewId, rating, feedback);
         setEditingReviewId(null);
       } else {
         await submitReview(productId, rating, feedback);
       }
-      setRating(1);
+      setRating(0);
       setFeedback("");
       setHover(0);
       fetchProductDetails(productId);
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message);
+      setRating(0);
+      setFeedback("");
+      setHover(0);
     }
   };
 
@@ -233,6 +250,7 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
         </div>
 
         <button
+          type="button"
           onClick={handleSubmit}
           disabled={loading}
           className={`py-2 px-6 rounded font-semibold cursor-pointer ${

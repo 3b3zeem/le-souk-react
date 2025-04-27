@@ -21,9 +21,20 @@ const useReviews = () => {
         return;
       }
 
+      if (!productId || isNaN(productId) || productId <= 0) {
+        throw new Error("Invalid product ID.");
+      }
+
+      if (rating < 1 || rating > 5) {
+        throw new Error("Rating must be between 1 and 5.");
+      }
+      if (!feedback || feedback.trim() === "") {
+        throw new Error("Feedback cannot be empty.");
+      }
+
       const response = await axios.post(
         "https://ecommerce.ershaad.net/api/reviews",
-        { product_id: productId, rating, feedback },
+        { product_id: Number(productId), rating, feedback },
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,10 +47,10 @@ const useReviews = () => {
       return response.data;
     } catch (err) {
       const errorMessage =
-        err.response?.data?.message || "Failed to submit review";
+        err.response?.data?.message || err.message || "Failed to submit review";
+      console.error("Submit Review Error:", err.response?.data || err);
       setError(errorMessage);
-      toast.error(errorMessage);
-      throw err;
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
