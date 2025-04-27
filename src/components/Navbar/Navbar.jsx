@@ -175,7 +175,7 @@ const Navbar = () => {
                         navigate("/profile");
                         setIsOpenUser((prev) => !prev);
                       }}
-                      className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b"
+                      className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
                     >
                       <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                         <User />
@@ -184,7 +184,7 @@ const Navbar = () => {
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
+                      className="flex items-center gap-2 w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
                     >
                       <LogOut />
                       Logout
@@ -351,7 +351,7 @@ const Navbar = () => {
                         )}
                         <button
                           onClick={() => navigate("/profile")}
-                          className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b"
+                          className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
                         >
                           <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                             <User />
@@ -360,7 +360,7 @@ const Navbar = () => {
                         </button>
                         <button
                           onClick={handleLogout}
-                          className="flex items-center w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
+                          className="flex items-center gap-2 w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
                         >
                           <LogOut />
                           Logout
