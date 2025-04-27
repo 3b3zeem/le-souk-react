@@ -67,7 +67,7 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const NextArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -right-10 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -right-2 md:-right-10 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronRight size={20} />
     </button>
@@ -76,7 +76,7 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const PrevArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -left-10 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -left-2 md:-left-10 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronLeft size={20} />
     </button>
