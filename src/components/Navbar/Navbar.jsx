@@ -17,21 +17,25 @@ import { useCart } from "../../context/Cart/CartContext";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 
 import logo from "../../assets/Images/3x/navbar.png";
+import { useUserContext } from "../../context/User/UserContext";
+import useUserProfile from "../../hooks/Profile/useProfile";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hover, setHover] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [isOpenUser, setIsOpenUser] = useState(false);
+  const { userData: navUser } = useUserProfile();
+  const { userData } = useUserContext();
   const { user, logout } = useAuthContext();
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
 
   const isLoggedIn = !!user;
-  const avatar = user?.image;
-  const userName = user?.name;
-  const isAdmin = localStorage.getItem("isAdmin");
+  const avatar = userData?.image || navUser?.image;
+  const userName = userData?.name || navUser?.name;
+  const isAdmin = user?.is_admin;
 
   const handleCartClick = () => {
     navigate("/cart");
@@ -143,10 +147,10 @@ const Navbar = () => {
                   onClick={() => setIsOpenUser((prev) => !prev)}
                 >
                   <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
-                    Hello, {userName}
+                    {userName}
                   </p>
                   <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                    <img src={avatar} alt={userName} className="rounded-full" />
+                    <img src={avatar} alt={userName} className="h-full w-full rounded-full object-cover" />
                   </div>
                 </div>
               </div>
@@ -160,11 +164,11 @@ const Navbar = () => {
                     transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
                   >
-                    {isAdmin !== "null" && (
-                      <button className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                    {isAdmin !== 0 && (
+                      <Link to={"/admin-dashboard"} className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
                         <LayoutDashboard />
                         Dashboard
-                      </button>
+                      </Link>
                     )}
                     <button
                       onClick={() => {
@@ -339,11 +343,11 @@ const Navbar = () => {
                         transition={{ duration: 0.2 }}
                         className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
                       >
-                        {isAdmin !== "null" && (
-                          <button className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        {isAdmin !== 0 && (
+                          <Link to={"/admin-dashboard"} className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
                             <LayoutDashboard />
                             Dashboard
-                          </button>
+                          </Link>
                         )}
                         <button
                           onClick={() => navigate("/profile")}

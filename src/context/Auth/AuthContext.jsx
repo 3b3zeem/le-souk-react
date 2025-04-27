@@ -1,12 +1,17 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null)
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -16,9 +21,25 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       setToken(storedToken);
     }
+
+    setIsLoading(false);
   }, []);
 
-  // logout endpoint and clear user
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+    }
+  }, [user, token]);
+
+  // logout function
   const logout = async () => {
     try {
       await axios.post(
@@ -26,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         {},
         {
           headers: {
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -36,16 +57,20 @@ export const AuthProvider = ({ children }) => {
       setToken(null);
       localStorage.clear();
     } catch (err) {
-      console.error("Logout error:", err.response?.data?.message || "Logout failed");
+      console.error(
+        "Logout error:",
+        err.response?.data?.message || "Logout failed"
+      );
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, token, setToken, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, token, setToken, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// custom hook to read context
 export const useAuthContext = () => useContext(AuthContext);
