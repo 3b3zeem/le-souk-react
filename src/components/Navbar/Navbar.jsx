@@ -36,6 +36,19 @@ const Navbar = () => {
   const avatar = userData?.image || navUser?.image;
   const userName = userData?.name || navUser?.name;
   const isAdmin = user?.is_admin;
+  
+  const renderAdminLink = () => {
+    if (isAdmin === 0) return null;
+    return (
+      <Link
+        to="/admin-dashboard"
+        className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+      >
+        <LayoutDashboard />
+        Dashboard
+      </Link>
+    );
+  };
 
   const handleCartClick = () => {
     navigate("/cart");
@@ -164,12 +177,7 @@ const Navbar = () => {
                     transition={{ duration: 0.2 }}
                     className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
                   >
-                    {isAdmin !== 0 && (
-                      <Link to={"/admin-dashboard"} className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        <LayoutDashboard />
-                        Dashboard
-                      </Link>
-                    )}
+                    {renderAdminLink()}
                     <button
                       onClick={() => {
                         navigate("/profile");
@@ -343,12 +351,7 @@ const Navbar = () => {
                         transition={{ duration: 0.2 }}
                         className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
                       >
-                        {isAdmin !== 0 && (
-                          <Link to={"/admin-dashboard"} className="flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                            <LayoutDashboard />
-                            Dashboard
-                          </Link>
-                        )}
+                        {renderAdminLink()}
                         <button
                           onClick={() => navigate("/profile")}
                           className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
