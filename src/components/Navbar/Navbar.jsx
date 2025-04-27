@@ -36,7 +36,7 @@ const Navbar = () => {
   const avatar = userData?.image || navUser?.image;
   const userName = userData?.name || navUser?.name;
   const isAdmin = user?.is_admin;
-  
+
   const renderAdminLink = () => {
     if (isAdmin === 0) return null;
     return (

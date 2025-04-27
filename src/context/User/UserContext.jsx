@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
   const { user } = useAuthContext();
   const [userData, setUserData] = useState(user);
 
+
   useEffect(() => {
     setUserData(user);
   }, [user]);

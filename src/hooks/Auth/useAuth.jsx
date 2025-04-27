@@ -72,7 +72,7 @@ const useAuth = () => {
 
       const data = res.data;
 
-      setUser(data.data.user);
+      setUser(data.data);
       setToken(data.data.token);
 
       localStorage.setItem("user", JSON.stringify(data.data));
