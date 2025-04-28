@@ -125,15 +125,20 @@ const useCartCRUD = () => {
         throw new Error("No authentication token found");
       }
   
-      if (newQuantity <= 0) {
-        await removeFromCart(productId);
-      } else {
-        const currentItem = cartItems.find((item) => item.product.id === productId);
-        if (currentItem && currentItem.quantity !== newQuantity) {
-          await removeFromCart(productId);
-          await addToCart(productId, newQuantity);
+      const formData = new FormData();
+      formData.append(`products[0][product_id]`, productId);
+      formData.append(`products[0][quantity]`, newQuantity);
+  
+      await axios.post(
+        "https://ecommerce.ershaad.net/api/cart/sync",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
-      }
+      );
   
       await fetchCart();
     } catch (err) {

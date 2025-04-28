@@ -8,6 +8,8 @@ import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
+const About = lazy(() => import("../pages/About/About.jsx"));
+const Contact = lazy(() => import("../pages/Contact/Contact.jsx"));
 const Profile = lazy(() => import("../pages/Profile/Profile.jsx"));
 const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("../pages/Auth/Register/Register.jsx"));
@@ -69,6 +71,22 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />
+          </Suspense>
+        ),
+      },
+      {
+        path: "contact",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Contact />
+          </Suspense>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <About />
           </Suspense>
         ),
       },

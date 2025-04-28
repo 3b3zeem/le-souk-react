@@ -1,0 +1,113 @@
+import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useAuthContext } from "../../context/Auth/AuthContext";
+
+export const useOrder = () => {
+  const [loading, setLoading] = useState(false);
+  const { token } = useAuthContext();
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "https://ecommerce.ershaad.net/api/orders",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to fetch orders.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const placeOrder = async (items) => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      items.forEach((item, index) => {
+        formData.append(`items[${index}][product_id]`, item.product_id);
+        formData.append(`items[${index}][quantity]`, item.quantity);
+      });
+
+      const response = await axios.post(
+        "https://ecommerce.ershaad.net/api/orders/place",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast.success(response.data.message || "Order placed successfully!");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to place order.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const proceedOrder = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://ecommerce.ershaad.net/api/orders/proceed",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast.success(response.data.message || "Order proceeded successfully!");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to proceed order.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelOrder = async (orderId) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `https://ecommerce.ershaad.net/api/orders/${orderId}/cancel`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success(response.data.message || "Order cancelled successfully!");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to cancel order.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetchOrders, placeOrder, proceedOrder, cancelOrder, loading };
+};

@@ -18,6 +18,7 @@ import NotFound from "../../../components/NotFound/NotFound";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import { useOrder } from "../../../hooks/Order/useOrder";
 
 const colors = {
   primary: "#1e70d0",
@@ -38,6 +39,7 @@ const ProductId = () => {
   } = useProducts();
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+  const { placeOrder, loading: orderLoading } = useOrder();
   const [quantity, setQuantity] = useState(1);
   const [loadingStates, setLoadingStates] = useState({
     cart: false,
@@ -88,8 +90,23 @@ const ProductId = () => {
     return wishlistItems.some((item) => item.id === parseInt(productId));
   };
 
-  const handlePayNow = () => {
-    toast.success("Redirecting to payment...");
+  const handlePayNow = async () => {
+    if (!token) {
+      toast.error(t("noAccount"));
+      return;
+    }
+
+    try {
+      const items = [
+        {
+          product_id: productId,
+          quantity: quantity,
+        },
+      ];
+      await placeOrder(items);
+    } catch (err) {
+      toast.error(err);
+    }
   };
 
   if (productDetailsLoading) return <Loader />;
@@ -187,11 +204,14 @@ const ProductId = () => {
             <input
               type="number"
               min="1"
-              max={productDetails.stock_quantity}
+              maxLength={productDetails.stock_quantity}
               value={quantity}
-              onChange={(e) =>
-                setQuantity(Math.max(1, parseInt(e.target.value)))
-              }
+              onChange={(e) => {
+                const value = parseInt(e.target.value) || 1;
+                setQuantity(
+                  Math.min(productDetails.stock_quantity, Math.max(1, value))
+                );
+              }}
               className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               style={{ borderColor: colors.borderLight }}
             />
@@ -216,12 +236,15 @@ const ProductId = () => {
 
             <button
               onClick={handlePayNow}
-              className="flex-1 py-3 rounded-md text-white font-medium cursor-pointer customEffect"
+              disabled={orderLoading}
+              className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${
+                orderLoading ? "opacity-50 cursor-not-allowed" : "customEffect"
+              }`}
               style={{ backgroundColor: colors.primary }}
             >
               <span className="flex justify-center items-center gap-2">
                 <CreditCard size={20} className="inline-block" />
-                {t("payNow")}
+                {orderLoading ? t("loading") : t("payNow")}
               </span>
             </button>
 

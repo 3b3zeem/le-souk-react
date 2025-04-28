@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Edit2, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUserProfile from "../../hooks/Profile/useProfile";
+import { useOrder } from "../../hooks/Order/useOrder";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import LanguageDropdown from "../../components/Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
+import { useAuthContext } from "../../context/Auth/AuthContext";
 
 const colors = {
   primary: "#1e70d0",
@@ -18,6 +21,10 @@ const colors = {
 
 const Profile = () => {
   const { userData, loading, error, updateUserProfile } = useUserProfile();
+  const { fetchOrders, cancelOrder } = useOrder();
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState({});
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -28,8 +35,37 @@ const Profile = () => {
   });
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { language, changeLanguage } = useLanguage();
+  const { token } = useAuthContext();
+  const { language } = useLanguage();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      setOrdersLoading(true);
+      try {
+        const data = await fetchOrders();
+        setOrders(data);
+      } catch (err) {
+        toast.error(err);
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+    loadOrders();
+  }, [token]);
+
+  const handleCancelOrder = async (orderId) => {
+    setCancelLoading((prev) => ({ ...prev, [orderId]: true }));
+    try {
+      await cancelOrder(orderId);
+      const updatedOrders = await fetchOrders();
+      setOrders(Array.isArray(updatedOrders) ? updatedOrders : []);
+    } catch (err) {
+      toast.error(err);
+    } finally {
+      setCancelLoading((prev) => ({ ...prev, [orderId]: false }));
+    }
+  };
 
   // * Open overlay Edit
   const openOverlay = () => {
@@ -216,7 +252,7 @@ const Profile = () => {
             >
               <button
                 onClick={closeOverlay}
-                className="absolute p-1 top-4 right-4 text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer"
+                className={`absolute p-1 top-4 ${language === "ar" ? "left-4" : "right-4"} text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer`}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -356,6 +392,125 @@ const Profile = () => {
           </h1>
           <LanguageDropdown />
         </div>
+      </div>
+
+      <div className="w-full mx-auto bg-white p-8 shadow-md mt-6 border-t border-gray-200">
+        <h2
+          className="text-2xl font-semibold mb-6"
+          style={{ color: colors.productTitle }}
+        >
+          {t("myOrders")}
+        </h2>
+        {ordersLoading ? (
+          <div className="text-center py-6">
+            <p className="text-gray-600">{t("loading")}</p>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="text-center py-6">
+            <p className="text-gray-600">{t("noOrdersFound")}</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead>
+                <tr className="border-b" style={{ borderColor: colors.borderLight }}>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("orderId")}
+                  </th>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("status")}
+                  </th>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("totalPrice")}
+                  </th>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("createdAt")}
+                  </th>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("items")}
+                  </th>
+                  <th
+                    className="py-3 px-4 font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("actions")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr
+                    key={order.id}
+                    className="border-b hover:bg-gray-50"
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                      {order.id}
+                    </td>
+                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                      {order.status}
+                    </td>
+                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                      {order.total_price} {language === "ar" ? "ج.م" : "LE"}
+                    </td>
+                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                      {new Date(order.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                      <ul className="list-decimal list-inside">
+                        {order.items.map((item, index) => (
+                          <li key={index}>
+                            {item.product.name} ( x{item.quantity} )
+                          </li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td className="py-3 px-4">
+                      {order.status === "pending" && (
+                        <button
+                          onClick={() => handleCancelOrder(order.id)}
+                          disabled={cancelLoading[order.id]}
+                          className={`py-2 px-4 rounded customEffect text-white cursor-pointer ${
+                            cancelLoading[order.id]
+                              ? "opacity-50 cursor-not-allowed"
+                              : ""
+                          }`}
+                          style={{
+                            backgroundColor: "#d01e1e",
+                          }}
+                        >
+                          {cancelLoading[order.id] ? (
+                            <span className="flex items-center gap-2">
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              {t("cancelling")}
+                            </span>
+                          ) : (
+                            <span>{t("cancelOrder")}</span>
+                          )}
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

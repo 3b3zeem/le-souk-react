@@ -5,6 +5,8 @@ import { ChevronRight, House, ShoppingCart, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import { useOrder } from "../../hooks/Order/useOrder";
+import { useAuthContext } from "../../context/Auth/AuthContext";
 
 const colors = {
   primary: "#1e70d0",
@@ -25,10 +27,12 @@ const Cart = () => {
     error,
     success,
   } = useCartCRUD();
+  const { proceedOrder, loading: orderLoading } = useOrder();
   const [loadingStates, setLoadingStates] = useState({
     remove: {},
     quantity: {},
   });
+  const { token } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -81,6 +85,12 @@ const Cart = () => {
     try {
       await setCartQuantity(productId, newQuantity);
       await fetchCart();
+
+      if (type === "inc") {
+        toast.success("Quantity increased successfully!");
+      } else if (type === "dec") {
+        toast.success("Quantity decreased successfully!");
+      }
     } catch (err) {
       console.error("Error updating quantity:", err);
       toast.error("Failed to update quantity.");
@@ -97,6 +107,21 @@ const Cart = () => {
       await clearCart();
     } catch (err) {
       console.error("Error clearing wishlist:", err);
+    }
+  };
+
+  const handleProceedOrder = async () => {
+    if (!token) {
+      toast.error(t("noAccount"));
+      return;
+    }
+
+    try {
+      await proceedOrder();
+      await clearCart();
+      await fetchCart();
+    } catch (err) {
+      toast.error(err);
     }
   };
 
@@ -291,30 +316,30 @@ const Cart = () => {
                   {t("summary")}
                 </h2>
 
-                {/* <div>
-                <p
-                  className="text-sm mb-2"
-                  style={{ color: colors.productName }}
-                >
-                  {t("promoCodePrompt")}
-                </p>
-                <div className="flex">
-                  <input
-                    type="text"
-                    placeholder={t("enterCode")}
-                    className="border border-gray-300 p-2 flex-1"
-                  />
-                  <button
-                    className="px-4 uppercase"
-                    style={{
-                      backgroundColor: colors.primary,
-                      color: colors.lightText,
-                    }}
+                <div>
+                  <p
+                    className="text-sm mb-2"
+                    style={{ color: colors.productName }}
                   >
-                    {t("apply")}
-                  </button>
+                    {t("promoCodePrompt")}
+                  </p>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      placeholder={t("enterCode")}
+                      className="border border-gray-300 p-2 flex-1"
+                    />
+                    <button
+                      className="px-4 uppercase"
+                      style={{
+                        backgroundColor: colors.primary,
+                        color: colors.lightText,
+                      }}
+                    >
+                      {t("apply")}
+                    </button>
+                  </div>
                 </div>
-              </div> */}
 
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
@@ -340,20 +365,28 @@ const Cart = () => {
                   className="border-t pt-4 flex justify-between font-semibold"
                   style={{ borderColor: colors.lineBg }}
                 >
-                  <p style={{ color: colors.productTitle }}>{t("estimatedTotal")}</p>
+                  <p style={{ color: colors.productTitle }}>
+                    {t("estimatedTotal")}
+                  </p>
                   <p style={{ color: colors.productTitle }}>
                     ${calculateSubtotal().toFixed(2)}
                   </p>
                 </div>
 
                 <button
-                  className="w-full py-3 mt-4 customEffect cursor-pointer"
+                  onClick={handleProceedOrder}
+                  disabled={orderLoading}
+                  className={`w-full py-3 mt-4 customEffect cursor-pointer ${
+                    orderLoading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                   style={{
                     backgroundColor: colors.primary,
                     color: colors.lightText,
                   }}
                 >
-                  <span className="uppercase">{t("checkout")}</span>
+                  <span className="uppercase">
+                    {orderLoading ? t("loading") : t("checkout")}
+                  </span>
                 </button>
               </div>
             </div>

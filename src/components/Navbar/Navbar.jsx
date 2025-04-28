@@ -109,6 +109,7 @@ const Navbar = () => {
         className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-white hidden md:flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
+        dir={language === "ar" ? "rtl" : "ltr"}
       >
         <div className="flex items-center">
           <img src={logo} width={150} alt="logo" />
@@ -231,7 +232,6 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <LanguageDropdown />
           {isLoggedIn ? (
             <>
               <div className="flex items-center gap-3">
@@ -330,6 +330,8 @@ const Navbar = () => {
                     {link.label}
                   </Link>
                 ))}
+
+                <LanguageDropdown />
 
                 {/* User Dropdown with animation as before */}
                 <div className="cursor-pointer relative ms-2">
