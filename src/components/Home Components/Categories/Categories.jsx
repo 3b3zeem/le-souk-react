@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import Loader from "../../../layouts/Loader";
 import useHome from "../../../hooks/HomeComponents/useHome";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 

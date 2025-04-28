@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { ShoppingCart, Heart, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import Loader from "../../../layouts/Loader";
 import { Link } from "react-router-dom";
