@@ -3,9 +3,13 @@ import Slider from "react-slick";
 import Loader from "../../../layouts/Loader";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const Categories = () => {
   const { categories, loading, error } = useHome();
+  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const NextArrow = ({ onClick }) => (
     <button
@@ -69,7 +73,7 @@ const Categories = () => {
           <div className="flex items-center justify-center mb-3">
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
+          <h2 className="text-lg font-bold mb-2">{t("Something went wrong!")}</h2>
           <p className="text-sm">{error}</p>
         </div>
       </div>
@@ -85,12 +89,12 @@ const Categories = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300">
+    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300" dir={language === "ar" ? "rtl" : "ltr"}>
       <h2
-        className="text-2xl sm:text-3xl font-normal mb-6"
+        className="text-2xl sm:text-3xl font-normal mb-6 uppercase"
         style={{ color: colors.categoryTitle }}
       >
-        CATEGORIES
+        {t("categories")}
       </h2>
 
       <Slider {...settings}>

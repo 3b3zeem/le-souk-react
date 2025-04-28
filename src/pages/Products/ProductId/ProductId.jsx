@@ -16,6 +16,8 @@ import Reviews from "../Reviews/Reviews";
 import Loader from "../../../layouts/Loader";
 import NotFound from "../../../components/NotFound/NotFound";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
+import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -41,12 +43,14 @@ const ProductId = () => {
     cart: false,
     wishlist: false,
   });
-    const { token } = useAuthContext();
+  const { token } = useAuthContext();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     if (productId) {
       fetchProductDetails(productId);
-      if (token) { 
+      if (token) {
         fetchWishlist();
       }
     }
@@ -92,21 +96,27 @@ const ProductId = () => {
   if (productDetailsError) return <NotFound productId={productId} />;
   if (!productDetails || !productDetails.id)
     return (
-      <div className="flex flex-col items-center justify-center py-10">
+      <div
+        className="flex flex-col items-center justify-center py-10"
+        dir={language === "ar" ? "rtl" : "ltr"}
+      >
         <div className="bg-gray-100 border border-gray-300 text-gray-700 px-6 py-4 rounded-md shadow-md max-w-md w-full text-center">
           <div className="flex items-center justify-center mb-3">
             <SearchX className="h-8 w-8 text-gray-400" />
           </div>
-          <h2 className="text-lg font-bold mb-2">No Product Found</h2>
+          <h2 className="text-lg font-bold mb-2">{t("noProductFound")}</h2>
           <p className="text-sm text-gray-600">
-            We couldn't find the product you're looking for.
+            {t("productNotFoundDescription")}
           </p>
         </div>
       </div>
     );
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div
+      className="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Section - Product Image */}
         <div className="md:w-1/2 flex justify-center items-center">
@@ -141,7 +151,7 @@ const ProductId = () => {
             className="text-xl font-semibold mb-4"
             style={{ color: colors.primary }}
           >
-            {productDetails.price} LE
+            {productDetails.price} {language === "ar" ? "ج.م" : "LE"}
           </p>
 
           <p className="text-gray-600 mb-4">{productDetails.description}</p>
@@ -151,7 +161,7 @@ const ProductId = () => {
               className="font-medium"
               style={{ color: colors.productTitle }}
             >
-              Category:
+              {t("category")}:
             </span>
             <span className="ml-2" style={{ color: colors.productName }}>
               {productDetails.category.name}.
@@ -160,7 +170,7 @@ const ProductId = () => {
               className="ml-4 font-medium"
               style={{ color: colors.productTitle }}
             >
-              In Stock:
+              {t("inStock")}:
             </span>
             <span className="ml-2" style={{ color: colors.productName }}>
               {productDetails.stock_quantity}
@@ -172,7 +182,7 @@ const ProductId = () => {
               className="font-medium mr-4"
               style={{ color: colors.productTitle }}
             >
-              Quantity:
+              {t("quantity")}:
             </span>
             <input
               type="number"
@@ -198,9 +208,9 @@ const ProductId = () => {
               }`}
               style={{ backgroundColor: colors.primary }}
             >
-              <span>
-                <ShoppingCart size={20} className="inline-block mr-2" />
-                {loadingStates.cart ? "Adding..." : "Add to Cart"}
+              <span className="flex justify-center items-center gap-2">
+                <ShoppingCart size={20} className="inline-block" />
+                {loadingStates.cart ? t("addingToCart") : t("addToCart")}
               </span>
             </button>
 
@@ -209,9 +219,9 @@ const ProductId = () => {
               className="flex-1 py-3 rounded-md text-white font-medium cursor-pointer customEffect"
               style={{ backgroundColor: colors.primary }}
             >
-              <span>
-                <CreditCard size={20} className="inline-block mr-2" />
-                Pay Now
+              <span className="flex justify-center items-center gap-2">
+                <CreditCard size={20} className="inline-block" />
+                {t("payNow")}
               </span>
             </button>
 

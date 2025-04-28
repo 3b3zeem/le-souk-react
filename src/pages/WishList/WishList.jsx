@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import useWishlistCRUD from "../../hooks/WishList/useWishlist";
 import useCartCRUD from "../../hooks/Cart/UseCart";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -28,6 +30,8 @@ const WishList = () => {
     addToCart: {},
   });
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     fetchWishlist();
@@ -86,13 +90,16 @@ const WishList = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-gray-200 p-10 mb-10">
+      <div
+        className="bg-gray-200 p-10 mb-10"
+        dir={language === "ar" ? "rtl" : "ltr"}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
-            className="text-2xl font-bold"
+            className="text-2xl font-bold uppercase"
             style={{ color: colors.productTitle }}
           >
-            MY WISHLIST
+            {t("myWishlist")}
           </h1>
           <div className="flex items-center text-gray-600 gap-1">
             <House
@@ -101,11 +108,14 @@ const WishList = () => {
               className="cursor-pointer"
             />
             <ChevronRight size={20} />
-            <span className="text-[17px]">Wishlist</span>
+            <span className="text-[17px]">{t("wishlist")}</span>
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto p-6">
+      <div
+        className="max-w-7xl mx-auto p-6"
+        dir={language === "ar" ? "rtl" : "ltr"}
+      >
         {wishlistItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <Heart
@@ -117,14 +127,13 @@ const WishList = () => {
               className="text-2xl font-semibold mb-2"
               style={{ color: colors.productTitle }}
             >
-              Your Wishlist is Empty
+              {t("yourWishlistIsEmpty")}
             </h2>
             <p
               className="text-sm mb-6 max-w-md"
               style={{ color: colors.productName }}
             >
-              Looks like you haven't added any items to your wishlist yet.
-              Explore our collection and find something you love!
+              {t("emptyWishlistDescription")}
             </p>
             <button
               onClick={() => navigate("/products")}
@@ -134,7 +143,7 @@ const WishList = () => {
                 color: colors.lightText,
               }}
             >
-              <span>Continue Shopping</span>
+              <span>{t("continueShopping")}</span>
             </button>
           </div>
         ) : (
@@ -144,7 +153,7 @@ const WishList = () => {
                 onClick={handleClearWishlist}
                 className="px-4 py-2 bg-red-500 mb-5  text-white rounded-md customEffect cursor-pointer"
               >
-                <span>Clear Wishlist</span>
+                <span>{t("clearWishlist")}</span>
               </button>
             </div>
             <div className="grid grid-cols-1 gap-8 mt-5">
@@ -172,22 +181,22 @@ const WishList = () => {
                           {item.name}
                         </h2>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          ITEM NO: {item.id}
+                          {t("itemNo")} {item.id}
                         </p>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          SIZE: OS
+                          {t("size")} OS
                         </p>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          COLOR: Unknown
+                          {t("color")} Unknown
                         </p>
                       </div>
                       <div className="flex flex-col justify-between items-center">
@@ -210,7 +219,7 @@ const WishList = () => {
                           >
                             <span>
                               {loadingStates.addToCart[item.id] ? (
-                                "Adding..."
+                                t("addingToCart")
                               ) : (
                                 <ShoppingCart size={18} />
                               )}
@@ -225,7 +234,7 @@ const WishList = () => {
                           >
                             <span>
                               {isRemoving ? (
-                                "Removing..."
+                                t("removing")
                               ) : (
                                 <Trash2 size={18} />
                               )}

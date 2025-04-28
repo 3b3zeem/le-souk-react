@@ -3,6 +3,8 @@ import useCartCRUD from "../../hooks/Cart/UseCart";
 import toast from "react-hot-toast";
 import { ChevronRight, House, ShoppingCart, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -28,6 +30,8 @@ const Cart = () => {
     quantity: {},
   });
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     if (error) {
@@ -98,13 +102,16 @@ const Cart = () => {
 
   return (
     <React.Fragment>
-      <div className="bg-gray-200 p-10 mb-10">
+      <div
+        className="bg-gray-200 p-10 mb-10"
+        dir={language === "ar" ? "rtl" : "ltr"}
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
-            className="text-2xl font-bold"
+            className="text-2xl font-bold uppercase"
             style={{ color: colors.productTitle }}
           >
-            MY SHOPPING BAG
+            {t("myShoppingBag")}
           </h1>
           <div className="flex items-center text-gray-600 gap-1">
             <House
@@ -113,11 +120,14 @@ const Cart = () => {
               className="cursor-pointer"
             />
             <ChevronRight size={20} />
-            <span className="text-[17px]">Cart</span>
+            <span className="text-[17px]">{t("cart")}</span>
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto p-6">
+      <div
+        className="max-w-7xl mx-auto p-6"
+        dir={language === "ar" ? "rtl" : "ltr"}
+      >
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <ShoppingCart
@@ -129,14 +139,13 @@ const Cart = () => {
               className="text-2xl font-semibold mb-2"
               style={{ color: colors.productTitle }}
             >
-              Your Cart is Empty
+              {t("yourCartIsEmpty")}
             </h2>
             <p
               className="text-sm mb-6 max-w-md"
               style={{ color: colors.productName }}
             >
-              Looks like you haven't added any items to your cart yet. Start
-              shopping to find your favorite products!
+              {t("emptyCartDescription")}
             </p>
             <button
               onClick={() => navigate("/products")}
@@ -146,7 +155,7 @@ const Cart = () => {
                 color: colors.lightText,
               }}
             >
-              <span>Start Shopping</span>
+              <span>{t("startShopping")}</span>
             </button>
           </div>
         ) : (
@@ -156,7 +165,7 @@ const Cart = () => {
                 onClick={handleClearCart}
                 className="px-4 py-2 bg-red-500 mb-5 text-white rounded-md customEffect cursor-pointer"
               >
-                <span>Clear Cart</span>
+                <span>{t("clearCart")}</span>
               </button>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-5">
@@ -187,22 +196,22 @@ const Cart = () => {
                           {item.product.name}
                         </h2>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          ITEM NO: {item.product.id}
+                          {t("itemNo")} {item.product.id}
                         </p>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          SIZE: OS
+                          {t("size")} OS
                         </p>
                         <p
-                          className="text-sm"
+                          className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          COLOR: Unknown
+                          {t("color")} Unknown
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <button
@@ -258,7 +267,7 @@ const Cart = () => {
                           }`}
                         >
                           <span>
-                            {isRemoving ? "Removing..." : <Trash2 size={18} />}
+                            {isRemoving ? t("removing") : <Trash2 size={18} />}
                           </span>
                         </button>
                       </div>
@@ -273,13 +282,13 @@ const Cart = () => {
                 style={{ borderColor: colors.borderLight }}
               >
                 <h2
-                  className="text-lg font-bold border-b pb-4"
+                  className="text-lg font-bold border-b pb-4 uppercase"
                   style={{
                     borderColor: colors.lineBg,
                     color: colors.productTitle,
                   }}
                 >
-                  SUMMARY
+                  {t("summary")}
                 </h2>
 
                 {/* <div>
@@ -287,41 +296,42 @@ const Cart = () => {
                   className="text-sm mb-2"
                   style={{ color: colors.productName }}
                 >
-                  Do you have a promo code?
+                  {t("promoCodePrompt")}
                 </p>
                 <div className="flex">
                   <input
                     type="text"
-                    placeholder="Enter code"
+                    placeholder={t("enterCode")}
                     className="border border-gray-300 p-2 flex-1"
                   />
                   <button
-                    className="px-4"
+                    className="px-4 uppercase"
                     style={{
                       backgroundColor: colors.primary,
                       color: colors.lightText,
                     }}
                   >
-                    APPLY
+                    {t("apply")}
                   </button>
                 </div>
               </div> */}
 
                 <div className="flex justify-between text-sm">
-                  <p style={{ color: colors.productName }}>Subtotal</p>
+                  <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
                     ${calculateSubtotal().toFixed(2)}
                   </p>
                 </div>
 
                 <div className="flex justify-between text-sm">
-                  <p style={{ color: colors.productName }}>Shipping</p>
+                  <p style={{ color: colors.productName }}>{t("shipping")}</p>
                   <p style={{ color: colors.productName }}>TBD</p>
                 </div>
 
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>
-                    Sales Tax <span className="text-gray-400 text-xs">(i)</span>
+                    {t("salesTax")}
+                    <span className="text-gray-400 text-xs">(i)</span>
                   </p>
                   <p style={{ color: colors.productName }}>TBD</p>
                 </div>
@@ -330,7 +340,7 @@ const Cart = () => {
                   className="border-t pt-4 flex justify-between font-semibold"
                   style={{ borderColor: colors.lineBg }}
                 >
-                  <p style={{ color: colors.productTitle }}>Estimated Total</p>
+                  <p style={{ color: colors.productTitle }}>{t("estimatedTotal")}</p>
                   <p style={{ color: colors.productTitle }}>
                     ${calculateSubtotal().toFixed(2)}
                   </p>
@@ -343,7 +353,7 @@ const Cart = () => {
                     color: colors.lightText,
                   }}
                 >
-                  <span>CHECKOUT</span>
+                  <span className="uppercase">{t("checkout")}</span>
                 </button>
               </div>
             </div>

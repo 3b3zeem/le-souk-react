@@ -19,6 +19,9 @@ import { useWishlist } from "../../context/WishList/WishlistContext";
 import logo from "../../assets/Images/3x/navbar.png";
 import { useUserContext } from "../../context/User/UserContext";
 import useUserProfile from "../../hooks/Profile/useProfile";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import LanguageDropdown from "../Language/LanguageDropdown";
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +34,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
+  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const isLoggedIn = !!user;
   const avatar = userData?.image || navUser?.image;
@@ -66,10 +71,10 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { path: "/", label: "HOME", isPrimary: true },
-    { path: "/products", label: "PRODUCTS", isPrimary: true },
-    { path: "/about", label: "ABOUT US", isPrimary: true },
-    { path: "/contact", label: "CONTACT US", isPrimary: true },
+    { path: "/", label: t("home"), isPrimary: true },
+    { path: "/about", label: t("about"), isPrimary: true },
+    { path: "/products", label: t("products"), isPrimary: true },
+    { path: "/contact", label: t("contact"), isPrimary: true },
   ];
 
   useEffect(() => {
@@ -125,6 +130,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-4">
+          <LanguageDropdown />
           {isLoggedIn ? (
             <div className="cursor-pointer relative">
               <div className="flex items-center gap-5">
@@ -159,11 +165,12 @@ const Navbar = () => {
                   className="flex items-center gap-2"
                   onClick={() => setIsOpenUser((prev) => !prev)}
                 >
-                  <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
-                    {userName}
-                  </p>
                   <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                    <img src={avatar} alt={userName} className="h-full w-full rounded-full object-cover" />
+                    <img
+                      src={avatar}
+                      alt={t("userProfile")}
+                      className="h-full w-full rounded-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -188,14 +195,14 @@ const Navbar = () => {
                       <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                         <User />
                       </div>
-                      User Profile
+                      {t("userProfile")}
                     </button>
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
                     >
                       <LogOut />
-                      Logout
+                      {t("logout")}
                     </button>
                   </motion.div>
                 )}
@@ -206,7 +213,7 @@ const Navbar = () => {
               onClick={() => navigate("/login")}
               className="bg-[#1e70d0] text-white font-bold py-2 px-4 rounded me-5 cursor-pointer customEffect"
             >
-              <span>Login</span>
+              <span>{t("login")}</span>
             </button>
           )}
         </div>
@@ -217,12 +224,14 @@ const Navbar = () => {
         className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-white md:hidden flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
+        dir={language === "ar" ? "rtl" : "ltr"}
       >
         <div className="text-2xl font-bold" style={{ color: colors.primary }}>
           <img src={logo} width={150} alt="logo" />
         </div>
 
         <div className="flex items-center space-x-2">
+          <LanguageDropdown />
           {isLoggedIn ? (
             <>
               <div className="flex items-center gap-3">
@@ -266,7 +275,7 @@ const Navbar = () => {
                 to="/login"
                 className="bg-[#1e70d0] text-white font-bold py-1 px-4 rounded me-5 cursor-pointer customEffect"
               >
-                <span>Login</span>
+                <span>{t("login")}</span>
               </Link>
               <button
                 onClick={() => setIsOpen(!isOpen)}
@@ -329,13 +338,10 @@ const Navbar = () => {
                       className="flex items-center gap-2"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
-                      <p className="text-center text mt-2 mb-2 text-gray-700 font-bold">
-                        Hello, {userName}
-                      </p>
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                         <img
                           src={avatar}
-                          alt={userName}
+                          alt={t("userProfile")}
                           className="rounded-full"
                         />
                       </div>
@@ -359,14 +365,14 @@ const Navbar = () => {
                           <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                             <User />
                           </div>
-                          User Profile
+                          {t("userProfile")}
                         </button>
                         <button
                           onClick={handleLogout}
                           className="flex items-center gap-2 w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
                         >
                           <LogOut />
-                          Logout
+                          {t("logout")}
                         </button>
                       </motion.div>
                     )}

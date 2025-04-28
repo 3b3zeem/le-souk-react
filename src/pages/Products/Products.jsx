@@ -7,6 +7,8 @@ import { renderStars } from "../../utils/ratingUtils";
 import { ring2 } from "ldrs";
 import useWishlistCRUD from "../../hooks/WishList/useWishlist";
 import useCartCRUD from "../../hooks/Cart/UseCart";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 ring2.register();
 
 const colors = {
@@ -43,6 +45,8 @@ const Products = () => {
     cart: {},
     wishlist: {},
   });
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   useEffect(() => {
     fetchWishlist();
@@ -113,7 +117,10 @@ const Products = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <div
+      className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filter Section */}
         <div className="w-full lg:w-1/3 h-[100%] border border-gray-200 rounded-md shadow-md p-3">
@@ -122,7 +129,7 @@ const Products = () => {
               className="relative inline-block font-bold text-2xl"
               style={{ color: colors.productName }}
             >
-              Categories
+              {t("categories")}
               <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
             </h3>
             {categories.map((category) => (
@@ -133,7 +140,7 @@ const Products = () => {
                   name="category"
                   value={category.id}
                   onChange={() => handleCategoryChange(category.id)}
-                  className="mr-2"
+                  className={language === "ar" ? "ml-2" : "mr-2"}
                 />
                 <label
                   htmlFor={`category-${category.id}`}
@@ -143,7 +150,9 @@ const Products = () => {
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="w-6 h-6 object-cover rounded-full mr-2"
+                    className={`w-6 h-6 object-cover rounded-full ${
+                      language === "ar" ? "ml-2" : "mr-2"
+                    }`}
                   />
                   {category.name}
                 </label>
@@ -156,26 +165,26 @@ const Products = () => {
               className="relative inline-block font-bold text-2xl"
               style={{ color: colors.productName }}
             >
-              Price
+              {t("price")}
               <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
             </h3>
             <div className="flex items-center gap-4 mb-4">
               <input
                 id="minPrice"
                 type="number"
-                placeholder="0 LE"
+                placeholder={language === "ar" ? "٠ ج.م" : "0 LE"}
                 value={minPrice}
                 onChange={(e) => setMinPrice(Number(e.target.value))}
                 className="w-1/2 p-2 border rounded-md text-sm"
                 style={{ borderColor: colors.borderLight }}
               />
               <span className="text-sm" style={{ color: colors.text }}>
-                TO
+                {t("to")}
               </span>
               <input
                 id="maxPrice"
                 type="number"
-                placeholder="100 LE"
+                placeholder={language === "ar" ? "١٠٠ ج.م" : "100 LE"}
                 defaultValue={100}
                 className="w-1/2 p-2 border rounded-md text-sm"
                 style={{ borderColor: colors.borderLight }}
@@ -189,7 +198,7 @@ const Products = () => {
                 color: colors.lightText,
               }}
             >
-              <span>Apply</span>
+              <span>{t("apply")}</span>
             </button>
           </div>
         </div>
@@ -201,13 +210,17 @@ const Products = () => {
             <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
               <input
                 type="text"
-                placeholder="search"
+                placeholder={t("search")}
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="w-full py-4 px-2 pl-4 border text-sm focus:outline-none shadow-sm"
                 style={{ borderColor: colors.borderLight }}
               />
-              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <span
+                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
+              >
                 <svg
                   className="w-5 h-5 text-blue-500"
                   fill="none"
@@ -229,9 +242,13 @@ const Products = () => {
                 className="p-2 border rounded-md text-sm appearance-none"
                 style={{ borderColor: colors.borderLight }}
               >
-                <option>Features: ALL</option>
+                <option>{t("featuresAll")}</option>
               </select>
-              <span className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <span
+                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
+                  language === "ar" ? "left-2" : "right-2"
+                }`}
+              >
                 <svg
                   className="w-4 h-4 text-gray-500"
                   fill="none"
@@ -299,7 +316,7 @@ const Products = () => {
                             className="ml-1 text-sm"
                             style={{ color: colors.text }}
                           >
-                            {product.reviews.length} reviews
+                            {product.reviews.length} {t("reviewsCount")}
                           </span>
                         </div>
                       </div>
@@ -308,7 +325,7 @@ const Products = () => {
                           className="text-sm font-semibold mt-2"
                           style={{ color: colors.primary }}
                         >
-                          {product.price} LE
+                          {product.price} {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         <div className="flex gap-2">
                           <button
@@ -387,10 +404,10 @@ const Products = () => {
                           speed="0.8"
                           color="#fff"
                         ></l-ring-2>
-                        Loading...
+                        {t("loading")}
                       </>
                     ) : (
-                      <span>Load More</span>
+                      <span>{t("loadMore")}</span>
                     )}
                   </button>
                 </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import { ChevronRight, House } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -12,22 +14,35 @@ const colors = {
 };
 
 const NotFound = ({ productId }) => {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+
   return (
     <div
       className="w-full mx-auto pb-8 flex flex-col min-h-screen"
       style={{ backgroundColor: colors.borderLight }}
+      dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div
         className="py-10 px-6 shadow-sm"
         style={{ backgroundColor: colors.lineBg }}
       >
         <div className="container mx-auto flex justify-between items-center">
-          <span
-            className="text-xl font-semibold"
-            style={{ color: colors.productTitle }}
-          >
-            Oops! This product can't be found.
-          </span>
+          {productId ? (
+            <span
+              className="text-xl font-semibold"
+              style={{ color: colors.productTitle }}
+            >
+              {t("oopsProductNotFound")}
+            </span>
+          ) : (
+            <span
+              className="text-xl font-semibold"
+              style={{ color: colors.productTitle }}
+            >
+              {t("pageNotFound")}
+            </span>
+          )}
           <div className="flex items-center space-x-2">
             <Link to="/">
               <House size={18} style={{ color: colors.productTitle }} />
@@ -58,19 +73,19 @@ const NotFound = ({ productId }) => {
                 fontFamily: "'Poppins', sans-serif",
               }}
             >
-              Product Not Found
+              {t("oopsProductNotFound")}
             </span>
             <p
               className="text-center text-lg mb-2"
               style={{ color: colors.productName }}
             >
-              No product found with ID: <strong>{productId}</strong>
+              {t("noProductWithId")} <strong>{productId}</strong>
             </p>
             <p
               className="text-center text-lg mb-6"
               style={{ color: colors.productName }}
             >
-              Let’s get you back on track.
+              {t("backOnTrack")}
             </p>
           </>
         ) : (
@@ -82,19 +97,19 @@ const NotFound = ({ productId }) => {
                 fontFamily: "'Poppins', sans-serif",
               }}
             >
-              Sorry! This page doesn't exist.
+              {t("pageNotFound")}
             </span>
             <p
               className="text-center text-lg"
               style={{ color: colors.productName }}
             >
-              We’re sorry for the inconvenience. Let’s get you back on track.
+              {t("inconvenience")}
             </p>
             <p
               className="text-center text-lg mb-6"
               style={{ color: colors.productName }}
             >
-              Head to the homepage or explore our latest solutions.
+              {t("exploreSolutions")}
             </p>
           </>
         )}
@@ -104,7 +119,7 @@ const NotFound = ({ productId }) => {
           className="px-5 py-3 text-md font-medium rounded shadow-md customEffect"
           style={{ backgroundColor: colors.primary, color: colors.lightText }}
         >
-          <span>Back to Home</span>
+          <span>{t("backToHome")}</span>
         </Link>
       </div>
     </div>

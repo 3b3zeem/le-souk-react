@@ -5,6 +5,8 @@ import RegImg from "../../../assets/sign_up.svg";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -16,6 +18,8 @@ const Register = () => {
   const { register, loading, error } = useAuth();
 
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   const colors = {
     primary: "#1e70d0",
@@ -44,7 +48,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full min-h-screen">
+    <div className="flex flex-col md:flex-row w-full min-h-screen" dir={language === "ar" ? "rtl" : "ltr"}>
       {/* Left Panel - Dark blue with illustration */}
       <div
         className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center text-center"
@@ -52,28 +56,28 @@ const Register = () => {
       >
         <div className="max-w-md">
           <h1 className="text-4xl font-bold mb-6">
-            <span className="text-white">Join us in </span>
+            <span className="text-white">{t("joinUsIn")} </span>
             <span className="text-gray-300">Le-Sock</span>
+            {/* {t("leSock")} */}
           </h1>
 
           <p className="text-white text-lg mb-6 leading-relaxed">
-            Do not miss out! Sign up for special promotions and discounts from
-            companies.
+          {t("signUpDescription")}
           </p>
 
           <p className="text-white mt-6">
-            Already have an account?
+          {t("alreadyHaveAccount")}
             <Link
               to={"/login"}
               className="text-white font-medium hover:underline ms-2"
             >
-              Sign In
+              {t("signIn")}
             </Link>
           </p>
 
           {/* Laptop Illustration */}
           <div className="relative flex justify-center mt-12">
-            <img src={RegImg} alt="" />
+            <img src={RegImg} alt={t("signUp")} />
           </div>
         </div>
       </div>
@@ -87,7 +91,7 @@ const Register = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8">Sign Up</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">{t("signUp")}</h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6">
@@ -111,7 +115,7 @@ const Register = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                User Name
+                {t("userName")}
               </label>
             </div>
 
@@ -135,7 +139,7 @@ const Register = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                Email
+                {t("email")}
               </label>
             </div>
 
@@ -159,7 +163,7 @@ const Register = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                Password
+                {t("password")}
               </label>
             </div>
 
@@ -183,7 +187,7 @@ const Register = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                Confirm Password
+                {t("confirmPassword")}
               </label>
             </div>
 
@@ -196,7 +200,7 @@ const Register = () => {
               }`}
               style={{ backgroundColor: colors.primary }}
             >
-              <span>{loading ? "Signing Up..." : "Sign Up"}</span>
+              <span>{loading ? t("signingUp") : t("signUp")}</span>
             </button>
           </form>
         </div>

@@ -5,6 +5,8 @@ import loginImg from "../../../assets/home-art.svg";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +14,8 @@ const Login = () => {
   const [focusedField, setFocusedField] = useState(null);
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   // Color variables
   const colors = {
@@ -42,7 +46,10 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full min-h-screen">
+    <div
+      className="flex flex-col md:flex-row w-full min-h-screen"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       {/* Left Panel - Dark blue with illustration */}
       <div
         className="w-full md:w-1/2 p-8 flex flex-col items-center justify-center text-center"
@@ -50,19 +57,17 @@ const Login = () => {
       >
         <div className="max-w-md">
           <h1 className="text-4xl font-bold mb-6">
-            <span className="text-white">Stay Connected</span>
-            <span style={{ color: colors.primary }}> Always</span>
+            <span className="text-white">{t("stayConnected")}</span>
+            <span style={{ color: colors.primary }}> {t("always")}</span>
           </h1>
 
           <p className="text-white text-lg mb-10 leading-relaxed">
-            From here, your point of view regarding travel and the company
-            system may change, and now you can register. We wish you happiness
-            and safety.
+            {t("loginDescription")}
           </p>
 
           {/* Phone Illustration */}
           <div className="relative flex justify-center mt-8">
-            <img src={loginImg} alt="Login Image" />
+            <img src={loginImg} alt={t("signIn")} />
           </div>
         </div>
       </div>
@@ -76,7 +81,7 @@ const Login = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8">Sign in</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">{t("signIn")}</h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -99,7 +104,7 @@ const Login = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                Email
+                {t("email")}
               </label>
             </div>
 
@@ -122,7 +127,7 @@ const Login = () => {
                     : "text-gray-400 top-3"
                 }`}
               >
-                Password
+                {t("password")}
               </label>
             </div>
 
@@ -133,14 +138,14 @@ const Login = () => {
               }`}
               style={{ backgroundColor: colors.primary }}
             >
-              <span>{loading ? "Signing In..." : "Sign In"}</span>
+              <span>{loading ? t("signingIn") : t("signIn")}</span>
             </button>
 
             <div className="text-center mt-6">
               <p className="text-gray-700">
-                Don't have an account?
+                {t("noAccount")}
                 <Link to={"/register"} className="text-blue-500 ml-1">
-                  Sign Up
+                  {t("signUp")}
                 </Link>
               </p>
             </div>

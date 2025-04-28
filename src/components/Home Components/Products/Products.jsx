@@ -9,6 +9,8 @@ import { renderStars } from "../../../utils/ratingUtils";
 import useCartCRUD from "./../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const Products = () => {
   const { products, loading, error } = useHome();
@@ -18,6 +20,8 @@ const Products = () => {
   });
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+  const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -133,7 +137,7 @@ const Products = () => {
           <div className="flex items-center justify-center mb-3">
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold mb-2">Something went wrong!</h2>
+          <h2 className="text-lg font-bold mb-2">{t("Something went wrong!")}</h2>
           <p className="text-sm">{error}</p>
         </div>
       </div>
@@ -141,12 +145,12 @@ const Products = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300" dir={language === "ar" ? "rtl" : "ltr"}>
       <h2
-        className="text-2xl sm:text-3xl font-normal mb-6"
+        className="text-2xl sm:text-3xl font-normal mb-6 uppercase"
         style={{ color: colors.categoryTitle }}
       >
-        PRODUCTS
+        {t("products")}
       </h2>
 
       <Slider {...settings}>
@@ -251,7 +255,7 @@ const Products = () => {
           className="px-6 py-2 border rounded-md text-md font-medium bg-[#1e70d0] transition duration-200 customEffect"
           style={{ borderColor: colors.primary, color: colors.primary }}
         >
-          <span>See More</span>
+          <span>{t("seeMore")}</span>
         </Link>
       </div>
     </div>

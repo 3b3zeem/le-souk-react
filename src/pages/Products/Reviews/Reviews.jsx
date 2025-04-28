@@ -4,6 +4,8 @@ import useReviews from "../../../hooks/Reviews/useReviews";
 import toast from "react-hot-toast";
 import { ChevronLeft, ChevronRight, MessageSquare, Star } from "lucide-react";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
+import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -24,6 +26,8 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const [feedback, setFeedback] = useState("");
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [hover, setHover] = useState(0);
+  const { t } = useTranslation();
+  const { language } = useLanguage();
 
   const currentUserId = user?.user?.id;
 
@@ -133,8 +137,8 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   };
 
   return (
-    <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">Customer Reviews</h2>
+    <div className="mt-8" dir={language === "ar" ? "rtl" : "ltr"}>
+      <h2 className="text-xl font-bold mb-4">{t("customerReviews")}</h2>
       {reviews.length > 0 ? (
         <Slider {...settings}>
           {reviews.map((review) => (
@@ -159,11 +163,17 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
                       />
                     ))}
                   </div>
-                  <span className="ml-3 text-base font-semibold" style={{color: colors.productTitle}}>
+                  <span
+                    className="ml-3 text-base font-semibold"
+                    style={{ color: colors.productTitle }}
+                  >
                     {review.rating}.0
                   </span>
                 </div>
-                <p className="text-sm leading-relaxed mb-4" style={{color: colors.productTitle}}>
+                <p
+                  className="text-sm leading-relaxed mb-4"
+                  style={{ color: colors.productTitle }}
+                >
                   "{review.feedback}"
                 </p>
               </div>
@@ -173,9 +183,12 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
                     <button
                       onClick={() => handleEditClick(review)}
                       className="py-1 px-3 rounded font-semibold cursor-pointer customEffect"
-                      style={{ backgroundColor: colors.primary, color: colors.lightText }}
+                      style={{
+                        backgroundColor: colors.primary,
+                        color: colors.lightText,
+                      }}
                     >
-                      <span>Edit</span>
+                      <span>{t("edit")}</span>
                     </button>
                     <button
                       onClick={() => handleDeleteClick(review.id)}
@@ -184,37 +197,56 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
                           ? "opacity-50 cursor-not-allowed"
                           : "customEffect"
                       }`}
-                      style={{ backgroundColor: colors.delete, color: colors.lightText }}
+                      style={{
+                        backgroundColor: colors.delete,
+                        color: colors.lightText,
+                      }}
                       disabled={deleteLoading}
                     >
-                      <span>{deleteLoading ? "Deleting..." : "Delete"}</span>
+                      <span>{deleteLoading ? t("deleting") : t("delete")}</span>
                     </button>
                   </div>
                 )}
-                <p className="text-xs" style={{color: colors.productName}}>
-                  By <span className="font-medium">{review.user.name}</span> on
-                  {new Date(review.created_at).toLocaleDateString()}
+                <p className="text-xs" style={{ color: colors.productName }}>
+                  {t("byUser")} {review.user.name} {t("OnDate")}{" "}
+                  {review.created_at}
                 </p>
               </div>
             </div>
           ))}
         </Slider>
       ) : (
-        <div className="flex flex-col items-center justify-center p-6 border border-gray-200" style={{ backgroundColor: colors.lightText }}>
-          <MessageSquare size={48} className="mb-4" style={{ color: colors.productName }} />
-          <p className="text-lg text-gray-600 font-semibold" style={{ color: colors.productTitle }}>
-            No reviews available.
+        <div
+          className="flex flex-col items-center justify-center p-6 border border-gray-200"
+          style={{ backgroundColor: colors.lightText }}
+        >
+          <MessageSquare
+            size={48}
+            className="mb-4"
+            style={{ color: colors.productName }}
+          />
+          <p
+            className="text-lg text-gray-600 font-semibold"
+            style={{ color: colors.productTitle }}
+          >
+            {t("noReviewsAvailable")}
           </p>
         </div>
       )}
 
       <h3 className="text-lg font-semibold mt-6 mb-4">
-        {editingReviewId ? "Edit Your Review" : "Add a Review"}
+        {editingReviewId ? t("editYourReview") : t("addAReview")}
       </h3>
-      <form className="space-y-6 p-6 border border-gray-200" style={{ backgroundColor: colors.lightText }}>
+      <form
+        className="space-y-6 p-6 border border-gray-200"
+        style={{ backgroundColor: colors.lightText }}
+      >
         <div>
-          <label className="block font-semibold mb-2 text-lg" style={{ color: colors.productDesc }}>
-            Rating:
+          <label
+            className="block font-semibold mb-2 text-lg"
+            style={{ color: colors.productDesc }}
+          >
+            {t("rating")}:
           </label>
           <div className="flex items-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -236,11 +268,14 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
         </div>
 
         <div>
-          <label className="block font-semibold mb-2 text-lg" style={{ color: colors.productDesc }}>
-            Your Review:
+          <label
+            className="block font-semibold mb-2 text-lg"
+            style={{ color: colors.productDesc }}
+          >
+            {t("yourReview")}:
           </label>
           <textarea
-            placeholder="Write your review..."
+            placeholder={t("writeYourReview")}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             className="mt-1 p-3 w-full border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none transition-all duration-200"
@@ -260,10 +295,10 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
         >
           <span>
             {loading
-              ? "Submitting..."
+              ? t("submitting")
               : editingReviewId
-              ? "Save Changes"
-              : "Submit Review"}
+              ? t("saveChanges")
+              : t("submitReview")}
           </span>
         </button>
         {editingReviewId && (
@@ -276,9 +311,9 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
               setHover(0);
             }}
             className="ml-3 py-2 px-6 rounded border border-gray-300 hover:bg-gray-200 transition-all duration-200 font-semibold cursor-pointer"
-            style={{color: colors.productTitle}}
+            style={{ color: colors.productTitle }}
           >
-            {loading ? "Cancel..." : "Cancel"}
+            {loading ? t("cancel") + "..." : t("cancel")}
           </button>
         )}
       </form>

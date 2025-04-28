@@ -3,6 +3,9 @@ import { Edit2, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUserProfile from "../../hooks/Profile/useProfile";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../../context/Language/LanguageContext";
+import LanguageDropdown from "../../components/Language/LanguageDropdown";
+import { useTranslation } from "react-i18next";
 
 const colors = {
   primary: "#1e70d0",
@@ -25,6 +28,8 @@ const Profile = () => {
   });
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { language, changeLanguage } = useLanguage();
+  const { t } = useTranslation();
 
   // * Open overlay Edit
   const openOverlay = () => {
@@ -83,14 +88,17 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full bg-white p-8 rounded-lg shadow-md">
+    <div
+      className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      <div className="w-full bg-white p-8 shadow-md">
         <div className="flex justify-between items-center mb-6">
           <h1
             className="text-2xl font-semibold"
             style={{ color: colors.productTitle }}
           >
-            Profile Settings
+            {t("profileSettings")}
           </h1>
           <button
             onClick={openOverlay}
@@ -99,7 +107,7 @@ const Profile = () => {
           >
             <span className="flex items-center gap-2">
               <Edit2 className="w-5 h-5 mr-1" />
-              Edit Profile
+              {t("editProfile")}
             </span>
           </button>
         </div>
@@ -123,7 +131,7 @@ const Profile = () => {
               className="block text-sm font-medium mb-1"
               style={{ color: colors.productTitle }}
             >
-              Name
+              {t("name")}
             </label>
             <div
               className="w-full p-3 rounded-md"
@@ -140,7 +148,7 @@ const Profile = () => {
               className="block text-sm font-medium mb-1"
               style={{ color: colors.productTitle }}
             >
-              Email Address
+              {t("emailAddress")}
             </label>
             <div
               className="w-full p-3 rounded-md"
@@ -157,7 +165,7 @@ const Profile = () => {
               className="block text-sm font-medium mb-1"
               style={{ color: colors.productTitle }}
             >
-              Phone
+              {t("phone")}
             </label>
             <div
               className="w-full p-3 rounded-md"
@@ -174,7 +182,7 @@ const Profile = () => {
               className="block text-sm font-medium mb-1"
               style={{ color: colors.productTitle }}
             >
-              Address
+              {t("address")}
             </label>
             <div
               className="w-full p-3 rounded-md"
@@ -216,7 +224,7 @@ const Profile = () => {
                 className="text-xl font-semibold mb-4"
                 style={{ color: colors.productTitle }}
               >
-                Edit Profile
+                {t("editProfile")}
               </h2>
               {updateError && (
                 <p className="text-red-500 mb-4">{updateError}</p>
@@ -227,7 +235,7 @@ const Profile = () => {
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
-                    Name
+                    {t("name")}
                   </label>
                   <input
                     type="text"
@@ -246,7 +254,7 @@ const Profile = () => {
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
-                    Email Address
+                    {t("emailAddress")}
                   </label>
                   <input
                     type="email"
@@ -265,7 +273,7 @@ const Profile = () => {
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
-                    Phone
+                    {t("phone")}
                   </label>
                   <input
                     type="text"
@@ -288,7 +296,7 @@ const Profile = () => {
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
-                    Address
+                    {t("address")}
                   </label>
                   <input
                     type="text"
@@ -307,7 +315,7 @@ const Profile = () => {
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
-                    Profile Image
+                    {t("profileImage")}
                   </label>
                   <input
                     type="file"
@@ -330,13 +338,25 @@ const Profile = () => {
                   }}
                 >
                   {isSubmitting && <Loader2 className="w-5 h-5 animate-spin" />}
-                  <span>{isSubmitting ? "Saving..." : "Save Changes"}</span>
+                  <span>{isSubmitting ? t("saving") : t("saveChanges")}</span>
                 </button>
               </form>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="w-full bg-white p-8 shadow-md border-t border-gray-200">
+        <div className="flex justify-start items-start mb-6 gap-5">
+          <h1
+            className="text-2xl font-semibold"
+            style={{ color: colors.productTitle }}
+          >
+            {t("changeLanguage")}:
+          </h1>
+          <LanguageDropdown />
+        </div>
+      </div>
     </div>
   );
 };
