@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Edit2, Loader2, X } from "lucide-react";
+import { Edit2, Eye, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUserProfile from "../../hooks/Profile/useProfile";
 import { useOrder } from "../../hooks/Order/useOrder";
@@ -35,6 +35,8 @@ const Profile = () => {
   });
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [showItemsModal, setShowItemsModal] = useState(false);
   const { token } = useAuthContext();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -105,6 +107,11 @@ const Profile = () => {
     } else {
       setUpdateError(result.error);
     }
+  };
+
+  const handleShowItems = (items) => {
+    setSelectedItems(items);
+    setShowItemsModal(true);
   };
 
   if (loading) {
@@ -252,7 +259,9 @@ const Profile = () => {
             >
               <button
                 onClick={closeOverlay}
-                className={`absolute p-1 top-4 ${language === "ar" ? "left-4" : "right-4"} text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer`}
+                className={`absolute p-1 top-4 ${
+                  language === "ar" ? "left-4" : "right-4"
+                } text-gray-600 hover:bg-gray-200 transition-all duration-200 cursor-pointer`}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -413,7 +422,10 @@ const Profile = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="border-b" style={{ borderColor: colors.borderLight }}>
+                <tr
+                  className="border-b"
+                  style={{ borderColor: colors.borderLight }}
+                >
                   <th
                     className="py-3 px-4 font-semibold"
                     style={{ color: colors.productTitle }}
@@ -442,12 +454,6 @@ const Profile = () => {
                     className="py-3 px-4 font-semibold"
                     style={{ color: colors.productTitle }}
                   >
-                    {t("items")}
-                  </th>
-                  <th
-                    className="py-3 px-4 font-semibold"
-                    style={{ color: colors.productTitle }}
-                  >
                     {t("actions")}
                   </th>
                 </tr>
@@ -459,28 +465,32 @@ const Profile = () => {
                     className="border-b hover:bg-gray-50"
                     style={{ borderColor: colors.borderLight }}
                   >
-                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                    <td
+                      className="py-3 px-4"
+                      style={{ color: colors.productName }}
+                    >
                       {order.id}
                     </td>
-                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                    <td
+                      className="py-3 px-4"
+                      style={{ color: colors.productName }}
+                    >
                       {order.status}
                     </td>
-                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                    <td
+                      className="py-3 px-4"
+                      style={{ color: colors.productName }}
+                    >
                       {order.total_price} {language === "ar" ? "ج.م" : "LE"}
                     </td>
-                    <td className="py-3 px-4" style={{ color: colors.productName }}>
+                    <td
+                      className="py-3 px-4"
+                      style={{ color: colors.productName }}
+                    >
                       {new Date(order.created_at).toLocaleDateString()}
                     </td>
-                    <td className="py-3 px-4" style={{ color: colors.productName }}>
-                      <ul className="list-decimal list-inside">
-                        {order.items.map((item, index) => (
-                          <li key={index}>
-                            {item.product.name} ( x{item.quantity} )
-                          </li>
-                        ))}
-                      </ul>
-                    </td>
-                    <td className="py-3 px-4">
+
+                    <td className="py-3 px-4 flex items-center gap-3">
                       {order.status === "pending" && (
                         <button
                           onClick={() => handleCancelOrder(order.id)}
@@ -504,11 +514,54 @@ const Profile = () => {
                           )}
                         </button>
                       )}
+                      <button
+                        onClick={() => handleShowItems(order.items)}
+                        className="text-sm py-2 px-4 text-light bg-[#1e70d0] flex items-center gap-1 customEffect cursor-pointer rounded"
+                      >
+                        <span className="flex items-center gap-1">
+                          {t("moreDetails")}
+                        </span>
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <AnimatePresence>
+              {showItemsModal && (
+                <motion.div
+                  className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <motion.div
+                    className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full"
+                    initial={{ y: -100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -100, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="text-lg font-bold mb-4 text-gray-700">
+                      {t("orderItems")}
+                    </h3>
+                    <ul className="list-decimal list-inside space-y-1 text-gray-800">
+                      {selectedItems.map((item, index) => (
+                        <li key={index}>
+                          {item.product.name} ( x{item.quantity} )
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      onClick={() => setShowItemsModal(false)}
+                      className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
+                    >
+                      {t("close")}
+                    </button>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>

@@ -137,5 +137,6 @@
   "noOrdersFound": "No orders found.",
   "actions": "Actions",
   "cancelOrder": "Cancel Order",
-  "cancelling": "Cancelling..."
+  "cancelling": "Cancelling...",
+  "moreDetails": "More Details"
 }

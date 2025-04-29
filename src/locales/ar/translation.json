@@ -137,5 +137,6 @@
   "noOrdersFound": "لم يتم العثور على طلبات.",
   "actions": "الإجراءات",
   "cancelOrder": "إلغاء الطلب",
-  "cancelling": "جارٍ الإلغاء..."
+  "cancelling": "جارٍ الإلغاء...",
+  "moreDetails": "تفاصيل اكثر"
 }

@@ -25,19 +25,19 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
+  // useEffect(() => {
+  //   if (user) {
+  //     localStorage.setItem("user", JSON.stringify(user));
+  //   } else {
+  //     localStorage.removeItem("user");
+  //   }
 
-    if (token) {
-      localStorage.setItem("token", token);
-    } else {
-      localStorage.removeItem("token");
-    }
-  }, [user, token]);
+  //   if (token) {
+  //     localStorage.setItem("token", token);
+  //   } else {
+  //     localStorage.removeItem("token");
+  //   }
+  // }, [user, token]);
 
   // logout function
   const logout = async () => {
