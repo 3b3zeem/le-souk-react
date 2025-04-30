@@ -154,5 +154,17 @@
   "id": "المعرف",
   "no_users": "لم يتم العثور على مستخدمين.",
   "confirm_delete_user": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
-  "showing_users": "عرض {start} إلى {end} من أصل {total} وكلاء"
+  "showing_users": "عرض {start} إلى {end} من أصل {total} وكلاء",
+  "manage_categories": "إدارة وعرض جميع الفئات",
+  "search_categories": "البحث عن فئات...",
+  "add_category": "إضافة فئة",
+  "no_categories": "لم يتم العثور على فئات.",
+  "confirm_delete_category": "هل أنت متأكد أنك تريد حذف هذه الفئة؟",
+  "showing_categories": "عرض {start} إلى {end} من أصل {total} فئات",
+  "category_name": "اسم الفئة",
+  "category_image": "صورة الفئة",
+  "enter_category_name": "أدخل اسم الفئة",
+  "add": "إضافة",
+  "update": "تحديث",
+  "category_name_required": "اسم الفئة مطلوب."
 }

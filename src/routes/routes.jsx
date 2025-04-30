@@ -25,6 +25,7 @@ import OrderId from './../pages/Profile/Order/OrderId';
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
 const Dashboard = lazy(() => import("../dashboard/pages/Home/Dashboard.jsx"));
 const Users = lazy(() => import("../dashboard/pages/Users/Users.jsx"));
+import Categories from "../dashboard/pages/Categories/Categories.jsx";
 const Unauthorized = lazy(() => import("./../components/Unauthorized/Unauthorized.jsx"));
 
 const routes = createBrowserRouter([
@@ -163,6 +164,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <Users />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "categories",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <Categories />
                   </Suspense>
                 ),
               },

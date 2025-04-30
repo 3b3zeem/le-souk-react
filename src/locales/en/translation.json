@@ -150,5 +150,17 @@
   "id": "ID",
   "no_users": "No users found.",
   "confirm_delete_user": "Are you sure you want to delete this user?",
-  "showing_users": "Showing {start} to {end} of {total} agents"
+  "showing_users": "Showing {start} to {end} of {total} agents",
+  "manage_categories": "Manage and view all categories",
+  "search_categories": "Search categories...",
+  "add_category": "Add Category",
+  "no_categories": "No categories found.",
+  "confirm_delete_category": "Are you sure you want to delete this category?",
+  "showing_categories": "Showing {start} to {end} of {total} categories",
+  "category_name": "Category Name",
+  "category_image": "Category Image",
+  "enter_category_name": "Enter category name",
+  "add": "Add",
+  "update": "Update",
+  "category_name_required": "Category name is required."
 }
