@@ -29,6 +29,28 @@ export const useOrder = () => {
     }
   };
 
+  const fetchOrderById = async (orderId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `https://ecommerce.ershaad.net/api/orders/${orderId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to fetch order.");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const placeOrder = async (items) => {
     setLoading(true);
     try {
@@ -109,5 +131,5 @@ export const useOrder = () => {
     }
   };
 
-  return { fetchOrders, placeOrder, proceedOrder, cancelOrder, loading };
+  return { fetchOrders, fetchOrderById, placeOrder, proceedOrder, cancelOrder, loading };
 };

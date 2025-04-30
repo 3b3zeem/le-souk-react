@@ -138,5 +138,17 @@
   "actions": "Actions",
   "cancelOrder": "Cancel Order",
   "cancelling": "Cancelling...",
-  "moreDetails": "More Details"
+  "moreDetails": "More Details",
+  "dashboard": "Dashboard",
+  "welcome_message": "Welcome back, Admin. Here's an overview of your e-commerce statistics.",
+  "total_sales": "Total Sales",
+  "total_users": "Total Users",
+  "total_products": "Total Products",
+  "manage_users": "Manage and view all support agents",
+  "search_users": "Search agents...",
+  "add_user": "Add User",
+  "id": "ID",
+  "no_users": "No users found.",
+  "confirm_delete_user": "Are you sure you want to delete this user?",
+  "showing_users": "Showing {start} to {end} of {total} agents"
 }

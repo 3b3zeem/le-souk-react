@@ -6,6 +6,7 @@ import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 
+
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
 const About = lazy(() => import("../pages/About/About.jsx"));
@@ -17,6 +18,8 @@ const Products = lazy(() => import("../pages/Products/Products.jsx"));
 const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
+import Order from "../pages/Profile/Order/Order.jsx";
+import OrderId from './../pages/Profile/Order/OrderId';
 
 // * Admin
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
@@ -114,6 +117,22 @@ const routes = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <Profile />
+              </Suspense>
+            ),
+          },
+          {
+            path: "order",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <Order />
+              </Suspense>
+            ),
+          },
+          {
+            path: "order/:orderId",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <OrderId />
               </Suspense>
             ),
           },
