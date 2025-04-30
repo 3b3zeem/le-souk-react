@@ -298,7 +298,7 @@ const Products = () => {
                         className="text-base font-bold"
                         style={{ color: colors.text }}
                         onClick={() => {
-                          navigate(`/product/${product.id}`);
+                          navigate(`/products/${product.id}`);
                         }}
                       >
                         {product.name}
