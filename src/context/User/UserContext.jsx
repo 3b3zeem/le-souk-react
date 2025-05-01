@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
 
 
   useEffect(() => {
-    setUserData(user);
+    setUserData(user.data);
   }, [user]);
 
   return (

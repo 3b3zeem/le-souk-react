@@ -39,8 +39,8 @@ const useAuth = () => {
       setUser(data.data);
       setToken(data.data.token);
 
-      localStorage.setItem("user", JSON.stringify(data.data));
-      localStorage.setItem("token", data.data.token);
+      // localStorage.setItem("user", JSON.stringify(data.data));
+      // localStorage.setItem("token", data.data.token);
 
       setLoading(false);
       return data;
