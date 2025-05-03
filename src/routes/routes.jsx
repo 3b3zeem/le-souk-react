@@ -20,12 +20,15 @@ const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 import Order from "../pages/Profile/Order/Order.jsx";
 import OrderId from './../pages/Profile/Order/OrderId';
+import AdminOrders from "../dashboard/pages/Orders/AdminOrders.jsx";
 
 // * Admin
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
 const Dashboard = lazy(() => import("../dashboard/pages/Home/Dashboard.jsx"));
 const Users = lazy(() => import("../dashboard/pages/Users/Users.jsx"));
-import Categories from "../dashboard/pages/Categories/Categories.jsx";
+const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.jsx"));
+const AdminProducts = lazy(() => import("../dashboard/pages/Products/adminProducts.jsx"));
+const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
 const Unauthorized = lazy(() => import("./../components/Unauthorized/Unauthorized.jsx"));
 
 const routes = createBrowserRouter([
@@ -172,6 +175,30 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <Categories />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "products",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AdminProducts />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "orders",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AdminOrders />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "reviews",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AdminReviews />
                   </Suspense>
                 ),
               },

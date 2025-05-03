@@ -123,7 +123,7 @@ const Categories = () => {
           </div>
         </div>
 
-        {/* Add Overlay Submit */}
+        {/* Add / Edit Overlay Submit */}
         <AnimatePresence>
           {isOverlayOpen && (
             <motion.div
