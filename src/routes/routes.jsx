@@ -6,7 +6,6 @@ import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 
-
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
 const About = lazy(() => import("../pages/About/About.jsx"));
@@ -18,9 +17,8 @@ const Products = lazy(() => import("../pages/Products/Products.jsx"));
 const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
-import Order from "../pages/Profile/Order/Order.jsx";
-import OrderId from './../pages/Profile/Order/OrderId';
-import AdminOrders from "../dashboard/pages/Orders/AdminOrders.jsx";
+const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
+const OrderId = lazy(() => import("./../pages/Profile/Order/OrderId.jsx"));
 
 // * Admin
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
@@ -29,6 +27,7 @@ const Users = lazy(() => import("../dashboard/pages/Users/Users.jsx"));
 const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.jsx"));
 const AdminProducts = lazy(() => import("../dashboard/pages/Products/adminProducts.jsx"));
 const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
+const AdminOrders = lazy(() => import("../dashboard/pages/Orders/AdminOrders.jsx"));
 const Unauthorized = lazy(() => import("./../components/Unauthorized/Unauthorized.jsx"));
 
 const routes = createBrowserRouter([
