@@ -198,5 +198,7 @@
   "variants": "الخيارات",
   "outOfStock": "غير متوفر",
   "selectVariant": "اختر خيار",
-  "description": "الوصف"
+  "description": "الوصف",
+  "no_products_found": "لا يوجد منتجات متاحة!",
+  "try_changing_filters": "جرّب تغيير الفلاتر أو البحث بطريقة مختلفة"
 }

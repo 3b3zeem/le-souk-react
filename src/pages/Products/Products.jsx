@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ShoppingCart, Heart, Search } from "lucide-react";
+import { ShoppingCart, Heart, Search, PackageX } from "lucide-react";
 import useProducts from "../../hooks/Products/useProduct";
 import Loader from "../../layouts/Loader";
 import { renderStars } from "../../utils/ratingUtils";
@@ -9,8 +9,8 @@ import useWishlistCRUD from "../../hooks/WishList/useWishlist";
 import useCartCRUD from "../../hooks/Cart/UseCart";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 ring2.register();
 
 const colors = {
@@ -24,8 +24,13 @@ const colors = {
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("search") || ""
+  );
+  const initialCategory = searchParams.get("category");
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialCategory ? parseInt(initialCategory) : null
+  );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100000);
   const [perPage, setPerPage] = useState(12);
@@ -36,14 +41,17 @@ const Products = () => {
   const [sliderPrice, setSliderPrice] = useState([minPrice, maxPrice]);
   const navigate = useNavigate();
 
-  const {
-    products,
-    categories,
-    loading,
-    error,
-    meta,
-    links,
-  } = useProducts(
+  useEffect(() => {
+    const categoryFromParams = searchParams.get("category");
+    if (categoryFromParams) {
+      setSelectedCategory(parseInt(categoryFromParams));
+    } else {
+      setSelectedCategory(null);
+    }
+    setPage(1);
+  }, [searchParams]);
+
+  const { products, categories, loading, error, meta, links } = useProducts(
     searchQuery,
     selectedCategory,
     minPrice,
@@ -56,14 +64,17 @@ const Products = () => {
   );
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
-  const [loadingStates, setLoadingStates] = useState({ cart: {}, wishlist: {} });
+  const [loadingStates, setLoadingStates] = useState({
+    cart: {},
+    wishlist: {},
+  });
   const { t } = useTranslation();
   const { language } = useLanguage();
 
   useEffect(() => {
     fetchWishlist();
 
-    scrollTo(0, 0)
+    scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -79,8 +90,17 @@ const Products = () => {
     }
     if (page !== 1) params.set("page", page);
     setSearchParams(params);
-  }, [searchQuery, selectedCategory, minPrice, maxPrice, inStock, sortBy, sortDirection, page, setSearchParams]);
-
+  }, [
+    searchQuery,
+    selectedCategory,
+    minPrice,
+    maxPrice,
+    inStock,
+    sortBy,
+    sortDirection,
+    page,
+    setSearchParams,
+  ]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -100,24 +120,36 @@ const Products = () => {
   };
 
   const handleAddToCart = async (productId, quantity) => {
-    setLoadingStates((prev) => ({ ...prev, cart: { ...prev.cart, [productId]: true } }));
+    setLoadingStates((prev) => ({
+      ...prev,
+      cart: { ...prev.cart, [productId]: true },
+    }));
     try {
       await addToCart(productId, quantity);
     } catch (err) {
       console.error("Error adding to cart:", err);
     } finally {
-      setLoadingStates((prev) => ({ ...prev, cart: { ...prev.cart, [productId]: false } }));
+      setLoadingStates((prev) => ({
+        ...prev,
+        cart: { ...prev.cart, [productId]: false },
+      }));
     }
   };
 
   const handleToggleWishlist = async (productId) => {
-    setLoadingStates((prev) => ({ ...prev, wishlist: { ...prev.wishlist, [productId]: true } }));
+    setLoadingStates((prev) => ({
+      ...prev,
+      wishlist: { ...prev.wishlist, [productId]: true },
+    }));
     try {
       await toggleWishlist(productId);
     } catch (err) {
       console.error("Error toggling wishlist:", err);
     } finally {
-      setLoadingStates((prev) => ({ ...prev, wishlist: { ...prev.wishlist, [productId]: false } }));
+      setLoadingStates((prev) => ({
+        ...prev,
+        wishlist: { ...prev.wishlist, [productId]: false },
+      }));
     }
   };
 
@@ -145,7 +177,11 @@ const Products = () => {
           <button
             key={p}
             onClick={() => setPage(p)}
-            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${meta.current_page === p ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100" : "hover:bg-gray-200 transition-all duration-200"}`}
+            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
+              meta.current_page === p
+                ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
+                : "hover:bg-gray-200 transition-all duration-200"
+            }`}
           >
             {p}
           </button>
@@ -162,13 +198,18 @@ const Products = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8" dir={language === "ar" ? "rtl" : "ltr"}>
+    <div
+      className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filter Section */}
         <div className="w-full lg:w-1/3 h-[100%] border border-gray-200 rounded-md shadow-md p-3">
-
           <div className="mb-8">
-            <h3 className="relative inline-block font-bold text-2xl mb-6" style={{ color: colors.productName }}>
+            <h3
+              className="relative inline-block font-bold text-2xl mb-6"
+              style={{ color: colors.productName }}
+            >
               {t("categories")}
               <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
             </h3>
@@ -189,27 +230,51 @@ const Products = () => {
                     }}
                     className={`
                       flex items-center gap-2 px-4 py-2 rounded-lg border transition
-                      ${isSelected ? "border-blue-600 bg-blue-50 shadow-md" : "border-gray-200 bg-white"}
+                      ${
+                        isSelected
+                          ? "border-blue-600 bg-blue-50 shadow-md"
+                          : "border-gray-200 bg-white"
+                      }
                       hover:border-blue-400 hover:bg-blue-100
                       focus:outline-none cursor-pointer
                     `}
                     style={{ minWidth: 120 }}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition
-                      ${isSelected ? "border-blue-600 ring-2 ring-blue-200" : "border-gray-300"}
-                      bg-white overflow-hidden`}>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center border transition
+                      ${
+                        isSelected
+                          ? "border-blue-600 ring-2 ring-blue-200"
+                          : "border-gray-300"
+                      }
+                      bg-white overflow-hidden`}
+                    >
                       <img
                         src={category.image_url}
                         alt={category.name}
                         className="w-7 h-7 object-cover rounded-full"
                       />
                     </div>
-                    <span className={`text-sm font-medium ${isSelected ? "text-blue-700" : "text-gray-700"}`}>
+                    <span
+                      className={`text-sm font-medium ${
+                        isSelected ? "text-blue-700" : "text-gray-700"
+                      }`}
+                    >
                       {category.name}
                     </span>
                     {isSelected && (
-                      <svg className="w-4 h-4 text-blue-600 ml-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4 text-blue-600 ml-1"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                     )}
                   </button>
@@ -221,7 +286,10 @@ const Products = () => {
           <div className="mb-5 flex justify-between">
             {/* In Stock Only */}
             <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
-              <span className="font-medium" style={{ color: colors.productName }}>
+              <span
+                className="font-medium"
+                style={{ color: colors.productName }}
+              >
                 {t("inStock")}
               </span>
               <span className="relative inline-block w-10 h-6">
@@ -232,17 +300,24 @@ const Products = () => {
                   className="opacity-0 w-0 h-0 peer"
                 />
                 <span
-                  className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${inStock === 1 ? "bg-blue-500" : "bg-gray-300"} peer-focus:ring-2 peer-focus:ring-blue-300`}
+                  className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
+                    inStock === 1 ? "bg-blue-500" : "bg-gray-300"
+                  } peer-focus:ring-2 peer-focus:ring-blue-300`}
                 ></span>
                 <span
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${inStock === 1 ? "translate-x-4" : ""}`}
+                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
+                    inStock === 1 ? "translate-x-4" : ""
+                  }`}
                 ></span>
               </span>
             </label>
           </div>
 
           <div className="mb-5">
-            <h3 className="relative inline-block font-bold text-2xl" style={{ color: colors.productName }}>
+            <h3
+              className="relative inline-block font-bold text-2xl"
+              style={{ color: colors.productName }}
+            >
               {t("price")}
               <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
             </h3>
@@ -257,13 +332,23 @@ const Products = () => {
                 step={100}
                 trackStyle={[{ backgroundColor: colors.primary }]}
                 handleStyle={[
-                  { borderColor: colors.primary, backgroundColor: colors.primary },
-                  { borderColor: colors.primary, backgroundColor: colors.primary }
+                  {
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primary,
+                  },
+                  {
+                    borderColor: colors.primary,
+                    backgroundColor: colors.primary,
+                  },
                 ]}
               />
               <div className="flex justify-between text-sm">
-                <span>{sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}</span>
-                <span>{sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}</span>
+                <span>
+                  {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                <span>
+                  {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                </span>
               </div>
               <button
                 onClick={() => {
@@ -272,7 +357,10 @@ const Products = () => {
                   setPage(1);
                 }}
                 className="w-[100px] py-2 text-sm font-medium cursor-pointer customEffect"
-                style={{ backgroundColor: colors.primary, color: colors.lightText }}
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.lightText,
+                }}
               >
                 <span>{t("apply")}</span>
               </button>
@@ -293,7 +381,11 @@ const Products = () => {
                 className="w-full py-4 px-2 pl-4 border text-sm focus:outline-none shadow-sm"
                 style={{ borderColor: colors.borderLight }}
               />
-              <span className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${language === "ar" ? "left-3" : "right-3"}`}>
+              <span
+                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
+              >
                 <Search size={20} className="text-gray-500" />
               </span>
             </div>
@@ -308,9 +400,21 @@ const Products = () => {
                 <option value="created_at_desc">{t("sortNewest")}</option>
                 <option value="created_at_asc">{t("sortOldest")}</option>
               </select>
-              <span className={`pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2`}>
-                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              <span
+                className={`pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2`}
+              >
+                <svg
+                  className="w-5 h-5 text-blue-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </span>
             </div>
@@ -320,6 +424,16 @@ const Products = () => {
             <Loader />
           ) : error ? (
             <div className="text-center py-10 text-red-500">{error}</div>
+          ) : products.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+              <PackageX className="w-16 h-16 mb-4 text-gray-400" />
+              <h2 className="text-xl font-semibold mb-2">
+                {t("no_products_found")}
+              </h2>
+              <p className="text-sm text-gray-400">
+                {t("try_changing_filters")}
+              </p>
+            </div>
           ) : (
             <>
               {/* Products List */}
@@ -337,7 +451,11 @@ const Products = () => {
                       }}
                     >
                       <img
-                        src={product.primary_image_url ? `https://le-souk.dinamo-app.com/storage/${product.primary_image_url}` : ""}
+                        src={
+                          product.primary_image_url
+                            ? `https://le-souk.dinamo-app.com/storage/${product.primary_image_url}`
+                            : ""
+                        }
                         alt={product.name}
                         lazy
                         className="h-full object-contain p-4 hover:scale-110 transition-transform duration-200"
@@ -353,7 +471,10 @@ const Products = () => {
                       >
                         {product.name}
                       </h3>
-                      <h3 className="text-base font-semibold truncate my-3" style={{ color: colors.productName }}>
+                      <h3
+                        className="text-base font-semibold truncate my-3"
+                        style={{ color: colors.productName }}
+                      >
                         {product.description}
                       </h3>
                       <div className="flex items-center justify-between mt-2">
@@ -365,42 +486,53 @@ const Products = () => {
                         </div>
                       </div>
                       <div className="flex justify-between items-center mt-4 border-t border-gray-300 pt-2">
-                        <p className="text-sm font-semibold mt-2" style={{ color: colors.primary }}>
+                        <p
+                          className="text-sm font-semibold mt-2"
+                          style={{ color: colors.primary }}
+                        >
                           {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleAddToCart(product.id, 1)}
                             disabled={loadingStates.cart[product.id]}
-                            className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${loadingStates.cart[product.id]
-                              ? "bg-gray-200 cursor-not-allowed"
-                              : "hover:bg-[#569be1] hover:text-white"
-                              }`}
+                            className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${
+                              loadingStates.cart[product.id]
+                                ? "bg-gray-200 cursor-not-allowed"
+                                : "hover:bg-[#569be1] hover:text-white"
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
-                            <ShoppingCart size={20} className="text-gray-500 group-hover:text-white transition duration-200" />
+                            <ShoppingCart
+                              size={20}
+                              className="text-gray-500 group-hover:text-white transition duration-200"
+                            />
                           </button>
 
                           <button
                             onClick={() => handleToggleWishlist(product.id)}
                             disabled={loadingStates.wishlist[product.id]}
-                            className={`p-3 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${loadingStates.wishlist[product.id]
-                              ? "opacity-50 cursor-not-allowed"
-                              : isProductInWishlist(product.id)
+                            className={`p-3 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
+                              loadingStates.wishlist[product.id]
+                                ? "opacity-50 cursor-not-allowed"
+                                : isProductInWishlist(product.id)
                                 ? "bg-red-100 hover:bg-red-200"
                                 : "hover:bg-[#569be1]"
-                              }`}
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <Heart
                               size={20}
-                              className={`$${loadingStates.wishlist[product.id]
-                                ? "text-gray-400"
-                                : isProductInWishlist(product.id)
+                              className={`$${
+                                loadingStates.wishlist[product.id]
+                                  ? "text-gray-400"
+                                  : isProductInWishlist(product.id)
                                   ? "text-red-500"
                                   : "text-gray-500 hover:text-white"
-                                }`}
-                              fill={isProductInWishlist(product.id) ? "red" : "none"}
+                              }`}
+                              fill={
+                                isProductInWishlist(product.id) ? "red" : "none"
+                              }
                             />
                           </button>
                         </div>

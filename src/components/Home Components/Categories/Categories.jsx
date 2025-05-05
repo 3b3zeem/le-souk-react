@@ -5,9 +5,11 @@ import useHome from "../../../hooks/HomeComponents/useHome";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
   const { categories, loading, error } = useHome();
+  const navigate = useNavigate()
   const { language } = useLanguage();
   const { t } = useTranslation();
 
@@ -101,8 +103,9 @@ const Categories = () => {
         {categories.map((category) => (
           <div key={category.id} className="px-2">
             <div
-              className="border rounded-lg overflow-hidden group transition-all duration-300"
+              className="border rounded-lg overflow-hidden group transition-all duration-300 cursor-pointer"
               style={{ borderColor: colors.borderLight }}
+              onClick={() => navigate(`/products?category=${category.id}`)}
             >
               <img
                 src={category.image_url}

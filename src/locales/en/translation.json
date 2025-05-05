@@ -196,5 +196,7 @@
   "variants": "Variants",
   "outOfStock": "Out of Stock",
   "selectVariant": "Select a variant",
-  "description": "description"
+  "description": "description",
+  "no_products_found" : "No products found!",
+  "try_changing_filters": "Try changing the filters or search differently"
 }

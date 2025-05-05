@@ -77,7 +77,8 @@ const useProducts = (
         url += `?${params.toString()}`;
 
         const productsResponse = await axios.get(url);
-        setProducts(productsResponse.data.data);
+        const newProducts = productsResponse.data.data;
+        setProducts(newProducts);
         setTotalProducts(productsResponse.data.meta?.total || 0);
         setMeta(productsResponse.data.meta || null);
         setLinks(productsResponse.data.links || null);
