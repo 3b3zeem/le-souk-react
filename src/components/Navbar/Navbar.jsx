@@ -50,7 +50,7 @@ const Navbar = () => {
         className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
       >
         <LayoutDashboard />
-        Dashboard
+        {t("dashboard")}
       </Link>
     );
   };
