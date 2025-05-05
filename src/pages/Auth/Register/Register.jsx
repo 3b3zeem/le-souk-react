@@ -37,7 +37,7 @@ const Register = () => {
         position: "top-right",
       });
       setTimeout(() => {
-        navigate("/");
+        navigate("/login");
       }, 1000);
     } else {
       toast.error(error || "Registration failed. Please try again.", {
