@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Search } from "lucide-react";
 import useProducts from "../../hooks/Products/useProduct";
 import Loader from "../../layouts/Loader";
 import { renderStars } from "../../utils/ratingUtils";
@@ -99,11 +99,6 @@ const Products = () => {
     setPage(1);
   };
 
-  const handleInStockChange = (e) => {
-    setInStock(e.target.checked ? 1 : null);
-    setPage(1);
-  };
-
   const handleAddToCart = async (productId, quantity) => {
     setLoadingStates((prev) => ({ ...prev, cart: { ...prev.cart, [productId]: true } }));
     try {
@@ -171,6 +166,7 @@ const Products = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Filter Section */}
         <div className="w-full lg:w-1/3 h-[100%] border border-gray-200 rounded-md shadow-md p-3">
+
           <div className="mb-8">
             <h3 className="relative inline-block font-bold text-2xl mb-6" style={{ color: colors.productName }}>
               {t("categories")}
@@ -287,7 +283,7 @@ const Products = () => {
         {/* Products Section */}
         <div className="w-full lg:w-3/4">
           {/* Search and Filter Section */}
-          <div className="flex flex-col items-start gap-10 md:flex-row md:justify-between items-center mb-6">
+          <div className="flex flex-col items-start gap-10 md:flex-row md:justify-between mb-6">
             <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
               <input
                 type="text"
@@ -298,9 +294,7 @@ const Products = () => {
                 style={{ borderColor: colors.borderLight }}
               />
               <span className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${language === "ar" ? "left-3" : "right-3"}`}>
-                <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+                <Search size={20} className="text-gray-500" />
               </span>
             </div>
 
@@ -333,11 +327,11 @@ const Products = () => {
                 {products.map((product) => (
                   <div
                     key={product.id}
-                    className="h-100 border overflow-hidden bg-gray-50 shadow-sm cursor-pointer"
+                    className="h-100 border overflow-hidden bg-white shadow-sm cursor-pointer"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <div
-                      className="flex justify-center items-center h-48 bg-white"
+                      className="flex justify-center items-center h-48"
                       onClick={() => {
                         navigate(`/products/${product.id}`);
                       }}
@@ -345,10 +339,11 @@ const Products = () => {
                       <img
                         src={product.primary_image_url ? `https://le-souk.dinamo-app.com/storage/${product.primary_image_url}` : ""}
                         alt={product.name}
+                        lazy
                         className="h-full object-contain p-4 hover:scale-110 transition-transform duration-200"
                       />
                     </div>
-                    <div className="p-4 bg-white">
+                    <div className="p-4">
                       <h3
                         className="text-base font-bold"
                         style={{ color: colors.text }}

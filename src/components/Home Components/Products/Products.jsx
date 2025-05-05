@@ -166,7 +166,7 @@ const Products = () => {
 
       <Slider {...settings}>
         {products.map((product) => (
-          <div key={product.id} className="px-2">
+          <div key={product.id} className="px-2 h-100">
             <div className="border border-gray-300 rounded-lg group transition-all duration-300 overflow-hidden bg-white">
               <img
                 src={
