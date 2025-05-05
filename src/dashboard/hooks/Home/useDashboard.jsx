@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import axios from "axios";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const useDashboard = () => {
   const [stats, setStats] = useState({
@@ -11,6 +12,18 @@ const useDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -22,7 +35,7 @@ const useDashboard = () => {
           }
 
         const response = await axios.get(
-          "https://ecommerce.ershaad.net/api/admin/dashboard/statistics",
+          "https://le-souk.dinamo-app.com/api/admin/dashboard/statistics",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -48,7 +61,7 @@ const useDashboard = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [language]);
 
   return { stats, loading, error };
 };

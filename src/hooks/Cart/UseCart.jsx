@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useCart } from "../../context/Cart/CartContext";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const useCartCRUD = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,6 +12,18 @@ const useCartCRUD = () => {
   const [success, setSuccess] = useState(null);
   const { addItemToCart, removeItemFromCart } = useCart();
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const fetchCart = async () => {
     setLoading(true);
@@ -23,7 +36,7 @@ const useCartCRUD = () => {
       }
 
       const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/cart/view",
+        "https://le-souk.dinamo-app.com/api/cart/view",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +54,7 @@ const useCartCRUD = () => {
 
   useEffect(() => {
     fetchCart();
-  }, [token]);
+  }, [language, token]);
 
   const addToCart = async (productId, quantity) => {
     setLoading(true);
@@ -54,7 +67,7 @@ const useCartCRUD = () => {
       }
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/cart/add",
+        "https://le-souk.dinamo-app.com/api/cart/add",
         {
           product_id: productId,
           quantity: quantity,
@@ -91,7 +104,7 @@ const useCartCRUD = () => {
       }
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/cart/remove",
+        "https://le-souk.dinamo-app.com/api/cart/remove",
         {
           product_id: productId,
         },
@@ -130,7 +143,7 @@ const useCartCRUD = () => {
       formData.append(`products[0][quantity]`, newQuantity);
   
       await axios.post(
-        "https://ecommerce.ershaad.net/api/cart/sync",
+        "https://le-souk.dinamo-app.com/api/cart/sync",
         formData,
         {
           headers: {
@@ -156,7 +169,7 @@ const useCartCRUD = () => {
   
     try {
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/cart/clear",
+        "https://le-souk.dinamo-app.com/api/cart/clear",
         {},
         {
           headers: {

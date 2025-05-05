@@ -1,17 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useAuthContext } from "../../context/Auth/AuthContext";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 export const useOrder = () => {
   const [loading, setLoading] = useState(false);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const fetchOrders = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/orders",
+        "https://le-souk.dinamo-app.com/api/orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -29,11 +42,15 @@ export const useOrder = () => {
     }
   };
 
+  useEffect(() => {
+    fetchOrders();
+  }, [language]);
+
   const fetchOrderById = async (orderId) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://ecommerce.ershaad.net/api/orders/${orderId}`,
+        `https://le-souk.dinamo-app.com/api/orders/${orderId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -61,7 +78,7 @@ export const useOrder = () => {
       });
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/orders/place",
+        "https://le-souk.dinamo-app.com/api/orders/place",
         formData,
         {
           headers: {
@@ -86,7 +103,7 @@ export const useOrder = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/orders/proceed",
+        "https://le-souk.dinamo-app.com/api/orders/proceed",
         {},
         {
           headers: {
@@ -111,7 +128,7 @@ export const useOrder = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `https://ecommerce.ershaad.net/api/orders/${orderId}/cancel`,
+        `https://le-souk.dinamo-app.com/api/orders/${orderId}/cancel`,
         {},
         {
           headers: {
@@ -131,5 +148,12 @@ export const useOrder = () => {
     }
   };
 
-  return { fetchOrders, fetchOrderById, placeOrder, proceedOrder, cancelOrder, loading };
+  return {
+    fetchOrders,
+    fetchOrderById,
+    placeOrder,
+    proceedOrder,
+    cancelOrder,
+    loading,
+  };
 };

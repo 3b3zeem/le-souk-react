@@ -23,7 +23,16 @@ const Categories = () => {
     page,
   } = useCategories();
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [categoryData, setCategoryData] = useState({ name: "", image: null });
+  const [categoryData, setCategoryData] = useState({
+    image: null,
+    status: "active",
+    is_featured: 0,
+    parent_id: "",
+    name: "",
+    en_description: "",
+    ar_name: "",
+    ar_description: "",
+  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [editCategoryId, setEditCategoryId] = useState(null);
 
@@ -31,6 +40,7 @@ const Categories = () => {
     const params = {};
     if (newParams.search) params.search = newParams.search;
     if (newParams.page) params.page = newParams.page.toString();
+    if (newParams.per_page) params.per_page = newParams.per_page.toString();
     setSearchParams(params);
   };
 
@@ -39,13 +49,22 @@ const Categories = () => {
   };
 
   const handlePageChange = (newPage) => {
-    updateSearchParams({ search, page: newPage });
+    updateSearchParams({ page: newPage });
   };
 
   const handleEdit = (category) => {
     setIsEditMode(true);
     setEditCategoryId(category.id);
-    setCategoryData({ name: category.name, image: null });
+    setCategoryData({
+      image: null,
+      status: category.status || "active",
+      is_featured: category.is_featured || 0,
+      parent_id: category.parent_id || "",
+      name: category.name,
+      en_description: category.description || "",
+      ar_name: category.ar_name || "",
+      ar_description: category.ar_description || "",
+    });
     setIsOverlayOpen(true);
   };
 
@@ -60,16 +79,37 @@ const Categories = () => {
       return;
     }
 
+    const formData = new FormData();
+    formData.append("status", categoryData.status);
+    formData.append("is_featured", categoryData.is_featured);
+    formData.append("parent_id", categoryData.parent_id);
+    formData.append("en[name]", categoryData.name || "");
+    formData.append("en[description]", categoryData.en_description || "");
+    formData.append("ar[name]", categoryData.ar_name || "");
+    formData.append("ar[description]", categoryData.ar_description || "");
+    if (categoryData.image) {
+      formData.append("image", categoryData.image);
+    }
+
     let success;
     if (isEditMode) {
-      success = await editCategory(editCategoryId, categoryData);
+      success = await editCategory(editCategoryId, formData);
     } else {
-      success = await addCategory(categoryData);
+      success = await addCategory(formData);
     }
 
     if (success) {
       setIsOverlayOpen(false);
-      setCategoryData({ name: "", image: null });
+      setCategoryData({
+        name: "",
+        image: null,
+        status: "active",
+        is_featured: 0,
+        parent_id: "",
+        en_description: "",
+        ar_name: "",
+        ar_description: "",
+      });
       setIsEditMode(false);
       setEditCategoryId(null);
     }
@@ -113,7 +153,16 @@ const Categories = () => {
             <button
               onClick={() => {
                 setIsEditMode(false);
-                setCategoryData({ name: "", image: null });
+                setCategoryData({
+                  image: null,
+                  status: "active",
+                  is_featured: 0,
+                  parent_id: "",
+                  name: "",
+                  en_description: "",
+                  ar_name: "",
+                  ar_description: "",
+                });
                 setIsOverlayOpen(true);
               }}
               className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm"
@@ -123,7 +172,6 @@ const Categories = () => {
           </div>
         </div>
 
-        {/* Add / Edit Overlay Submit */}
         <AnimatePresence>
           {isOverlayOpen && (
             <motion.div
@@ -131,47 +179,32 @@ const Categories = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-100"
+              className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
               onClick={() => setIsOverlayOpen(false)}
             >
               <motion.div
-                initial={{ scale: 0.8, y: 50 }}
+                initial={{ scale: 0.95, y: 40 }}
                 animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.8, y: 50 }}
+                exit={{ scale: 0.95, y: 40 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative"
+                className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
                   onClick={() => setIsOverlayOpen(false)}
-                  className="text-gray-500 hover:bg-gray-200 p-1 mb-5 cursor-pointer transition-all duration-200"
+                  className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition"
                 >
-                  <X size={20} />
+                  <X size={22} className="text-gray-500" />
                 </button>
 
-                <h2 className="text-xl font-bold text-gray-800 mb-4">
+                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                   {isEditMode ? t("edit_category") : t("add_category")}
                 </h2>
-                <form onSubmit={handleSubmit}>
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {t("category_name")}
-                    </label>
-                    <input
-                      type="text"
-                      value={categoryData.name}
-                      onChange={(e) =>
-                        setCategoryData({
-                          ...categoryData,
-                          name: e.target.value,
-                        })
-                      }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm transition-all duration-200"
-                      placeholder={t("enter_category_name")}
-                    />
-                  </div>
-
-                  <div className="mb-4">
+                <form
+                  onSubmit={handleSubmit}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  <div className="col-span-1 sm:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t("category_image")}
                     </label>
@@ -184,7 +217,7 @@ const Categories = () => {
                           image: e.target.files[0],
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
                     />
                     {categoryData.image && (
                       <p className="mt-2 text-xs text-gray-600">
@@ -193,17 +226,150 @@ const Categories = () => {
                     )}
                   </div>
 
-                  <div className="flex justify-end gap-3">
+                  {/* English Name and Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("category_name")} (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={categoryData.name}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          name: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      placeholder={t("enter_category_name")}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("description")} (English)
+                    </label>
+                    <textarea
+                      value={categoryData.en_description}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          en_description: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      rows="3"
+                      placeholder={t("enter_description")}
+                    />
+                  </div>
+
+                  {/* Arabic Name and Description */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("category_name")} (Arabic)
+                    </label>
+                    <input
+                      type="text"
+                      value={categoryData.ar_name}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          ar_name: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      placeholder={t("enter_category_name_ar")}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("description")} (Arabic)
+                    </label>
+                    <textarea
+                      value={categoryData.ar_description}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          ar_description: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      rows="3"
+                      placeholder={t("enter_description_ar")}
+                    />
+                  </div>
+
+                  {/* Status and is_featured */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("status")}
+                    </label>
+                    <input
+                      type="text"
+                      value={categoryData.status}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          status: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      placeholder={t("status")}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("is_featured")}
+                    </label>
+                    <input
+                      type="text"
+                      value={categoryData.is_featured}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          is_featured: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      placeholder={t("is_featured")}
+                    />
+                  </div>
+
+                  {/* Parent Category */}
+                  <div className="col-span-1 sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t("parent_category")}
+                    </label>
+                    <select
+                      value={categoryData.parent_id}
+                      onChange={(e) =>
+                        setCategoryData({
+                          ...categoryData,
+                          parent_id: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    >
+                      <option value="">{t("none")}</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="col-span-1 sm:col-span-2 flex justify-end gap-3 pt-2">
                     <button
                       type="button"
                       onClick={() => setIsOverlayOpen(false)}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 text-sm cursor-pointer"
+                      className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm cursor-pointer font-medium"
                     >
                       {t("cancel")}
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer"
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
                     >
                       {isEditMode ? t("update") : t("add")}
                     </button>
@@ -229,7 +395,7 @@ const Categories = () => {
                     {t("id")}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
-                    {t("image")}
+                    {t("category_image")}
                   </th>
                   <th
                     className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
@@ -237,6 +403,13 @@ const Categories = () => {
                     }`}
                   >
                     {t("name")}
+                  </th>
+                  <th
+                    className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
+                      language === "ar" ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {t("description")}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
                     {t("actions")}
@@ -251,7 +424,7 @@ const Categories = () => {
                     </td>
                     <td className="p-3 flex justify-center">
                       <img
-                        src={category.image}
+                        src={category.image_url}
                         alt={category.name}
                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-200"
                         onError={(e) =>
@@ -265,6 +438,13 @@ const Categories = () => {
                       }`}
                     >
                       {category.name}
+                    </td>
+                    <td
+                      className={`p-3 text-xs sm:text-sm font-medium text-gray-800 ${
+                        language === "ar" ? "text-right" : "text-left"
+                      }`}
+                    >
+                      {category.description}
                     </td>
                     <td className="p-3">
                       <div className="flex justify-center items-center gap-2 flex-wrap">
@@ -301,25 +481,25 @@ const Categories = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
             <p className="text-xs sm:text-sm text-gray-600">
               {t("showing_categories", {
-                start: (page - 1) * 5 + 1,
-                end: Math.min(page * 5, categories.length + (page - 1) * 5),
-                total: categories.length + (page - 1) * 5,
+                start: categories[0]?.id || 1,
+                end: categories[categories.length - 1]?.id || 1,
+                total: totalPages * 6,
               })}
             </p>
             <div className="flex gap-1 sm:gap-2">
               <button
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
-                className="px-2 sm:px-3 py-1 border rounded-lg disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1 border rounded disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:bg-gray-200 transition-all duration-200"
               >
-                {"<"}
+                {t("previous")}
               </button>
-              {[...Array(totalPages)].map((_, index) => (
+              {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`px-2 sm:px-3 py-1 border rounded-lg text-xs sm:text-sm ${
-                    page === index + 1 ? "bg-blue-600 text-white" : ""
+                  className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
+                    page === index + 1 ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100" : "hover:bg-gray-200 transition-all duration-200"
                   }`}
                 >
                   {index + 1}
@@ -328,9 +508,9 @@ const Categories = () => {
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
-                className="px-2 sm:px-3 py-1 border rounded-lg disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1 border rounded disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:bg-gray-200 transition-all duration-200"
               >
-                {">"}
+                {t("next")}
               </button>
             </div>
           </div>

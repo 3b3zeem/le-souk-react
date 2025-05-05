@@ -4,8 +4,8 @@ import axios from "axios";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+  const [profile, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("profile");
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const [token, setToken] = useState(
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("profile");
     const storedToken = localStorage.getItem("token");
 
     if (storedUser && storedToken) {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axios.post(
-        "https://ecommerce.ershaad.net/api/logout",
+        "https://le-souk.dinamo-app.com/api/logout",
         {},
         {
           headers: {
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, setUser, token, setToken, logout, isLoading }}
+      value={{ profile, setUser, token, setToken, logout, isLoading }}
     >
       {children}
     </AuthContext.Provider>

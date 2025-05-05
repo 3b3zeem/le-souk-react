@@ -33,7 +33,7 @@ const useReviews = () => {
       }
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/reviews",
+        "https://le-souk.dinamo-app.com/api/reviews",
         { product_id: Number(productId), rating, feedback },
         {
           headers: {
@@ -68,7 +68,7 @@ const useReviews = () => {
       }
 
       const response = await axios.post(
-        `https://ecommerce.ershaad.net/api/reviews/${reviewId}`,
+        `https://le-souk.dinamo-app.com/api/reviews/${reviewId}`,
         { _method: "PUT", product_id: productId, rating, feedback },
         {
           headers: {
@@ -103,7 +103,7 @@ const useReviews = () => {
       }
 
       const response = await axios.delete(
-        `https://ecommerce.ershaad.net/api/reviews/${reviewId}`,
+        `https://le-souk.dinamo-app.com/api/reviews/${reviewId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

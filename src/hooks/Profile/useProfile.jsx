@@ -3,12 +3,25 @@ import axios from "axios";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useUserContext } from "../../context/User/UserContext";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const useUserProfile = () => {
   const { userData, setUserData } = useUserContext();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -18,7 +31,7 @@ const useUserProfile = () => {
         }
 
         const response = await axios.get(
-          "https://ecommerce.ershaad.net/api/profile",
+          "https://le-souk.dinamo-app.com/api/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -36,7 +49,7 @@ const useUserProfile = () => {
     };
 
     if (token) fetchUserProfile();
-  }, [token]);
+  }, [token, language]);
 
   const updateUserProfile = async (updatedData) => {
     try {
@@ -53,7 +66,7 @@ const useUserProfile = () => {
       if (updatedData.image) formData.append("image", updatedData.image);
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/profile",
+        "https://le-souk.dinamo-app.com/api/profile",
         formData,
         {
           headers: {

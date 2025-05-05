@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
       }
 
       const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/cart/view",
+        "https://le-souk.dinamo-app.com/api//cart/view",
         {
           headers: {
             Authorization: `Bearer ${token}`,

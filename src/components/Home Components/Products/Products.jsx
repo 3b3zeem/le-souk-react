@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
-import { ShoppingCart, Heart, ChevronLeft, ChevronRight, AlertCircle } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle,
+} from "lucide-react";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import Loader from "../../../layouts/Loader";
 import { Link } from "react-router-dom";
@@ -137,7 +143,9 @@ const Products = () => {
           <div className="flex items-center justify-center mb-3">
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold mb-2">{t("Something went wrong!")}</h2>
+          <h2 className="text-lg font-bold mb-2">
+            {t("Something went wrong!")}
+          </h2>
           <p className="text-sm">{error}</p>
         </div>
       </div>
@@ -145,7 +153,10 @@ const Products = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300" dir={language === "ar" ? "rtl" : "ltr"}>
+    <div
+      className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <h2
         className="text-2xl sm:text-3xl font-normal mb-6 uppercase"
         style={{ color: colors.categoryTitle }}
@@ -158,9 +169,12 @@ const Products = () => {
           <div key={product.id} className="px-2">
             <div className="border border-gray-300 rounded-lg group transition-all duration-300 overflow-hidden bg-white">
               <img
-                src={product.image}
+                src={
+                  product.images[0]?.image_url ||
+                  "https://via.placeholder.com/150"
+                }
                 alt={product.name}
-                className="w-full h-48 object-contain p-4 group-hover:rotate-10 transition-transform duration-300 cursor-pointer"
+                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300 cursor-pointer"
                 onClick={() => {
                   navigate(`/products/${product.id}`);
                 }}
@@ -172,7 +186,9 @@ const Products = () => {
                     navigate(`/products/${product.id}`);
                   }}
                 >
-                  {product.category.name}
+                  {product.categories?.length > 0
+                    ? product.categories[0].name
+                    : "No category"}
                 </p>
                 <h3
                   className="text-sm font-medium mt-1 cursor-pointer"
@@ -184,18 +200,22 @@ const Products = () => {
                   {product.name}
                 </h3>
                 <p
-                  className="text-sm mt-1"
+                  className="text-sm mt-1 truncate"
                   style={{ color: colors.categoryName }}
                 >
                   {product.description}
                 </p>
-                <div className="flex mt-2">{renderStars(product.rating)}</div>
+                <div className="flex mt-2">
+                  <span>No rating available</span>
+                </div>
                 <div className="flex justify-between items-center mt-4 border-t border-gray-300">
                   <p
                     className="text-lg font-semibold mt-2"
                     style={{ color: colors.primary }}
                   >
-                    {product.price}$
+                    {product.min_price !== "N/A"
+                      ? `${product.min_price}$`
+                      : "Price not available"}
                   </p>
                   <div className="flex justify-center gap-4 mt-4">
                     <button

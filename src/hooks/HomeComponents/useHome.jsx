@@ -1,26 +1,59 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const useHome = () => {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { language } = useLanguage();
 
-  const BaseURL = "https://ecommerce.ershaad.net/api";
+  const BaseURL = "https://le-souk.dinamo-app.com/api";
   const categoriesURL = `${BaseURL}/categories`;
-  const productsURL = `${BaseURL}/products?per_page=5`;
+  const productsURL = `${BaseURL}/products?per_page=5&with=images,categories,variants`;
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        const categoriesResponse = await axios.get(`${categoriesURL}`);
-        setCategories(categoriesResponse.data.data);
+        // Fetch categories
+        const categoriesResponse = await axios.get(categoriesURL);
+        const categoriesData = categoriesResponse.data.data || [];
+        setCategories(categoriesData);
 
-        const productsResponse = await axios.get(`${productsURL}`);
-        setProducts(productsResponse.data.data);
+        // Fetch products
+        const productsResponse = await axios.get(productsURL);
+        const rawProducts = productsResponse.data.data || [];
+
+        // Filter and normalize products
+        const filteredProducts = rawProducts.map((product) => ({
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          primary_image_url: product.primary_image_url,
+          images: Array.isArray(product.images) ? product.images : [],
+          categories: Array.isArray(product.categories)
+            ? product.categories
+            : [],
+          variants: Array.isArray(product.variants) ? product.variants : [],
+          min_price: product.min_price,
+          max_price: product.max_price,
+        }));
+
+        setProducts(filteredProducts);
 
         setLoading(false);
       } catch (err) {
@@ -30,7 +63,7 @@ const useHome = () => {
     };
 
     fetchData();
-  }, []);
+  }, [language]); // Re-fetch data when language changes
 
   return { categories, products, loading, error };
 };

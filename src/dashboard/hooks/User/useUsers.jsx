@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useSearchParams } from "react-router-dom";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const useUsers = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,18 @@ const useUsers = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const page = parseInt(searchParams.get("page")) || 1;
   const search = searchParams.get("search") || "";
@@ -30,7 +43,7 @@ const useUsers = () => {
         if (search) params.append("search", search);
 
         const response = await axios.get(
-          `https://ecommerce.ershaad.net/api/admin/users?${params.toString()}`,
+          `https://le-souk.dinamo-app.com/api/admin/users?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +64,7 @@ const useUsers = () => {
     };
 
     fetchUsers();
-  }, [token, search, page]);
+  }, [token, search, page, language]);
 
   return { users, loading, error, totalPages };
 };

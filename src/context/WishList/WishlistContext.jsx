@@ -18,7 +18,7 @@ export const WishlistProvider = ({ children }) => {
       }
 
       const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/wishlist/view",
+        "https://le-souk.dinamo-app.com/api//wishlist/view",
         {
           headers: {
             Authorization: `Bearer ${token}`,

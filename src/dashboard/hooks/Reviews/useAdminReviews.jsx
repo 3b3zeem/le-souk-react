@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const useAdminReviews = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,18 @@ const useAdminReviews = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const search = searchParams.get("search") || "";
   const page = parseInt(searchParams.get("page")) || 1;
@@ -30,7 +43,7 @@ const useAdminReviews = () => {
         if (page) params.append("page", page);
 
         const response = await axios.get(
-          `https://ecommerce.ershaad.net/api/admin/reviews?${params.toString()}`,
+          `https://le-souk.dinamo-app.com/api/admin/reviews?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -52,7 +65,7 @@ const useAdminReviews = () => {
     };
 
     fetchReviews();
-  }, [searchParams, token]);
+  }, [searchParams, token, language]);
 
   const deleteReview = async (reviewId) => {
     setLoading(true);
@@ -62,7 +75,7 @@ const useAdminReviews = () => {
       }
 
       await axios.delete(
-        `https://ecommerce.ershaad.net/api/admin/reviews/${reviewId}`,
+        `https://le-souk.dinamo-app.com/api/admin/reviews/${reviewId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const useOrders = () => {
   const [searchParams] = useSearchParams();
@@ -11,6 +12,18 @@ const useOrders = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const search = searchParams.get("search") || "";
   const page = parseInt(searchParams.get("page")) || 1;
@@ -30,7 +43,7 @@ const useOrders = () => {
         if (page) params.append("page", page);
 
         const response = await axios.get(
-          `https://ecommerce.ershaad.net/api/admin/orders?${params.toString()}`,
+          `https://le-souk.dinamo-app.com/api/admin/orders?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -51,7 +64,7 @@ const useOrders = () => {
     };
 
     fetchOrders();
-  }, [searchParams, token]);
+  }, [searchParams, token, language]);
 
   const confirmOrder = async (orderId) => {
     setLoading(true);
@@ -66,7 +79,7 @@ const useOrders = () => {
       }
 
       const response = await axios.post(
-        `https://ecommerce.ershaad.net/api/admin/orders/${orderId}/confirm`,
+        `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/confirm`,
         {},
         {
           headers: {
@@ -105,7 +118,7 @@ const useOrders = () => {
       }
 
       const response = await axios.post(
-        `https://ecommerce.ershaad.net/api/admin/orders/${orderId}/reject`,
+        `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/reject`,
         {},
         {
           headers: {

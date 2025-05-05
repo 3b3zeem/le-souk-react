@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const useCategories = () => {
   const [searchParams] = useSearchParams();
@@ -11,9 +12,22 @@ const useCategories = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
 
   const search = searchParams.get("search") || "";
   const page = parseInt(searchParams.get("page")) || 1;
+  const perPage = parseInt(searchParams.get("per_page")) || 6;
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -27,19 +41,21 @@ const useCategories = () => {
 
         const params = new URLSearchParams();
         if (search) params.append("search", search);
-        if (page) params.append("page", page);
+        params.append("page", page);
+        params.append("per_page", perPage);
+        params.append("with", "parent,children,products");
 
         const response = await axios.get(
-          `https://ecommerce.ershaad.net/api/categories?${params.toString()}`,
+          `https://le-souk.dinamo-app.com/api/categories?${params.toString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
+        
         setCategories(response.data.data);
-        setTotalPages(response.data.last_page || 1);
+        setTotalPages(response.data.meta.last_page || 1);
       } catch (err) {
         const errorMessage =
           err.response?.data?.message || "Failed to fetch categories";
@@ -51,22 +67,16 @@ const useCategories = () => {
     };
 
     fetchCategories();
-  }, [searchParams]);
+  }, [language, searchParams]);
 
-  const addCategory = async (categoryData) => {
+  const addCategory = async (formData) => {
     try {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
 
-      const formData = new FormData();
-      formData.append("name", categoryData.name);
-      if (categoryData.image) {
-        formData.append("image", categoryData.image);
-      }
-
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/admin/categories",
+        "https://le-souk.dinamo-app.com/api/admin/categories",
         formData,
         {
           headers: {
@@ -87,21 +97,16 @@ const useCategories = () => {
     }
   };
 
-  const editCategory = async (categoryId, categoryData) => {
+  const editCategory = async (categoryId, formData) => {
     try {
       if (!token) {
         throw new Error("No token found. Please log in.");
       }
 
-      const formData = new FormData();
       formData.append("_method", "PUT");
-      formData.append("name", categoryData.name);
-      if (categoryData.image) {
-        formData.append("image", categoryData.image);
-      }
 
       const response = await axios.post(
-        `https://ecommerce.ershaad.net/api/admin/categories/${categoryId}`,
+        `https://le-souk.dinamo-app.com/api/admin/categories/${categoryId}`,
         formData,
         {
           headers: {
@@ -133,7 +138,7 @@ const useCategories = () => {
       }
 
       await axios.delete(
-        `https://ecommerce.ershaad.net/api/admin/categories/${categoryId}`,
+        `https://le-souk.dinamo-app.com/api/admin/categories/${categoryId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

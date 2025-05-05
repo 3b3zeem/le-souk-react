@@ -105,7 +105,7 @@ const Categories = () => {
               style={{ borderColor: colors.borderLight }}
             >
               <img
-                src={category.image}
+                src={category.image_url}
                 alt={category.name}
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
               />

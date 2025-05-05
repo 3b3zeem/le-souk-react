@@ -20,7 +20,7 @@ const useAuth = () => {
 
     try {
       const res = await axios.post(
-        "https://ecommerce.ershaad.net/api/register",
+        "https://le-souk.dinamo-app.com/api/register",
         {
           name: username,
           email,
@@ -59,7 +59,7 @@ const useAuth = () => {
 
     try {
       const res = await axios.post(
-        "https://ecommerce.ershaad.net/api/login",
+        "https://le-souk.dinamo-app.com/api/login",
         {
           email,
           password,
@@ -76,7 +76,7 @@ const useAuth = () => {
       setUser(data.data);
       setToken(data.data.token);
 
-      localStorage.setItem("user", JSON.stringify(data.data));
+      localStorage.setItem("profile", JSON.stringify(data.data));
       localStorage.setItem("token", data.data.token);
 
       setLoading(false);

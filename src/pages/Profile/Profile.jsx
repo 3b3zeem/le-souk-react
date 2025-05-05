@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Edit2, Eye, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUserProfile from "../../hooks/Profile/useProfile";
-import { useOrder } from "../../hooks/Order/useOrder";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import LanguageDropdown from "../../components/Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
-import toast from "react-hot-toast";
-import { useAuthContext } from "../../context/Auth/AuthContext";
 import Order from "./Order/Order";
 
 const colors = {
@@ -22,10 +19,6 @@ const colors = {
 
 const Profile = () => {
   const { userData, loading, error, updateUserProfile } = useUserProfile();
-  const { fetchOrders, cancelOrder } = useOrder();
-  const [orders, setOrders] = useState([]);
-  const [ordersLoading, setOrdersLoading] = useState(false);
-  const [cancelLoading, setCancelLoading] = useState({});
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -36,39 +29,10 @@ const Profile = () => {
   });
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const [selectedItems, setSelectedItems] = useState([]);
-  // const [showItemsModal, setShowItemsModal] = useState(false);
-  const { token } = useAuthContext();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef();
   const { language } = useLanguage();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    const loadOrders = async () => {
-      setOrdersLoading(true);
-      try {
-        const data = await fetchOrders();
-        setOrders(data);
-      } catch (err) {
-        toast.error(err);
-      } finally {
-        setOrdersLoading(false);
-      }
-    };
-    loadOrders();
-  }, [token]);
-
-  const handleCancelOrder = async (orderId) => {
-    setCancelLoading((prev) => ({ ...prev, [orderId]: true }));
-    try {
-      await cancelOrder(orderId);
-      const updatedOrders = await fetchOrders();
-      setOrders(Array.isArray(updatedOrders) ? updatedOrders : []);
-    } catch (err) {
-      toast.error(err);
-    } finally {
-      setCancelLoading((prev) => ({ ...prev, [orderId]: false }));
-    }
-  };
 
   // * Open overlay Edit
   const openOverlay = () => {
@@ -95,7 +59,18 @@ const Profile = () => {
   };
 
   const handleImageChange = (e) => {
-    setFormData((prev) => ({ ...prev, image: e.target.files[0] }));
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file));
+      setFormData((prev) => ({
+        ...prev,
+        image: file,
+      }));
+    }
+  };
+
+  const handleClickBox = () => {
+    fileInputRef.current.click();
   };
 
   const handleSubmit = async (e) => {
@@ -109,11 +84,6 @@ const Profile = () => {
       setUpdateError(result.error);
     }
   };
-
-  // const handleShowItems = (items) => {
-  //   setSelectedItems(items);
-  //   setShowItemsModal(true);
-  // };
 
   if (loading) {
     return (
@@ -278,6 +248,48 @@ const Profile = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label
+                    className="block text-sm font-medium mb-2"
+                    style={{ color: colors.productTitle }}
+                  >
+                    {t("userImage")}
+                  </label>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                  />
+
+                  <div
+                    onClick={handleClickBox}
+                    className="w-30 h-30 border border-dashed flex items-center justify-center rounded-full cursor-pointer"
+                    style={{
+                      borderColor: colors.borderLight,
+                      color: colors.productName,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {selectedImage ? (
+                      <img
+                        src={selectedImage}
+                        alt={t("imagePreview")}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : userData?.image ? (
+                      <img
+                        src={userData.image}
+                        alt={t("userImageAlt")}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span>{t("clickToChooseImage")}</span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label
                     className="block text-sm font-medium mb-1"
                     style={{ color: colors.productTitle }}
                   >
@@ -349,24 +361,6 @@ const Profile = () => {
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    className="w-full p-3 rounded-md border"
-                    style={{
-                      borderColor: colors.borderLight,
-                      color: colors.productName,
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-medium mb-1"
-                    style={{ color: colors.productTitle }}
-                  >
-                    {t("profileImage")}
-                  </label>
-                  <input
-                    type="file"
-                    name="image"
-                    onChange={handleImageChange}
                     className="w-full p-3 rounded-md border"
                     style={{
                       borderColor: colors.borderLight,

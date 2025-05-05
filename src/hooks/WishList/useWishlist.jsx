@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const useWishlistCRUD = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [wishlistItems, setWishlistItems] = useState([]);
-  const { token } = useAuthContext();
+  const { token } = useAuthContext();  const { language } = useLanguage();
   const { addItemToWishlist, removeItemFromWishlist } = useWishlist();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+
+    return () => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [language]);
 
   const fetchWishlist = async () => {
     setLoading(true);
@@ -18,7 +30,7 @@ const useWishlistCRUD = () => {
 
     try {
       const response = await axios.get(
-        "https://ecommerce.ershaad.net/api/wishlist/view",
+        "https://le-souk.dinamo-app.com/api/wishlist/view",
         {
           headers: {
             "Content-Type": "application/json",
@@ -37,6 +49,12 @@ const useWishlistCRUD = () => {
     }
   };
 
+  useEffect(() => {
+    if(token){
+      fetchWishlist();
+    }
+  }, [language, token]);
+
   const addToWishlist = async (productId) => {
     setLoading(true);
     setError(null);
@@ -48,7 +66,7 @@ const useWishlistCRUD = () => {
       }
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/wishlist/add",
+        "https://le-souk.dinamo-app.com/api/wishlist/add",
         { product_id: productId },
         {
           headers: {
@@ -86,7 +104,7 @@ const useWishlistCRUD = () => {
       }
 
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/wishlist/remove",
+        "https://le-souk.dinamo-app.com/api/wishlist/remove",
         { product_id: productId },
         {
           headers: {
@@ -118,7 +136,7 @@ const useWishlistCRUD = () => {
       }
   
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/wishlist/toggle",
+        "https://le-souk.dinamo-app.com/api/wishlist/toggle",
         { product_ids: [productId] },
         {
           headers: {
@@ -159,7 +177,7 @@ const useWishlistCRUD = () => {
 
     try {
       const response = await axios.post(
-        "https://ecommerce.ershaad.net/api/wishlist/clear",
+        "https://le-souk.dinamo-app.com/api/wishlist/clear",
         {},
         {
           headers: {

@@ -7,13 +7,13 @@ const UserContext = createContext({
   });
 
 export const UserProvider = ({ children }) => {
-  const { user } = useAuthContext();
-  const [userData, setUserData] = useState(user);
+  const { profile } = useAuthContext();
+  const [userData, setUserData] = useState(profile);
 
 
   useEffect(() => {
-    setUserData(user);
-  }, [user]);
+    setUserData(profile);
+  }, [profile]);
 
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
