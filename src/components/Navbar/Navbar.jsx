@@ -106,7 +106,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-white hidden md:flex items-center justify-between ${
+        className={`sticky top-0 left-0 z-200 w-full transition-all duration-300 ease-in-out bg-white hidden md:flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}

@@ -154,18 +154,18 @@ const AdminProducts = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-4 sm:p-6"
+      className="min-h-screen bg-gray-50 p-4 sm:p-6 w-[100%]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="container mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+      <div className="container mx-auto w-[100%]">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 w-[100%]">
           {t("products")}
         </h1>
-        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+        <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base w-[100% - w-16]">
           {t("manage_products")}
         </p>
 
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div className="w-[100%] flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div className="relative w-full sm:w-64">
             <input
               type="text"
@@ -621,104 +621,114 @@ const AdminProducts = () => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse bg-white rounded-lg shadow">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+          <div className="w-[100%] overflow-x-auto">
+            <table className="border-collapse bg-white rounded-lg shadow table-auto">
+              <thead className="w-[100%] overflow-x-auto">
+                <tr className="bg-gray-100 w-[100%] overflow-x-auto">
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("id")}
                   </th>
-                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("product_image")}
                   </th>
                   <th
-                    className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
                       language === "ar" ? "text-right" : "text-left"
                     }`}
                   >
                     {t("name")}
                   </th>
                   <th
-                    className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
                       language === "ar" ? "text-right" : "text-left"
                     }`}
                   >
                     {t("description")}
                   </th>
                   <th
-                    className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
                       language === "ar" ? "text-right" : "text-left"
                     }`}
                   >
                     {t("price")}
                   </th>
                   <th
-                    className={`p-3 text-xs sm:text-sm font-semibold text-gray-700 ${
+                    className={`p-2 sm:p-3 text-xs font-semibold fluorine-gray-700 ${
                       language === "ar" ? "text-right" : "text-left"
                     }`}
                   >
                     {t("stock")}
                   </th>
-                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("actions")}
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="w-[100%] overflow-x-auto">
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b hover:bg-gray-50">
-                    <td className="p-3 text-xs sm:text-sm text-gray-600 text-center">
+                  <tr key={product.id} className="border-b hover:bg-gray-50 w-[100%] overflow-x-auto">
+                    <td
+                      className="p-2 sm:p-3 text-xs text-gray-600 text-center"
+                      data-label={t("id")}
+                    >
                       {product.id}.
                     </td>
-                    <td className="p-3 flex justify-center">
+                    <td
+                      className="p-2 sm:p-3 flex justify-center"
+                      data-label={t("product_image")}
+                    >
                       <img
                         src={product.images[0].image_url}
                         alt={product.name}
                         onClick={() => navigate(`/products/${product.id}`)}
-                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-200 cursor-pointer"
+                        className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover border border-gray-200 cursor-pointer"
                         onError={(e) =>
                           (e.target.src = "https://via.placeholder.com/64")
                         }
                       />
                     </td>
                     <td
-                      className={`p-3 text-xs sm:text-sm font-medium text-gray-800 ${
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 whitespace-nowrap ${
                         language === "ar" ? "text-right" : "text-left"
                       }`}
+                      data-label={t("name")}
                       title={product.name}
                     >
                       {product.name}
                     </td>
                     <td
-                      className={`p-3 text-xs sm:text-sm font-medium text-gray-800 ${
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[100px] sm:max-w-[200px] truncate ${
                         language === "ar" ? "text-right" : "text-left"
                       }`}
+                      data-label={t("description")}
                       title={product.description}
                     >
-                      {product.description.slice(0, 50) + "...."}
+                      {product.description}
                     </td>
                     <td
-                      className={`p-3 text-xs sm:text-sm font-medium text-gray-500 ${
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
                         language === "ar" ? "text-right" : "text-left"
                       }`}
+                      data-label={t("price")}
                     >
                       ${product.min_price}
                     </td>
                     <td
-                      className={`p-3 text-xs sm:text-sm font-medium text-gray-500 ${
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
                         language === "ar" ? "text-right" : "text-left"
                       }`}
+                      data-label={t("stock")}
                     >
                       {product.total_stock}
                     </td>
-                    <td className="p-3">
+                    <td className="p-2 sm:p-3" data-label={t("actions")}>
                       <div className="flex justify-center items-center gap-2 flex-wrap">
                         <button
-                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
-                          title={t("view")}
+                          className="flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer text-xs"
+                          title={t("delete")}
                         >
                           <Trash2 size={14} />
-                          <span className="hidden sm:inline font-medium">
+                          <span className="sm:inline hidden font-medium">
                             {t("delete")}
                           </span>
                         </button>

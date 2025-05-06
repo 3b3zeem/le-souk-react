@@ -59,7 +59,7 @@ const Sidebar = () => {
     <div
       className={`${
         isOpen ? "w-64" : "w-16"
-      } h-screen bg-gray-100 text-gray-900 flex flex-col transition-all duration-300 sticky top-0 border-r border-gray-300`}
+      } h-screen bg-gray-100 text-gray-900 flex flex-col transition-all duration-300 sticky top-0 border-r border-gray-300 z-100`}
       style={{
         [language === "ar" ? "right" : "left"]: 0,
       }}
