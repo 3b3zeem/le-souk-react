@@ -3,9 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import useCategories from "../../hooks/Categories/useCategories";
-import { Edit, Search, Trash2, X } from "lucide-react";
+import { Edit, Layers, Search, Trash2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import Loader from "./../../../layouts/Loader";
 
 const Categories = () => {
   const { language } = useLanguage();
@@ -381,11 +382,16 @@ const Categories = () => {
         </AnimatePresence>
 
         {loading ? (
-          <p className="text-center text-gray-600">{t("loading")}</p>
+          <Loader />
         ) : error ? (
           <p className="text-center text-red-600">{error}</p>
         ) : categories.length === 0 ? (
-          <p className="text-center text-gray-600">{t("no_categories")}</p>
+          <div className="flex flex-col items-center justify-center py-12">
+            <Layers size={48} className="text-gray-400 mb-4" />
+            <p className="text-center text-gray-600 text-lg">
+              {t("no_categories")}
+            </p>
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-white rounded-lg shadow">
@@ -499,7 +505,9 @@ const Categories = () => {
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
                   className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
-                    page === index + 1 ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100" : "hover:bg-gray-200 transition-all duration-200"
+                    page === index + 1
+                      ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
+                      : "hover:bg-gray-200 transition-all duration-200"
                   }`}
                 >
                   {index + 1}

@@ -2,12 +2,13 @@ import React, { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { Eye, Search, Trash2, X } from "lucide-react";
+import { Search, ShoppingBag, Trash2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import useAdminProducts from "../../hooks/Products/useProducts";
 import useProducts from "./../../../hooks/Products/useProduct";
 import { ring } from "ldrs";
+import Loader from "../../../layouts/Loader";
 ring.register();
 
 const AdminProducts = () => {
@@ -609,11 +610,16 @@ const AdminProducts = () => {
         </AnimatePresence>
 
         {loading ? (
-          <p className="text-center text-gray-600">{t("loading")}</p>
+          <Loader />
         ) : error ? (
           <p className="text-center text-red-600">{error}</p>
         ) : products.length === 0 ? (
-          <p className="text-center text-gray-600">{t("no_products")}</p>
+          <div className="flex flex-col items-center justify-center py-12">
+            <ShoppingBag size={48} className="text-gray-400 mb-4" />
+            <p className="text-center text-gray-600 text-lg">
+              {t("no_products")}
+            </p>
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-white rounded-lg shadow">
@@ -689,7 +695,7 @@ const AdminProducts = () => {
                       }`}
                       title={product.description}
                     >
-                      {product.description.slice(0, 100) + "...."}
+                      {product.description.slice(0, 50) + "...."}
                     </td>
                     <td
                       className={`p-3 text-xs sm:text-sm font-medium text-gray-500 ${

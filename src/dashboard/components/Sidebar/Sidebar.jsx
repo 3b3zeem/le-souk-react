@@ -4,11 +4,11 @@ import {
   Users,
   Layers,
   LogOut,
-  Package,
   ShoppingCart,
   Star,
   Settings,
   Menu,
+  ShoppingBag,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -100,7 +100,7 @@ const Sidebar = () => {
         />
         <SidebarItem
           to="/admin-dashboard/products"
-          icon={<Package />}
+          icon={<ShoppingBag />}
           label="products"
           isOpen={isOpen}
         />
