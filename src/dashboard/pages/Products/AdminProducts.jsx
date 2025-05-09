@@ -12,7 +12,7 @@ import Loader from "../../../layouts/Loader";
 ring.register();
 
 const AdminProducts = () => {
-  const { products, addProduct, loading, error, totalPages, search, page } =
+  const { products, addProduct, loading, error, totalPages, totalCount, currentPage, search, page } =
     useAdminProducts();
   const [productData, setProductData] = useState({
     image: [],
@@ -622,7 +622,7 @@ const AdminProducts = () => {
           </div>
         ) : (
           <div className="w-[100%] overflow-x-auto">
-            <table className="border-collapse bg-white rounded-lg shadow table-auto">
+            <table className="border-collapse bg-white rounded-lg shadow table-auto w-[100%]">
               <thead className="w-[100%] overflow-x-auto">
                 <tr className="bg-gray-100 w-[100%] overflow-x-auto">
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
@@ -666,7 +666,10 @@ const AdminProducts = () => {
               </thead>
               <tbody className="w-[100%] overflow-x-auto">
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b hover:bg-gray-50 w-[100%] overflow-x-auto">
+                  <tr
+                    key={product.id}
+                    className="border-b hover:bg-gray-50 w-[100%] overflow-x-auto"
+                  >
                     <td
                       className="p-2 sm:p-3 text-xs text-gray-600 text-center"
                       data-label={t("id")}
@@ -745,9 +748,9 @@ const AdminProducts = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
             <p className="text-xs sm:text-sm text-gray-600">
               {t("showing_products", {
-                start: products[0]?.id || 1,
-                end: products[products.length - 1]?.id || 1,
-                total: totalPages * 15,
+                count: products.length,
+                current: currentPage,
+                total: totalCount,
               })}
             </p>
             <div className="flex gap-1 sm:gap-2">

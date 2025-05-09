@@ -5,14 +5,17 @@ import Footer from "../components/Footer/Footer";
 import { useAuthContext } from "../context/Auth/AuthContext";
 
 const LayOut = () => {
-  const { profile } = useAuthContext();
+  // const { profile } = useAuthContext();
+  // const isAdmin = profile.is_admin || null;
+  // console.log(isAdmin);
+  
   
   return (
     <React.Fragment>
       <Navbar />
       <Outlet />
-
-      {!profile.is_admin && <Footer />}
+<Footer />
+      {/* {!isAdmin && <Footer />} */}
     </React.Fragment>
   );
 };

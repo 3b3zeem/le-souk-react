@@ -156,7 +156,7 @@
   "add_category": "Add Category",
   "no_categories": "No categories found.",
   "confirm_delete_category": "Are you sure you want to delete this category?",
-  "showing_categories": "Displaying categories {{start}} – {{end}} out of {{total}}",
+  "showing_categories": "Displaying {{count}} in page {{current}} of {{total}} categories",
   "category_name": "Category Name",
   "category_image": "Category Image",
   "enter_category_name": "Enter category name",
@@ -216,7 +216,7 @@
   "add_variant": "Add Variant",
   "adding": "Adding",
   "no_products": "No products found",
-  "showing_products": "Showing {{start}} to {{end}} of {{total}} products",
+  "showing_products": "Showing {{count}} in page {{current}} of {{total}} products",
   "previous": "Previous",
   "view": "View",
   "product_name_required": "Product name required"

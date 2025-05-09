@@ -43,13 +43,38 @@ const Products = () => {
 
   useEffect(() => {
     const categoryFromParams = searchParams.get("category");
+    const pageFromParams = searchParams.get("page");
+
     if (categoryFromParams) {
       setSelectedCategory(parseInt(categoryFromParams));
     } else {
       setSelectedCategory(null);
     }
-    setPage(1);
-  }, [searchParams]);
+
+    if (pageFromParams) {
+      setPage(parseInt(pageFromParams));
+    } else {
+      const otherParamsChanged =
+        searchParams.get("search") !== searchQuery ||
+        searchParams.get("min_price") !== minPrice.toString() ||
+        searchParams.get("max_price") !== maxPrice.toString() ||
+        searchParams.get("in_stock") !== (inStock ? "1" : null) ||
+        searchParams.get("sort_by") !== sortBy ||
+        searchParams.get("sort_direction") !== sortDirection;
+
+      if (otherParamsChanged) {
+        setPage(1);
+      }
+    }
+  }, [
+    searchParams,
+    searchQuery,
+    minPrice,
+    maxPrice,
+    inStock,
+    sortBy,
+    sortDirection,
+  ]);
 
   const { products, categories, loading, error, meta, links } = useProducts(
     searchQuery,
@@ -159,7 +184,7 @@ const Products = () => {
 
   // Pagination component
   const Pagination = () => {
-    // if (!meta || meta.last_page <= 1) return null;
+    if (!meta || meta.last_page <= 1) return null;
     const pages = [];
     for (let i = 1; i <= meta.last_page; i++) {
       pages.push(i);

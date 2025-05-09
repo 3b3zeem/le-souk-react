@@ -11,6 +11,8 @@ const useProducts = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
   const { token } = useAuthContext();
   const { language } = useLanguage();
 
@@ -56,6 +58,8 @@ const useProducts = () => {
 
         setProducts(response.data.data);
         setTotalPages(response.data.meta.last_page || 1);
+        setTotalCount(response.data.meta.total)
+        setCurrentPage(response.data.meta.current_page)
       } catch (err) {
         const errorMessage =
           err.response?.data?.message || "Failed to fetch products";
@@ -103,6 +107,8 @@ const useProducts = () => {
     loading,
     error,
     totalPages,
+    totalCount,
+    currentPage,
     search,
     page,
   };

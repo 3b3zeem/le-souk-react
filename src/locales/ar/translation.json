@@ -160,7 +160,7 @@
   "add_category": "إضافة فئة",
   "no_categories": "لم يتم العثور على فئات.",
   "confirm_delete_category": "هل أنت متأكد أنك تريد حذف هذه الفئة؟",
-  "showing_categories": "عرض الفئات {{start}} - {{end}} من أصل {{total}} فئات",
+  "showing_categories": "عرض {{count}} في صفحة {{current}} من أصل {{total}} الفئات",
   "category_name": "اسم الفئة",
   "category_image": "صورة الفئة",
   "enter_category_name": "أدخل اسم الفئة",
@@ -218,7 +218,7 @@
   "add_variant": "إضافة متغير",
   "adding": "جاري الإضافة",
   "no_products": "لا توجد منتجات",
-  "showing_products": "عرض {{start}} إلى {{end}} من {{total}} منتج",
+  "showing_products": "يعرض {{count}} في صفحة {{current}} من أصل {{total}} منتج",
   "previous": "السابق",
   "view": "عرض",
   "product_name_required": "يجب ادخال الاعنوان"

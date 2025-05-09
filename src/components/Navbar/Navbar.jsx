@@ -40,7 +40,7 @@ const Navbar = () => {
   const isLoggedIn = !!profile;
   const avatar = userData?.image || navUser?.image;
   const userName = userData?.name || navUser?.name;
-  const isAdmin = profile?.is_admin;
+  const isAdmin = profile?.is_admin || 0;
 
   const renderAdminLink = () => {
     if (isAdmin === 0) return null;
@@ -168,7 +168,7 @@ const Navbar = () => {
                 >
                   <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                     <img
-                      src={avatar}
+                      src={avatar || "/user.png"}
                       alt={t("userProfile")}
                       className="h-full w-full rounded-full object-cover"
                     />

@@ -20,6 +20,8 @@ const Categories = () => {
     loading,
     error,
     totalPages,
+    totalCount,
+    currentPage,
     search,
     page,
   } = useCategories();
@@ -180,7 +182,7 @@ const Categories = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+              className="fixed inset-0 bg-black/60 flex items-center justify-center z-500"
               onClick={() => setIsOverlayOpen(false)}
             >
               <motion.div
@@ -193,7 +195,7 @@ const Categories = () => {
               >
                 <button
                   onClick={() => setIsOverlayOpen(false)}
-                  className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition"
+                  className="absolute top-4 right-4 bg-gray-100 hover:bg-gray-200 rounded p-2 transition cursor-pointer"
                 >
                   <X size={22} className="text-gray-500" />
                 </button>
@@ -487,9 +489,9 @@ const Categories = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
             <p className="text-xs sm:text-sm text-gray-600">
               {t("showing_categories", {
-                start: categories[0]?.id || 1,
-                end: categories[categories.length - 1]?.id || 1,
-                total: totalPages * 6,
+                count: categories.length,
+                current: currentPage,
+                total: totalCount,
               })}
             </p>
             <div className="flex gap-1 sm:gap-2">
