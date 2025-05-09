@@ -183,13 +183,13 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
-                    className={`absolute ${language === "ar" ? "left-0" : "right-0"} absolute mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
+                    className={`absolute ${
+                      language === "ar" ? "left-0" : "right-0"
+                    } absolute mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
                   >
-                  <div className="flex flex-col gap-3 px-4 py-6 bg-gray-50 border-b border-gray-100">
+                    <div className="flex flex-col gap-3 px-4 py-6 bg-gray-50 border-b border-gray-100">
                       <p className="text-sm text-gray-600">{t("welcome")}</p>
-                      <p className="font-bold text-gray-800">
-                        {userName}
-                      </p>
+                      <p className="font-bold text-gray-800">{userName}</p>
                     </div>
                     {renderAdminLink()}
                     <button
@@ -300,7 +300,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black/40 z-50"
+            className="md:hidden fixed inset-0 bg-black/40 z-550"
           >
             <motion.div
               initial={{ x: -300 }}
@@ -327,7 +327,7 @@ const Navbar = () => {
                     style={{
                       color: hover === index ? colors.primary : undefined,
                     }}
-                    className="cursor-pointer font-[500] transition ms-2 duration-200 ease-in-out b-bottom text-[.90rem]"
+                    className="cursor-pointer font-[500] p-2 transition ms-2 duration-200 ease-in-out b-bottom text-[.90rem]"
                     onMouseEnter={() => setHover(index)}
                     onMouseLeave={() => setHover(null)}
                   >
@@ -338,19 +338,25 @@ const Navbar = () => {
                 <LanguageDropdown />
 
                 {/* User Dropdown with animation as before */}
-                <div className="cursor-pointer relative ms-2">
+                <div className="cursor-pointer relative w-full">
                   {isLoggedIn && (
                     <div
-                      className="flex items-center gap-2"
+                      className="flex items-center justify-between gap-2 bg-gray-50 px-2"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                         <img
-                          src={avatar}
+                          src={avatar || "/user.png"}
                           alt={t("userProfile")}
-                          className="rounded-full"
+                          className="rounded-full w-full h-full"
                         />
                       </div>
+                      <div className="flex flex-col gap-3 px-4 py-6  border-b border-gray-100">
+                          <p className="text-sm text-gray-600">
+                            {t("welcome")}
+                          </p>
+                          <p className="font-bold text-gray-800">{userName}</p>
+                        </div>
                     </div>
                   )}
 
@@ -361,23 +367,26 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-50"
+                        className={`absolute ${
+                          language === "ar" ? "left-0" : "right-0"
+                        } absolute mt-3 w-full bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
                       >
                         {renderAdminLink()}
                         <button
-                          onClick={() => navigate("/profile")}
-                          className="flex items-center gap-3 w-full text-right px-4 py-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
+                          onClick={() => {
+                            navigate("/profile");
+                            setIsOpenUser((prev) => !prev);
+                          }}
+                          className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
                         >
-                          <div className="w-8 h-8 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                            <User />
-                          </div>
+                          <User className="w-5 h-5" />
                           {t("userProfile")}
                         </button>
                         <button
                           onClick={handleLogout}
-                          className="flex items-center gap-2 w-full mt-3 text-white bg-red-500 hover:bg-red-600 transition duration-200 px-4 py-2 rounded-xl rounded-t cursor-pointer"
+                          className="flex items-center gap-3 w-full text-right px-4 py-3 text-red-600 hover:bg-red-50 cursor-pointer transition-colors duration-200"
                         >
-                          <LogOut />
+                          <LogOut className="w-5 h-5" />
                           {t("logout")}
                         </button>
                       </motion.div>
