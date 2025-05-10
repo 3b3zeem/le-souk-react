@@ -205,9 +205,9 @@ const Products = () => {
                 >
                   {product.description}
                 </p>
-                <div className="flex mt-2">
+                {/* <div className="flex mt-2">
                   <span>No rating available</span>
-                </div>
+                </div> */}
                 <div className="flex justify-between items-center mt-4 border-t border-gray-300">
                   <p
                     className="text-lg font-semibold mt-2"
@@ -217,7 +217,7 @@ const Products = () => {
                       ? `${product.min_price}$`
                       : "Price not available"}
                   </p>
-                  <div className="flex justify-center gap-4 mt-4">
+                  {/* <div className="flex justify-center gap-4 mt-4">
                     <button
                       onClick={() => handleAddToCart(product.id, 1)}
                       disabled={loadingStates.cart[product.id]}
@@ -261,7 +261,7 @@ const Products = () => {
                         fill={isProductInWishlist(product.id) ? "red" : "none"}
                       />
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

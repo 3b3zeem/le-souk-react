@@ -7,6 +7,7 @@ import img2 from "../../../assets/2.jpg";
 import img3 from "../../../assets/3.jpg";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const sliderData = [
   {
@@ -163,13 +164,15 @@ const HeroSection = () => {
                   >
                     {slide.description[language]}
                   </p>
-                  <a
-                    href={slide.buttonLink}
-                    className="inline-block px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white font-medium transition duration-200"
+                  <Link
+                    to={slide.buttonLink}
+                    className="inline-block px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base customEffect font-medium"
                     style={{ backgroundColor: colors.primary }}
                   >
-                    {slide.buttonText[language]}
-                  </a>
+                    <span>
+                      {slide.buttonText[language]}
+                    </span>
+                  </Link>
                 </div>
               </div>
             </section>

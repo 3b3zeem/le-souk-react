@@ -115,6 +115,7 @@ const Navbar = () => {
           <img src={logo} width={150} alt="logo" />
         </div>
 
+        {/* Links */}
         <div className="flex items-center gap-4 lg:gap-8">
           {navLinks.map((link, index) => (
             <Link
@@ -135,7 +136,8 @@ const Navbar = () => {
           {isLoggedIn ? (
             <div className="cursor-pointer relative">
               <div className="flex items-center gap-5">
-                <div className="flex justify-center gap-4">
+                {/* Cart & Wishlist */}
+                {/* <div className="flex justify-center gap-4">
                   <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
@@ -148,6 +150,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
+
                   <button
                     onClick={handleWishlistClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
@@ -160,7 +163,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
-                </div>
+                </div> */}
 
                 <div
                   className="flex items-center gap-2"
@@ -239,7 +242,8 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <div className="flex items-center gap-3">
-                <div className="flex justify-center gap-4">
+                {/* Cart & Wishlist */}
+                {/* <div className="flex justify-center gap-4">
                   <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
@@ -252,6 +256,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
+
                   <button
                     onClick={handleWishlistClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
@@ -264,7 +269,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
-                </div>
+                </div> */}
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"

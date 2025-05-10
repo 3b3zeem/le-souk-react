@@ -395,7 +395,7 @@ const Products = () => {
 
         {/* Products Section */}
         <div className="w-full lg:w-3/4">
-          {/* Search and Filter Section */}
+          {/* Search and Sort Section */}
           <div className="flex flex-col items-start gap-10 md:flex-row md:justify-between mb-6">
             <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
               <input
@@ -466,11 +466,11 @@ const Products = () => {
                 {products.map((product) => (
                   <div
                     key={product.id}
-                    className="h-100 border overflow-hidden bg-white shadow-sm cursor-pointer"
+                    className="h-100 border overflow-hidden bg-white shadow-sm cursor-pointer group"
                     style={{ borderColor: colors.borderLight }}
                   >
                     <div
-                      className="flex justify-center items-center h-48"
+                      className="flex justify-center items-center h-48 group-hover:scale-110 transition-transform duration-200"
                       onClick={() => {
                         navigate(`/products/${product.id}`);
                       }}
@@ -483,7 +483,7 @@ const Products = () => {
                         }
                         alt={product.name}
                         lazy
-                        className="h-full object-contain p-4 hover:scale-110 transition-transform duration-200"
+                        className="h-full object-contain p-4"
                       />
                     </div>
                     <div className="p-4">
@@ -517,7 +517,8 @@ const Products = () => {
                         >
                           {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                         </p>
-                        <div className="flex gap-2">
+                        {/* Cart & Wishlist */}
+                        {/* <div className="flex gap-2">
                           <button
                             onClick={() => handleAddToCart(product.id, 1)}
                             disabled={loadingStates.cart[product.id]}
@@ -560,7 +561,7 @@ const Products = () => {
                               }
                             />
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

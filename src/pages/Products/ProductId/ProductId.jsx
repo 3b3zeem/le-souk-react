@@ -179,7 +179,7 @@ const ProductId = () => {
     >
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Section - Product Image */}
-        <div className={`w-full md:w-1/2 flex flex-col md:flex-row items-center justify-center gap-4 ${language === "ar" ? "md:flex-row" : "md:flex-row-reverse"}`}>
+        <div className={`w-full md:w-1/2 flex flex-col md:flex-row items-center justify-center ${language === "ar" ? "md:flex-row" : "md:flex-row-reverse"}`}>
           {/* Thumbnails Slider */}
           <div className={`md:order-2 focus:outline-none focus:border-none  ${language === "ar" ? "order-1" : "order-2"}`} style={{ maxWidth: isDesktop ? 90 : "45%" }}>
             <Slider {...sliderSettings}>
@@ -242,7 +242,7 @@ const ProductId = () => {
               {t("category")}:
             </span>
             {productDetails.categories && productDetails.categories.length > 0 ? (
-              productDetails.categories.map((cat, idx) => (
+              productDetails.categories.map((cat) => (
                 <span key={cat.id} className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs" style={{ color: colors.productName }}>
                   {cat.name}
                 </span>
@@ -288,7 +288,7 @@ const ProductId = () => {
             </div>
           )}
 
-          <div className="flex items-center mb-6">
+          {/* <div className="flex items-center mb-6">
             <span
               className="font-medium mr-4"
               style={{ color: colors.productTitle }}
@@ -309,9 +309,9 @@ const ProductId = () => {
               className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
               style={{ borderColor: colors.borderLight }}
             />
-          </div>
+          </div> */}
 
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <button
               onClick={handleAddToCart}
               disabled={loadingStates.cart}
@@ -364,14 +364,14 @@ const ProductId = () => {
                 />
               </button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
-      <Reviews
+      {/* <Reviews
         reviews={productDetails.reviews || []}
         productId={productId}
         fetchProductDetails={fetchProductDetails}
-      />
+      /> */}
     </div>
   );
 };
