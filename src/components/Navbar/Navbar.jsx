@@ -137,8 +137,8 @@ const Navbar = () => {
             <div className="cursor-pointer relative">
               <div className="flex items-center gap-5">
                 {/* Cart & Wishlist */}
-                {/* <div className="flex justify-center gap-4">
-                  <button
+                <div className="flex justify-center gap-4">
+                  {/* <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
@@ -149,7 +149,7 @@ const Navbar = () => {
                         {cartCount}
                       </span>
                     )}
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={handleWishlistClick}
@@ -163,7 +163,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
-                </div> */}
+                </div>
 
                 <div
                   className="flex items-center gap-2"

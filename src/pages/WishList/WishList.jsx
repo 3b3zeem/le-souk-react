@@ -160,17 +160,17 @@ const WishList = () => {
               {/* Products Section */}
               <div className="lg:col-span-2 space-y-6">
                 {wishlistItems.map((item) => {
-                  const isRemoving = loadingStates.remove[item.id] || false;
+                  const isRemoving = loadingStates.remove[item.product.id] || false;
 
                   return (
                     <div
-                      key={item.id}
+                      key={item.product.id}
                       className="flex gap-4 border-b pb-6"
                       style={{ borderColor: colors.borderLight }}
                     >
                       <img
-                        src={item.image}
-                        alt={item.name}
+                        src={item.product.primary_image_url}
+                        alt={item.product.name}
                         className="w-24 h-24 object-cover"
                       />
                       <div className="flex-1">
@@ -178,13 +178,13 @@ const WishList = () => {
                           className="font-semibold"
                           style={{ color: colors.productName }}
                         >
-                          {item.name}
+                          {item.product.name}
                         </h2>
                         <p
                           className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          {t("itemNo")} {item.id}
+                          {t("itemNo")} {item.product.id}
                         </p>
                         <p
                           className="text-sm uppercase"
@@ -204,21 +204,21 @@ const WishList = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          ${Number(item.price).toFixed(2)}
+                          ${Number(item.product.min_price).toFixed(2)}
                         </p>
                         <div className="flex flex-col gap-2">
                           <button
-                            onClick={() => handleAddToCart(item.id, 1)}
-                            disabled={loadingStates.addToCart[item.id]}
+                            onClick={() => handleAddToCart(item.product.id, 1)}
+                            disabled={loadingStates.addToCart[item.product.id]}
                             className={` text-white font-bold py-2 px-4 rounded cursor-pointer customEffect mt-2 ${
-                              loadingStates.addToCart[item.id]
+                              loadingStates.addToCart[item.product.id]
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
                             }`}
                             style={{ backgroundColor: colors.primary }}
                           >
                             <span>
-                              {loadingStates.addToCart[item.id] ? (
+                              {loadingStates.addToCart[item.product.id] ? (
                                 t("addingToCart")
                               ) : (
                                 <ShoppingCart size={18} />
@@ -226,7 +226,7 @@ const WishList = () => {
                             </span>
                           </button>
                           <button
-                            onClick={() => handleRemove(item.id)}
+                            onClick={() => handleRemove(item.product.id)}
                             disabled={isRemoving}
                             className={`bg-[#d01e1e] text-white font-bold py-2 px-4 rounded cursor-pointer customEffect ${
                               isRemoving ? "opacity-50 cursor-not-allowed" : ""

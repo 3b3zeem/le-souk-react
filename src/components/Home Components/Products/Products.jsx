@@ -17,6 +17,7 @@ import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useWishlist } from "../../../context/WishList/WishlistContext";
 
 const Products = () => {
   const { products, loading, error } = useHome();
@@ -25,7 +26,9 @@ const Products = () => {
     wishlist: {},
   });
   const { addToCart } = useCartCRUD();
-  const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+  const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
+  const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
+    useWishlist();
   const { language } = useLanguage();
   const { t } = useTranslation();
 
@@ -116,8 +119,11 @@ const Products = () => {
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
     }));
+
     try {
       await toggleWishlist(productId);
+      await fetchWishlistItems();
+      await fetchWishlistCount();
     } catch (err) {
       console.error("Error toggling wishlist:", err);
     } finally {
@@ -129,7 +135,7 @@ const Products = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return wishlistItems.some((item) => item.id === productId);
+    return wishlistItems.some((item) => item.product.id === productId);
   };
 
   if (loading) {
@@ -217,8 +223,8 @@ const Products = () => {
                       ? `${product.min_price}$`
                       : "Price not available"}
                   </p>
-                  {/* <div className="flex justify-center gap-4 mt-4">
-                    <button
+                  <div className="flex justify-center gap-4 mt-4">
+                    {/* <button
                       onClick={() => handleAddToCart(product.id, 1)}
                       disabled={loadingStates.cart[product.id]}
                       className={`p-2 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
@@ -236,7 +242,7 @@ const Products = () => {
                             : "text-gray-500"
                         }`}
                       />
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => handleToggleWishlist(product.id)}
                       disabled={loadingStates.wishlist[product.id]}
@@ -261,7 +267,7 @@ const Products = () => {
                         fill={isProductInWishlist(product.id) ? "red" : "none"}
                       />
                     </button>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>

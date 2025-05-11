@@ -11,6 +11,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { useWishlist } from "../../context/WishList/WishlistContext";
 ring2.register();
 
 const colors = {
@@ -88,7 +89,9 @@ const Products = () => {
     inStock
   );
   const { addToCart } = useCartCRUD();
-  const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+  const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
+  const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
+    useWishlist();
   const [loadingStates, setLoadingStates] = useState({
     cart: {},
     wishlist: {},
@@ -166,8 +169,11 @@ const Products = () => {
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
     }));
+
     try {
       await toggleWishlist(productId);
+      await fetchWishlistItems();
+      await fetchWishlistCount();
     } catch (err) {
       console.error("Error toggling wishlist:", err);
     } finally {
@@ -179,7 +185,7 @@ const Products = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return wishlistItems.some((item) => item.id === productId);
+    return wishlistItems.some((item) => item.product.id === productId);
   };
 
   // Pagination component
@@ -478,7 +484,7 @@ const Products = () => {
                       <img
                         src={
                           product.primary_image_url
-                            ? `https://le-souk.dinamo-app.com/storage/${product.primary_image_url}`
+                            ? `${product.primary_image_url}`
                             : ""
                         }
                         alt={product.name}
@@ -518,8 +524,8 @@ const Products = () => {
                           {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         {/* Cart & Wishlist */}
-                        {/* <div className="flex gap-2">
-                          <button
+                        <div className="flex gap-2">
+                          {/* <button
                             onClick={() => handleAddToCart(product.id, 1)}
                             disabled={loadingStates.cart[product.id]}
                             className={`p-3 rounded-full border group transition duration-200 cursor-pointer ${
@@ -533,7 +539,7 @@ const Products = () => {
                               size={20}
                               className="text-gray-500 group-hover:text-white transition duration-200"
                             />
-                          </button>
+                          </button> */}
 
                           <button
                             onClick={() => handleToggleWishlist(product.id)}
@@ -549,19 +555,19 @@ const Products = () => {
                           >
                             <Heart
                               size={20}
-                              className={`$${
+                              className={`${
                                 loadingStates.wishlist[product.id]
                                   ? "text-gray-400"
                                   : isProductInWishlist(product.id)
                                   ? "text-red-500"
-                                  : "text-gray-500 hover:text-white"
+                                  : "text-gray-500"
                               }`}
                               fill={
                                 isProductInWishlist(product.id) ? "red" : "none"
                               }
                             />
                           </button>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   </div>

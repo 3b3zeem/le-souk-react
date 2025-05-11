@@ -10,8 +10,9 @@ const useWishlistCRUD = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [wishlistItems, setWishlistItems] = useState([]);
-  const { token } = useAuthContext();  const { language } = useLanguage();
-  const { addItemToWishlist, removeItemFromWishlist } = useWishlist();
+  const { token } = useAuthContext();
+  const { language } = useLanguage();
+  const { addItemToWishlist, removeItemFromWishlist, fetchWishlistCount, fetchWishlistItems } = useWishlist();
 
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
@@ -30,7 +31,7 @@ const useWishlistCRUD = () => {
 
     try {
       const response = await axios.get(
-        "https://le-souk.dinamo-app.com/api/wishlist/view",
+        "https://le-souk.dinamo-app.com/api/wishlist",
         {
           headers: {
             "Content-Type": "application/json",
@@ -38,8 +39,10 @@ const useWishlistCRUD = () => {
           },
         }
       );
-      const items = response.data.data;
-      
+      const items = Array.isArray(response.data.data?.items)
+        ? response.data.data.items
+        : [];
+
       setWishlistItems(items);
       return items;
     } catch (err) {
@@ -50,7 +53,7 @@ const useWishlistCRUD = () => {
   };
 
   useEffect(() => {
-    if(token){
+    if (token) {
       fetchWishlist();
     }
   }, [language, token]);
@@ -129,12 +132,13 @@ const useWishlistCRUD = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     try {
       if (!token) {
         toast.error("Please log in to manage your wishlist.");
+        return;
       }
-  
+
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/wishlist/toggle",
         { product_ids: [productId] },
@@ -145,24 +149,25 @@ const useWishlistCRUD = () => {
           },
         }
       );
-  
+
       setSuccess(response.data.message);
-  
+      toast.success(response.data.message)
+
       const addedItems = response.data.added || [];
       const removedItems = response.data.removed || [];
-  
+
       if (addedItems.includes(productId)) {
-        await addItemToWishlist();
+        setWishlistItems((prevItems) => [...prevItems, { id: productId }]);
         toast.success("Product added to wishlist!");
       } else if (removedItems.includes(productId)) {
-        await removeItemFromWishlist();
+        setWishlistItems((prevItems) =>
+          prevItems.filter((item) => item.id !== productId)
+        );
         toast.success("Product removed from wishlist!");
       }
-  
-      const updatedWishlist = await fetchWishlist();
-      
-      const isInWishlist = updatedWishlist.some(item => item.id === productId);
-      return { isInWishlist, response };
+
+      await fetchWishlistCount();
+      await fetchWishlistItems();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to toggle wishlist");
     } finally {
@@ -186,11 +191,11 @@ const useWishlistCRUD = () => {
           },
         }
       );
-  
+
       setWishlistItems([]);
       await removeItemFromWishlist();
       toast.success(response.data.message);
-  
+
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to clear wishlist");
