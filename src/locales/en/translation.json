@@ -219,5 +219,16 @@
   "showing_products": "Showing {{count}} in page {{current}} of {{total}} products",
   "previous": "Previous",
   "view": "View",
-  "product_name_required": "Product name required"
+  "product_name_required": "Product name required",
+  "edit_product": "Edit product",
+  "search_products": "Search products...",
+  "select_image": "Please select an image",
+  "set_primary_image": "Set Primary Image",
+  "current_primary": "Current Primary",
+  "no_images": "No images available",
+  "areYouSureToDelete": "Are you sure you want to delete this?",
+  "thisActionCannotBeUndone": "This action cannot be undone!",
+  "yesDeleteIt": "Yes, delete it!",
+  "deletedSuccessfully": "Deleted successfully",
+  "itemHasBeenDeleted": "The item has been deleted."
 }

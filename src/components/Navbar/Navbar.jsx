@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   X,
   Menu,
@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/Cart/CartContext";
 import { useWishlist } from "../../context/WishList/WishlistContext";
-
 import logo from "../../assets/Images/3x/navbar.png";
 import { useUserContext } from "../../context/User/UserContext";
 import useUserProfile from "../../hooks/Profile/useProfile";
@@ -34,6 +33,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
+  const overlayRef = useRef(null);
+  const avatarRef = useRef(null);
+  const drawerRef = useRef(null);
   const { language } = useLanguage();
   const { t } = useTranslation();
 
@@ -42,11 +44,56 @@ const Navbar = () => {
   const userName = userData?.name || navUser?.name;
   const isAdmin = profile?.is_admin || 0;
 
+  // Click outSide { Drawer && USerOverlay }
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        overlayRef.current &&
+        !overlayRef.current.contains(event.target) &&
+        avatarRef.current &&
+        !avatarRef.current.contains(event.target)
+      ) {
+        setIsOpenUser(false);
+      }
+    };
+
+    const handleClickOutsideDrawer = (event) => {
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideDrawer);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideDrawer);
+    };
+  }, [overlayRef, avatarRef, drawerRef]);
+
+  const colors = {
+    primary: "#1e70d0",
+    textDark: "#333333",
+    bgLight: "#ffffff",
+  };
+
+  const navLinks = [
+    { path: "/", label: t("home"), isPrimary: true },
+    { path: "/about", label: t("about"), isPrimary: true },
+    { path: "/products", label: t("products"), isPrimary: true },
+    { path: "/contact", label: t("contact"), isPrimary: true },
+  ];
+
   const renderAdminLink = () => {
     if (isAdmin === 0) return null;
     return (
       <Link
         to="/admin-dashboard"
+        onClick={() => {
+          setIsOpenUser(false);
+          setIsOpen(false);
+        }}
         className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
       >
         <LayoutDashboard />
@@ -63,20 +110,7 @@ const Navbar = () => {
     navigate("/wishlist");
   };
 
-  // Color variables
-  const colors = {
-    primary: "#1e70d0",
-    textDark: "#333333",
-    bgLight: "#ffffff",
-  };
-
-  const navLinks = [
-    { path: "/", label: t("home"), isPrimary: true },
-    { path: "/about", label: t("about"), isPrimary: true },
-    { path: "/products", label: t("products"), isPrimary: true },
-    { path: "/contact", label: t("contact"), isPrimary: true },
-  ];
-
+  // Scroll Affect
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
@@ -111,9 +145,11 @@ const Navbar = () => {
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="flex items-center">
-          <img src={logo} width={150} alt="logo" />
-        </div>
+        <Link to={"/"}>
+          <div className="flex items-center">
+            <img src={logo} width={150} alt="logo" />
+          </div>
+        </Link>
 
         {/* Links */}
         <div className="flex items-center gap-4 lg:gap-8">
@@ -166,6 +202,7 @@ const Navbar = () => {
                 </div>
 
                 <div
+                  ref={avatarRef}
                   className="flex items-center gap-2"
                   onClick={() => setIsOpenUser((prev) => !prev)}
                 >
@@ -182,13 +219,14 @@ const Navbar = () => {
               <AnimatePresence>
                 {isOpenUser && (
                   <motion.div
+                    ref={overlayRef}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                     className={`absolute ${
                       language === "ar" ? "left-0" : "right-0"
-                    } absolute mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
+                    } mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
                   >
                     <div className="flex flex-col gap-3 px-4 py-6 bg-gray-50 border-b border-gray-100">
                       <p className="text-sm text-gray-600">{t("welcome")}</p>
@@ -198,7 +236,7 @@ const Navbar = () => {
                     <button
                       onClick={() => {
                         navigate("/profile");
-                        setIsOpenUser((prev) => !prev);
+                        setIsOpenUser(false);
                       }}
                       className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
                     >
@@ -234,17 +272,19 @@ const Navbar = () => {
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="text-2xl font-bold" style={{ color: colors.primary }}>
-          <img src={logo} width={150} alt="logo" />
-        </div>
+        <Link to={"/"}>
+          <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+            <img src={logo} width={150} alt="logo" />
+          </div>
+        </Link>
 
         <div className="flex items-center space-x-2">
           {isLoggedIn ? (
             <>
               <div className="flex items-center gap-3">
                 {/* Cart & Wishlist */}
-                {/* <div className="flex justify-center gap-4">
-                  <button
+                <div className="flex justify-center gap-4">
+                  {/* <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
@@ -255,7 +295,7 @@ const Navbar = () => {
                         {cartCount}
                       </span>
                     )}
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={handleWishlistClick}
@@ -269,7 +309,7 @@ const Navbar = () => {
                       </span>
                     )}
                   </button>
-                </div> */}
+                </div>
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"
@@ -306,16 +346,21 @@ const Navbar = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="md:hidden fixed inset-0 bg-black/40 z-550"
+            onClick={() => setIsOpen(false)}
           >
             <motion.div
+              ref={drawerRef}
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ duration: 0.3 }}
               className="h-full w-[300px] bg-white flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center p-4 border-b">
-                <img src={logo} width={120} alt="logo" />
+                <Link to={"/"} onClick={() => setIsOpen(false)}>
+                  <img src={logo} width={120} alt="logo" />
+                </Link>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="p-1 rounded bg-gray-200 cursor-pointer"
@@ -335,6 +380,7 @@ const Navbar = () => {
                     className="cursor-pointer font-[500] p-2 transition ms-2 duration-200 ease-in-out b-bottom text-[.90rem]"
                     onMouseEnter={() => setHover(index)}
                     onMouseLeave={() => setHover(null)}
+                    onClick={() => setIsOpen(false)}
                   >
                     {link.label}
                   </Link>
@@ -346,6 +392,7 @@ const Navbar = () => {
                 <div className="cursor-pointer relative w-full">
                   {isLoggedIn && (
                     <div
+                      ref={avatarRef}
                       className="flex items-center justify-between gap-2 bg-gray-50 px-2"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
@@ -356,18 +403,17 @@ const Navbar = () => {
                           className="rounded-full w-full h-full"
                         />
                       </div>
-                      <div className="flex flex-col gap-3 px-4 py-6  border-b border-gray-100">
-                          <p className="text-sm text-gray-600">
-                            {t("welcome")}
-                          </p>
-                          <p className="font-bold text-gray-800">{userName}</p>
-                        </div>
+                      <div className="flex flex-col gap-3 px-4 py-6 border-b border-gray-100">
+                        <p className="text-sm text-gray-600">{t("welcome")}</p>
+                        <p className="font-bold text-gray-800">{userName}</p>
+                      </div>
                     </div>
                   )}
 
                   <AnimatePresence>
                     {isOpenUser && (
                       <motion.div
+                        ref={overlayRef}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
@@ -380,7 +426,8 @@ const Navbar = () => {
                         <button
                           onClick={() => {
                             navigate("/profile");
-                            setIsOpenUser((prev) => !prev);
+                            setIsOpenUser(false);
+                            setIsOpen(false);
                           }}
                           className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
                         >

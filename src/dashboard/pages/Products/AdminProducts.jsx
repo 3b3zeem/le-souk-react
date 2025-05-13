@@ -2,20 +2,35 @@ import React, { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { Search, ShoppingBag, Trash2, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import toast from "react-hot-toast";
-import useAdminProducts from "../../hooks/Products/useProducts";
-import useProducts from "./../../../hooks/Products/useProduct";
-import { ring } from "ldrs";
+import { Eye, Search, ShoppingBag, SquarePen, Trash2 } from "lucide-react";
+import AddProductForm from "./AddProductForm";
 import Loader from "../../../layouts/Loader";
+import { ring } from "ldrs";
+import EditProductForm from "./EditProductForm";
+import useProducts from "./../../../hooks/Products/useProduct";
+import useAdminProducts from "../../hooks/Products/useAdminProducts";
+import SetPrimaryImageForm from "./SetPrimaryImageForm";
+import Swal from "sweetalert2";
 ring.register();
 
 const AdminProducts = () => {
-  const { products, addProduct, loading, error, totalPages, totalCount, currentPage, search, page } =
-    useAdminProducts();
+  const {
+    products,
+    addProduct,
+    updateProduct,
+    updateProductImages,
+    setPrimaryImage,
+    deleteProduct,
+    loading,
+    error,
+    totalPages,
+    totalCount,
+    currentPage,
+    search,
+    page,
+  } = useAdminProducts();
   const [productData, setProductData] = useState({
-    image: [],
+    images: [],
     status: "active",
     en_name: "",
     en_description: "",
@@ -28,9 +43,10 @@ const AdminProducts = () => {
   });
   const { categories } = useProducts();
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-  const [activeTab, setActiveTab] = useState("basic");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEditOverlayOpen, setIsEditOverlayOpen] = useState(false);
+  const [isPrimaryOverlayOpen, setIsPrimaryOverlayOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [editProductId, setEditProductId] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -53,103 +69,69 @@ const AdminProducts = () => {
     updateSearchParams({ page: newPage });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!productData.en_name) {
-      toast.error(t("product_name_required"));
-      return;
-    }
-
-    setIsSubmitting(true);
-    const formData = new FormData();
-    formData.append("status", productData.status);
-    formData.append("en[name]", productData.en_name);
-    formData.append("en[description]", productData.en_description);
-    formData.append("ar[name]", productData.ar_name);
-    formData.append("ar[description]", productData.ar_description);
-    productData.category_ids.forEach((id, index) =>
-      formData.append(`categories[${index}]`, id)
-    );
-    productData.image.forEach((file, index) =>
-      formData.append(`images[${index}]`, file)
-    );
-    productData.variants.forEach((variant, index) => {
-      formData.append(`variants[${index}][size]`, variant.size);
-      formData.append(`variants[${index}][price]`, variant.price);
-      formData.append(`variants[${index}][sku]`, variant.sku);
-      formData.append(`variants[${index}][stock]`, variant.stock);
-    });
-
-    const success = await addProduct(formData);
-
-    if (success) {
-      setIsOverlayOpen(false);
-      setProductData({
-        image: [],
-        status: "active",
-        en_name: "",
-        en_description: "",
-        ar_name: "",
-        ar_description: "",
-        price: "",
-        stock: "",
-        category_ids: [],
-        variants: [{ size: "", price: "", sku: "", stock: "" }],
-      });
-    }
-    setIsSubmitting(false);
-  };
-
-  const addVariant = () => {
-    setProductData((prev) => ({
-      ...prev,
-      variants: [...prev.variants, { size: "", price: "", sku: "", stock: "" }],
-    }));
-  };
-
-  const updateVariant = (index, field, value) => {
-    setProductData((prev) => {
-      const newVariants = [...prev.variants];
-      newVariants[index][field] = value;
-      return { ...prev, variants: newVariants };
+  const resetProductData = () => {
+    setProductData({
+      images: [],
+      status: "active",
+      en_name: "",
+      en_description: "",
+      ar_name: "",
+      ar_description: "",
+      price: "",
+      stock: "",
+      category_ids: [],
+      variants: [{ size: "", price: "", sku: "", stock: "" }],
     });
   };
 
-  const removeVariant = (index) => {
-    setProductData((prev) => ({
-      ...prev,
-      variants: prev.variants.filter((_, i) => i !== index),
-    }));
-  };
+  const handleEdit = (productId) => {
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+      const arTranslation =
+        product.translations.find((t) => t.locale === "ar") || {};
+      const enTranslation =
+        product.translations.find((t) => t.locale === "en") || {};
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
+      const transformedProductData = {
+        images:
+          product.images?.map((img) => ({ id: img.id, url: img.image_url })) ||
+          [],
+        status: product.status || "active",
+        ar_name: arTranslation.name || product.name || "",
+        ar_description: arTranslation.description || product.description || "",
+        en_name: enTranslation.name || product.name || "",
+        en_description: enTranslation.description || product.description || "",
+        price: product.min_price || "",
+        stock: product.total_stock || "",
+        category_ids: product.categories?.map((cat) => cat.id) || [],
+        variants:
+          product.variants?.length > 0
+            ? product.variants
+            : [{ size: "", price: "", sku: "", stock: "" }],
+      };
 
-    setProductData((prev) => ({
-      ...prev,
-      image: [...prev.image, ...files],
-    }));
-
-    if (imageInputRef.current) {
-      imageInputRef.current.value = "";
+      setProductData(transformedProductData);
+      setEditProductId(productId);
+      setIsEditOverlayOpen(true);
     }
   };
 
-  const removeImage = (index) => {
-    setProductData((prev) => ({
-      ...prev,
-      image: prev.image.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleCategoryChange = (id) => {
-    setProductData((prev) => {
-      const isSelected = prev.category_ids.includes(id);
-      const newSelected = isSelected
-        ? prev.category_ids.filter((catId) => catId !== id)
-        : [...prev.category_ids, id];
-      return { ...prev, category_ids: newSelected };
+  const handleDelete = async (onDelete, t) => {
+    const result = await Swal.fire({
+      title: t("areYouSureToDelete"),
+      text: t("thisActionCannotBeUndone"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: t("yesDeleteIt"),
+      cancelButtonText: t("cancel"),
     });
+
+    if (result.isConfirmed) {
+      await onDelete();
+      Swal.fire(t("deletedSuccessfully"), t("itemHasBeenDeleted"), "success");
+    }
   };
 
   return (
@@ -189,20 +171,8 @@ const AdminProducts = () => {
           <div className="flex flex-col sm:flex-row gap-3 w-auto">
             <button
               onClick={() => {
-                setProductData({
-                  image: [],
-                  status: "active",
-                  en_name: "",
-                  en_description: "",
-                  ar_name: "",
-                  ar_description: "",
-                  price: "",
-                  stock: "",
-                  category_ids: [],
-                  variants: [{ size: "", price: "", sku: "", stock: "" }],
-                });
+                resetProductData();
                 setIsOverlayOpen(true);
-                setShowCategoryDropdown(false);
               }}
               className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm"
             >
@@ -211,403 +181,48 @@ const AdminProducts = () => {
           </div>
         </div>
 
-        <AnimatePresence>
-          {isOverlayOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4"
-              onClick={() => setIsOverlayOpen(false)}
-            >
-              <motion.div
-                initial={{ scale: 0.95, y: 40 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 40 }}
-                transition={{ duration: 0.3 }}
-                className="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  onClick={() => setIsOverlayOpen(false)}
-                  className="absolute top-5 right-5 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition cursor-pointer"
-                >
-                  <X size={22} className="text-gray-500" />
-                </button>
+        {isOverlayOpen && (
+          <AddProductForm
+            isOpen={isOverlayOpen}
+            setIsOpen={setIsOverlayOpen}
+            productData={productData}
+            setProductData={setProductData}
+            addProduct={addProduct}
+            categories={categories}
+            language={language}
+            t={t}
+            imageInputRef={imageInputRef}
+            resetProductData={resetProductData}
+          />
+        )}
 
-                <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                  {t("add_product")}
-                </h2>
+        {isEditOverlayOpen && (
+          <EditProductForm
+            isOpen={isEditOverlayOpen}
+            setIsOpen={setIsEditOverlayOpen}
+            productId={editProductId}
+            productData={productData}
+            setProductData={setProductData}
+            updateProduct={updateProduct}
+            updateProductImages={updateProductImages}
+            categories={categories}
+            language={language}
+            t={t}
+            imageInputRef={imageInputRef}
+          />
+        )}
 
-                {/* Tabs Navigation */}
-                <div className="flex border-b border-gray-200 mb-6">
-                  <button
-                    onClick={() => setActiveTab("basic")}
-                    className={`px-4 py-2 text-sm font-medium cursor-pointer ${
-                      activeTab === "basic"
-                        ? "border-b-2 border-blue-500 text-blue-600"
-                        : "text-gray-600 hover:text-blue-600"
-                    }`}
-                  >
-                    {t("basic_info")}
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab("images")}
-                    className={`px-4 py-2 text-sm font-medium cursor-pointer ${
-                      activeTab === "images"
-                        ? "border-b-2 border-blue-500 text-blue-600"
-                        : "text-gray-600 hover:text-blue-600"
-                    }`}
-                  >
-                    {t("images")}
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab("variants")}
-                    className={`px-4 py-2 text-sm font-medium cursor-pointer ${
-                      activeTab === "variants"
-                        ? "border-b-2 border-blue-500 text-blue-600"
-                        : "text-gray-600 hover:text-blue-600"
-                    }`}
-                  >
-                    {t("variants")}
-                  </button>
-                </div>
-
-                <form onSubmit={handleSubmit}>
-                  {/* Tab Content */}
-                  {activeTab === "basic" && (
-                    <div className="space-y-6">
-                      {/* Categories Dropdown */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          {t("categories")}
-                        </label>
-                        <div className="relative">
-                          <div
-                            onClick={() =>
-                              setShowCategoryDropdown(!showCategoryDropdown)
-                            }
-                            className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
-                          >
-                            {productData.category_ids.length > 0
-                              ? categories
-                                  .filter((cat) =>
-                                    productData.category_ids.includes(cat.id)
-                                  )
-                                  .map((cat) => cat.name)
-                                  .join(", ")
-                              : t("select_categories")}
-                          </div>
-                          {showCategoryDropdown && (
-                            <div className="absolute z-40 mt-2 w-full max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg">
-                              {categories.map((category) => (
-                                <label
-                                  key={category.id}
-                                  className="flex items-center px-4 py-2 hover:bg-gray-50 cursor-pointer"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    value={category.id}
-                                    checked={productData.category_ids.includes(
-                                      category.id
-                                    )}
-                                    onChange={() =>
-                                      handleCategoryChange(category.id)
-                                    }
-                                    className="mr-2 accent-blue-500"
-                                  />
-                                  {category.name}
-                                </label>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {t("click_to_select_multiple")}
-                        </p>
-                      </div>
-
-                      {/* English Name and Description */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t("product_name")} (English)
-                          </label>
-                          <input
-                            type="text"
-                            value={productData.en_name}
-                            onChange={(e) =>
-                              setProductData({
-                                ...productData,
-                                en_name: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                            placeholder={t("enter_product_name")}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t("product_name")} (Arabic)
-                          </label>
-                          <input
-                            type="text"
-                            value={productData.ar_name}
-                            onChange={(e) =>
-                              setProductData({
-                                ...productData,
-                                ar_name: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                            placeholder={t("enter_product_name_ar")}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t("description")} (English)
-                          </label>
-                          <textarea
-                            value={productData.en_description}
-                            onChange={(e) =>
-                              setProductData({
-                                ...productData,
-                                en_description: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                            rows="4"
-                            placeholder={t("enter_description")}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            {t("description")} (Arabic)
-                          </label>
-                          <textarea
-                            value={productData.ar_description}
-                            onChange={(e) =>
-                              setProductData({
-                                ...productData,
-                                ar_description: e.target.value,
-                              })
-                            }
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                            rows="4"
-                            placeholder={t("enter_description_ar")}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "images" && (
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          {t("product_images")}
-                        </label>
-                        <input
-                          ref={imageInputRef}
-                          type="file"
-                          accept="image/jpeg,image/jpg,image/webp,image/gif"
-                          multiple
-                          placeholder=""
-                          onChange={handleImageChange}
-                          className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-500">
-                          {productData.image.length > 0
-                            ? `${productData.image.length} image(s) selected`
-                            : "No file chosen"}
-                        </span>
-                      </div>
-                      <div className="overflow-y-auto">
-                        {productData.image.length > 0 && (
-                          <div className="grid grid-cols-3 gap-4 h-80">
-                            {productData.image.map((file, index) => (
-                              <div key={index} className="relative">
-                                <img
-                                  src={URL.createObjectURL(file)}
-                                  alt={`Preview ${index}`}
-                                  className="w-full h-40 object-cover rounded-lg border border-gray-200"
-                                />
-                                <button
-                                  onClick={() => removeImage(index)}
-                                  className="absolute top-2 right-2 cursor-pointer bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
-                                >
-                                  <Trash2 size={16} />
-                                </button>
-                                <p className="mt-1 text-xs text-gray-600 truncate">
-                                  {file.name}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {activeTab === "variants" && (
-                    <div className="space-y-6">
-                      <div className="overflow-auto">
-                        <table className="w-full border-collapse">
-                          <thead>
-                            <tr className="bg-gray-100">
-                              <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
-                                {t("size")}
-                              </th>
-                              <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
-                                {t("sku")}
-                              </th>
-                              <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
-                                {t("price")}
-                              </th>
-                              <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
-                                {t("stock")}
-                              </th>
-                              <th className="p-3 text-sm font-medium text-gray-700 text-left">
-                                {t("actions")}
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {productData.variants.map((variant, index) => (
-                              <tr key={index} className="border-b">
-                                <td className="p-3">
-                                  <input
-                                    type="text"
-                                    value={variant.size}
-                                    onChange={(e) =>
-                                      updateVariant(
-                                        index,
-                                        "size",
-                                        e.target.value
-                                      )
-                                    }
-                                    placeholder={t("size")}
-                                    list="sizeSuggestions"
-                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                                  />
-                                  <datalist id="sizeSuggestions">
-                                    <option value="small">{t("small")}</option>
-                                    <option value="medium">
-                                      {t("medium")}
-                                    </option>
-                                    <option value="large">{t("large")}</option>
-                                  </datalist>
-                                </td>
-                                <td className="p-3">
-                                  <input
-                                    type="text"
-                                    value={variant.sku}
-                                    onChange={(e) =>
-                                      updateVariant(
-                                        index,
-                                        "sku",
-                                        e.target.value
-                                      )
-                                    }
-                                    placeholder={t("sku")}
-                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                                  />
-                                </td>
-                                <td className="p-3">
-                                  <input
-                                    type="number"
-                                    value={variant.price}
-                                    onChange={(e) =>
-                                      updateVariant(
-                                        index,
-                                        "price",
-                                        e.target.value
-                                      )
-                                    }
-                                    placeholder={t("price")}
-                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                                  />
-                                </td>
-                                <td className="p-3">
-                                  <input
-                                    type="number"
-                                    value={variant.stock}
-                                    onChange={(e) =>
-                                      updateVariant(
-                                        index,
-                                        "stock",
-                                        e.target.value
-                                      )
-                                    }
-                                    placeholder={t("stock")}
-                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
-                                  />
-                                </td>
-                                <td className="p-3">
-                                  <button
-                                    type="button"
-                                    onClick={() => removeVariant(index)}
-                                    className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-200 cursor-pointer"
-                                  >
-                                    <Trash2 size={16} />
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={addVariant}
-                        className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm transition-all duration-200 cursor-pointer"
-                      >
-                        {t("add_variant")}
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Buttons */}
-                  <div className="flex justify-end gap-4 pt-8">
-                    <button
-                      type="button"
-                      onClick={() => setIsOverlayOpen(false)}
-                      className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-medium transition cursor-pointer"
-                      disabled={isSubmitting}
-                    >
-                      {t("cancel")}
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow transition cursor-pointer"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center gap-3">
-                          <l-ring
-                            size="20"
-                            stroke="3"
-                            bg-opacity="0"
-                            speed="2"
-                            color="#fff"
-                          ></l-ring>
-                          {t("adding")}
-                        </span>
-                      ) : (
-                        t("add")
-                      )}
-                    </button>
-                  </div>
-                </form>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isPrimaryOverlayOpen && (
+          <SetPrimaryImageForm
+            isOpen={isPrimaryOverlayOpen}
+            setIsOpen={setIsPrimaryOverlayOpen}
+            productId={selectedProductId}
+            products={products}
+            setPrimaryImage={setPrimaryImage}
+            language={language}
+            t={t}
+          />
+        )}
 
         {loading ? (
           <Loader />
@@ -653,7 +268,7 @@ const AdminProducts = () => {
                     {t("price")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold fluorine-gray-700 ${
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
                       language === "ar" ? "text-right" : "text-left"
                     }`}
                   >
@@ -681,9 +296,12 @@ const AdminProducts = () => {
                       data-label={t("product_image")}
                     >
                       <img
-                        src={product.images[0].image_url}
+                        src={product.primary_image_url}
                         alt={product.name}
-                        onClick={() => navigate(`/products/${product.id}`)}
+                        onClick={() => {
+                          setSelectedProductId(product.id);
+                          setIsPrimaryOverlayOpen(true);
+                        }}
                         className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover border border-gray-200 cursor-pointer"
                         onError={(e) =>
                           (e.target.src = "https://via.placeholder.com/64")
@@ -727,6 +345,29 @@ const AdminProducts = () => {
                     <td className="p-2 sm:p-3" data-label={t("actions")}>
                       <div className="flex justify-center items-center gap-2 flex-wrap">
                         <button
+                          onClick={() => navigate(`/products/${product.id}`)}
+                          className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
+                          title={t("view")}
+                        >
+                          <Eye size={14} />
+                          <span className="sm:inline hidden font-medium">
+                            {t("view")}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => handleEdit(product.id)}
+                          className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs"
+                          title={t("edit")}
+                        >
+                          <SquarePen size={14} />
+                          <span className="sm:inline hidden font-medium">
+                            {t("edit")}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDelete(() => deleteProduct(product.id), t)
+                          }
                           className="flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer text-xs"
                           title={t("delete")}
                         >
@@ -744,6 +385,7 @@ const AdminProducts = () => {
           </div>
         )}
 
+        {/* Pagination */}
         {products.length > 0 && (
           <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
             <p className="text-xs sm:text-sm text-gray-600">

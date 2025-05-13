@@ -20,6 +20,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { useOrder } from "../../../hooks/Order/useOrder";
 import Slider from "react-slick";
+import { useWishlist } from "../../../context/WishList/WishlistContext";
 
 const colors = {
   primary: "#1e70d0",
@@ -39,7 +40,9 @@ const ProductId = () => {
     fetchProductDetails,
   } = useProducts();
   const { addToCart } = useCartCRUD();
-  const { toggleWishlist, wishlistItems, fetchWishlist } = useWishlistCRUD();
+  const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
+    const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
+      useWishlist();
   const { placeOrder, loading: orderLoading } = useOrder();
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -48,7 +51,7 @@ const ProductId = () => {
     wishlist: false,
   });
   const [mainImage, setMainImage] = useState(null);
-  const [sliderIndex, setSliderIndex] = useState(0)
+  const [sliderIndex, setSliderIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const { token } = useAuthContext();
   const { t } = useTranslation();
@@ -62,21 +65,27 @@ const ProductId = () => {
       }
     }
 
-    scrollTo(0, 0)
+    scrollTo(0, 0);
   }, [productId, language]);
 
   useEffect(() => {
-  const handleResize = () => setIsDesktop(window.innerWidth >= 768);
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
-    if (productDetails && productDetails.images && productDetails.images.length > 0) {
+    if (
+      productDetails &&
+      productDetails.images &&
+      productDetails.images.length > 0
+    ) {
       setMainImage(productDetails.images[0].image_url);
       setSliderIndex(0);
     } else if (productDetails && productDetails.primary_image_url) {
-      setMainImage(`https://le-souk.dinamo-app.com/storage/${productDetails.primary_image_url}`);
+      setMainImage(
+        `https://le-souk.dinamo-app.com/storage/${productDetails.primary_image_url}`
+      );
       setSliderIndex(0);
     }
   }, [productDetails]);
@@ -101,8 +110,11 @@ const ProductId = () => {
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
     }));
+
     try {
       await toggleWishlist(productId);
+      await fetchWishlistItems();
+      await fetchWishlistCount();
     } catch (err) {
       console.error("Error toggling wishlist:", err);
     } finally {
@@ -113,8 +125,8 @@ const ProductId = () => {
     }
   };
 
-  const isProductInWishlist = () => {
-    return wishlistItems.some((item) => item.id === parseInt(productId));
+  const isProductInWishlist = (productId) => {
+    return wishlistItems.some((item) => item.product.id === productId);
   };
 
   const handlePayNow = async () => {
@@ -169,7 +181,7 @@ const ProductId = () => {
       if (productDetails.images && productDetails.images[newIndex]) {
         setMainImage(productDetails.images[newIndex].image_url);
       }
-    }
+    },
   };
 
   return (
@@ -179,32 +191,48 @@ const ProductId = () => {
     >
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left Section - Product Image */}
-        <div className={`w-full md:w-1/2 flex flex-col md:flex-row items-center justify-center ${language === "ar" ? "md:flex-row" : "md:flex-row-reverse"}`}>
+        <div
+          className={`w-full md:w-1/2 flex flex-col md:flex-row items-center justify-center ${
+            language === "ar" ? "md:flex-row" : "md:flex-row-reverse"
+          }`}
+        >
           {/* Thumbnails Slider */}
-          <div className={`md:order-2 focus:outline-none focus:border-none  ${language === "ar" ? "order-1" : "order-2"}`} style={{ maxWidth: isDesktop ? 90 : "45%" }}>
+          <div
+            className={`md:order-2 focus:outline-none focus:border-none  ${
+              language === "ar" ? "order-1" : "order-2"
+            }`}
+            style={{ maxWidth: isDesktop ? 90 : "45%" }}
+          >
             <Slider {...sliderSettings}>
-              {productDetails.images && productDetails.images.map((img, idx) => (
-                <div key={img.id}>
-                  <img
-                    src={img.image_url}
-                    alt={`thumb-${idx}`}
-                    className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
-                ${mainImage === img.image_url ? "ring-2 ring-blue-400 border-blue-400" : "border-gray-300"}
+              {productDetails.images &&
+                productDetails.images.map((img, idx) => (
+                  <div key={img.id}>
+                    <img
+                      src={img.image_url}
+                      alt={`thumb-${idx}`}
+                      className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
+                ${
+                  mainImage === img.image_url
+                    ? "ring-2 ring-blue-400 border-blue-400"
+                    : "border-gray-300"
+                }
               `}
-                    onClick={() => {
-                      setMainImage(img.image_url);
-                      setSliderIndex(idx);
-                    }}
-                  />
-                </div>
-              ))}
+                      onClick={() => {
+                        setMainImage(img.image_url);
+                        setSliderIndex(idx);
+                      }}
+                    />
+                  </div>
+                ))}
             </Slider>
           </div>
           {/* Main Image */}
           <img
             src={mainImage}
             alt={productDetails.name}
-            className={`w-full h-[300px] md:h-[500px] object-cover rounded ${language === "ar" ? "order-2" : "order-1"}`}
+            className={`w-full h-[300px] md:h-[500px] object-cover rounded ${
+              language === "ar" ? "order-2" : "order-1"
+            }`}
             style={{ maxWidth: 350 }}
           />
         </div>
@@ -227,23 +255,38 @@ const ProductId = () => {
             </span>
           </div> */}
 
-          <p className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>
+          <p
+            className="text-xl font-semibold mb-4"
+            style={{ color: colors.primary }}
+          >
             {selectedVariant
               ? `${selectedVariant.price} ${language === "ar" ? "ج.م" : "LE"}`
               : productDetails.min_price === productDetails.max_price
-                ? `${productDetails.min_price} ${language === "ar" ? "ج.م" : "LE"}`
-                : `${productDetails.min_price} ${language === "ar" ? "ج.م" : "LE"}`}
+              ? `${productDetails.min_price} ${
+                  language === "ar" ? "ج.م" : "LE"
+                }`
+              : `${productDetails.min_price} ${
+                  language === "ar" ? "ج.م" : "LE"
+                }`}
           </p>
 
           <p className="text-gray-600 mb-4">{productDetails.description}</p>
 
           <div className="flex items-center mb-4 flex-wrap gap-2">
-            <span className="font-medium" style={{ color: colors.productTitle }}>
+            <span
+              className="font-medium"
+              style={{ color: colors.productTitle }}
+            >
               {t("category")}:
             </span>
-            {productDetails.categories && productDetails.categories.length > 0 ? (
+            {productDetails.categories &&
+            productDetails.categories.length > 0 ? (
               productDetails.categories.map((cat) => (
-                <span key={cat.id} className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs" style={{ color: colors.productName }}>
+                <span
+                  key={cat.id}
+                  className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs"
+                  style={{ color: colors.productName }}
+                >
                   {cat.name}
                 </span>
               ))
@@ -252,7 +295,10 @@ const ProductId = () => {
                 {t("noCategory")}
               </span>
             )}
-            <span className="ml-4 font-medium" style={{ color: colors.productTitle }}>
+            <span
+              className="ml-4 font-medium"
+              style={{ color: colors.productTitle }}
+            >
               {t("inStock")}:
             </span>
             <span className="ml-2" style={{ color: colors.productName }}>
@@ -262,7 +308,10 @@ const ProductId = () => {
 
           {productDetails.variants && productDetails.variants.length > 0 && (
             <div className="mb-4">
-              <span className="font-medium" style={{ color: colors.productTitle }}>
+              <span
+                className="font-medium"
+                style={{ color: colors.productTitle }}
+              >
                 {t("variants")}:
               </span>
               <div className="flex flex-wrap gap-2 mt-2">
@@ -272,10 +321,16 @@ const ProductId = () => {
                     <button
                       key={variant.id}
                       type="button"
-                      onClick={() => setSelectedVariant(isSelected ? null : variant)}
+                      onClick={() =>
+                        setSelectedVariant(isSelected ? null : variant)
+                      }
                       className={`
                         px-4 py-2 rounded-lg border transition
-                        ${isSelected ? "border-blue-600 bg-blue-50 shadow-md" : "border-gray-200 bg-white"}
+                        ${
+                          isSelected
+                            ? "border-blue-600 bg-blue-50 shadow-md"
+                            : "border-gray-200 bg-white"
+                        }
                         hover:border-blue-400 hover:bg-blue-100
                         focus:outline-none cursor-pointer text-md font-medium
                       `}
@@ -311,8 +366,8 @@ const ProductId = () => {
             />
           </div> */}
 
-          {/* <div className="flex gap-4">
-            <button
+          <div className="flex gap-4">
+            {/* <button
               onClick={handleAddToCart}
               disabled={loadingStates.cart}
               className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${loadingStates.cart
@@ -338,33 +393,35 @@ const ProductId = () => {
                 <CreditCard size={20} className="inline-block" />
                 {orderLoading ? t("loading") : t("payNow")}
               </span>
-            </button>
+            </button> */}
 
             {productDetails?.id && (
               <button
                 onClick={() => handleToggleWishlist(productDetails.id)}
                 disabled={loadingStates.wishlist?.[productDetails.id]}
-                className={`p-2 rounded border border-gray-300 transition duration-200 cursor-pointer ${loadingStates.wishlist?.[productDetails.id]
-                  ? "opacity-50 cursor-not-allowed"
-                  : isProductInWishlist(productDetails.id)
+                className={`p-2 rounded border border-gray-300 transition duration-200 cursor-pointer ${
+                  loadingStates.wishlist?.[productDetails.id]
+                    ? "opacity-50 cursor-not-allowed"
+                    : isProductInWishlist(productDetails.id)
                     ? "bg-red-100 hover:bg-red-200"
                     : "hover:bg-gray-100"
-                  }`}
+                }`}
                 style={{ borderColor: colors.borderLight }}
               >
                 <Heart
                   size={25}
-                  className={`${loadingStates.wishlist?.[productDetails.id]
-                    ? "text-gray-400"
-                    : isProductInWishlist(productDetails.id)
+                  className={`${
+                    loadingStates.wishlist?.[productDetails.id]
+                      ? "text-gray-400"
+                      : isProductInWishlist(productDetails.id)
                       ? "text-red-500"
                       : "text-gray-400"
-                    }`}
+                  }`}
                   fill={isProductInWishlist(productDetails.id) ? "red" : "none"}
                 />
               </button>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
       {/* <Reviews

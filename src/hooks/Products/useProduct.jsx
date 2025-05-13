@@ -106,7 +106,6 @@ const useProducts = (
       const response = await axios.get(
         `${BASE_URL}products/${id}?with=images,categories,variants`
       );
-      console.log(response.data.data);
       setProductDetails(response.data.data);
     } catch (err) {
       setProductDetailsError(

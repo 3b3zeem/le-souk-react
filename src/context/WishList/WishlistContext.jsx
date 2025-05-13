@@ -52,7 +52,6 @@ export const WishlistProvider = ({ children }) => {
         }
       );
       const items = response.data.data.items;
-      console.log("Fetched items", items);
       setWishlistItems(items);
     } catch (error) {
       console.error("Error fetching wishlist items", error);

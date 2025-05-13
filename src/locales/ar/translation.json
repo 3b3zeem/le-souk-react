@@ -220,6 +220,15 @@
   "no_products": "لا توجد منتجات",
   "showing_products": "يعرض {{count}} في صفحة {{current}} من أصل {{total}} منتج",
   "previous": "السابق",
-  "view": "عرض",
-  "product_name_required": "يجب ادخال الاعنوان"
+  "view": "عرض تفاصيل",
+  "product_name_required": "يجب ادخال الاعنوان",
+  "edit_product": "تعديل المنتج",
+  "search_products": "البحث عن منتجات...",
+  "select_image": "من فضلك اختر صورة",
+  "set_primary_image": "تعيين الصورة الأساسية",
+  "current_primary": "الصورة الأساسية الحالية",
+  "no_images": "لا توجد صور",
+  "areYouSureToDelete": "هل أنت متأكد من الحذف؟",
+  "thisActionCannotBeUndone": "لا يمكنك التراجع بعد تنفيذ هذا الإجراء!",
+  "yesDeleteIt": "نعم، احذفه"
 }
