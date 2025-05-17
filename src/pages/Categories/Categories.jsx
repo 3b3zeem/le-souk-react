@@ -1,0 +1,35 @@
+import React, { useState } from "react";
+import CategoryCard from "./CategoryCard";
+import Pagination from "./Pagination";
+import useCategories from "../../hooks/Categories/useCategories";
+import Loader from "../../layouts/Loader";
+import { useTranslation } from "react-i18next";
+
+const Categories = () => {
+  const [page, setPage] = useState(1);
+  const { t } = useTranslation();
+  const { categories, meta, loading, error } = useCategories(
+    10,
+    page
+  );
+
+  if (loading) return <Loader />;
+  if (error) return <div className="text-red-500 text-center">{error}</div>;
+
+  return (
+    <div className="container mx-auto py-6">
+      <h2 className="text-4xl font-bold text-gray-900 text-center mb-12 relative">
+        {t("Explore_Categories")}
+        <span class="block w-16 h-1 bg-yellow-400 rounded-full mx-auto mt-2"></span>
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-12">
+        {categories.map((category) => (
+          <CategoryCard key={category.id} category={category} />
+        ))}
+      </div>
+      <Pagination meta={meta} onPageChange={setPage} />
+    </div>
+  );
+};
+
+export default Categories;

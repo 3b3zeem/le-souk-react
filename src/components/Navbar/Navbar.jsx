@@ -8,7 +8,7 @@ import {
   ShoppingCart,
   Heart,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
@@ -82,6 +82,7 @@ const Navbar = () => {
     { path: "/", label: t("home"), isPrimary: true },
     { path: "/about", label: t("about"), isPrimary: true },
     { path: "/products", label: t("products"), isPrimary: true },
+    { path: "/categories", label: t("categories"), isPrimary: true },
     { path: "/contact", label: t("contact"), isPrimary: true },
   ];
 
@@ -154,16 +155,21 @@ const Navbar = () => {
         {/* Links */}
         <div className="flex items-center gap-4 lg:gap-8">
           {navLinks.map((link, index) => (
-            <Link
+            <NavLink
               key={index}
               to={link.path}
-              style={{ color: hover === index ? colors.primary : undefined }}
-              className="cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]"
+              className={({ isActive }) =>
+                `
+                  cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]
+                  ${isActive ? "text-[#1e70d0] font-[700]" : ""}
+                  ${hover === index ? "text-[#1e70d0]" : ""}
+                `
+              }
               onMouseEnter={() => setHover(index)}
               onMouseLeave={() => setHover(null)}
             >
               {link.label}
-            </Link>
+            </NavLink>
           ))}
         </div>
 
@@ -371,19 +377,21 @@ const Navbar = () => {
 
               <div className="flex flex-col p-4 gap-5">
                 {navLinks.map((link, index) => (
-                  <Link
+                  <NavLink
                     key={index}
                     to={link.path}
-                    style={{
-                      color: hover === index ? colors.primary : undefined,
-                    }}
-                    className="cursor-pointer font-[500] p-2 transition ms-2 duration-200 ease-in-out b-bottom text-[.90rem]"
+                    className={({ isActive }) =>
+                      `
+                        cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]
+                        ${isActive ? "text-[#1e70d0]" : ""}
+                        ${hover === index ? "text-[#1e70d0]" : ""}
+                      `
+                    }
                     onMouseEnter={() => setHover(index)}
                     onMouseLeave={() => setHover(null)}
-                    onClick={() => setIsOpen(false)}
                   >
                     {link.label}
-                  </Link>
+                  </NavLink>
                 ))}
 
                 <LanguageDropdown />

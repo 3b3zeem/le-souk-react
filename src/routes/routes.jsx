@@ -5,6 +5,8 @@ import NotFound from "../components/NotFound/NotFound.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
+import CategoryId from "../pages/Categories/CategoryId/CategoryId.jsx";
+
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
@@ -15,6 +17,7 @@ const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("../pages/Auth/Register/Register.jsx"));
 const Products = lazy(() => import("../pages/Products/Products.jsx"));
 const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
+const MainCategories = lazy(() => import("../pages/Categories/Categories.jsx"));
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
@@ -30,6 +33,7 @@ const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.
 const AdminOrders = lazy(() => import("./../dashboard/pages/Orders/AdminOrders"));
 const Settings = lazy(() => import("../dashboard/pages/Settings/Settings.jsx"));
 const Unauthorized = lazy(() => import("../components/Unauthorized/Unauthorized.jsx"));
+
 
 const routes = createBrowserRouter([
   {
@@ -78,6 +82,22 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />
+          </Suspense>
+        ),
+      },
+      {
+        path: "categories",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <MainCategories />
+          </Suspense>
+        ),
+      },
+      {
+        path: "categories/:categoryId",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CategoryId />
           </Suspense>
         ),
       },

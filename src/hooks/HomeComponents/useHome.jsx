@@ -10,7 +10,7 @@ const useHome = () => {
   const { language } = useLanguage();
 
   const BaseURL = "https://le-souk.dinamo-app.com/api";
-  const categoriesURL = `${BaseURL}/categories`;
+  const categoriesURL = `${BaseURL}/categories?per_page=4&page=1`;
   const productsURL = `${BaseURL}/products?per_page=5&with=images,categories,variants`;
 
   useEffect(() => {

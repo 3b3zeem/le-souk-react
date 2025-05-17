@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   ShoppingCart,
@@ -6,6 +6,7 @@ import {
   Heart,
   AlertCircle,
   SearchX,
+  X,
 } from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
@@ -54,6 +55,13 @@ const ProductId = () => {
   const [mainImage, setMainImage] = useState(null);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({
+    x: 0,
+    y: 0,
+    visible: false,
+  });
+  const imageRef = useRef(null);
   const { token } = useAuthContext();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -149,6 +157,46 @@ const ProductId = () => {
     }
   };
 
+  const handleMouseMove = (e) => {
+    if (!imageRef.current) return;
+
+    const { left, top, width, height } =
+      imageRef.current.getBoundingClientRect();
+    const x = e.clientX - left;
+    const y = e.clientY - top;
+
+    if (x >= 0 && x <= width && y >= 0 && y <= height) {
+      setZoomPosition(() => ({
+        x: (x / width) * 100,
+        y: (y / height) * 100,
+        visible: true,
+      }));
+    } else {
+      setZoomPosition((prev) => ({ ...prev, visible: false }));
+    }
+  };
+
+  // Handle mouse leave to hide magnifier
+  const handleMouseLeave = () => {
+    setZoomPosition({ ...zoomPosition, visible: false });
+  };
+
+  // Open overlay on main image click
+  const handleImageClick = () => {
+    setIsOverlayOpen(true);
+  };
+
+  // Close overlay
+  const closeOverlay = () => {
+    setIsOverlayOpen(false);
+  };
+
+  // Handle thumbnail click in overlay
+  const handleThumbnailClick = (imageUrl, index) => {
+    setMainImage(imageUrl);
+    setSliderIndex(index);
+  };
+
   if (productDetailsLoading) return <Loader />;
   if (productDetailsError) return <NotFound productId={productId} />;
   if (!productDetails || !productDetails.id)
@@ -197,17 +245,59 @@ const ProductId = () => {
             language === "ar" ? "lg:flex-row" : "lg:flex-row-reverse gap-0"
           }`}
         >
-          {/* Main Image */}
-          <img
-            src={mainImage}
-            alt={productDetails.name}
-            className={`w-full h-[300px] lg:h-[500px] object-cover rounded `}
-            style={{ maxWidth: 350 }}
-          />
+          {/* Main Image with Magnifier */}
+          <div className="relative w-full" style={{ maxWidth: 350 }}>
+            <img
+              ref={imageRef}
+              src={mainImage}
+              alt={productDetails.name}
+              className="w-full h-[300px] lg:h-[500px] object-cover rounded cursor-zoom-in"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleImageClick}
+            />
+            {zoomPosition.visible && (
+              <div
+                className="absolute w-50 h-50 border-2 border-gray-300 rounded pointer-events-none overflow-hidden"
+                style={{
+                  top: `calc(${zoomPosition.y}% - 64px)`,
+                  left: `calc(${zoomPosition.x}% - 64px)`,
+                  backgroundImage: `url(${mainImage})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: `250%`,
+                  backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                  zIndex: 10,
+                }}
+              />
+            )}
+          </div>
+
+          {/* Overlay Modal */}
+          {isOverlayOpen && (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-500">
+              <div className="relative  rounded-lg p-4 max-w-4xl w-full">
+                <button
+                  className="absolute top-2 right-2 text-gray-200 text-4xl cursor-pointer"
+                  onClick={closeOverlay}
+                >
+                  <X />
+                </button>
+                <div className="flex flex-col items-center">
+                  <img
+                    src={mainImage}
+                    alt={productDetails.name}
+                    className="w-full h-[400px] md:h-[600px] object-contain rounded"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Thumbnails Slider */}
           <div
-            className={`lg:order-2 focus:outline-none focus:border-none`}
+            className={`lg:order-2 focus:outline-none focus:border-none ${
+              language === "ar" ? "ml-4" : "mr-4"
+            }`}
             style={{ maxWidth: isDesktop ? 90 : "45%" }}
           >
             <Slider {...sliderSettings}>
@@ -218,12 +308,11 @@ const ProductId = () => {
                       src={img.image_url}
                       alt={`thumb-${idx}`}
                       className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
-                ${
-                  mainImage === img.image_url
-                    ? "ring-2 ring-blue-400 border-blue-400"
-                    : "border-gray-300"
-                }
-              `}
+                        ${
+                          mainImage === img.image_url
+                            ? "ring-2 ring-blue-400 border-blue-400"
+                            : "border-gray-300"
+                        }`}
                       onClick={() => {
                         setMainImage(img.image_url);
                         setSliderIndex(idx);
