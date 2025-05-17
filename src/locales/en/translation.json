@@ -230,5 +230,28 @@
   "thisActionCannotBeUndone": "This action cannot be undone!",
   "yesDeleteIt": "Yes, delete it!",
   "deletedSuccessfully": "Deleted successfully",
-  "itemHasBeenDeleted": "The item has been deleted."
+  "itemHasBeenDeleted": "The item has been deleted.",
+  "settings": {
+    "title": "Settings",
+    "name": "Name",
+    "key": "Key",
+    "value": "Value",
+    "group": "Group",
+    "type": "Type",
+    "description": "Description",
+    "actions": "Actions",
+    "perPage": "Items per page:",
+    "clear": "Clear",
+    "add": "Add setting"
+  },
+  "no_data": "No settings found.",
+  "error": "Error:",
+  "Size": "Size",
+  "Color": "Color",
+  "Price": "Price",
+  "Stock": "Stock",
+  "Out of stock": "Out of stock",
+  "available": "available",
+  "Minimum": "Min",
+  "Maximum": "Max"
 }

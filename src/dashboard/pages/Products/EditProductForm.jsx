@@ -35,7 +35,7 @@ const EditProductForm = ({
     variants: [{ size: "", price: "", sku: "", stock: "" }],
   });
 
-  // when open the overlay 
+  // when open the overlay
   useEffect(() => {
     if (initialProductData) {
       setLocalProductData({
@@ -99,6 +99,7 @@ const EditProductForm = ({
             formData.append(`variants[${index}][id]`, variant.id);
           }
           formData.append(`variants[${index}][size]`, variant.size || "");
+          formData.append(`variants[${index}][color]`, variant.color || "");
           formData.append(`variants[${index}][price]`, variant.price || "");
           formData.append(`variants[${index}][sku]`, variant.sku || "");
           formData.append(`variants[${index}][stock]`, variant.stock || "");
@@ -447,6 +448,9 @@ const EditProductForm = ({
                           <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
                             {t("size")}
                           </th>
+                          <th className="p-3 text-sm font-medium text-gray-700 text-left">
+                            {t("color")}
+                          </th>
                           <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
                             {t("sku")}
                           </th>
@@ -479,6 +483,59 @@ const EditProductForm = ({
                                 <option value="small">{t("small")}</option>
                                 <option value="medium">{t("medium")}</option>
                                 <option value="large">{t("large")}</option>
+                              </datalist>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="color"
+                                  value={variant.color}
+                                  onChange={(e) =>
+                                    updateVariant(
+                                      index,
+                                      "color",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-12 h-9 border  border-gray-300 rounded-lg cursor-pointer"
+                                />
+                                <input
+                                  type="text"
+                                  value={variant.color}
+                                  onChange={(e) =>
+                                    updateVariant(
+                                      index,
+                                      "color",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder={t("color")}
+                                  list="colorSuggestions"
+                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 lowercase"
+                                />
+                              </div>
+                              <datalist id="colorSuggestions">
+                                <option value="Red" />
+                                <option value="Blue" />
+                                <option value="Green" />
+                                <option value="Yellow" />
+                                <option value="Black" />
+                                <option value="White" />
+                                <option value="Orange" />
+                                <option value="Purple" />
+                                <option value="Pink" />
+                                <option value="Brown" />
+
+                                <option value="Light Blue" />
+                                <option value="Dark Green" />
+                                <option value="Sky Blue" />
+                                <option value="Olive Green" />
+                                <option value="Coral Pink" />
+                                <option value="Beige" />
+                                <option value="Maroon" />
+                                <option value="Navy Blue" />
+                                <option value="Turquoise" />
+                                <option value="Magenta" />
                               </datalist>
                             </td>
                             <td className="p-3">

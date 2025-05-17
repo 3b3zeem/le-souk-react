@@ -28,6 +28,7 @@ const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.j
 const AdminProducts = lazy(() => import("./../dashboard/pages/Products/AdminProducts"));
 const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
 const AdminOrders = lazy(() => import("./../dashboard/pages/Orders/AdminOrders"));
+const Settings = lazy(() => import("../dashboard/pages/Settings/Settings.jsx"));
 const Unauthorized = lazy(() => import("../components/Unauthorized/Unauthorized.jsx"));
 
 const routes = createBrowserRouter([
@@ -198,6 +199,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <AdminReviews />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "settings",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <Settings />
                   </Suspense>
                 ),
               },

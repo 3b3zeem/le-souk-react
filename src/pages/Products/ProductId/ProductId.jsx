@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { useOrder } from "../../../hooks/Order/useOrder";
 import Slider from "react-slick";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
+import { motion } from "framer-motion";
 
 const colors = {
   primary: "#1e70d0",
@@ -41,8 +42,8 @@ const ProductId = () => {
   } = useProducts();
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
-    const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
-      useWishlist();
+  const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
+    useWishlist();
   const { placeOrder, loading: orderLoading } = useOrder();
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -52,7 +53,7 @@ const ProductId = () => {
   });
   const [mainImage, setMainImage] = useState(null);
   const [sliderIndex, setSliderIndex] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const { token } = useAuthContext();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -69,7 +70,7 @@ const ProductId = () => {
   }, [productId, language]);
 
   useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 768);
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -175,7 +176,7 @@ const ProductId = () => {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 3000,
-    vertical: window.innerWidth >= 768,
+    vertical: window.innerWidth >= 1024,
     beforeChange: (oldIndex, newIndex) => {
       setSliderIndex(newIndex);
       if (productDetails.images && productDetails.images[newIndex]) {
@@ -186,21 +187,27 @@ const ProductId = () => {
 
   return (
     <div
-      className="max-w-5xl mx-auto py-10 px-4 sm:px-6 lg:px-8"
+      className="max-w-5xl mx-auto py-10 px-4 sm:px-6 md:px-8 lg:px-12"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Left Section - Product Image */}
         <div
-          className={`w-full md:w-1/2 flex flex-col md:flex-row items-center justify-center ${
-            language === "ar" ? "md:flex-row" : "md:flex-row-reverse"
+          className={`w-full lg:w-1/2 flex flex-col-reverse items-center ${
+            language === "ar" ? "lg:flex-row" : "lg:flex-row-reverse gap-0"
           }`}
         >
+          {/* Main Image */}
+          <img
+            src={mainImage}
+            alt={productDetails.name}
+            className={`w-full h-[300px] lg:h-[500px] object-cover rounded `}
+            style={{ maxWidth: 350 }}
+          />
+
           {/* Thumbnails Slider */}
           <div
-            className={`md:order-2 focus:outline-none focus:border-none  ${
-              language === "ar" ? "order-1" : "order-2"
-            }`}
+            className={`lg:order-2 focus:outline-none focus:border-none`}
             style={{ maxWidth: isDesktop ? 90 : "45%" }}
           >
             <Slider {...sliderSettings}>
@@ -226,20 +233,12 @@ const ProductId = () => {
                 ))}
             </Slider>
           </div>
-          {/* Main Image */}
-          <img
-            src={mainImage}
-            alt={productDetails.name}
-            className={`w-full h-[300px] md:h-[500px] object-cover rounded ${
-              language === "ar" ? "order-2" : "order-1"
-            }`}
-            style={{ maxWidth: 350 }}
-          />
         </div>
+
         {/* Right Section - Product Details */}
-        <div className="md:w-1/2 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center mt-6 lg:mt-0">
           <h1
-            className="text-2xl font-bold mb-2"
+            className="text-xl sm:text-2xl font-bold mb-2"
             style={{ color: colors.productTitle }}
           >
             {productDetails.name}
@@ -256,7 +255,7 @@ const ProductId = () => {
           </div> */}
 
           <p
-            className="text-xl font-semibold mb-4"
+            className="text-lg sm:text-xl font-semibold mb-4"
             style={{ color: colors.primary }}
           >
             {selectedVariant
@@ -270,11 +269,13 @@ const ProductId = () => {
                 }`}
           </p>
 
-          <p className="text-gray-600 mb-4">{productDetails.description}</p>
+          <p className="text-sm sm:text-base text-gray-600 mb-4">
+            {productDetails.description}
+          </p>
 
-          <div className="flex items-center mb-4 flex-wrap gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 flex-wrap gap-2">
             <span
-              className="font-medium"
+              className="font-medium text-sm sm:text-base"
               style={{ color: colors.productTitle }}
             >
               {t("category")}:
@@ -284,24 +285,30 @@ const ProductId = () => {
               productDetails.categories.map((cat) => (
                 <span
                   key={cat.id}
-                  className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs"
+                  className="ml-2 px-2 py-1 bg-gray-100 rounded text-xs sm:text-sm"
                   style={{ color: colors.productName }}
                 >
                   {cat.name}
                 </span>
               ))
             ) : (
-              <span className="ml-2" style={{ color: colors.productName }}>
+              <span
+                className="ml-2 text-sm"
+                style={{ color: colors.productName }}
+              >
                 {t("noCategory")}
               </span>
             )}
             <span
-              className="ml-4 font-medium"
+              className="font-medium text-sm sm:text-base mt-2 sm:mt-0 sm:ml-4"
               style={{ color: colors.productTitle }}
             >
               {t("inStock")}:
             </span>
-            <span className="ml-2" style={{ color: colors.productName }}>
+            <span
+              className="ml-2 text-sm"
+              style={{ color: colors.productName }}
+            >
               {productDetails.total_stock}
             </span>
           </div>
@@ -309,34 +316,100 @@ const ProductId = () => {
           {productDetails.variants && productDetails.variants.length > 0 && (
             <div className="mb-4">
               <span
-                className="font-medium"
+                className="font-medium text-sm sm:text-base"
                 style={{ color: colors.productTitle }}
               >
                 {t("variants")}:
               </span>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-col sm:flex-row gap-4 mt-4">
                 {productDetails.variants.map((variant) => {
                   const isSelected = selectedVariant?.id === variant.id;
+
                   return (
-                    <button
+                    <motion.button
                       key={variant.id}
                       type="button"
                       onClick={() =>
                         setSelectedVariant(isSelected ? null : variant)
                       }
-                      className={`
-                        px-4 py-2 rounded-lg border transition
+                      whileTap={{ scale: 0.95 }}
+                      disabled={variant.stock <= 0}
+                      className={`px-4 sm:px-6 py-3 sm:py-4 rounded-md border transition-all duration-300 text-left flex flex-col gap-2 sm:gap-3 w-full sm:w-[300px] shadow-md
                         ${
                           isSelected
-                            ? "border-blue-600 bg-blue-50 shadow-md"
+                            ? "border-blue-600 bg-blue-50 shadow-lg"
                             : "border-gray-200 bg-white"
                         }
-                        hover:border-blue-400 hover:bg-blue-100
-                        focus:outline-none cursor-pointer text-md font-medium
+                        ${
+                          variant.stock <= 0
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:border-blue-500 hover:bg-blue-100"
+                        }
+                        focus:outline-none cursor-pointer font-medium
                       `}
                     >
-                      {variant.size}
-                    </button>
+                      <div className="flex flex-col gap-1 sm:gap-2 text-gray-800">
+                        {/* Size */}
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-gray-700 font-medium text-sm sm:text-base">
+                            {t("Size")}:
+                          </span>
+                          <span className="font-semibold text-sm sm:text-base">
+                            {variant.size}
+                          </span>
+                        </div>
+
+                        {/* Color */}
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-gray-700 font-medium text-sm sm:text-base">
+                            {t("Color")}:
+                          </span>
+                          <span className="font-semibold capitalize text-sm sm:text-base">
+                            {variant.color}
+                          </span>
+                          <span
+                            className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-gray-300"
+                            style={{ backgroundColor: variant.color }}
+                          ></span>
+                        </div>
+
+                        {/* Price */}
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-gray-700 font-medium text-sm sm:text-base">
+                            {t("Price")}:
+                          </span>
+                          <span
+                            style={{ color: colors.primary }}
+                            className="font-semibold text-base sm:text-lg"
+                          >
+                            {variant.price} {language === "ar" ? "ج.م" : "LE"}
+                          </span>
+                        </div>
+
+                        {/* Stock */}
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-gray-700 font-medium text-sm sm:text-base">
+                            {t("Stock")}:
+                          </span>
+                          <span
+                            className={`font-semibold flex items-center gap-1 px-1 sm:px-2 py-0.5 sm:py-1 rounded-md ${
+                              variant.stock > 0
+                                ? "text-green-700 bg-green-100"
+                                : "text-red-700 bg-red-100"
+                            }`}
+                          >
+                            {variant.stock > 0
+                              ? `${variant.stock}`
+                              : t("Out of stock")}
+                            {variant.stock > 0 && (
+                              <span className="text-green-700 font-medium text-xs sm:text-base">
+                                {t("available")}
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.button>
                   );
                 })}
               </div>

@@ -43,6 +43,7 @@ const AddProductForm = ({
     );
     productData.variants.forEach((variant, index) => {
       formData.append(`variants[${index}][size]`, variant.size);
+      formData.append(`variants[${index}][color]`, variant.color);
       formData.append(`variants[${index}][price]`, variant.price);
       formData.append(`variants[${index}][sku]`, variant.sku);
       formData.append(`variants[${index}][stock]`, variant.stock);
@@ -248,11 +249,13 @@ const AddProductForm = ({
                         placeholder={t("enter_product_name")}
                       />
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         {t("product_name")} (Arabic)
                       </label>
                       <input
+                        dir="rtl"
                         type="text"
                         value={productData.ar_name}
                         onChange={(e) =>
@@ -261,7 +264,7 @@ const AddProductForm = ({
                             ar_name: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-right"
                         placeholder={t("enter_product_name_ar")}
                       />
                     </div>
@@ -284,11 +287,13 @@ const AddProductForm = ({
                         placeholder={t("enter_description")}
                       />
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         {t("description")} (Arabic)
                       </label>
                       <textarea
+                        dir="rtl"
                         value={productData.ar_description}
                         onChange={(e) =>
                           setProductData({
@@ -296,7 +301,7 @@ const AddProductForm = ({
                             ar_description: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-right"
                         rows="4"
                         placeholder={t("enter_description_ar")}
                       />
@@ -362,6 +367,9 @@ const AddProductForm = ({
                           <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
                             {t("size")}
                           </th>
+                          <th className="p-3 text-sm font-medium text-gray-700 text-left">
+                            {t("color")}
+                          </th>
                           <th className="p-3 text-sm font-medium text-gray-700 text-left border-r border-gray-400">
                             {t("sku")}
                           </th>
@@ -394,6 +402,59 @@ const AddProductForm = ({
                                 <option value="small">{t("small")}</option>
                                 <option value="medium">{t("medium")}</option>
                                 <option value="large">{t("large")}</option>
+                              </datalist>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="color"
+                                  value={variant.color}
+                                  onChange={(e) =>
+                                    updateVariant(
+                                      index,
+                                      "color",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-12 h-9 border  border-gray-300 rounded-lg cursor-pointer"
+                                />
+                                <input
+                                  type="text"
+                                  value={variant.color}
+                                  onChange={(e) =>
+                                    updateVariant(
+                                      index,
+                                      "color",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder={t("color")}
+                                  list="colorSuggestions"
+                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 lowercase"
+                                />
+                              </div>
+                              <datalist id="colorSuggestions">
+                                <option value="Red" />
+                                <option value="Blue" />
+                                <option value="Green" />
+                                <option value="Yellow" />
+                                <option value="Black" />
+                                <option value="White" />
+                                <option value="Orange" />
+                                <option value="Purple" />
+                                <option value="Pink" />
+                                <option value="Brown" />
+
+                                <option value="Light Blue" />
+                                <option value="Dark Green" />
+                                <option value="Sky Blue" />
+                                <option value="Olive Green" />
+                                <option value="Coral Pink" />
+                                <option value="Beige" />
+                                <option value="Maroon" />
+                                <option value="Navy Blue" />
+                                <option value="Turquoise" />
+                                <option value="Magenta" />
                               </datalist>
                             </td>
                             <td className="p-3">

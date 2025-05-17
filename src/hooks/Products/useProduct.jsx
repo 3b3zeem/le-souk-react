@@ -42,7 +42,10 @@ const useProducts = (
     };
   }, [language]);
 
+  // * Fetch categories and products
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const fetchData = async () => {
       try {
         if (perPage === 5 && page === 1) {
@@ -51,32 +54,34 @@ const useProducts = (
           setLoadMoreLoading(true);
         }
 
-        const categoriesResponse = await axios.get(
-          BASE_URL + "categories"
-        );
+        const categoriesResponse = await axios.get(BASE_URL + "categories", {
+          cancelToken: source.token,
+        });
         setCategories(categoriesResponse.data.data);
 
         let url = BASE_URL + "products";
-        const params = new URLSearchParams();
 
-        // Pagination & sorting
+        // * Pagination & sorting
+        const params = new URLSearchParams();
         params.append("per_page", perPage);
         params.append("page", page);
         params.append("sort_by", sortBy);
         params.append("sort_direction", sortDirection);
 
-        // Filters
+        // * Filters
         if (searchQuery) params.append("search", searchQuery);
         if (categoryId) params.append("category_id", categoryId);
         if (minPrice !== null) params.append("min_price", minPrice);
         if (maxPrice !== null) params.append("max_price", maxPrice);
         if (inStock !== null) params.append("in_stock", inStock);
-
         params.append("with", "images,categories,variants");
 
         url += `?${params.toString()}`;
 
-        const productsResponse = await axios.get(url);
+        const productsResponse = await axios.get(url, {
+          cancelToken: source.token,
+        });
+
         const newProducts = productsResponse.data.data;
         setProducts(newProducts);
         setTotalProducts(productsResponse.data.meta?.total || 0);
@@ -86,6 +91,10 @@ const useProducts = (
         setLoading(false);
         setLoadMoreLoading(false);
       } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled:", err.message);
+          return;
+        }
         setError(err.response?.data?.message || "Failed to fetch products");
         setLoading(false);
         setLoadMoreLoading(false);
@@ -93,7 +102,24 @@ const useProducts = (
     };
 
     fetchData();
-  }, [language, searchQuery, categoryId, minPrice, maxPrice, perPage, page, sortBy, sortDirection, inStock]);
+
+    return () => {
+      source.cancel(
+        "Request canceled due to component unmount or parameter change"
+      );
+    };
+  }, [
+    language,
+    searchQuery,
+    categoryId,
+    minPrice,
+    maxPrice,
+    perPage,
+    page,
+    sortBy,
+    sortDirection,
+    inStock,
+  ]);
 
   const fetchProductDetails = async (id) => {
     if (!id) return;

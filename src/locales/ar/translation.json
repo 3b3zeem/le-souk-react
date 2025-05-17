@@ -230,5 +230,28 @@
   "no_images": "لا توجد صور",
   "areYouSureToDelete": "هل أنت متأكد من الحذف؟",
   "thisActionCannotBeUndone": "لا يمكنك التراجع بعد تنفيذ هذا الإجراء!",
-  "yesDeleteIt": "نعم، احذفه"
+  "yesDeleteIt": "نعم، احذفه",
+  "settings": {
+    "title": "الإعدادات",
+    "name": "الاسم",
+    "key": "المفتاح",
+    "value": "القيمة",
+    "group": "المجموعة",
+    "type": "النوع",
+    "description": "الوصف",
+    "actions": "الإجراءات",
+    "perPage": "عدد العناصر لكل صفحة:",
+    "clear": "مسح",
+    "add": "إضافة اعدادات"
+  },
+  "no_data": "لم يتم العثور على إعدادات.",
+  "error": "خطأ:",
+  "Size": "الحجم",
+  "Color": "اللون",
+  "Price": "السعر",
+  "Stock": "المخزون",
+  "Out of stock": "نفد المخزون",
+  "available": "متوفر",
+  "Minimum": "الحد الأدنى",
+  "Maximum": "الحد الأقصى"
 }

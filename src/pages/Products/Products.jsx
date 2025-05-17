@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ShoppingCart, Heart, Search, PackageX } from "lucide-react";
 import useProducts from "../../hooks/Products/useProduct";
@@ -41,42 +41,6 @@ const Products = () => {
   const [inStock, setInStock] = useState(null);
   const [sliderPrice, setSliderPrice] = useState([minPrice, maxPrice]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const categoryFromParams = searchParams.get("category");
-    const pageFromParams = searchParams.get("page");
-
-    if (categoryFromParams) {
-      setSelectedCategory(parseInt(categoryFromParams));
-    } else {
-      setSelectedCategory(null);
-    }
-
-    if (pageFromParams) {
-      setPage(parseInt(pageFromParams));
-    } else {
-      const otherParamsChanged =
-        searchParams.get("search") !== searchQuery ||
-        searchParams.get("min_price") !== minPrice.toString() ||
-        searchParams.get("max_price") !== maxPrice.toString() ||
-        searchParams.get("in_stock") !== (inStock ? "1" : null) ||
-        searchParams.get("sort_by") !== sortBy ||
-        searchParams.get("sort_direction") !== sortDirection;
-
-      if (otherParamsChanged) {
-        setPage(1);
-      }
-    }
-  }, [
-    searchParams,
-    searchQuery,
-    minPrice,
-    maxPrice,
-    inStock,
-    sortBy,
-    sortDirection,
-  ]);
-
   const { products, categories, loading, error, meta, links } = useProducts(
     searchQuery,
     selectedCategory,
@@ -105,6 +69,7 @@ const Products = () => {
     scrollTo(0, 0);
   }, []);
 
+  // * Set Parameters' Filters in URL
   useEffect(() => {
     const params = new URLSearchParams();
     if (searchQuery) params.set("search", searchQuery);
@@ -130,11 +95,25 @@ const Products = () => {
     setSearchParams,
   ]);
 
+  // * Set initial values for filters from URL
+  useEffect(() => {
+    const pageFromParams = searchParams.get("page");
+    const categoryFromParams = searchParams.get("category");
+
+    if (pageFromParams) {
+      setPage(parseInt(pageFromParams));
+    }
+
+    setSelectedCategory(
+      categoryFromParams ? parseInt(categoryFromParams) : null
+    );
+  }, [searchParams]);
+
+  // * Handle Search, Sort, and Category Change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setPage(1);
   };
-
   const handleSortChange = (e) => {
     const value = e.target.value;
     if (value === "created_at_desc") {
@@ -147,6 +126,11 @@ const Products = () => {
     setPage(1);
   };
 
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`);
+  };
+
+  // * Handle Add to Cart and Toggle Wishlist
   const handleAddToCart = async (productId, quantity) => {
     setLoadingStates((prev) => ({
       ...prev,
@@ -163,7 +147,6 @@ const Products = () => {
       }));
     }
   };
-
   const handleToggleWishlist = async (productId) => {
     setLoadingStates((prev) => ({
       ...prev,
@@ -183,12 +166,16 @@ const Products = () => {
       }));
     }
   };
-
   const isProductInWishlist = (productId) => {
     return wishlistItems.some((item) => item.product.id === productId);
   };
 
-  // Pagination component
+  // * Handle Pagination
+  const handlePageChange = useCallback((newPage) => {
+    setPage(newPage);
+  }, []);
+
+  // * Pagination component
   const Pagination = () => {
     if (!meta || meta.last_page <= 1) return null;
     const pages = [];
@@ -198,7 +185,7 @@ const Products = () => {
     return (
       <div className="flex justify-center mt-8 gap-2">
         <button
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
+          onClick={() => handlePageChange(Math.max(1, page - 1))}
           disabled={meta.current_page === 1}
           className="px-3 py-1 border border-gray-400 rounded disabled:opacity-50 cursor-pointer hover:bg-gray-200 transition-all duration-200"
         >
@@ -207,7 +194,7 @@ const Products = () => {
         {pages.map((p) => (
           <button
             key={p}
-            onClick={() => setPage(p)}
+            onClick={() => handlePageChange(p)}
             className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
               meta.current_page === p
                 ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
@@ -218,7 +205,7 @@ const Products = () => {
           </button>
         ))}
         <button
-          onClick={() => setPage((p) => Math.min(meta.last_page, p + 1))}
+          onClick={() => handlePageChange(Math.min(meta.last_page, page + 1))}
           disabled={meta.current_page === meta.last_page}
           className="px-3 py-1 border border-gray-400 rounded disabled:opacity-50 cursor-pointer hover:bg-gray-200 transition-all duration-200"
         >
@@ -375,10 +362,10 @@ const Products = () => {
               />
               <div className="flex justify-between text-sm">
                 <span>
-                  {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                  {t("Minimum")}: {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
                 </span>
                 <span>
-                  {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                  {t("Maximum")}: {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
                 </span>
               </div>
               <button
@@ -477,9 +464,7 @@ const Products = () => {
                   >
                     <div
                       className="flex justify-center items-center h-48 group-hover:scale-110 transition-transform duration-200"
-                      onClick={() => {
-                        navigate(`/products/${product.id}`);
-                      }}
+                      onClick={() => handleProductClick(product.id)}
                     >
                       <img
                         src={
