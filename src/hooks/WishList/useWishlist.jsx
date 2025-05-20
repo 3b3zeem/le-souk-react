@@ -136,7 +136,7 @@ const useWishlistCRUD = () => {
     try {
       if (!token) {
         toast.error("Please log in to manage your wishlist.");
-        return;
+        
       }
 
       const response = await axios.post(

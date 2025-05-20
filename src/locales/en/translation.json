@@ -254,5 +254,11 @@
   "available": "available",
   "Minimum": "Min",
   "Maximum": "Max",
-  "Explore_Categories": "Explore Categories"
+  "Explore_Categories": "Explore Categories",
+  "noVariant": "No variants available",
+  "unitPrice": "Unit Price",
+  "noCategoriesTitle": "No categories available",
+  "noCategoriesSubtitle": "Please check back later or return to the homepage.",
+  "noProductsTitle": "No products found",
+  "noProductsSubtitle": "There are no products in this category yet."
 }

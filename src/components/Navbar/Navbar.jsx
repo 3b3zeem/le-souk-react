@@ -31,7 +31,7 @@ const Navbar = () => {
   const { userData } = useUserContext();
   const { profile, logout } = useAuthContext();
   const navigate = useNavigate();
-  const { cartCount } = useCart();
+  const { cartCount } = useCart();  
   const { wishlistCount } = useWishlist();
   const overlayRef = useRef(null);
   const avatarRef = useRef(null);
@@ -180,7 +180,7 @@ const Navbar = () => {
               <div className="flex items-center gap-5">
                 {/* Cart & Wishlist */}
                 <div className="flex justify-center gap-4">
-                  {/* <button
+                  <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
@@ -191,7 +191,7 @@ const Navbar = () => {
                         {cartCount}
                       </span>
                     )}
-                  </button> */}
+                  </button>
 
                   <button
                     onClick={handleWishlistClick}
@@ -290,7 +290,7 @@ const Navbar = () => {
               <div className="flex items-center gap-3">
                 {/* Cart & Wishlist */}
                 <div className="flex justify-center gap-4">
-                  {/* <button
+                  <button
                     onClick={handleCartClick}
                     className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                     style={{ borderColor: colors.borderLight }}
@@ -301,7 +301,7 @@ const Navbar = () => {
                         {cartCount}
                       </span>
                     )}
-                  </button> */}
+                  </button>
 
                   <button
                     onClick={handleWishlistClick}

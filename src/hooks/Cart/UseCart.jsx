@@ -11,6 +11,7 @@ const useCartCRUD = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const { addItemToCart, removeItemFromCart } = useCart();
+  const [subtotal, setSubtotal] = useState(0);
   const { token } = useAuthContext();
   const { language } = useLanguage();
 
@@ -36,14 +37,15 @@ const useCartCRUD = () => {
       }
 
       const response = await axios.get(
-        "https://le-souk.dinamo-app.com/api/cart/view",
+        "https://le-souk.dinamo-app.com/api/cart",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setCartItems(response.data.data);
+      setCartItems(response.data.data.items);
+      setSubtotal(response.data.data.subtotal);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch cart data");
       setCartItems([]);
@@ -56,7 +58,7 @@ const useCartCRUD = () => {
     fetchCart();
   }, [language, token]);
 
-  const addToCart = async (productId, quantity) => {
+  const addToCart = async (productId, quantity, productVariantId) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -64,14 +66,20 @@ const useCartCRUD = () => {
     try {
       if (!token) {
         toast.error("Please log in to add items to your cart.");
+        return;
+      }
+
+      const payload = {
+        product_id: productId,
+        quantity: quantity,
+      };
+      if (productVariantId) {
+        payload.product_variant_id = productVariantId;
       }
 
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/cart/add",
-        {
-          product_id: productId,
-          quantity: quantity,
-        },
+        payload,
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,6 +95,7 @@ const useCartCRUD = () => {
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add to cart");
       await addItemToCart();
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -106,7 +115,7 @@ const useCartCRUD = () => {
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/cart/remove",
         {
-          product_id: productId,
+          cart_item_id: productId,
         },
         {
           headers: {
@@ -131,19 +140,19 @@ const useCartCRUD = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     try {
       if (!token) {
         toast.error("Please log in to update your cart.");
         throw new Error("No authentication token found");
       }
-  
+
       const formData = new FormData();
-      formData.append(`products[0][product_id]`, productId);
-      formData.append(`products[0][quantity]`, newQuantity);
-  
+      formData.append(`cart_item_id`, productId);
+      formData.append(`quantity`, newQuantity);
+
       await axios.post(
-        "https://le-souk.dinamo-app.com/api/cart/sync",
+        "https://le-souk.dinamo-app.com/api/cart/update",
         formData,
         {
           headers: {
@@ -152,7 +161,7 @@ const useCartCRUD = () => {
           },
         }
       );
-  
+
       await fetchCart();
     } catch (err) {
       console.log("Error details:", err.response?.data);
@@ -166,7 +175,7 @@ const useCartCRUD = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     try {
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/cart/clear",
@@ -178,11 +187,11 @@ const useCartCRUD = () => {
           },
         }
       );
-  
+
       setCartItems([]);
       await removeItemFromCart();
       toast.success(response.data.message);
-  
+
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to clear wishlist");
@@ -199,6 +208,7 @@ const useCartCRUD = () => {
     fetchCart,
     setCartQuantity,
     clearCart,
+    subtotal,
     loading,
     error,
     success,

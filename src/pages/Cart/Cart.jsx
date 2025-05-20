@@ -24,6 +24,7 @@ const Cart = () => {
     fetchCart,
     setCartQuantity,
     clearCart,
+    subtotal,
     error,
     success,
   } = useCartCRUD();
@@ -46,11 +47,8 @@ const Cart = () => {
     }
   }, [error, success]);
 
-  const calculateSubtotal = () =>
-    cartItems.reduce(
-      (acc, item) => acc + Number(item.product.price) * item.quantity,
-      0
-    );
+  // const calculateSubtotal = () =>
+  //   cartItems.reduce((acc, item) => acc + Number(item.total), 0);
 
   const handleRemove = async (productId) => {
     setLoadingStates((prev) => ({
@@ -197,19 +195,18 @@ const Cart = () => {
               {/* Products Section */}
               <div className="lg:col-span-2 space-y-6">
                 {cartItems.map((item) => {
-                  const isRemoving =
-                    loadingStates.remove[item.product.id] || false;
+                  const isRemoving = loadingStates.remove[item.id] || false;
                   const isUpdatingQuantity =
-                    loadingStates.quantity[item.product.id] || false;
+                    loadingStates.quantity[item.id] || false;
 
                   return (
                     <div
-                      key={item.product.id}
+                      key={item.id}
                       className="flex gap-4 border-b pb-6"
                       style={{ borderColor: colors.borderLight }}
                     >
                       <img
-                        src={item.product.image}
+                        src={item.product.primary_image_url}
                         alt={item.product.name}
                         className="w-24 h-24 object-cover"
                       />
@@ -226,23 +223,39 @@ const Cart = () => {
                         >
                           {t("itemNo")} {item.product.id}
                         </p>
-                        <p
-                          className="text-sm uppercase"
-                          style={{ color: colors.productName }}
-                        >
-                          {t("size")} OS
-                        </p>
-                        <p
-                          className="text-sm uppercase"
-                          style={{ color: colors.productName }}
-                        >
-                          {t("color")} Unknown
-                        </p>
+                        {item.variant ? (
+                          <div
+                            className="text-sm uppercase"
+                            style={{ color: colors.productName }}
+                          >
+                            <p>
+                              {t("size")} {item.variant.size || "N/A"}
+                            </p>
+                            <p>
+                              {t("color")} {item.variant.color || "غير محدد"}
+                            </p>
+                            <p>
+                              {t("sku")}: {item.variant.sku || "N/A"}
+                            </p>
+                            <p>
+                              {t("unitPrice")}:{" "}
+                              {(item.unit_price / 100).toFixed(2)}{" "}
+                              {language === "ar" ? "ج.م" : "LE"}
+                            </p>
+                          </div>
+                        ) : (
+                          <p
+                            className="text-sm uppercase"
+                            style={{ color: colors.productName }}
+                          >
+                            {t("noVariant")}
+                          </p>
+                        )}
                         <div className="flex items-center gap-2 mt-2">
                           <button
                             onClick={() =>
                               handleQuantityChange(
-                                item.product.id,
+                                item.id,
                                 "dec",
                                 item.quantity
                               )
@@ -261,7 +274,7 @@ const Cart = () => {
                           <button
                             onClick={() =>
                               handleQuantityChange(
-                                item.product.id,
+                                item.id,
                                 "inc",
                                 item.quantity
                               )
@@ -279,13 +292,11 @@ const Cart = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          $
-                          {(Number(item.product.price) * item.quantity).toFixed(
-                            2
-                          )}
+                          {(item.total / 100).toFixed(2)}{" "}
+                          {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         <button
-                          onClick={() => handleRemove(item.product.id)}
+                          onClick={() => handleRemove(item.id)}
                           disabled={isRemoving || isUpdatingQuantity}
                           className={`bg-[#d01e1e] text-white font-bold py-2 px-4 rounded cursor-pointer customEffect ${
                             isRemoving ? "opacity-50 cursor-not-allowed" : ""
@@ -344,7 +355,8 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
-                    ${calculateSubtotal().toFixed(2)}
+                    ${(subtotal / 100).toFixed(2)}{" "}
+                    {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>
 
@@ -369,7 +381,8 @@ const Cart = () => {
                     {t("estimatedTotal")}
                   </p>
                   <p style={{ color: colors.productTitle }}>
-                    ${calculateSubtotal().toFixed(2)}
+                    {(subtotal / 100).toFixed(2)}{" "}
+                    {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>
 

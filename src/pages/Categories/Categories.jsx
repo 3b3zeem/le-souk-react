@@ -8,10 +8,7 @@ import { useTranslation } from "react-i18next";
 const Categories = () => {
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
-  const { categories, meta, loading, error } = useCategories(
-    10,
-    page
-  );
+  const { categories, meta, loading, error } = useCategories(10, page);
 
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
@@ -22,11 +19,21 @@ const Categories = () => {
         {t("Explore_Categories")}
         <span class="block w-16 h-1 bg-yellow-400 rounded-full mx-auto mt-2"></span>
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-12">
-        {categories.map((category) => (
-          <CategoryCard key={category.id} category={category} />
-        ))}
-      </div>
+      {categories.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
+          <FolderX size={60} className="mb-4 text-gray-400" />
+          <h2 className="text-2xl font-semibold mb-2">
+            {t("noCategoriesTitle")}
+          </h2>
+          <p className="text-md text-gray-400">{t("noCategoriesSubtitle")}</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {categories.map((category) => (
+            <CategoryCard key={category.id} category={category} />
+          ))}
+        </div>
+      )}
       <Pagination meta={meta} onPageChange={setPage} />
     </div>
   );

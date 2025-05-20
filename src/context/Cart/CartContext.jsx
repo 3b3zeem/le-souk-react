@@ -16,18 +16,15 @@ export const CartProvider = ({ children }) => {
       }
 
       const response = await axios.get(
-        "https://le-souk.dinamo-app.com/api/cart/view",
+        "https://le-souk.dinamo-app.com/api/cart",
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      const cartItems = response.data.data;
-      const totalItems = cartItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
+      const cartItems = response.data.data.items;
+      const totalItems = response.data.data.items_count;
       setCartCount(totalItems);
     } catch (err) {
       setCartCount(0);

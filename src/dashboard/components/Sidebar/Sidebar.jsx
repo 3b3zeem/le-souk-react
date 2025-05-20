@@ -9,6 +9,7 @@ import {
   Settings,
   Menu,
   ShoppingBag,
+  Percent,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -108,6 +109,12 @@ const Sidebar = () => {
           to="/admin-dashboard/orders"
           icon={<ShoppingCart />}
           label="orders"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          to="/admin-dashboard/coupons"
+          icon={<Percent />}
+          label="coupons"
           isOpen={isOpen}
         />
         <SidebarItem

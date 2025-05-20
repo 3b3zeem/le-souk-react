@@ -7,7 +7,6 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import CategoryId from "../pages/Categories/CategoryId/CategoryId.jsx";
 
-
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
 const About = lazy(() => import("../pages/About/About.jsx"));
@@ -31,6 +30,7 @@ const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.j
 const AdminProducts = lazy(() => import("./../dashboard/pages/Products/AdminProducts"));
 const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
 const AdminOrders = lazy(() => import("./../dashboard/pages/Orders/AdminOrders"));
+const Coupons = lazy(() => import("../dashboard/pages/Coupons/Coupons.jsx"));
 const Settings = lazy(() => import("../dashboard/pages/Settings/Settings.jsx"));
 const Unauthorized = lazy(() => import("../components/Unauthorized/Unauthorized.jsx"));
 
@@ -203,6 +203,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <AdminProducts />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "coupons",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <Coupons />
                   </Suspense>
                 ),
               },

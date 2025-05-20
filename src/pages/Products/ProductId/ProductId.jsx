@@ -62,7 +62,7 @@ const ProductId = () => {
     visible: false,
   });
   const imageRef = useRef(null);
-  const { token } = useAuthContext();
+  const { token, profile } = useAuthContext();
   const { t } = useTranslation();
   const { language } = useLanguage();
 
@@ -106,15 +106,34 @@ const ProductId = () => {
   const handleAddToCart = async () => {
     setLoadingStates((prev) => ({ ...prev, cart: true }));
     try {
-      await addToCart(productId, quantity);
+      if (
+        productDetails.variants &&
+        productDetails.variants.length > 0 &&
+        selectedVariant
+      ) {
+        const isValidVariant = productDetails.variants.some(
+          (variant) => variant.id === selectedVariant.id
+        );
+
+        if (!isValidVariant) {
+          toast.error("The selected variant does not belong to this product.");
+          return;
+        }
+      }
+
+      await addToCart(productId, quantity, selectedVariant?.id);
     } catch (err) {
-      toast.error(err);
+      toast.error(err.message || "Failed to add to cart");
     } finally {
       setLoadingStates((prev) => ({ ...prev, cart: false }));
     }
   };
 
   const handleToggleWishlist = async (productId) => {
+    if (!profile) {
+      toast.error("Please log in to add items to your wishlist.");
+    }
+
     setLoadingStates((prev) => ({
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },
@@ -133,7 +152,6 @@ const ProductId = () => {
       }));
     }
   };
-
   const isProductInWishlist = (productId) => {
     return wishlistItems.some((item) => item.product.id === productId);
   };
@@ -176,25 +194,16 @@ const ProductId = () => {
     }
   };
 
-  // Handle mouse leave to hide magnifier
   const handleMouseLeave = () => {
     setZoomPosition({ ...zoomPosition, visible: false });
   };
 
-  // Open overlay on main image click
   const handleImageClick = () => {
     setIsOverlayOpen(true);
   };
 
-  // Close overlay
   const closeOverlay = () => {
     setIsOverlayOpen(false);
-  };
-
-  // Handle thumbnail click in overlay
-  const handleThumbnailClick = (imageUrl, index) => {
-    setMainImage(imageUrl);
-    setSliderIndex(index);
   };
 
   if (productDetailsLoading) return <Loader />;
@@ -505,37 +514,76 @@ const ProductId = () => {
             </div>
           )}
 
-          {/* <div className="flex items-center mb-6">
+          <div className="flex items-center mb-6">
             <span
               className="font-medium mr-4"
               style={{ color: colors.productTitle }}
             >
               {t("quantity")}:
             </span>
-            <input
-              type="number"
-              min="1"
-              maxLength={productDetails.stock_quantity}
-              value={quantity}
-              onChange={(e) => {
-                const value = parseInt(e.target.value) || 1;
-                setQuantity(
-                  Math.min(productDetails.stock_quantity, Math.max(1, value))
-                );
-              }}
-              className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-              style={{ borderColor: colors.borderLight }}
-            />
-          </div> */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  if (quantity > 1) {
+                    setQuantity(quantity - 1);
+                  }
+                }}
+                disabled={quantity <= 1}
+                className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                style={{ borderColor: colors.borderLight }}
+              >
+                -
+              </button>
+
+              <input
+                type="number"
+                min="1"
+                max={productDetails.total_stock}
+                value={quantity}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "") {
+                    return;
+                  }
+                  const parsedValue = parseInt(value);
+                  if (isNaN(parsedValue)) {
+                    return;
+                  }
+                  setQuantity(
+                    Math.min(
+                      productDetails.total_stock,
+                      Math.max(1, parsedValue)
+                    )
+                  );
+                }}
+                className="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 text-center"
+                style={{ borderColor: colors.borderLight }}
+              />
+
+              <button
+                onClick={() => {
+                  if (quantity < productDetails.total_stock) {
+                    setQuantity(quantity + 1);
+                  }
+                }}
+                disabled={quantity >= productDetails.total_stock}
+                className="px-2 border disabled:opacity-50 cursor-pointer hover:bg-gray-100 transition-all duration-200"
+                style={{ borderColor: colors.borderLight }}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
           <div className="flex gap-4">
-            {/* <button
+            <button
               onClick={handleAddToCart}
               disabled={loadingStates.cart}
-              className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${loadingStates.cart
-                ? "opacity-50 cursor-not-allowed"
-                : "customEffect"
-                }`}
+              className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${
+                loadingStates.cart
+                  ? "opacity-50 cursor-not-allowed"
+                  : "customEffect"
+              }`}
               style={{ backgroundColor: colors.primary }}
             >
               <span className="flex justify-center items-center gap-2">
@@ -544,7 +592,7 @@ const ProductId = () => {
               </span>
             </button>
 
-            <button
+            {/* <button
               onClick={handlePayNow}
               disabled={orderLoading}
               className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${orderLoading ? "opacity-50 cursor-not-allowed" : "customEffect"

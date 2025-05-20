@@ -224,7 +224,7 @@ const Products = () => {
                       : "Price not available"}
                   </p>
                   <div className="flex justify-center gap-4 mt-4">
-                    {/* <button
+                    <button
                       onClick={() => handleAddToCart(product.id, 1)}
                       disabled={loadingStates.cart[product.id]}
                       className={`p-2 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
@@ -242,7 +242,7 @@ const Products = () => {
                             : "text-gray-500"
                         }`}
                       />
-                    </button> */}
+                    </button>
                     <button
                       onClick={() => handleToggleWishlist(product.id)}
                       disabled={loadingStates.wishlist[product.id]}

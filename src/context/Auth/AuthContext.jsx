@@ -18,26 +18,31 @@ export const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
 
     if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
+      const userData = JSON.parse(storedUser);
+      const expiry = new Date(userData.expires_at);
+      if (expiry < new Date()) {
+        logout();
+      } else {
+        setUser(userData);
+        setToken(storedToken);
+      }
     }
-
     setIsLoading(false);
   }, []);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     localStorage.setItem("user", JSON.stringify(user));
-  //   } else {
-  //     localStorage.removeItem("user");
-  //   }
+  useEffect(() => {
+    if (profile) {
+      localStorage.setItem("profile", JSON.stringify(profile));
+    } else {
+      localStorage.removeItem("profile");
+    }
 
-  //   if (token) {
-  //     localStorage.setItem("token", token);
-  //   } else {
-  //     localStorage.removeItem("token");
-  //   }
-  // }, [user, token]);
+    if (token) {
+      localStorage.setItem("token", token);
+    } else {
+      localStorage.removeItem("token");
+    }
+  }, [profile, token]);
 
   // logout function
   const logout = async () => {
@@ -52,15 +57,15 @@ export const AuthProvider = ({ children }) => {
           },
         }
       );
-
-      setUser(null);
-      setToken(null);
-      localStorage.clear();
     } catch (err) {
       console.error(
         "Logout error:",
         err.response?.data?.message || "Logout failed"
       );
+    } finally {
+      setUser(null);
+      setToken(null);
+      localStorage.clear();
     }
   };
 

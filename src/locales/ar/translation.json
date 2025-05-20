@@ -254,5 +254,11 @@
   "available": "متوفر",
   "Minimum": "الحد الأدنى",
   "Maximum": "الحد الأقصى",
-  "Explore_Categories": "استكشاف الفئات"
+  "Explore_Categories": "استكشاف الفئات",
+  "noVariant": "لا توجد خيارات",
+  "unitPrice": "سعر الوحدة",
+  "noCategoriesTitle": "لا توجد أقسام متاحة حالياً",
+  "noCategoriesSubtitle": "يرجى المحاولة لاحقاً أو العودة للصفحة الرئيسية.",
+  "noProductsTitle": "لا توجد منتجات",
+  "noProductsSubtitle": "لا توجد منتجات في هذا القسم حالياً."
 }
