@@ -25,6 +25,7 @@ const Products = () => {
     cart: {},
     wishlist: {},
   });
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
   const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
@@ -171,108 +172,174 @@ const Products = () => {
       </h2>
 
       <Slider {...settings}>
-        {products.map((product) => (
-          <div key={product.id} className="px-2 h-100">
-            <div className="border border-gray-300 rounded-lg group transition-all duration-300 overflow-hidden bg-white">
-              <img
-                src={
-                  product.images[0]?.image_url ||
-                  "https://via.placeholder.com/150"
-                }
-                alt={product.name}
-                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300 cursor-pointer"
-                onClick={() => {
-                  navigate(`/products/${product.id}`);
-                }}
-              />
-              <div className="p-4 text-left">
-                <p
-                  className="text-xs uppercase text-gray-500 cursor-pointer"
-                  onClick={() => {
-                    navigate(`/products/${product.id}`);
-                  }}
+        {products.map((product, idx) => {
+          const primaryImage =
+            product.images[0]?.image_url;
+          const secondImage =
+            product.images && product.images.length > 1
+              ? product.images[1].image_url
+              : primaryImage;
+
+          return (
+            <div key={product.id} className="px-2 h-full">
+              <div
+                className="border border-gray-300 rounded-lg group transition-all duration-300 overflow-hidden bg-white flex flex-col cursor-pointer"
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <div
+                  className="relative flex justify-center items-center bg-gray-50"
+                  onClick={() => navigate(`/products/${product.id}`)}
                 >
-                  {product.categories?.length > 0
-                    ? product.categories[0].name
-                    : "No category"}
-                </p>
-                <h3
-                  className="text-sm font-medium mt-1 cursor-pointer"
-                  style={{ color: colors.text }}
-                  onClick={() => {
-                    navigate(`/products/${product.id}`);
-                  }}
-                >
-                  {product.name}
-                </h3>
-                <p
-                  className="text-sm mt-1 truncate"
-                  style={{ color: colors.categoryName }}
-                >
-                  {product.description}
-                </p>
-                {/* <div className="flex mt-2">
-                  <span>No rating available</span>
-                </div> */}
-                <div className="flex justify-between items-center mt-4 border-t border-gray-300">
-                  <p
-                    className="text-lg font-semibold mt-2"
-                    style={{ color: colors.primary }}
-                  >
-                    {product.min_price !== "N/A"
-                      ? `${product.min_price}$`
-                      : "Price not available"}
-                  </p>
-                  <div className="flex justify-center gap-4 mt-4">
-                    <button
-                      onClick={() => handleAddToCart(product.id, 1)}
-                      disabled={loadingStates.cart[product.id]}
-                      className={`p-2 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
-                        loadingStates.cart[product.id]
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-gray-100"
-                      }`}
-                      style={{ borderColor: colors.borderLight }}
+                  <img
+                    src={hoveredIndex === idx ? secondImage : primaryImage}
+                    alt={product.name}
+                    className="h-{100%} object-contain p-4 transition-transform duration-200 group-hover:scale-105"
+                    style={{ maxWidth: "90%" }}
+                  />
+                  {/* Discount badge */}
+                  {product.discount_percentage && (
+                    <span
+                      className="absolute"
+                      style={{
+                        top: 12,
+                        left: -38,
+                        background: "#ef233c",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        padding: "10px 48px",
+                        transform: "rotate(-35deg)",
+                        zIndex: 30,
+                        boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
+                        letterSpacing: "1px",
+                        borderRadius: "6px",
+                        textShadow: "0 1px 2px rgba(0,0,0,0.10)",
+                        borderTopLeftRadius: "0.5rem",
+                        borderTopRightRadius: "0.5rem",
+                      }}
                     >
-                      <ShoppingCart
-                        size={20}
-                        className={`${
-                          loadingStates.cart[product.id]
-                            ? "text-gray-400"
-                            : "text-gray-500"
-                        }`}
-                      />
-                    </button>
-                    <button
-                      onClick={() => handleToggleWishlist(product.id)}
-                      disabled={loadingStates.wishlist[product.id]}
-                      className={`p-2 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
+                      -{product.discount_percentage}%{" "}
+                      {language === "ar" ? "خصم" : "OFF"}
+                    </span>
+                  )}
+                  {/* WishList */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleWishlist(product.id);
+                    }}
+                    disabled={loadingStates.wishlist[product.id]}
+                    className={`absolute top-3 ${
+                      language === "ar" ? "left-4" : "right-4"
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded-full flex items-center justify-center transition duration-200 cursor-pointer
+                      ${
                         loadingStates.wishlist[product.id]
                           ? "opacity-50 cursor-not-allowed"
                           : isProductInWishlist(product.id)
                           ? "bg-red-100 hover:bg-red-200"
-                          : "hover:bg-gray-100"
+                          : "hover:bg-blue-100"
                       }`}
-                      style={{ borderColor: colors.borderLight }}
-                    >
-                      <Heart
-                        size={20}
-                        className={`${
-                          loadingStates.wishlist[product.id]
-                            ? "text-gray-400"
-                            : isProductInWishlist(product.id)
-                            ? "text-red-500"
-                            : "text-gray-500"
-                        }`}
-                        fill={isProductInWishlist(product.id) ? "red" : "none"}
-                      />
-                    </button>
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <Heart
+                      size={22}
+                      className={`transition ${
+                        loadingStates.wishlist[product.id]
+                          ? "text-gray-400"
+                          : isProductInWishlist(product.id)
+                          ? "text-red-500"
+                          : "text-gray-500"
+                      }`}
+                      fill={isProductInWishlist(product.id) ? "red" : "none"}
+                    />
+                  </button>
+                  {/* Cart */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product.id, 1);
+                    }}
+                    disabled={loadingStates.cart[product.id]}
+                    className={`absolute bottom-3 ${
+                      language === "ar" ? "left-4" : "right-4"
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded-full flex items-center justify-center transition duration-200 cursor-pointer
+                      ${
+                        loadingStates.cart[product.id]
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-blue-100"
+                      }`}
+                    style={{ borderColor: colors.borderLight }}
+                  >
+                    <ShoppingCart size={22} className="text-gray-500" />
+                  </button>
+                </div>
+                {/* Product Details */}
+                <div className="p-4 text-left flex flex-col flex-1">
+                  <p
+                    className="text-xs uppercase text-gray-500 cursor-pointer"
+                    onClick={() => navigate(`/products/${product.id}`)}
+                  >
+                    {product.categories?.length > 0
+                      ? product.categories[0].name
+                      : "No category"}
+                  </p>
+                  <h3
+                    className="text-base font-bold mt-1 mb-1 truncate cursor-pointer"
+                    style={{ color: colors.productTitle, minHeight: 24 }}
+                    onClick={() => navigate(`/products/${product.id}`)}
+                  >
+                    {product.name}
+                  </h3>
+                  <p
+                    className="text-sm text-gray-500 mb-2 truncate"
+                    style={{ minHeight: 20 }}
+                  >
+                    {product.description}
+                  </p>
+                  {/* Price */}
+                  <div className="flex items-end gap-2 mb-2">
+                    {product.min_sale_price &&
+                    product.min_sale_price !== product.min_price ? (
+                      <div className="flex flex-col">
+                        <span className="line-through text-gray-400 text-xs font-normal">
+                          {product.min_price}{" "}
+                          {language === "ar" ? "ج.م" : "LE"}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="text-lg font-bold"
+                            style={{ color: colors.primary }}
+                          >
+                            {product.min_sale_price}{" "}
+                            {language === "ar" ? "ج.م" : "LE"}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <span
+                        className="text-lg font-bold"
+                        style={{ color: colors.primary }}
+                      >
+                        {product.min_price}{" "}
+                        {language === "ar" ? "ج.م" : "LE"}
+                      </span>
+                    )}
+                  </div>
+                  {/* Stock */}
+                  <div className="flex items-center gap-2 mt-auto">
+                    <span className="text-xs text-gray-400">
+                      {t("inStock")}:
+                    </span>
+                    <span className="text-xs font-semibold text-green-600">
+                      {product.total_stock}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </Slider>
 
       <div className="flex justify-center mt-8">

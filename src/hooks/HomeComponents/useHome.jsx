@@ -39,21 +39,30 @@ const useHome = () => {
         const rawProducts = productsResponse.data.data || [];
 
         // Filter and normalize products
-        const filteredProducts = rawProducts.map((product) => ({
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          primary_image_url: product.primary_image_url,
-          images: Array.isArray(product.images) ? product.images : [],
-          categories: Array.isArray(product.categories)
-            ? product.categories
-            : [],
-          variants: Array.isArray(product.variants) ? product.variants : [],
-          min_price: product.min_price,
-          max_price: product.max_price,
-        }));
+        // const filteredProducts = rawProducts.map((product) => ({
+        //   id: product.id,
+        //   name: product.name,
+        //   description: product.description,
+        //   primary_image_url: product.primary_image_url,
+        //   images: Array.isArray(product.images) ? product.images : [],
+        //   categories: Array.isArray(product.categories)
+        //     ? product.categories
+        //     : [],
+        //   variants: Array.isArray(product.variants) ? product.variants : [],
+        //   min_price: product.min_price,
+        //   max_price: product.max_price,
+        //   on_sale: product.on_sale,
+        //   discount_type: product.discount_type,
+        //   discount_value: product.discount_value,
+        //   discount_percentage: product.discount_percentage,
+        //   min_sale_price: product.min_sale_price,
+        //   max_sale_price: product.max_sale_price,
+        //   sale_starts_at: product.sale_starts_at,
+        //   sale_ends_at: product.sale_ends_at,
+        //   total_stock: product.total_stock,
+        // }));
 
-        setProducts(filteredProducts);
+        setProducts(rawProducts);
 
         setLoading(false);
       } catch (err) {
@@ -63,7 +72,7 @@ const useHome = () => {
     };
 
     fetchData();
-  }, [language]); // Re-fetch data when language changes
+  }, [language]);
 
   return { categories, products, loading, error };
 };
