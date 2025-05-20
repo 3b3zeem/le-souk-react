@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Lock } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 
 import RegImg from "../../../assets/sign_up.svg";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,6 +14,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [focusedField, setFocusedField] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { register, loading, error } = useAuth();
 
@@ -47,11 +49,18 @@ const Register = () => {
     }
   };
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+
   return (
-    <div className="flex flex-col md:flex-row w-full min-h-screen" dir={language === "ar" ? "rtl" : "ltr"}>
+    <div
+      className="flex flex-col md:flex-row w-full min-h-screen"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       {/* Left Panel - Dark blue with illustration */}
       <div
-        className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center text-center"
+        className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center"
         style={{ backgroundColor: colors.secondary }}
       >
         <div className="max-w-md">
@@ -62,11 +71,11 @@ const Register = () => {
           </h1>
 
           <p className="text-white text-lg mb-6 leading-relaxed">
-          {t("signUpDescription")}
+            {t("signUpDescription")}
           </p>
 
           <p className="text-white mt-6">
-          {t("alreadyHaveAccount")}
+            {t("alreadyHaveAccount")}
             <Link
               to={"/login"}
               className="text-white font-medium hover:underline ms-2"
@@ -102,18 +111,26 @@ const Register = () => {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className={`w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out`}
                 placeholder=" "
                 onFocus={() => setFocusedField("username")}
                 onBlur={() => setFocusedField(null)}
               />
               <label
                 htmlFor="username"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "username" || username
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
+                  ${
+                    focusedField === "username" || username
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("userName")}
               </label>
@@ -133,11 +150,19 @@ const Register = () => {
               />
               <label
                 htmlFor="email"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "email" || email
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
+                  ${
+                    focusedField === "email" || email
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("email")}
               </label>
@@ -146,7 +171,7 @@ const Register = () => {
             {/* Password Field */}
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -157,20 +182,37 @@ const Register = () => {
               />
               <label
                 htmlFor="password"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "password" || password
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
+                  ${
+                    focusedField === "password" || password
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("password")}
               </label>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             {/* Confirm Password Field */}
             <div className="relative">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -181,14 +223,31 @@ const Register = () => {
               />
               <label
                 htmlFor="confirmPassword"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "confirmPassword" || confirmPassword
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
+                  ${
+                    focusedField === "confirmPassword" || confirmPassword
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("confirmPassword")}
               </label>
+              <button
+                type="button"
+                onClick={toggleConfirmPasswordVisibility}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             <button

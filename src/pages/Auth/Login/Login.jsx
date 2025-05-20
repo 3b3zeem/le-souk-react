@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Lock } from "lucide-react";
+import { Eye, EyeOff, Lock } from "lucide-react";
 
 import loginImg from "../../../assets/home-art.svg";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [focusedField, setFocusedField] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -43,6 +44,10 @@ const Login = () => {
         position: "top-right",
       });
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -98,11 +103,15 @@ const Login = () => {
               />
               <label
                 htmlFor="email"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "email" || email
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${language === "ar" ? "right-3 text-right" : "left-3 text-left"}
+                  ${
+                    focusedField === "email" || email
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("email")}
               </label>
@@ -110,25 +119,38 @@ const Login = () => {
 
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out pr-10"
                 placeholder=" "
                 onFocus={() => setFocusedField("password")}
                 onBlur={() => setFocusedField(null)}
               />
               <label
                 htmlFor="password"
-                className={`absolute left-3 transition-all duration-200 ${
-                  focusedField === "password" || password
-                    ? "text-xs text-blue-500 -top-2 bg-white px-1"
-                    : "text-gray-400 top-3"
-                }`}
+                className={`
+                  absolute transition-all duration-200
+                  ${language === "ar" ? "right-3 text-right" : "left-3 text-left"}
+                  ${
+                    focusedField === "password" || password
+                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
               >
                 {t("password")}
               </label>
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             <button
