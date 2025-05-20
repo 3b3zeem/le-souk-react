@@ -31,7 +31,7 @@ const Navbar = () => {
   const { userData } = useUserContext();
   const { profile, logout } = useAuthContext();
   const navigate = useNavigate();
-  const { cartCount } = useCart();  
+  const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const overlayRef = useRef(null);
   const avatarRef = useRef(null);
@@ -40,7 +40,8 @@ const Navbar = () => {
   const { t } = useTranslation();
 
   const isLoggedIn = !!profile;
-  const avatar = userData?.image || navUser?.image;
+  const avatar =
+    (userData && userData.image) || (navUser && navUser.image) || "/user.png";
   const userName = userData?.name || navUser?.name;
   const isAdmin = profile?.is_admin || 0;
 
@@ -213,11 +214,17 @@ const Navbar = () => {
                   onClick={() => setIsOpenUser((prev) => !prev)}
                 >
                   <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                    <img
-                      src={avatar || "/user.png"}
-                      alt={t("userProfile")}
-                      className="h-full w-full rounded-full object-cover"
-                    />
+                    {(userData || navUser) && (
+                      <img
+                        src={avatar}
+                        alt={t("userProfile")}
+                        className="h-full w-full rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/user.png";
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -406,9 +413,13 @@ const Navbar = () => {
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
                         <img
-                          src={avatar || "/user.png"}
+                          src={avatar}
                           alt={t("userProfile")}
                           className="rounded-full w-full h-full"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/user.png";
+                          }}
                         />
                       </div>
                       <div className="flex flex-col gap-3 px-4 py-6 border-b border-gray-100">

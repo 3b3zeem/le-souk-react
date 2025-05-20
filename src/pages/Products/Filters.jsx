@@ -295,7 +295,7 @@ const Filters = ({
                   type="button"
                   onClick={() => handleCategoryClick(category.id)}
                   className={`
-                    flex items-center gap-2 px-4 py-2 rounded-lg border transition
+                    flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
                     ${
                       isSelected
                         ? "border-blue-600 bg-blue-50 shadow-md"

@@ -2,7 +2,14 @@ import React, { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { Eye, Search, ShoppingBag, SquarePen, Trash2 } from "lucide-react";
+import {
+  Eye,
+  Plus,
+  Search,
+  ShoppingBag,
+  SquarePen,
+  Trash2,
+} from "lucide-react";
 import AddProductForm from "./AddProductForm";
 import Loader from "../../../layouts/Loader";
 import { ring } from "ldrs";
@@ -11,6 +18,7 @@ import useProducts from "./../../../hooks/Products/useProduct";
 import useAdminProducts from "../../hooks/Products/useAdminProducts";
 import SetPrimaryImageForm from "./SetPrimaryImageForm";
 import Swal from "sweetalert2";
+import AddDiscount from "./addDiscount";
 ring.register();
 
 const AdminProducts = () => {
@@ -20,6 +28,7 @@ const AdminProducts = () => {
     updateProduct,
     updateProductImages,
     setPrimaryImage,
+    addProductDiscount,
     deleteProduct,
     loading,
     error,
@@ -47,6 +56,9 @@ const AdminProducts = () => {
   const [isPrimaryOverlayOpen, setIsPrimaryOverlayOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [editProductId, setEditProductId] = useState(null);
+  const [addDiscountOpen, setAddDiscountOpen] = useState(false);
+  const [discountProductId, setDiscountProductId] = useState(null);
+  const [loadingDiscount, setLoadingDiscount] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -132,6 +144,18 @@ const AdminProducts = () => {
       await onDelete();
       Swal.fire(t("deletedSuccessfully"), t("itemHasBeenDeleted"), "success");
     }
+  };
+
+  const handleAddDiscount = (productId) => {
+    setDiscountProductId(productId);
+    setAddDiscountOpen(true);
+  };
+
+  const handleSubmitDiscount = async (data) => {
+    setLoadingDiscount(true);
+    const ok = await addProductDiscount(discountProductId, data);
+    setLoadingDiscount(false);
+    if (ok) setAddDiscountOpen(false);
   };
 
   return (
@@ -224,6 +248,14 @@ const AdminProducts = () => {
           />
         )}
 
+        <AddDiscount
+          isOpen={addDiscountOpen}
+          onClose={() => setAddDiscountOpen(false)}
+          onSubmit={handleSubmitDiscount}
+          t={t}
+          loading={loadingDiscount}
+        />
+
         {loading ? (
           <Loader />
         ) : error ? (
@@ -273,6 +305,9 @@ const AdminProducts = () => {
                     }`}
                   >
                     {t("stock")}
+                  </th>
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
+                    {t("discount")}
                   </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("actions")}
@@ -341,6 +376,17 @@ const AdminProducts = () => {
                       data-label={t("stock")}
                     >
                       {product.total_stock}
+                    </td>
+                    <td>
+                      <button
+                        className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
+                        onClick={() => handleAddDiscount(product.id)}
+                      >
+                        <Plus size={14} />
+                        <span className="sm:inline hidden font-medium">
+                          {t("add_discount")}
+                        </span>
+                      </button>
                     </td>
                     <td className="p-2 sm:p-3" data-label={t("actions")}>
                       <div className="flex justify-center items-center gap-2 flex-wrap">

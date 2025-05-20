@@ -259,6 +259,32 @@ const useAdminProducts = () => {
     }
   };
 
+  const addProductDiscount = async (productId, discountData) => {
+  try {
+    if (!token) throw new Error("No token found. Please log in.");
+
+    const response = await axios.put(
+      `https://le-souk.dinamo-app.com/api/admin/products/${productId}/discount`,
+      discountData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    toast.success(response.data.message || "Discount added successfully!");
+    await fetchProducts();
+    return true;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Failed to add discount";
+    toast.error(errorMessage);
+    return false;
+  }
+};
+
   const deleteProduct = async (productId) => {
     try {
       if (!token) {
@@ -293,6 +319,7 @@ const useAdminProducts = () => {
     updateProduct,
     updateProductImages,
     setPrimaryImage,
+    addProductDiscount,
     deleteProduct,
     loading,
     error,

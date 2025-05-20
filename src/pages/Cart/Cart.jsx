@@ -292,7 +292,7 @@ const Cart = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          {(item.total / 100).toFixed(2)}{" "}
+                          {item.total}{" "}
                           {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         <button
@@ -355,7 +355,7 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
-                    ${(subtotal / 100).toFixed(2)}{" "}
+                    ${subtotal}{" "}
                     {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>

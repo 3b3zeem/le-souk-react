@@ -6,6 +6,7 @@ import {
   Search,
   PackageX,
   ChevronDown,
+  CornerDownRight,
 } from "lucide-react";
 import useProducts from "../../hooks/Products/useProduct";
 import Loader from "../../layouts/Loader";
@@ -46,6 +47,7 @@ const Products = () => {
   const [inStock, setInStock] = useState(null);
   const [sliderPrice, setSliderPrice] = useState([minPrice, maxPrice]);
   const [showFilters, setShowFilters] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const navigate = useNavigate();
   const { products, categories, loading, error, meta, links } = useProducts(
     searchQuery,
@@ -304,107 +306,205 @@ const Products = () => {
             <>
               {/* Products List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="h-100 border overflow-hidden bg-white shadow-sm cursor-pointer group"
-                    style={{ borderColor: colors.borderLight }}
-                  >
-                    <div
-                      className="flex justify-center items-center h-48 group-hover:scale-110 transition-transform duration-200"
-                      onClick={() => handleProductClick(product.id)}
-                    >
-                      <img
-                        src={
-                          product.primary_image_url
-                            ? `${product.primary_image_url}`
-                            : ""
-                        }
-                        alt={product.name}
-                        lazy
-                        className="h-full object-contain p-4"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3
-                        className="text-base font-bold"
-                        style={{ color: colors.text }}
-                        onClick={() => {
-                          navigate(`/products/${product.id}`);
-                        }}
-                      >
-                        {product.name}
-                      </h3>
-                      <h3
-                        className="text-base font-semibold truncate my-3"
-                        style={{ color: colors.productName }}
-                      >
-                        {product.description}
-                      </h3>
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center">
-                          {/* {renderStars(product.rating)} */}
-                          {/* <span className="ml-1 text-sm" style={{ color: colors.text }}>
-                            {product.reviews.length} {t("reviewsCount")}
-                          </span> */}
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center mt-4 border-t border-gray-300 pt-2">
-                        <p
-                          className="text-sm font-semibold mt-2"
-                          style={{ color: colors.primary }}
-                        >
-                          {product.min_price} {language === "ar" ? "ج.م" : "LE"}
-                        </p>
-                        {/* Cart & Wishlist */}
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleAddToCart(product.id, 1)}
-                            disabled={loadingStates.cart[product.id]}
-                            className={`p-3 rounded-full border transition duration-200 cursor-pointer ${
-                              loadingStates.cart[product.id]
-                                ? "bg-gray-200 cursor-not-allowed"
-                                : "hover:bg-[#569be1] hover:text-white"
-                            }`}
-                            style={{ borderColor: colors.borderLight }}
-                          >
-                            <ShoppingCart
-                              size={20}
-                              className="text-gray-500 hover:text-white transition duration-200"
-                            />
-                          </button>
+                {products.map((product, idx) => {
+                  const primaryImage = product.primary_image_url;
+                  const secondImage =
+                    product.images && product.images.length > 1
+                      ? product.images[1].image_url
+                      : primaryImage;
 
-                          <button
-                            onClick={() => handleToggleWishlist(product.id)}
-                            disabled={loadingStates.wishlist[product.id]}
-                            className={`p-3 rounded-full border border-gray-300 transition duration-200 cursor-pointer ${
+                  return (
+                    <div
+                      key={product.id}
+                      onMouseEnter={() => setHoveredIndex(idx)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                      className="relative group border rounded-md overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
+                      style={{
+                        borderColor: colors.borderLight,
+                        minHeight: 420,
+                      }}
+                    >
+                      <div
+                        className="relative flex justify-center items-center h-56 bg-gray-50 cup"
+                        onClick={() => handleProductClick(product.id)}
+                      >
+                        <img
+                          src={
+                            hoveredIndex === idx ? secondImage : primaryImage
+                          }
+                          alt={product.name}
+                          loading="lazy"
+                          className="h-full max-h-52 object-contain p-4 transition-transform duration-200 group-hover:scale-105"
+                          style={{ maxWidth: "90%" }}
+                        />
+                        {/* WishList */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleWishlist(product.id);
+                          }}
+                          disabled={loadingStates.wishlist[product.id]}
+                          className={`absolute top-3 ${
+                            language === "ar" ? "left-3" : "right-3"
+                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${
+                            loadingStates.wishlist[product.id]
+                              ? "opacity-50 cursor-not-allowed"
+                              : isProductInWishlist(product.id)
+                              ? "bg-red-100 hover:bg-red-200"
+                              : "hover:bg-blue-100"
+                          }`}
+                          style={{ borderColor: colors.borderLight }}
+                        >
+                          <Heart
+                            size={22}
+                            className={`transition ${
                               loadingStates.wishlist[product.id]
-                                ? "opacity-50 cursor-not-allowed"
+                                ? "text-gray-400"
                                 : isProductInWishlist(product.id)
-                                ? "bg-red-100 hover:bg-red-200"
-                                : "hover:bg-[#569be1]"
+                                ? "text-red-500"
+                                : "text-gray-500"
                             }`}
-                            style={{ borderColor: colors.borderLight }}
+                            fill={
+                              isProductInWishlist(product.id) ? "red" : "none"
+                            }
+                          />
+                        </button>
+                        {/* Cart */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddToCart(product.id, 1);
+                          }}
+                          disabled={loadingStates.cart[product.id]}
+                          className={`absolute bottom-3 ${
+                            language === "ar" ? "left-3" : "right-3"
+                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${
+                            loadingStates.cart[product.id]
+                              ? "opacity-50 cursor-not-allowed"
+                              : "hover:bg-blue-100"
+                          }`}
+                          style={{ borderColor: colors.borderLight }}
+                        >
+                          <ShoppingCart size={22} className="text-gray-500" />
+                        </button>
+                        {/* Discount badge */}
+                        {product.discount_percentage && (
+                          <span
+                            className="absolute"
+                            style={{
+                              top: 12,
+                              left: -38,
+                              background: "#ef233c",
+                              color: "#fff",
+                              fontWeight: "bold",
+                              fontSize: "1rem",
+                              padding: "10px 48px",
+                              transform: "rotate(-35deg)",
+                              zIndex: 30,
+                              boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
+                              letterSpacing: "1px",
+                              borderRadius: "6px",
+                              textShadow: "0 1px 2px rgba(0,0,0,0.10)",
+                              borderTopLeftRadius: "0.5rem",
+                              borderTopRightRadius: "0.5rem",
+                            }}
                           >
-                            <Heart
-                              size={20}
-                              className={`hover:text-white ${
-                                loadingStates.wishlist[product.id]
-                                  ? "text-gray-400"
-                                  : isProductInWishlist(product.id)
-                                  ? "text-red-500"
-                                  : "text-gray-500"
-                              }`}
-                              fill={
-                                isProductInWishlist(product.id) ? "red" : "none"
-                              }
-                            />
-                          </button>
+                            -{product.discount_percentage}% {t("offer")}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="flex flex-col flex-1 p-4">
+                        <h3
+                          className="text-base font-bold mb-1 truncate"
+                          style={{ color: colors.productTitle, minHeight: 24 }}
+                          onClick={() => navigate(`/products/${product.id}`)}
+                        >
+                          {product.name}
+                        </h3>
+                        <p
+                          className="text-sm text-gray-500 mb-2 truncate"
+                          style={{ minHeight: 20 }}
+                        >
+                          {product.description}
+                        </p>
+
+                        {/* Price */}
+                        <div className="flex items-end gap-2 mb-2">
+                          {product.min_sale_price &&
+                          product.min_sale_price !== product.min_price ? (
+                            <div className="flex flex-col">
+                              <span className="line-through text-gray-400 text-xs font-normal">
+                                {product.min_price}{" "}
+                                {language === "ar" ? "ج.م" : "LE"}
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <CornerDownRight
+                                  size={20}
+                                  style={{ color: colors.primary }}
+                                />
+                                <span
+                                  className="text-lg font-bold"
+                                  style={{ color: colors.primary }}
+                                >
+                                  {product.min_sale_price}{" "}
+                                  {language === "ar" ? "ج.م" : "LE"}
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <span
+                              className="text-lg font-bold"
+                              style={{ color: colors.primary }}
+                            >
+                              {product.min_price}{" "}
+                              {language === "ar" ? "ج.م" : "LE"}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Discount duration */}
+                        {product.sale_starts_at &&
+                          product.sale_ends_at &&
+                          (() => {
+                            const start = new Date(product.sale_starts_at);
+                            const end = new Date(product.sale_ends_at);
+                            const diffTime = Math.abs(end - start);
+                            const diffDays = Math.ceil(
+                              diffTime / (1000 * 60 * 60 * 24)
+                            );
+                            const diffMonths = Math.floor(diffDays / 30);
+                            return (
+                              <div className="mb-2">
+                                <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
+                                  {diffMonths > 0
+                                    ? t("discount_for_months", {
+                                        count: diffMonths,
+                                      })
+                                    : t("discount_for_days", {
+                                        count: diffDays,
+                                      })}
+                                </span>
+                              </div>
+                            );
+                          })()}
+
+                        {/* Stock*/}
+                        <div className="flex items-center gap-2 mt-auto">
+                          <span className="text-xs text-gray-400">
+                            {t("inStock")}:
+                          </span>
+                          <span className="text-xs font-semibold text-green-600">
+                            {product.total_stock}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Pagination */}

@@ -1,14 +1,16 @@
 import React from "react";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ProductCard = ({ product, getTranslatedText }) => {
   const { language } = useLanguage();
   const id = product.id;
   const name = getTranslatedText(product.translations, "name");
   const description = getTranslatedText(product.translations, "description");
-  const price = product.min_price;
   const imageUrl = product.primary_image_url;
+
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
 
@@ -28,7 +30,27 @@ const ProductCard = ({ product, getTranslatedText }) => {
       <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
       <p className="text-sm text-gray-600 mb-2 line-clamp-2">{description}</p>
       <div className="mt-2 text-[#1e70d0] font-semibold">
-        {language === "ar" ? "ج.م" : "LE"} {price}
+        {product.min_sale_price &&
+            product.min_sale_price !== product.min_price ? (
+              <>
+                <span className="line-through text-gray-400 text-base font-normal">
+                  {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                <span>
+                  {product.min_sale_price}{" "}
+                  {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                {product.discount_percentage && (
+                  <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                    {t("discount")}-{product.discount_percentage}%
+                  </span>
+                )}
+              </>
+            ) : (
+              <span>
+                {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+              </span>
+            )}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   AlertCircle,
   SearchX,
   X,
+  CornerDownLeft,
 } from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
@@ -353,19 +354,54 @@ const ProductId = () => {
           </div> */}
 
           <p
-            className="text-lg sm:text-xl font-semibold mb-4"
+            className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-3"
             style={{ color: colors.primary }}
           >
-            {selectedVariant
-              ? `${selectedVariant.price} ${language === "ar" ? "ج.م" : "LE"}`
-              : productDetails.min_price === productDetails.max_price
-              ? `${productDetails.min_price} ${
-                  language === "ar" ? "ج.م" : "LE"
-                }`
-              : `${productDetails.min_price} ${
-                  language === "ar" ? "ج.م" : "LE"
-                }`}
+            {productDetails.min_sale_price &&
+            productDetails.min_sale_price !== productDetails.min_price ? (
+              <>
+                <span className="line-through text-gray-400 text-base font-normal">
+                  {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                <span>
+                  {productDetails.min_sale_price}{" "}
+                  {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                {productDetails.discount_percentage && (
+                  <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                    {t("discount")}-{productDetails.discount_percentage}%
+                  </span>
+                )}
+              </>
+            ) : (
+              <span>
+                {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
+              </span>
+            )}
           </p>
+
+          {productDetails.sale_starts_at &&
+            productDetails.sale_ends_at &&
+            (() => {
+              const start = new Date(productDetails.sale_starts_at);
+              const end = new Date(productDetails.sale_ends_at);
+              const diffTime = Math.abs(end - start);
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+              const diffMonths = Math.floor(diffDays / 30);
+
+              return (
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
+                    {t("discount_duration")}:
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    {diffMonths > 0
+                      ? t("discount_for_months", { count: diffMonths })
+                      : t("discount_for_days", { count: diffDays })}
+                  </span>
+                </div>
+              );
+            })()}
 
           <p className="text-sm sm:text-base text-gray-600 mb-4">
             {productDetails.description}
@@ -472,16 +508,49 @@ const ProductId = () => {
                         </div>
 
                         {/* Price */}
-                        <div className="flex items-center gap-1 sm:gap-2">
+                        <div className="flex items-center gap-1 sm:gap-2 my-5">
                           <span className="text-gray-700 font-medium text-sm sm:text-base">
                             {t("Price")}:
                           </span>
-                          <span
-                            style={{ color: colors.primary }}
-                            className="font-semibold text-base sm:text-lg"
-                          >
-                            {variant.price} {language === "ar" ? "ج.م" : "LE"}
-                          </span>
+                          {variant.sale_price &&
+                          variant.sale_price !== variant.price ? (
+                            <>
+                              <div className="flex flex-col items-start gap-1 sm:gap-2">
+                                <div className="flex items-center gap-1 sm:gap-2">
+                                  <span className="line-through text-gray-400 text-sm font-normal">
+                                    {variant.price}{" "}
+                                    {language === "ar" ? "ج.م" : "LE"}
+                                  </span>
+                                  {variant.discount_percentage && (
+                                    <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                                      {t("discount")}-
+                                      {variant.discount_percentage}%
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-1 sm:gap-2">
+                                  <span
+                                    className="text-base font-semibold"
+                                    style={{ color: colors.primary }}
+                                  >
+                                    {variant.sale_price}{" "}
+                                    {language === "ar" ? "ج.م" : "LE"}
+                                  </span>
+                                  <CornerDownLeft
+                                    size={22}
+                                    style={{ color: colors.primary }}
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <span
+                              className="text-base font-semibold"
+                              style={{ color: colors.primary }}
+                            >
+                              {variant.price} {language === "ar" ? "ج.م" : "LE"}
+                            </span>
+                          )}
                         </div>
 
                         {/* Stock */}

@@ -129,12 +129,13 @@ const Profile = () => {
           <div className="flex justify-center items-center mb-3">
             <div className="relative w-40 h-40 border-4 border-gray-300 rounded-full p-2">
               <img
-                src={
-                  userData?.image ||
-                  "https://ecommerce.ershaad.net/storage/images/default/customer.png"
-                }
+                src={userData?.image}
                 alt="User Avatar"
                 className="w-full h-full object-cover rounded-full"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/user.png";
+                }}
               />
             </div>
           </div>
@@ -282,6 +283,10 @@ const Profile = () => {
                         src={userData.image}
                         alt={t("userImageAlt")}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/user.png";
+                        }}
                       />
                     ) : (
                       <span>{t("clickToChooseImage")}</span>
