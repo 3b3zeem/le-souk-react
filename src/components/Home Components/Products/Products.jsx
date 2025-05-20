@@ -7,6 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
   AlertCircle,
+  CornerDownRight,
 } from "lucide-react";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import Loader from "../../../layouts/Loader";
@@ -173,8 +174,7 @@ const Products = () => {
 
       <Slider {...settings}>
         {products.map((product, idx) => {
-          const primaryImage =
-            product.images[0]?.image_url;
+          const primaryImage = product.images[0]?.image_url;
           const secondImage =
             product.images && product.images.length > 1
               ? product.images[1].image_url
@@ -303,10 +303,13 @@ const Products = () => {
                     product.min_sale_price !== product.min_price ? (
                       <div className="flex flex-col">
                         <span className="line-through text-gray-400 text-xs font-normal">
-                          {product.min_price}{" "}
-                          {language === "ar" ? "ج.م" : "LE"}
+                          {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                         </span>
                         <div className="flex items-center gap-2">
+                          <CornerDownRight
+                            size={20}
+                            style={{ color: colors.primary }}
+                          />
                           <span
                             className="text-lg font-bold"
                             style={{ color: colors.primary }}
@@ -321,8 +324,7 @@ const Products = () => {
                         className="text-lg font-bold"
                         style={{ color: colors.primary }}
                       >
-                        {product.min_price}{" "}
-                        {language === "ar" ? "ج.م" : "LE"}
+                        {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                       </span>
                     )}
                   </div>
