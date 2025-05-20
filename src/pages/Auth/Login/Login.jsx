@@ -105,7 +105,11 @@ const Login = () => {
                 htmlFor="email"
                 className={`
                   absolute transition-all duration-200
-                  ${language === "ar" ? "right-3 text-right" : "left-3 text-left"}
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
                   ${
                     focusedField === "email" || email
                       ? "text-xs text-blue-500 -top-2 bg-white px-1"
@@ -132,7 +136,11 @@ const Login = () => {
                 htmlFor="password"
                 className={`
                   absolute transition-all duration-200
-                  ${language === "ar" ? "right-3 text-right" : "left-3 text-left"}
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
                   ${
                     focusedField === "password" || password
                       ? "text-xs text-blue-500 -top-2 bg-white px-1"
