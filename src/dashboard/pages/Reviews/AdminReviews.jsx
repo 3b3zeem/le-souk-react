@@ -40,7 +40,7 @@ const AdminReviews = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-4 sm:p-6"
+      className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto">

@@ -68,7 +68,7 @@ const Settings = () => {
 
   return (
     <div
-      className={`container mx-auto p-4 ${language === "ar" ? "rtl" : "ltr"}`}
+      className={`container mx-auto p-1 ${language === "ar" ? "rtl" : "ltr"}`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <h2 className="text-2xl font-bold mb-4">

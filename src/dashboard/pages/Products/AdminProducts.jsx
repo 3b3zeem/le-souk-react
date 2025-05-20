@@ -136,7 +136,7 @@ const AdminProducts = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-4 sm:p-6 w-[100%]"
+      className="min-h-screen bg-gray-50 p-1 sm:p-6 w-[100%]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto w-[100%]">

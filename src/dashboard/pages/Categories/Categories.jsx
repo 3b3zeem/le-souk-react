@@ -120,7 +120,7 @@ const Categories = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-4 sm:p-6"
+      className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="container mx-auto">
@@ -182,7 +182,7 @@ const Categories = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/60 flex items-center justify-center z-500"
+              className="fixed inset-0 bg-black/60 flex items-center justify-center z-500 overflow-y-auto"
               onClick={() => setIsOverlayOpen(false)}
             >
               <motion.div
@@ -190,8 +190,9 @@ const Categories = () => {
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 40 }}
                 transition={{ duration: 0.3 }}
-                className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8"
+                className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
+                style={{ maxHeight: '90vh' }}
               >
                 <button
                   onClick={() => setIsOverlayOpen(false)}

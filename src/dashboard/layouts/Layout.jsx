@@ -5,7 +5,7 @@ export default function AdminLayout() {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="w-[90%] md:w-full">
+      <div className="w-[82%] md:w-full">
         <Outlet />
       </div>
     </div>

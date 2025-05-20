@@ -4,6 +4,7 @@ import useDashboard from "../../hooks/Home/useDashboard";
 import { DollarSign, Users, Package } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import Loader from "../../../layouts/Loader";
 
 const Dashboard = () => {
   const { stats, loading, error } = useDashboard();
@@ -22,7 +23,7 @@ const Dashboard = () => {
   }, [error, navigate]);
 
   if (loading)
-    return <div className="text-center text-gray-600">Loading...</div>;
+    return <Loader />;
   if (error)
     return <div className="text-center text-red-600">Error: {error}</div>;
 
