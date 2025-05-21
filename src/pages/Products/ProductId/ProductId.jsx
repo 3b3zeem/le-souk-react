@@ -2,9 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   ShoppingCart,
-  CreditCard,
   Heart,
-  AlertCircle,
   SearchX,
   X,
   CornerDownLeft,
@@ -54,6 +52,7 @@ const ProductId = () => {
     wishlist: false,
   });
   const [mainImage, setMainImage] = useState(null);
+  const [variantImages, setVariantImages] = useState([]);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -91,17 +90,20 @@ const ProductId = () => {
       productDetails.images.length > 0
     ) {
       setMainImage(productDetails.images[0].image_url);
+      setVariantImages([]);
       setSliderIndex(0);
     } else if (productDetails && productDetails.primary_image_url) {
       setMainImage(
         `https://le-souk.dinamo-app.com/storage/${productDetails.primary_image_url}`
       );
+      setVariantImages([]);
       setSliderIndex(0);
     }
   }, [productDetails]);
 
   useEffect(() => {
     setSelectedVariant(null);
+    setVariantImages([]);
   }, [productDetails]);
 
   const handleAddToCart = async () => {
@@ -207,6 +209,39 @@ const ProductId = () => {
     setIsOverlayOpen(false);
   };
 
+  const handleVariantSelect = (variant) => {
+    if (selectedVariant?.id === variant.id) {
+      setSelectedVariant(null);
+      setVariantImages([]);
+      setMainImage(
+        productDetails.primary_image_url
+          ? `${productDetails.primary_image_url}`
+          : productDetails.images?.[0]?.image_url || ""
+      );
+    } else {
+      setSelectedVariant(variant);
+
+      const relatedImages = productDetails.images.filter(
+        (img) => img.product_variant_id === variant.id
+      );
+
+      if (relatedImages.length > 0) {
+        setVariantImages(relatedImages);
+        setMainImage(relatedImages[0].image_url);
+      } else if (variant.image_url) {
+        setVariantImages([]);
+        setMainImage(variant.image_url);
+      } else {
+        setVariantImages([]);
+        setMainImage(
+          productDetails.primary_image_url
+            ? `${productDetails.primary_image_url}`
+            : productDetails.images?.[0]?.image_url || ""
+        );
+      }
+    }
+  };
+
   if (productDetailsLoading) return <Loader />;
   if (productDetailsError) return <NotFound productId={productId} />;
   if (!productDetails || !productDetails.id)
@@ -245,13 +280,13 @@ const ProductId = () => {
 
   return (
     <div
-      className="max-w-5xl mx-auto py-10 px-4 sm:px-6 md:px-8 lg:px-12"
+      className="max-w-8xl mx-auto py-10 px-4 sm:px-6 md:px-8 lg:px-12"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col items-start lg:flex-row gap-6">
         {/* Left Section - Product Image */}
         <div
-          className={`w-full lg:w-1/2 flex flex-col-reverse items-center ${
+          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-center ${
             language === "ar" ? "lg:flex-row" : "lg:flex-row-reverse gap-0"
           }`}
         >
@@ -261,7 +296,7 @@ const ProductId = () => {
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[300px] lg:h-[500px] object-cover rounded cursor-zoom-in"
+              className="w-full h-[400px] lg:h-[500px] object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
@@ -282,27 +317,6 @@ const ProductId = () => {
             )}
           </div>
 
-          {/* Overlay Modal */}
-          {isOverlayOpen && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-500">
-              <div className="relative  rounded-lg p-4 max-w-4xl w-full">
-                <button
-                  className="absolute top-2 right-2 text-gray-200 text-4xl cursor-pointer"
-                  onClick={closeOverlay}
-                >
-                  <X />
-                </button>
-                <div className="flex flex-col items-center">
-                  <img
-                    src={mainImage}
-                    alt={productDetails.name}
-                    className="w-full h-[400px] md:h-[600px] object-contain rounded"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Thumbnails Slider */}
           <div
             className={`lg:order-2 focus:outline-none focus:border-none ${
@@ -310,9 +324,13 @@ const ProductId = () => {
             }`}
             style={{ maxWidth: isDesktop ? 90 : "45%" }}
           >
-            <Slider {...sliderSettings}>
-              {productDetails.images &&
-                productDetails.images.map((img, idx) => (
+            {variantImages.length > 1 ? (
+              <div
+                className={`flex ${
+                  isDesktop ? "flex-col" : "flex-row"
+                } gap-2 overflow-x-auto`}
+              >
+                {variantImages.map((img, idx) => (
                   <div key={img.id}>
                     <img
                       src={img.image_url}
@@ -325,17 +343,60 @@ const ProductId = () => {
                         }`}
                       onClick={() => {
                         setMainImage(img.image_url);
-                        setSliderIndex(idx);
                       }}
                     />
                   </div>
                 ))}
-            </Slider>
+              </div>
+            ) : selectedVariant ? null : (
+              <Slider {...sliderSettings}>
+                {productDetails.images &&
+                  productDetails.images.map((img, idx) => (
+                    <div key={img.id}>
+                      <img
+                        src={img.image_url}
+                        alt={`thumb-${idx}`}
+                        className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
+                          ${
+                            mainImage === img.image_url
+                              ? "ring-2 ring-blue-400 border-blue-400"
+                              : "border-gray-300"
+                          }`}
+                        onClick={() => {
+                          setMainImage(img.image_url);
+                          setSliderIndex(idx);
+                        }}
+                      />
+                    </div>
+                  ))}
+              </Slider>
+            )}
           </div>
         </div>
+        {/* Overlay Modal */}
+        {isOverlayOpen && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-5000">
+            <div className="relative rounded-lg p-4 max-w-4xl w-full">
+              <button
+                className="absolute top-[-50px] right-1/2 -translate-x-1/2 text-gray-200 text-4xl cursor-pointer hover:text-gray-400 transition-all duration-200 p-1 hover:bg-gray-600"
+                onClick={closeOverlay}
+              >
+                <X />
+              </button>
+              <div className="flex flex-col items-center">
+                <img
+                  src={mainImage}
+                  alt={productDetails.name}
+                  className="w-full h-[400px] md:h-[500px] object-contain rounded"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Right Section - Product Details */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center mt-6 lg:mt-0">
+          {/* Product Title */}
           <h1
             className="text-xl sm:text-2xl font-bold mb-2"
             style={{ color: colors.productTitle }}
@@ -353,6 +414,7 @@ const ProductId = () => {
             </span>
           </div> */}
 
+          {/* Price */}
           <p
             className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-3"
             style={{ color: colors.primary }}
@@ -380,6 +442,7 @@ const ProductId = () => {
             )}
           </p>
 
+          {/* Sale Duration */}
           {productDetails.sale_starts_at &&
             productDetails.sale_ends_at &&
             (() => {
@@ -403,10 +466,12 @@ const ProductId = () => {
               );
             })()}
 
+          {/* Description */}
           <p className="text-sm sm:text-base text-gray-600 mb-4">
             {productDetails.description}
           </p>
 
+          {/* Categories and Stock */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 flex-wrap gap-2">
             <span
               className="font-medium text-sm sm:text-base"
@@ -447,6 +512,7 @@ const ProductId = () => {
             </span>
           </div>
 
+          {/* Variants */}
           {productDetails.variants && productDetails.variants.length > 0 && (
             <div className="mb-4">
               <span
@@ -455,7 +521,7 @@ const ProductId = () => {
               >
                 {t("variants")}:
               </span>
-              <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 {productDetails.variants.map((variant) => {
                   const isSelected = selectedVariant?.id === variant.id;
 
@@ -463,12 +529,10 @@ const ProductId = () => {
                     <motion.button
                       key={variant.id}
                       type="button"
-                      onClick={() =>
-                        setSelectedVariant(isSelected ? null : variant)
-                      }
+                      onClick={() => handleVariantSelect(variant)}
                       whileTap={{ scale: 0.95 }}
                       disabled={variant.stock <= 0}
-                      className={`px-4 sm:px-6 py-3 sm:py-4 rounded-md border transition-all duration-300 text-left flex flex-col gap-2 sm:gap-3 w-full sm:w-[300px] shadow-md
+                      className={`px-4 sm:px-6 py-3 sm:py-4 rounded-md border transition-all duration-300 text-left flex flex-col gap-2 sm:gap-3 w-full  shadow-md
                         ${
                           isSelected
                             ? "border-blue-600 bg-blue-50 shadow-lg"
@@ -583,6 +647,7 @@ const ProductId = () => {
             </div>
           )}
 
+          {/* Quantity Selector */}
           <div className="flex items-center mb-6">
             <span
               className="font-medium mr-4"
@@ -644,6 +709,7 @@ const ProductId = () => {
             </div>
           </div>
 
+          {/* Buttons */}
           <div className="flex gap-4">
             <button
               onClick={handleAddToCart}

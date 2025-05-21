@@ -437,7 +437,7 @@ const Categories = () => {
                         alt={category.name}
                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-200"
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/64")
+                          (e.target.src = "/default_category.jpg")
                         }
                       />
                     </td>

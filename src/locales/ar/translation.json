@@ -306,5 +306,10 @@
   "discount_duration": "مدة الخصم",
   "discount_for_days": "الخصم لمدة {{count}} يوم",
   "discount_for_months": "الخصم لمدة {{count}} شهر",
-  "offer": "خصم"
+  "offer": "خصم",
+  "assign_images_to_variant": "تعيين الصور للمتغير",
+  "select_variant": "اختر المتغير",
+  "select_images": "اختر الصور",
+  "assign": "تعيين",
+  "assign_images_toVariant": "تعيين الصور لمتغير المنتج"
 }

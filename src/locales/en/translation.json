@@ -304,5 +304,10 @@
   "discount_duration": "Discount Duration",
   "discount_for_days": "Discount for {{count}} days",
   "discount_for_months": "Discount for {{count}} months",
-  "offer": "Offer"
+  "offer": "Offer",
+  "assign_images_to_variant": "Assign images to variant",
+  "select_variant": "Select variant",
+  "select_images": "Select images",
+  "assign": "Assign",
+  "assign_images_toVariant": "Assign images to Variant"
 }

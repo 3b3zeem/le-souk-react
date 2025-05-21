@@ -260,30 +260,67 @@ const useAdminProducts = () => {
   };
 
   const addProductDiscount = async (productId, discountData) => {
-  try {
-    if (!token) throw new Error("No token found. Please log in.");
+    try {
+      if (!token) throw new Error("No token found. Please log in.");
 
-    const response = await axios.put(
-      `https://le-souk.dinamo-app.com/api/admin/products/${productId}/discount`,
-      discountData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      const response = await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/products/${productId}/discount`,
+        discountData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success(response.data.message || "Discount added successfully!");
+      await fetchProducts();
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to add discount";
+      toast.error(errorMessage);
+      return false;
+    }
+  };
+
+  const assignImagesToVariant = async (
+    productId,
+    productVariantId,
+    productImageIds
+  ) => {
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
       }
-    );
 
-    toast.success(response.data.message || "Discount added successfully!");
-    await fetchProducts();
-    return true;
-  } catch (err) {
-    const errorMessage =
-      err.response?.data?.message || "Failed to add discount";
-    toast.error(errorMessage);
-    return false;
-  }
-};
+      const response = await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/products/${productId}/images/assign`,
+        {
+          product_image_ids: productImageIds,
+          product_variant_id: productVariantId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success(
+        response.data.message || "Images assigned to variant successfully!"
+      );
+      await fetchProducts();
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to assign images to variant";
+      toast.error(errorMessage);
+      return false;
+    }
+  };
 
   const deleteProduct = async (productId) => {
     try {
@@ -320,6 +357,7 @@ const useAdminProducts = () => {
     updateProductImages,
     setPrimaryImage,
     addProductDiscount,
+    assignImagesToVariant,
     deleteProduct,
     loading,
     error,

@@ -321,6 +321,9 @@ const Filters = ({
                       alt={category.name}
                       className="w-7 h-7 object-cover rounded-full"
                       loading="lazy"
+                      onError={(e) =>
+                        (e.target.src = "/default_category.jpg")
+                      }
                     />
                   </div>
                   <span

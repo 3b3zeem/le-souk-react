@@ -110,7 +110,7 @@ const Users = () => {
                         alt={user.name}
                         className="w-8 h-8 rounded-full object-cover border border-gray-200"
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/32")
+                          (e.target.src = "/user.png")
                         }
                       />
                       <div className="flex-1">

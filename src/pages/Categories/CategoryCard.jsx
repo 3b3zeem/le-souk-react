@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const CategoryCard = ({ category }) => {
+  const [bgImage, setBgImage] = useState(category.image_url);
   const navigate = useNavigate();
+
   return (
     <div className="relative bg-white rounded-lg overflow-hidden group h-70 transition-all duration-300">
       <div
         className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-105 cursor-pointer"
         style={{
-          backgroundImage: `url(${category.image_url})`,
+          backgroundImage: `url(${bgImage})`,
           backgroundColor: "#e5e7eb",
         }}
         onClick={() => navigate(`/categories/${category.id}`)}
       >
+        <img
+          src={category.image_url}
+          alt="check image"
+          hidden
+          onError={() => setBgImage("/default_category.jpg")}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
 
         <div className="absolute inset-0 flex flex-col gap-5 justify-end items-start p-7 transition-all duration-300">

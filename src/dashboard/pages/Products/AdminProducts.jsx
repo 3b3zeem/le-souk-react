@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import {
+  Check,
   Eye,
   Plus,
   Search,
@@ -19,6 +20,7 @@ import useAdminProducts from "../../hooks/Products/useAdminProducts";
 import SetPrimaryImageForm from "./SetPrimaryImageForm";
 import Swal from "sweetalert2";
 import AddDiscount from "./addDiscount";
+import AssignImagesModal from "./AssignImagesModal";
 ring.register();
 
 const AdminProducts = () => {
@@ -29,6 +31,7 @@ const AdminProducts = () => {
     updateProductImages,
     setPrimaryImage,
     addProductDiscount,
+    assignImagesToVariant,
     deleteProduct,
     loading,
     error,
@@ -59,6 +62,8 @@ const AdminProducts = () => {
   const [addDiscountOpen, setAddDiscountOpen] = useState(false);
   const [discountProductId, setDiscountProductId] = useState(null);
   const [loadingDiscount, setLoadingDiscount] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -156,6 +161,29 @@ const AdminProducts = () => {
     const ok = await addProductDiscount(discountProductId, data);
     setLoadingDiscount(false);
     if (ok) setAddDiscountOpen(false);
+  };
+
+  const openModal = (product) => {
+    setSelectedProduct(product);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedProduct(null);
+  };
+
+  const handleAssignImages = async ({
+    productId,
+    productVariantId,
+    productImageIds,
+  }) => {
+    const success = await assignImagesToVariant(
+      productId,
+      productVariantId,
+      productImageIds
+    );
+    return success;
   };
 
   return (
@@ -256,6 +284,14 @@ const AdminProducts = () => {
           loading={loadingDiscount}
         />
 
+        <AssignImagesModal
+          isOpen={modalIsOpen}
+          onClose={closeModal}
+          product={selectedProduct}
+          onAssign={handleAssignImages}
+          loading={loading}
+        />
+
         {loading ? (
           <Loader />
         ) : error ? (
@@ -307,6 +343,9 @@ const AdminProducts = () => {
                     {t("stock")}
                   </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
+                    {t("assign_images_to_variant")}
+                  </th>
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("discount")}
                   </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
@@ -339,7 +378,7 @@ const AdminProducts = () => {
                         }}
                         className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover border border-gray-200 cursor-pointer"
                         onError={(e) =>
-                          (e.target.src = "https://via.placeholder.com/64")
+                          (e.target.src = "/default_product.jpg")
                         }
                       />
                     </td>
@@ -350,7 +389,7 @@ const AdminProducts = () => {
                       data-label={t("name")}
                       title={product.name}
                     >
-                      {product.name}
+                      {product.name.slice(0, 30)}...
                     </td>
                     <td
                       className={`p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[100px] sm:max-w-[200px] truncate ${
@@ -359,7 +398,7 @@ const AdminProducts = () => {
                       data-label={t("description")}
                       title={product.description}
                     >
-                      {product.description}
+                      {product.description.slice(0, 30)}...
                     </td>
                     <td
                       className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
@@ -376,6 +415,17 @@ const AdminProducts = () => {
                       data-label={t("stock")}
                     >
                       {product.total_stock}
+                    </td>
+                    <td>
+                      <button
+                        className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
+                        onClick={() => openModal(product)}
+                      >
+                        <Check size={14} />
+                        <span className="sm:inline hidden font-medium">
+                          {t("select_images")}
+                        </span>
+                      </button>
                     </td>
                     <td>
                       <button
