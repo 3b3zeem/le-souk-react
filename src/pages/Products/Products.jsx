@@ -325,7 +325,7 @@ const Products = () => {
                       }}
                     >
                       <div
-                        className="relative flex justify-center items-center h-56 bg-gray-50 cup"
+                        className="relative flex justify-center items-center h-56 bg-gray-50 cursor-pointer"
                         onClick={() => handleProductClick(product.id)}
                       >
                         <img

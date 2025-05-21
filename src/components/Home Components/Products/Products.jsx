@@ -183,18 +183,22 @@ const Products = () => {
           return (
             <div key={product.id} className="px-2 h-full">
               <div
-                className="border border-gray-300 rounded-lg group transition-all duration-300 overflow-hidden bg-white flex flex-col cursor-pointer"
+                className="relative group border rounded-md overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                style={{
+                  borderColor: colors.borderLight,
+                  minHeight: 420,
+                }}
               >
                 <div
-                  className="relative flex justify-center items-center bg-gray-50"
+                  className="relative flex justify-center items-center bg-gray-50 h-100"
                   onClick={() => navigate(`/products/${product.id}`)}
                 >
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-{100%} object-contain p-4 transition-transform duration-200 group-hover:scale-105"
+                    className="h-full object-contain p-4 transition-transform duration-200 group-hover:scale-105"
                     style={{ maxWidth: "90%" }}
                   />
                   {/* Discount badge */}
