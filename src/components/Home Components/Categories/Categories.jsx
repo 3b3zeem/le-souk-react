@@ -127,6 +127,10 @@ const Categories = () => {
                 src={category.image_url}
                 alt={category.name}
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/default_category.jpg";
+                }}
               />
               <div className="p-4 text-center">
                 <h3
