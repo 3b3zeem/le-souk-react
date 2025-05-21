@@ -24,6 +24,8 @@ const Cart = () => {
     fetchCart,
     setCartQuantity,
     clearCart,
+    validateCoupon,
+    finalTotal,
     subtotal,
     error,
     success,
@@ -33,6 +35,8 @@ const Cart = () => {
     remove: {},
     quantity: {},
   });
+  const [coupon, setCoupon] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
   const { token } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -46,9 +50,6 @@ const Cart = () => {
       toast.success(success);
     }
   }, [error, success]);
-
-  // const calculateSubtotal = () =>
-  //   cartItems.reduce((acc, item) => acc + Number(item.total), 0);
 
   const handleRemove = async (productId) => {
     setLoadingStates((prev) => ({
@@ -121,6 +122,17 @@ const Cart = () => {
     } catch (err) {
       toast.error(err);
     }
+  };
+
+  const handleApplyCoupon = async () => {
+    setCouponLoading(true);
+    try {
+      await validateCoupon(coupon);
+      setCoupon("");
+    } catch (err) {
+      toast.error(err);
+    }
+    setCouponLoading(false);
   };
 
   return (
@@ -292,8 +304,7 @@ const Cart = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          {item.total}{" "}
-                          {language === "ar" ? "ج.م" : "LE"}
+                          {item.total} {language === "ar" ? "ج.م" : "LE"}
                         </p>
                         <button
                           onClick={() => handleRemove(item.id)}
@@ -338,16 +349,20 @@ const Cart = () => {
                     <input
                       type="text"
                       placeholder={t("enterCode")}
-                      className="border border-gray-300 p-2 flex-1"
+                      value={coupon}
+                      onChange={(e) => setCoupon(e.target.value)}
+                      className="border border-gray-300 p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                     />
                     <button
-                      className="px-4 uppercase"
+                      className="px-4 uppercase customEffect cursor-pointer"
                       style={{
                         backgroundColor: colors.primary,
                         color: colors.lightText,
                       }}
+                      disabled={couponLoading || !coupon}
+                      onClick={handleApplyCoupon}
                     >
-                      {t("apply")}
+                      <span>{couponLoading ? t("loading") : t("apply")}</span>
                     </button>
                   </div>
                 </div>
@@ -355,8 +370,7 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
-                    ${subtotal}{" "}
-                    {language === "ar" ? "ج.م" : "LE"}
+                    ${subtotal} {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>
 
@@ -381,8 +395,7 @@ const Cart = () => {
                     {t("estimatedTotal")}
                   </p>
                   <p style={{ color: colors.productTitle }}>
-                    {(subtotal / 100).toFixed(2)}{" "}
-                    {language === "ar" ? "ج.م" : "LE"}
+                    {finalTotal ? finalTotal: subtotal} {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>
 

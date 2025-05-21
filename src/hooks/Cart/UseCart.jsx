@@ -12,6 +12,7 @@ const useCartCRUD = () => {
   const [success, setSuccess] = useState(null);
   const { addItemToCart, removeItemFromCart } = useCart();
   const [subtotal, setSubtotal] = useState(0);
+  const [finalTotal, setFinalTotal] = useState(0);
   const { token } = useAuthContext();
   const { language } = useLanguage();
 
@@ -201,6 +202,36 @@ const useCartCRUD = () => {
     }
   };
 
+  const validateCoupon = async (couponCode) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await axios.post(
+        "https://le-souk.dinamo-app.com/api/coupons/validate",
+        {
+          code: couponCode,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSuccess(response.data.message);
+      setFinalTotal(response.data.data.final_total);
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to validate coupon");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     cartItems,
     addToCart,
@@ -208,6 +239,8 @@ const useCartCRUD = () => {
     fetchCart,
     setCartQuantity,
     clearCart,
+    validateCoupon,
+    finalTotal,
     subtotal,
     loading,
     error,
