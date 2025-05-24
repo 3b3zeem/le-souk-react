@@ -21,7 +21,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
 
 const Products = () => {
-  const { products, loading, error } = useHome();
+  const { products, loading, error } = useHome(5);
   const [loadingStates, setLoadingStates] = useState({
     cart: {},
     wishlist: {},
@@ -64,6 +64,8 @@ const Products = () => {
     speed: 500,
     slidesToShow: Math.min(products.length, 4),
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
     nextArrow: products.length > 1 ? <NextArrow /> : null,
     prevArrow: products.length > 1 ? <PrevArrow /> : null,
     responsive: [

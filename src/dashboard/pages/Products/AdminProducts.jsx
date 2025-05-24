@@ -309,9 +309,6 @@ const AdminProducts = () => {
               <thead className="w-[100%] overflow-x-auto">
                 <tr className="bg-gray-100 w-[100%] overflow-x-auto">
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
-                    {t("id")}
-                  </th>
-                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("product_image")}
                   </th>
                   <th
@@ -342,6 +339,13 @@ const AdminProducts = () => {
                   >
                     {t("stock")}
                   </th>
+                  <th
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
+                      language === "ar" ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {t("discount_percentage")}
+                  </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("assign_images_to_variant")}
                   </th>
@@ -359,12 +363,6 @@ const AdminProducts = () => {
                     key={product.id}
                     className="border-b hover:bg-gray-50 w-[100%] overflow-x-auto"
                   >
-                    <td
-                      className="p-2 sm:p-3 text-xs text-gray-600 text-center"
-                      data-label={t("id")}
-                    >
-                      {product.id}.
-                    </td>
                     <td
                       className="p-2 sm:p-3 flex justify-center"
                       data-label={t("product_image")}
@@ -415,6 +413,14 @@ const AdminProducts = () => {
                       data-label={t("stock")}
                     >
                       {product.total_stock}
+                    </td>
+                    <td
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
+                        language === "ar" ? "text-right" : "text-left"
+                      }`}
+                      data-label={t("stock")}
+                    >
+                      {product.discount_value ? product.discount_value + "%" : t("no_discount")}
                     </td>
                     <td>
                       <button

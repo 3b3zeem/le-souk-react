@@ -309,5 +309,7 @@
   "select_variant": "Select variant",
   "select_images": "Select images",
   "assign": "Assign",
-  "assign_images_toVariant": "Assign images to Variant"
+  "assign_images_toVariant": "Assign images to Variant",
+  "discount_percentage": "Discount Per",
+  "no_discount": "No discounts available"
 }

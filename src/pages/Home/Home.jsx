@@ -3,6 +3,7 @@ import HeroSection from "../../components/Home Components/HomeSwiper/HeroSection
 import Categories from "../../components/Home Components/Categories/Categories";
 import Products from "../../components/Home Components/Products/Products";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import Offers from "../../components/Home Components/Offers/Offers";
 
 const Home = () => {
   const { language } = useLanguage();
@@ -12,6 +13,7 @@ const Home = () => {
         <HeroSection />
         <Categories />
         <Products />
+        <Offers perPage={20} page={1} />
       </div>
     </React.Fragment>
   );

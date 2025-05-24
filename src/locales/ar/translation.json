@@ -311,5 +311,7 @@
   "select_variant": "اختر المتغير",
   "select_images": "اختر الصور",
   "assign": "تعيين",
-  "assign_images_toVariant": "تعيين الصور لمتغير المنتج"
+  "assign_images_toVariant": "تعيين الصور لمتغير المنتج",
+  "discount_percentage": "نسبة الخصم",
+  "no_discount": "لا يوجد خصم"
 }

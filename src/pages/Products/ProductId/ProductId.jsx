@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import {
-  ShoppingCart,
-  Heart,
-  SearchX,
-  X,
-  CornerDownLeft,
-} from "lucide-react";
+import { ShoppingCart, Heart, SearchX, X, CornerDownLeft } from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
@@ -61,6 +55,7 @@ const ProductId = () => {
     y: 0,
     visible: false,
   });
+  const [timeLeft, setTimeLeft] = useState(null);
   const imageRef = useRef(null);
   const { token, profile } = useAuthContext();
   const { t } = useTranslation();
@@ -105,6 +100,37 @@ const ProductId = () => {
     setSelectedVariant(null);
     setVariantImages([]);
   }, [productDetails]);
+
+  useEffect(() => {
+    if (productDetails && productDetails.sale_ends_at) {
+      const updateCountdown = () => {
+        const now = new Date();
+        const end = new Date(productDetails.sale_ends_at);
+        const diff = end - now;
+        if (diff > 0) {
+          const hours = String(
+            Math.floor((diff / (1000 * 60 * 60)) % 24)
+          ).padStart(2, "0");
+          const minutes = String(
+            Math.floor((diff / (1000 * 60)) % 60)
+          ).padStart(2, "0");
+          const seconds = String(Math.floor((diff / 1000) % 60)).padStart(
+            2,
+            "0"
+          );
+          const days = String(
+            Math.floor(diff / (1000 * 60 * 60 * 24))
+          ).padStart(2, "0");
+          setTimeLeft({ days, hours, minutes, seconds });
+        } else {
+          setTimeLeft(null);
+        }
+      };
+      updateCountdown();
+      const timer = setInterval(updateCountdown, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [productDetails && productDetails.sale_ends_at]);
 
   const handleAddToCart = async () => {
     setLoadingStates((prev) => ({ ...prev, cart: true }));
@@ -443,28 +469,35 @@ const ProductId = () => {
           </p>
 
           {/* Sale Duration */}
-          {productDetails.sale_starts_at &&
+          {productDetails &&
+            productDetails.sale_starts_at &&
             productDetails.sale_ends_at &&
-            (() => {
-              const start = new Date(productDetails.sale_starts_at);
-              const end = new Date(productDetails.sale_ends_at);
-              const diffTime = Math.abs(end - start);
-              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-              const diffMonths = Math.floor(diffDays / 30);
-
-              return (
-                <div className="mb-2 flex items-center gap-2">
-                  <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                    {t("discount_duration")}:
+            timeLeft && productDetails.min_sale_price && (
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex gap-1">
+                  <span className="bg-gray-100 text-gray-800 font-bold px-3 py-2 rounded text-lg">
+                    {timeLeft.days}
                   </span>
-                  <span className="text-xs text-gray-600">
-                    {diffMonths > 0
-                      ? t("discount_for_months", { count: diffMonths })
-                      : t("discount_for_days", { count: diffDays })}
+                  <span className="text-xl font-bold">:</span>
+                  <span className="bg-gray-100 text-gray-800 font-bold px-3 py-2 rounded text-lg">
+                    {timeLeft.hours}
+                  </span>
+                  <span className="text-xl font-bold">:</span>
+                  <span className="bg-gray-100 text-gray-800 font-bold px-3 py-2 rounded text-lg">
+                    {timeLeft.minutes}
+                  </span>
+                  <span className="text-xl font-bold">:</span>
+                  <span className="bg-gray-100 text-gray-800 font-bold px-3 py-2 rounded text-lg">
+                    {timeLeft.seconds}
                   </span>
                 </div>
-              );
-            })()}
+                <span className="text-sm text-gray-700 font-medium">
+                  {language === "ar"
+                    ? "متبقي حتى نهاية العرض"
+                    : "Remains until the end of the offer"}
+                </span>
+              </div>
+            )}
 
           {/* Description */}
           <p className="text-sm sm:text-base text-gray-600 mb-4">

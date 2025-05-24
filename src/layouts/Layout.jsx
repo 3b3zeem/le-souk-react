@@ -12,8 +12,8 @@ const LayOut = () => {
     <React.Fragment>
       <Navbar />
       <Outlet />
-      {/* <Footer /> */}
-      {!isAdmin && <Footer />}
+      <Footer />
+      {/* {!isAdmin && <Footer />} */}
     </React.Fragment>
   );
 };
