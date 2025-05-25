@@ -15,7 +15,6 @@ import { Link } from "react-router-dom";
 import { renderStars } from "../../../utils/ratingUtils";
 import useCartCRUD from "./../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
-import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
@@ -356,7 +355,7 @@ const Products = () => {
           className="px-6 py-2 border rounded-md text-md font-medium bg-[#1e70d0] transition duration-200 customEffect"
           style={{ borderColor: colors.primary, color: colors.primary }}
         >
-          <span>{t("seeMore")}</span>
+          <span>{t("allProducts")}</span>
         </Link>
       </div>
     </div>

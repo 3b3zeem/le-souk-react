@@ -5,7 +5,6 @@ import NotFound from "../components/NotFound/NotFound.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
-import CategoryId from "../pages/Categories/CategoryId/CategoryId.jsx";
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
@@ -16,7 +15,10 @@ const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("../pages/Auth/Register/Register.jsx"));
 const Products = lazy(() => import("../pages/Products/Products.jsx"));
 const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
+const Packages = lazy(() => import("../pages/Packages/Packages.jsx"));
+const PackagesId = lazy(() => import("../pages/Packages/PackagesId/PackagesId.jsx"));
 const MainCategories = lazy(() => import("../pages/Categories/Categories.jsx"));
+const CategoryId = lazy(() => import("../pages/Categories/CategoryId/CategoryId.jsx"));
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
@@ -28,6 +30,7 @@ const Dashboard = lazy(() => import("../dashboard/pages/Home/Dashboard.jsx"));
 const Users = lazy(() => import("../dashboard/pages/Users/Users.jsx"));
 const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.jsx"));
 const AdminProducts = lazy(() => import("./../dashboard/pages/Products/AdminProducts"));
+const AdminPackages = lazy(() => import("../dashboard/pages/Packages/AdminPackages.jsx"));
 const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
 const AdminOrders = lazy(() => import("./../dashboard/pages/Orders/AdminOrders"));
 const Coupons = lazy(() => import("../dashboard/pages/Coupons/Coupons.jsx"));
@@ -82,6 +85,22 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />
+          </Suspense>
+        ),
+      },
+      {
+        path: "packages",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Packages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "packages/:packagesId",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <PackagesId />
           </Suspense>
         ),
       },
@@ -203,6 +222,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <AdminProducts />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "packages",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AdminPackages />
                   </Suspense>
                 ),
               },
