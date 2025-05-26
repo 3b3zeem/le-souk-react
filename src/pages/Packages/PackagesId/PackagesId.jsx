@@ -53,16 +53,16 @@ const PackagesId = () => {
     }
   }, [details]);
 
+  if (loading) {
+    return <Loader />;
+  }
+
   if (!details) {
     return (
       <div className="text-center text-gray-500">
         {t("No package details found.")}
       </div>
     );
-  }
-
-  if (loading) {
-    return <Loader />;
   }
 
   if (error) {
@@ -79,7 +79,10 @@ const PackagesId = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-10 px-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div
+      className="max-w-7xl mx-auto py-10 px-4"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       {/* Hero Section */}
       <div className="relative flex flex-col lg:flex-row bg-gradient-to-r from-gray-700 via-gray-500 to-gray-400 rounded-xl shadow-2xl overflow-hidden mb-12 min-h-[400px]">
         {/* Image */}
@@ -161,7 +164,6 @@ const PackagesId = () => {
 
       {/* Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-
         <div className="md:sticky md:top-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-xl p-8 border border-blue-100 h-100">
           <h2 className="text-2xl font-extrabold mb-8 text-blue-700 flex items-center gap-2">
             <Clock4 className="w-6 h-6 text-blue-500" />
@@ -186,17 +188,23 @@ const PackagesId = () => {
               />
               <DetailRow
                 label={t("Original Price")}
-                value={`${details?.original_price} ${language === "ar" ? "ج.م" : "LE"}`}
+                value={`${details?.original_price} ${
+                  language === "ar" ? "ج.م" : "LE"
+                }`}
                 color="text-red-500 line-through"
               />
               <DetailRow
                 label={t("Discounted Price")}
-                value={`${details?.discounted_price} ${language === "ar" ? "ج.م" : "LE"}`}
+                value={`${details?.discounted_price} ${
+                  language === "ar" ? "ج.م" : "LE"
+                }`}
                 color="text-green-700 font-bold"
               />
               <DetailRow
                 label={t("Savings")}
-                value={`${details?.savings} ${language === "ar" ? "ج.م" : "LE"}`}
+                value={`${details?.savings} ${
+                  language === "ar" ? "ج.م" : "LE"
+                }`}
                 color="text-green-500"
               />
             </div>
@@ -268,7 +276,6 @@ const PackagesId = () => {
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );
