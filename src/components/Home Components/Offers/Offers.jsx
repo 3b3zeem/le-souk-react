@@ -149,7 +149,6 @@ const ProductCountdown = ({ saleEndsAt }) => {
 };
 
 const SwiperSection = ({ products }) => {
-  const { t } = useTranslation();
   const { language } = useLanguage();
 
   const navigate = useNavigate();
@@ -191,7 +190,7 @@ const SwiperSection = ({ products }) => {
         className="text-xl font-bold mb-6 text-left"
         style={{ color: colors.primary }}
       >
-        {language === "ar" ? "عروض" : t("Deals")}
+        {language === "ar" ? "اكبر من 50%" : "More than 50% Off"}
       </h2>
 
       {products.length > 0 ? (
@@ -214,8 +213,8 @@ const SwiperSection = ({ products }) => {
                 className="text-center text-lg font-bold mb-2"
                 style={{ color: colors.primary }}
               >
-                {language === "ar" ? "ج.م" : "$"}
-                {product.min_sale_price} - {language === "ar" ? "ج.م" : "$"}
+                {language === "ar" ? "ج.م" : "LE"}
+                {product.min_sale_price} - {language === "ar" ? "ج.م" : "LE"}
                 {product.max_sale_price}
               </p>
               <p className="text-sm text-center text-gray-600">
@@ -226,7 +225,7 @@ const SwiperSection = ({ products }) => {
               <div className="mt-3 text-center">
                 <span className="inline-block px-3 py-1 rounded text-sm font-medium bg-green-600 text-white">
                   {product.discount_percentage}%{" "}
-                  {language === "ar" ? "خصم" : t("offer", "Offer")}
+                  {language === "ar" ? "خصم" : "Offer"}
                 </span>
               </div>
 
@@ -242,10 +241,7 @@ const SwiperSection = ({ products }) => {
         <p className="text-center text-gray-500 mt-6">
           {language === "ar"
             ? "لا توجد منتجات ذات خصم مرتفع متاحة."
-            : t(
-              "no_high_discount_products",
-              "No high-discount products available."
-            )}
+            : "No high-discount products available."}
         </p>
       )}
     </div>
@@ -304,8 +300,9 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
       </h2>
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "1-10" ? "text-white" : ""
-            }`}
+          className={`px-4 py-2 rounded cursor-pointer ${
+            activeTab === "1-10" ? "text-white" : ""
+          }`}
           style={{
             backgroundColor:
               activeTab === "1-10" ? colors.primary : colors.lineBg,
@@ -316,8 +313,9 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           {language === "ar" ? "خصم 1-10%" : "1-10% Offer"}
         </button>
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "11-30" ? "text-white" : ""
-            }`}
+          className={`px-4 py-2 rounded cursor-pointer ${
+            activeTab === "11-30" ? "text-white" : ""
+          }`}
           style={{
             backgroundColor:
               activeTab === "11-30" ? colors.primary : colors.lineBg,
@@ -329,8 +327,9 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           {language === "ar" ? "خصم 11-30%" : "11-30% Offer"}
         </button>
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "31-50" ? "text-white" : ""
-            }`}
+          className={`px-4 py-2 rounded cursor-pointer ${
+            activeTab === "31-50" ? "text-white" : ""
+          }`}
           style={{
             backgroundColor:
               activeTab === "31-50" ? colors.primary : colors.lineBg,
@@ -382,9 +381,7 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
         <p className="text-center text-gray-500">
           {language === "ar"
             ? "لا توجد منتجات في هذا النطاق."
-            : t(
-              "No products available in this discount range."
-            )}
+            : t("No products available in this discount range.")}
         </p>
       )}
     </div>
@@ -406,9 +403,9 @@ const Offers = () => {
         {language === "ar"
           ? "لا توجد منتجات متاحة حالياً. جرب تغيير الفلاتر أو الصفحة."
           : t(
-            "noProductsTitle",
-            "No products available at the moment. Try adjusting the filters or page."
-          )}
+              "noProductsTitle",
+              "No products available at the moment. Try adjusting the filters or page."
+            )}
       </div>
     );
 

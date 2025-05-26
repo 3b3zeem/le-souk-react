@@ -340,5 +340,9 @@
   "remove": "حذف",
   "close": "إغلاق",
   "original_price": "السعر الأصلي",
-  "discounted_price": "السعر بعد الخصم"
+  "discounted_price": "السعر بعد الخصم",
+  "deal_of_the_week": "عرض الأسبوع",
+  "limited_time_offer": "عرض لفترة محدودة.",
+  "the_deal_will_expire": "العرض ينتهي في",
+  "hurry_up": "سارع الآن!"
 }

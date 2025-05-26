@@ -22,7 +22,7 @@
   "categories": "Categories",
   "somethingWentWrong": "Something went wrong!",
   "seeMore": "See More",
-  "allProducts" : "All Products",
+  "allProducts": "All Products",
   "stayConnected": "Stay Connected",
   "always": "Always",
   "loginDescription": "From here, your shopping experience and the company's offerings may change, and now you can register. We wish you a pleasant shopping journey and satisfaction with our products.",
@@ -338,5 +338,9 @@
   "remove": "Remove",
   "close": "Close",
   "original_price": "Original Price",
-  "discounted_price": "Discounted Price"
+  "discounted_price": "Discounted Price",
+  "deal_of_the_week": "Deal Of The Week",
+  "limited_time_offer": "Limited time offer.",
+  "the_deal_will_expire": "The deal will expire on",
+  "hurry_up": "HURRY UP!"
 }

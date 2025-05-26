@@ -4,9 +4,13 @@ import Loader from "../../../layouts/Loader";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
+import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const OfferItem = ({ product }) => {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const { t } = useTranslation();
   const end = new Date(product.sale_ends_at);
 
   const [timeLeft, setTimeLeft] = useState(() => {
@@ -44,7 +48,10 @@ const OfferItem = ({ product }) => {
   }, [end]);
 
   return (
-    <div className="flex flex-col lg:flex-row items-center bg-white lg:h-[550px] overflow-hidden">
+    <div
+      className="flex flex-col lg:flex-row items-center bg-white lg:h-[550px] overflow-hidden"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       {/* Left side - Product Image */}
       <div
         onClick={() => navigate(`products/${product.id}`)}
@@ -63,7 +70,7 @@ const OfferItem = ({ product }) => {
         <div className="flex items-center mb-6">
           <Star className="w-5 h-5 text-orange-600 mr-3" fill="orange" />
           <span className="text-orange-600 font-medium text-sm tracking-wide uppercase">
-            Deal Of The Week
+            {t("deal_of_the_week")}
           </span>
         </div>
 
@@ -119,8 +126,10 @@ const OfferItem = ({ product }) => {
         </div>
 
         {/* Limited Offer Notice */}
-        <div className="flex items-center bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+        <div
+          className={`flex items-center bg-red-50 border border-red-200 rounded-lg p-4 gap-2`}
+        >
+          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
             <svg
               className="w-4 h-4 text-white"
               fill="currentColor"
@@ -134,9 +143,9 @@ const OfferItem = ({ product }) => {
             </svg>
           </div>
           <div className="text-sm text-gray-700">
-            <span className="font-medium">Limited time offer.</span> The deal
-            will expires on {end.toLocaleDateString()}{" "}
-            <span className="font-bold text-red-600">HURRY UP!</span>
+            <span className="font-medium">{t("limited_time_offer")}</span>{" "}
+            {t("the_deal_will_expire")} {end.toLocaleDateString(language)}{" "}
+            <span className="font-bold text-red-600">{t("hurry_up")}</span>
           </div>
         </div>
       </div>
