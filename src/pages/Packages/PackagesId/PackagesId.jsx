@@ -164,7 +164,7 @@ const PackagesId = () => {
 
       {/* Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div className="md:sticky md:top-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-xl p-8 border border-blue-100 h-100">
+        <div className="md:sticky md:top-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-xl p-8 border border-blue-100 md:h-100">
           <h2 className="text-2xl font-extrabold mb-8 text-blue-700 flex items-center gap-2">
             <Clock4 className="w-6 h-6 text-blue-500" />
             {t("Package Details")}
