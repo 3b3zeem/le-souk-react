@@ -423,48 +423,53 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
                 return (
                   <div
                     key={product.product_id}
-                    className="flex items-center gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm"
+                    className="flex items-center gap-4 p-4 border rounded-lg bg-gray-50 shadow-sm  overflow-x-auto"
                   >
-                    <img
-                      src={imageUrl}
-                      alt={product.name}
-                      className="w-14 h-14 rounded-lg object-cover border border-gray-200"
-                      onError={(e) => (e.target.src = "/default_product.jpg")}
-                    />
-                    <div className="flex-1">
-                      <p className="text-base font-semibold text-gray-800">
-                        {product.name}
-                      </p>
+                    <div className="flex sm:flex-row flex-col items-start sm:items-center gap-4 flex-1">
+                      <img
+                        src={imageUrl}
+                        alt={product.name}
+                        className="w-14 h-14 rounded-lg object-cover border border-gray-200"
+                        onError={(e) => (e.target.src = "/default_product.jpg")}
+                      />
+                      <div className="flex-1">
+                        <p className="text-base font-semibold text-gray-800">
+                          {product.name.slice(0, 20)}...
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
+
+                    <div className="flex sm:flex-row flex-col items-end sm:items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleQuantityChange(product.product_id, -1)
+                          }
+                          className="p-2 border border-gray-300 hover:bg-gray-200 rounded transition duration-200 cursor-pointer"
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="text-base">{product.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleQuantityChange(product.product_id, 1)
+                          }
+                          className="p-2 border border-gray-300 hover:bg-gray-200 rounded transition duration-200 cursor-pointer"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
                       <button
                         type="button"
-                        onClick={() =>
-                          handleQuantityChange(product.product_id, -1)
-                        }
-                        className="p-2 border border-gray-300 hover:bg-gray-200 rounded transition duration-200 cursor-pointer"
+                        onClick={() => handleRemoveProduct(product.product_id)}
+                        className="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
+                        title={t("remove")}
                       >
-                        <Minus size={16} />
-                      </button>
-                      <span className="text-base">{product.quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleQuantityChange(product.product_id, 1)
-                        }
-                        className="p-2 border border-gray-300 hover:bg-gray-200 rounded transition duration-200 cursor-pointer"
-                      >
-                        <Plus size={16} />
+                        <X size={18} />
                       </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveProduct(product.product_id)}
-                      className="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
-                      title={t("remove")}
-                    >
-                      <X size={18} />
-                    </button>
                   </div>
                 );
               })}
