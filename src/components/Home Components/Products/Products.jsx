@@ -237,7 +237,7 @@ const Products = () => {
                     disabled={loadingStates.wishlist[product.id]}
                     className={`absolute top-3 ${
                       language === "ar" ? "left-4" : "right-4"
-                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded-full flex items-center justify-center transition duration-200 cursor-pointer
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
                       ${
                         loadingStates.wishlist[product.id]
                           ? "opacity-50 cursor-not-allowed"
@@ -268,7 +268,7 @@ const Products = () => {
                     disabled={loadingStates.cart[product.id]}
                     className={`absolute bottom-3 ${
                       language === "ar" ? "left-4" : "right-4"
-                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded-full flex items-center justify-center transition duration-200 cursor-pointer
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
                       ${
                         loadingStates.cart[product.id]
                           ? "opacity-50 cursor-not-allowed"

@@ -186,7 +186,7 @@ const SwiperSection = ({ products }) => {
   };
 
   return (
-    <div className="w-full md:w-1/3 h-full p-6 border border-gray-400 rounded-lg bg-white">
+    <div className="w-full md:w-1/3 h-full p-6 rounded-lg bg-white overflow-x-auto">
       <h2
         className="text-xl font-bold mb-6 text-left"
         style={{ color: colors.primary }}
@@ -243,9 +243,9 @@ const SwiperSection = ({ products }) => {
           {language === "ar"
             ? "لا توجد منتجات ذات خصم مرتفع متاحة."
             : t(
-                "no_high_discount_products",
-                "No high-discount products available."
-              )}
+              "no_high_discount_products",
+              "No high-discount products available."
+            )}
         </p>
       )}
     </div>
@@ -302,11 +302,10 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           ? "عروض اليوم! احصل على أفضل الأسعار."
           : t("Daily_Deals", "Daily Deals! Get our best prices.")}
       </h2>
-      <div className="flex space-x-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "1-10" ? "text-white" : ""
-          }`}
+          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "1-10" ? "text-white" : ""
+            }`}
           style={{
             backgroundColor:
               activeTab === "1-10" ? colors.primary : colors.lineBg,
@@ -317,9 +316,8 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           {language === "ar" ? "خصم 1-10%" : "1-10% Offer"}
         </button>
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "11-30" ? "text-white" : ""
-          }`}
+          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "11-30" ? "text-white" : ""
+            }`}
           style={{
             backgroundColor:
               activeTab === "11-30" ? colors.primary : colors.lineBg,
@@ -331,9 +329,8 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           {language === "ar" ? "خصم 11-30%" : "11-30% Offer"}
         </button>
         <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "31-50" ? "text-white" : ""
-          }`}
+          className={`px-4 py-2 rounded cursor-pointer ${activeTab === "31-50" ? "text-white" : ""
+            }`}
           style={{
             backgroundColor:
               activeTab === "31-50" ? colors.primary : colors.lineBg,
@@ -386,8 +383,8 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           {language === "ar"
             ? "لا توجد منتجات في هذا النطاق."
             : t(
-                "No products available in this discount range."
-              )}
+              "No products available in this discount range."
+            )}
         </p>
       )}
     </div>
@@ -409,26 +406,27 @@ const Offers = () => {
         {language === "ar"
           ? "لا توجد منتجات متاحة حالياً. جرب تغيير الفلاتر أو الصفحة."
           : t(
-              "noProductsTitle",
-              "No products available at the moment. Try adjusting the filters or page."
-            )}
+            "noProductsTitle",
+            "No products available at the moment. Try adjusting the filters or page."
+          )}
       </div>
     );
 
   const highDiscountProducts = offers.filter(
     (product) => product.discount_percentage > 50
   );
-  console.log("High Discount Products:", highDiscountProducts);
-  
+
   const tabProducts = offers.filter(
     (product) =>
       product.discount_percentage >= 1 && product.discount_percentage <= 50
   );
 
   return (
-    <div className="mx-auto max-w-7xl py-12 flex flex-col md:flex-row">
-      <SwiperSection products={highDiscountProducts} />
-      <TabsSection products={tabProducts} productsPerPage={6} />
+    <div className="p-5 bg-gray-100 w-full">
+      <div className="bg-white flex flex-col md:flex-row">
+        <SwiperSection products={highDiscountProducts} />
+        <TabsSection products={tabProducts} productsPerPage={6} />
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import Products from "../../components/Home Components/Products/Products";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import Offers from "../../components/Home Components/Offers/Offers";
 import HomePackages from "../../components/Home Components/Packages/HomePackages";
+import WeaklyOffers from "../../components/Home Components/WeaklyOffers/WeaklyOffers";
 
 const Home = () => {
   const { language } = useLanguage();
@@ -13,8 +14,9 @@ const Home = () => {
       <div dir={language === "ar" ? "rtl" : "ltr"}>
         <HeroSection />
         <Categories />
+        <WeaklyOffers />
         <Products />
-        <Offers perPage={20} />
+        <Offers />
         <HomePackages perPage={5} />
       </div>
     </React.Fragment>

@@ -6,13 +6,24 @@ import useHome from "../../../hooks/HomeComponents/useHome";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../layouts/Loader";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { useTranslation } from "react-i18next";
+import useCartCRUD from "../../../hooks/Cart/UseCart";
+import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
+import { useWishlist } from "../../../context/WishList/WishlistContext";
+import { Heart, ShoppingCart } from "lucide-react";
 
 const HomePackages = () => {
   const { packages, loading, error } = useHome(5);
   const [productsToShow, setProductsToShow] = useState(4);
-    const { t } = useTranslation();
-    const { language } = useLanguage();
+  const { language } = useLanguage();
+
+  const { addToCart } = useCartCRUD();
+  const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
+  const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
+    useWishlist();
+  const [loadingStates, setLoadingStates] = useState({
+    cart: {},
+    wishlist: {},
+  });
 
   const navigate = useNavigate();
 
@@ -38,12 +49,61 @@ const HomePackages = () => {
     autoplaySpeed: 3000,
   };
 
+  const colors = {
+    primary: "#1e70d0",
+    categoryTitle: "#808080",
+    categoryName: "#6b7280",
+    borderLight: "#e5e7eb",
+    lineBg: "#d1d5db",
+  };
+
+  const handleAddToCart = async (productId, quantity) => {
+    setLoadingStates((prev) => ({
+      ...prev,
+      cart: { ...prev.cart, [productId]: true },
+    }));
+    try {
+      await addToCart(productId, quantity);
+    } catch (err) {
+      console.error("Error adding to cart:", err);
+    } finally {
+      setLoadingStates((prev) => ({
+        ...prev,
+        cart: { ...prev.cart, [productId]: false },
+      }));
+    }
+  };
+
+  const handleToggleWishlist = async (productId) => {
+    setLoadingStates((prev) => ({
+      ...prev,
+      wishlist: { ...prev.wishlist, [productId]: true },
+    }));
+
+    try {
+      await toggleWishlist(productId);
+      await fetchWishlistItems();
+      await fetchWishlistCount();
+    } catch (err) {
+      console.error("Error toggling wishlist:", err);
+    } finally {
+      setLoadingStates((prev) => ({
+        ...prev,
+        wishlist: { ...prev.wishlist, [productId]: false },
+      }));
+    }
+  };
+
+  const isProductInWishlist = (productId) => {
+    return wishlistItems.some((item) => item.product.id === productId);
+  };
+
   if (loading) return <Loader />;
   if (error) return <div>Error: {error}</div>;
   if (!packages?.length) return <div>No packages available</div>;
 
   return (
-    <div className="relative w-full py-12">
+    <div className="relative w-full py-16">
       <Slider {...settings}>
         {packages.map((pkg) => (
           <div key={pkg.id} className="">
@@ -71,29 +131,88 @@ const HomePackages = () => {
                   </div>
                 </div>
                 <div className="flex items-end justify-between w-full h-full">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-2/3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
                     {pkg.packageProducts
                       .slice(0, productsToShow)
                       .map((product) => (
                         <div
+                          className="flex flex-col md:flex-row bg-white/90 p-4 items-start justify-between gap-4"
                           key={product.id}
-                          className="bg-white/90 py-4 px-10 flex flex-col sm:flex-row items-center text-center gap-4"
                         >
-                          <img
-                            src={product.product.primary_image_url}
-                            alt={product.product.name}
-                            className="w-32 h-32 object-contain rounded mb-3"
-                            onError={(e) =>
-                              (e.target.src = "/default_product.jpg")
-                            }
-                          />
-                          <div className="flex flex-col items-start gap-2">
-                            <p className="text-sm font-semibold text-gray-800 mb-1">
-                              {product.product.name.slice(0, 20)}...
-                            </p>
-                            <p className="text-md font-bold text-gray-900 mb-2">
-                              {product.product.max_price} {language === "ar" ? "ج.م" : "LE"}
-                            </p>
+                          <div className="flex flex-col sm:flex-row  gap-4">
+                            <img
+                              src={product.product.primary_image_url}
+                              alt={product.product.name}
+                              className="w-28 h-28 object-contain rounded"
+                              onError={(e) =>
+                                (e.target.src = "/default_product.jpg")
+                              }
+                            />
+                            <div className="flex flex-col items-center sm:items-start gap-2">
+                              <p className="text-sm font-semibold text-gray-800">
+                                {product.product.name.slice(0, 20)}...
+                              </p>
+                              <p className="text-md font-bold text-gray-900">
+                                {product.product.max_price}{" "}
+                                {language === "ar" ? "ج.م" : "LE"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex flex-row md:flex-col items-center gap-3">
+                            {/* Wishlist Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleWishlist(product.id);
+                              }}
+                              disabled={loadingStates.wishlist[product.id]}
+                              className={`z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                                ${
+                                  loadingStates.wishlist[product.id]
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : isProductInWishlist(product.id)
+                                    ? "bg-red-100 hover:bg-red-200"
+                                    : "hover:bg-blue-100"
+                                }`}
+                              style={{ borderColor: colors.borderLight }}
+                            >
+                              <Heart
+                                size={22}
+                                className={`transition ${
+                                  loadingStates.wishlist[product.id]
+                                    ? "text-gray-400"
+                                    : isProductInWishlist(product.id)
+                                    ? "text-red-500"
+                                    : "text-gray-500"
+                                }`}
+                                fill={
+                                  isProductInWishlist(product.id)
+                                    ? "red"
+                                    : "none"
+                                }
+                              />
+                            </button>
+
+                            {/* Cart Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAddToCart(product.id, 1);
+                              }}
+                              disabled={loadingStates.cart[product.id]}
+                              className={`z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                                ${
+                                  loadingStates.cart[product.id]
+                                    ? "opacity-50 cursor-not-allowed"
+                                    : "hover:bg-blue-100"
+                                }`}
+                              style={{ borderColor: colors.borderLight }}
+                            >
+                              <ShoppingCart
+                                size={22}
+                                className="text-gray-500"
+                              />
+                            </button>
                           </div>
                         </div>
                       ))}
