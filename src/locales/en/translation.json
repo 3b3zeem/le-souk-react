@@ -342,5 +342,22 @@
   "deal_of_the_week": "Deal Of The Week",
   "limited_time_offer": "Limited time offer.",
   "the_deal_will_expire": "The deal will expire on",
-  "hurry_up": "HURRY UP!"
+  "hurry_up": "HURRY UP!",
+  "Package Details": "Package Details",
+  "Status": "Status",
+  "Type": "Discount Type",
+  "Discount": "Discount",
+  "Original Price": "Original Price",
+  "Discounted Price": "Discounted Price",
+  "Savings": "Savings",
+  "Usage Limit": "Usage Limit",
+  "Usage Count": "Usage Count",
+  "User Usage Limit": "User Usage Limit",
+  "Starts At": "Start Date",
+  "Expires At": "Expiry Date",
+  "Explore_Packages": "Explore Packages",
+  "noPackagesTitle": "No Packages Found",
+  "noPackagesSubtitle": "There are currently no packages available.",
+  "Previous": "Previous",
+  "Next": "Next"
 }

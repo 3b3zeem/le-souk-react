@@ -11,6 +11,7 @@ import AddPackageForm from "./AddPackageForm";
 const AdminPackages = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const [page, setPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     packages,
@@ -23,7 +24,7 @@ const AdminPackages = () => {
     totalCount,
     currentPage,
     search,
-  } = useAdminPackages();
+  } = useAdminPackages(page);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   const updateSearchParams = (newParams) => {
@@ -43,6 +44,7 @@ const AdminPackages = () => {
 
   const handlePageChange = (newPage) => {
     updateSearchParams({ page: newPage });
+    setPage(newPage);
   };
 
   const handleAddPackage = async (formData) => {

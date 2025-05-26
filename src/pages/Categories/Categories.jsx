@@ -17,7 +17,7 @@ const Categories = () => {
     <div className="container mx-auto py-6">
       <h2 className="text-4xl font-bold text-gray-900 text-center mb-12 relative">
         {t("Explore_Categories")}
-        <span class="block w-16 h-1 bg-yellow-400 rounded-full mx-auto mt-2"></span>
+        <span class="block w-16 h-1 bg-[#1e70d0] rounded-full mx-auto mt-2"></span>
       </h2>
       {categories.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">

@@ -344,5 +344,22 @@
   "deal_of_the_week": "عرض الأسبوع",
   "limited_time_offer": "عرض لفترة محدودة.",
   "the_deal_will_expire": "العرض ينتهي في",
-  "hurry_up": "سارع الآن!"
+  "hurry_up": "سارع الآن!",
+  "Package Details": "تفاصيل الباقة",
+  "Status": "الحالة",
+  "Type": "نوع الخصم",
+  "Discount": "الخصم",
+  "Original Price": "السعر الأصلي",
+  "Discounted Price": "السعر بعد الخصم",
+  "Savings": "التوفير",
+  "Usage Limit": "حد الاستخدام",
+  "Usage Count": "عدد مرات الاستخدام",
+  "User Usage Limit": "حد استخدام المستخدم",
+  "Starts At": "تاريخ البداية",
+  "Expires At": "تاريخ الانتهاء",
+  "Explore_Packages": "استكشف الباقات",
+  "noPackagesTitle": "لا توجد باقات",
+  "noPackagesSubtitle": "لا توجد باقات متاحة حالياً.",
+  "Previous": "السابق",
+  "Next": "التالي"
 }

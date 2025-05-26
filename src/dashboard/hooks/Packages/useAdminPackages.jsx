@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import toast from "react-hot-toast";
 
-const useAdminPackages = () => {
+const useAdminPackages = (page, packageId) => {
   const [searchParams] = useSearchParams();
   const { token } = useAuthContext();
   const { language } = useLanguage();
@@ -15,8 +15,15 @@ const useAdminPackages = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [meta, setMeta] = useState({
+    links: [],
+    current_page: page,
+    last_page: 1,
+    total: 0,
+  });
   const [search, setSearch] = useState("");
+  const [details, setDetails] = useState(null);
 
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
@@ -52,12 +59,11 @@ const useAdminPackages = () => {
     }
   };
 
-  const fetchPackages = async () => {
+  const fetchPackages = async (pageNum) => {
     setLoading(true);
     setError(null);
 
     try {
-      const page = searchParams.get("page") || "1";
       const perPage = searchParams.get("per_page") || "10";
       const sortBy = searchParams.get("sort_by") || "id";
       const sortDirection = searchParams.get("sort_direction") || "asc";
@@ -72,7 +78,7 @@ const useAdminPackages = () => {
         {
           params: {
             per_page: perPage,
-            page: page,
+            page: pageNum,
             sort_by: sortBy,
             sort_direction: sortDirection,
             search: searchQuery,
@@ -87,14 +93,49 @@ const useAdminPackages = () => {
       setPackages(response.data.data || []);
       setTotalPages(response.data.meta.last_page || 1);
       setTotalCount(response.data.meta.total || 0);
-      setCurrentPage(parseInt(page));
+      setCurrentPage(pageNum);
       setSearch(searchQuery);
+      setMeta({
+        links: response.data.meta?.links || [],
+        current_page: response.data.meta?.current_page || 1,
+        last_page: response.data.meta?.last_page || 1,
+        total: response.data.meta?.total || 0,
+      });
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch packages");
     } finally {
       setLoading(false);
     }
   };
+
+  const packageDetails = async (packageId) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.get(
+        `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDetails(res.data.data);
+      return res.data.data;
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to fetch package details"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+    fetchPackages(page);
+  }, [language, searchParams, page]);
 
   const addPackage = async (formData) => {
     setLoading(true);
@@ -146,14 +187,11 @@ const useAdminPackages = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts();
-    fetchPackages();
-  }, [searchParams]);
-
   return {
     packages,
     fetchProducts,
+    packageDetails,
+    details,
     products,
     addPackage,
     deletePackage,
@@ -163,6 +201,7 @@ const useAdminPackages = () => {
     totalCount,
     currentPage,
     search,
+    meta,
   };
 };
 
