@@ -3,18 +3,20 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useHome from "../../../hooks/HomeComponents/useHome";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../../layouts/Loader";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
 import { Heart, ShoppingCart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const HomePackages = () => {
   const { packages, loading, error } = useHome(5);
   const [productsToShow, setProductsToShow] = useState(4);
   const { language } = useLanguage();
+  const { t } = useTranslation();
 
   const { addToCart } = useCartCRUD();
   const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
@@ -103,10 +105,28 @@ const HomePackages = () => {
   if (!packages?.length) return <div>No packages available</div>;
 
   return (
-    <div className="relative w-full py-16">
+    <div
+      className="relative w-full py-16"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      <div className="flex items-center justify-between mb-6 px-4">
+        <h2
+          className="text-2xl sm:text-3xl font-normal uppercase"
+          style={{ color: colors.categoryTitle }}
+        >
+          {t("packages")}
+        </h2>
+        <Link
+          to={"/packages"}
+          className="px-6 py-2 border rounded text-md font-medium bg-[#1e70d0] transition duration-200 customEffect"
+          style={{ borderColor: colors.primary, color: colors.primary }}
+        >
+          <span>{t("All_Packages")}</span>
+        </Link>
+      </div>
       <Slider {...settings}>
         {packages.map((pkg) => (
-          <div key={pkg.id} className="">
+          <div key={pkg.id} dir={language === "ar" ? "rtl" : "ltr"}>
             <div
               className="relative overflow-hidden flex flex-col items-center justify-end bg-white h-[85vh]"
               style={{
@@ -130,7 +150,14 @@ const HomePackages = () => {
                     </button>
                   </div>
                 </div>
-                <div className="flex items-end justify-between w-full h-full">
+                <div
+                  className={`flex flex-col justify-end gap-4 w-full h-full ${
+                    language === "ar" ? "items-start" : "items-end"
+                  }`}
+                >
+                  <h2 className="text-2xl sm:text-3xl font-normal uppercase text-gray-50">
+                    {t("package_products")}
+                  </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 ">
                     {pkg.packageProducts
                       .slice(0, productsToShow)

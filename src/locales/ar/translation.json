@@ -361,5 +361,7 @@
   "noPackagesTitle": "لا توجد باقات",
   "noPackagesSubtitle": "لا توجد باقات متاحة حالياً.",
   "Previous": "السابق",
-  "Next": "التالي"
+  "Next": "التالي",
+  "All_Packages": "كل الباقات",
+  "package_products": "منتجات الباقة:"
 }

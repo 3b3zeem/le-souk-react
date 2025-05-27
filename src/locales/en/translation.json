@@ -359,5 +359,7 @@
   "noPackagesTitle": "No Packages Found",
   "noPackagesSubtitle": "There are currently no packages available.",
   "Previous": "Previous",
-  "Next": "Next"
+  "Next": "Next",
+  "All_Packages": "All Packages",
+  "package_products": "Package's Products:"
 }
