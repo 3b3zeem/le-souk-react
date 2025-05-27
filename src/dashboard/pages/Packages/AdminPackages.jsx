@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import useAdminPackages from "../../hooks/Packages/useAdminPackages";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { Edit, Layers, Search, Trash2 } from "lucide-react";
+import { Edit, Trash2, MoreVertical, Plus, Search, Layers } from "lucide-react";
 import Loader from "../../../layouts/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 import AddPackageForm from "./AddPackageForm";
+import ManageProductForm from "./ManageProductForm";
+import DropdownActions from "./DropdownActions";
 
 const AdminPackages = () => {
   const { t } = useTranslation();
@@ -16,7 +18,11 @@ const AdminPackages = () => {
   const {
     packages,
     products,
-    addPackage,
+    packageDetails,
+    addOrUpdatePackage,
+    addProductToPackage,
+    updatePackageProductQuantity,
+    removeProductFromPackage,
     deletePackage,
     loading,
     error,
@@ -26,6 +32,9 @@ const AdminPackages = () => {
     search,
   } = useAdminPackages(page);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const navigate = useNavigate()
 
   const updateSearchParams = (newParams) => {
     const params = {};
@@ -47,10 +56,35 @@ const AdminPackages = () => {
     setPage(newPage);
   };
 
-  const handleAddPackage = async (formData) => {
-    const success = await addPackage(formData);
+  const handleAddOrUpdatePackage = async (formData, packageId) => {
+    const success = await addOrUpdatePackage(formData, packageId);
     if (success) {
       setIsOverlayOpen(false);
+      setSelectedPackage(null);
+    }
+  };
+
+  const handleOpenAdd = () => {
+    setSelectedPackage(null);
+    setIsOverlayOpen(true);
+  };
+
+  const handleOpenEdit = (packageId) => {
+    const packageToEdit = packages.find((pkg) => pkg.id === packageId);
+    setSelectedPackage(packageToEdit);
+    setIsOverlayOpen(true);
+  };
+
+  const handleAddProduct = (packageId) => {
+    const pkg = packages.find((p) => p.id === packageId);
+    setSelectedPackage(pkg);
+    setShowAddProductForm(true);
+  };
+
+  const handleAddProductSubmit = async (productsData) => {
+    for (const product of productsData) {
+      const success = await addProductToPackage(selectedPackage.id, product);
+      if (!success) break;
     }
   };
 
@@ -93,7 +127,7 @@ const AdminPackages = () => {
           </div>
 
           <div
-            onClick={() => setIsOverlayOpen(true)}
+            onClick={handleOpenAdd}
             className="flex flex-col sm:flex-row gap-3 w-auto"
           >
             <button className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm">
@@ -102,7 +136,7 @@ const AdminPackages = () => {
           </div>
         </div>
 
-        {/* Add Package */}
+        {/* Add & Edit Package */}
         <AnimatePresence>
           {isOverlayOpen && (
             <motion.div
@@ -123,9 +157,50 @@ const AdminPackages = () => {
                 style={{ maxHeight: "90vh" }}
               >
                 <AddPackageForm
+                  packageData={selectedPackage}
                   onClose={() => setIsOverlayOpen(false)}
-                  onSubmit={handleAddPackage}
+                  onSubmit={handleAddOrUpdatePackage}
                   products={products}
+                  loading={loading}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Add Package Product */}
+        <AnimatePresence>
+          {showAddProductForm && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/60 flex items-center justify-center z-500 overflow-y-auto"
+              onClick={() => setShowAddProductForm(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 40 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 40 }}
+                transition={{ duration: 0.3 }}
+                className="relative bg-white w-full max-w-7xl p-8 overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+                style={{ maxHeight: "95vh" }}
+              >
+                <ManageProductForm
+                  packageId={selectedPackage?.id}
+                  products={products}
+                  details={selectedPackage}
+                  onSubmit={handleAddProductSubmit}
+                  removeProductFromPackage={removeProductFromPackage}
+                  updatePackageProductQuantity={updatePackageProductQuantity}
+                  packageDetails={packageDetails}
+                  loading={loading}
+                  onClose={() => {
+                    setShowAddProductForm(false);
+                    setSelectedPackage(null);
+                  }}
                 />
               </motion.div>
             </motion.div>
@@ -175,6 +250,9 @@ const AdminPackages = () => {
                     {t("discounted_price")}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+                    {t("products")}
+                  </th>
+                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
                     {t("duration")}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
@@ -189,7 +267,7 @@ const AdminPackages = () => {
                       <img
                         src={pkg.image_url}
                         alt={pkg.name}
-                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-200"
+                        className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border border-gray-200 cursor-pointer"
                         onError={(e) => (e.target.src = "/default_package.jpg")}
                       />
                     </td>
@@ -218,6 +296,9 @@ const AdminPackages = () => {
                       {Number(pkg.discounted_price).toLocaleString()}{" "}
                       {language === "ar" ? "ج.م" : "LE"}
                     </td>
+                    <td className="p-3 text-xs sm:text-sm text-center text-green-700 font-bold">
+                      {pkg.packageProducts.length || 0} {t("products")}
+                    </td>
                     <td className="p-3 text-xs sm:text-sm text-center text-gray-700">
                       {pkg.starts_at && pkg.expires_at
                         ? `${new Date(
@@ -227,28 +308,16 @@ const AdminPackages = () => {
                           ).toLocaleDateString()}`
                         : t("not_determined", "not determined")}
                     </td>
-                    <td className="p-3">
-                      <div className="flex justify-center items-center gap-2 flex-wrap">
-                        <button
-                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
-                          title={t("edit")}
-                        >
-                          <Edit size={14} />
-                          <span className="hidden sm:inline font-medium">
-                            {t("edit")}
-                          </span>
-                        </button>
-                        <button
-                          onClick={() => handleDeletePackage(pkg.id)}
-                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
-                          title={t("delete")}
-                        >
-                          <Trash2 size={14} />
-                          <span className="hidden sm:inline font-medium">
-                            {t("delete")}
-                          </span>
-                        </button>
-                      </div>
+                    <td className="p-3 text-center">
+                      <DropdownActions
+                        pkg={pkg}
+                        t={t}
+                        loading={loading}
+                        onView={() => navigate(`/packages/${pkg.id}`)}
+                        handleOpenEdit={handleOpenEdit}
+                        handleAddProduct={handleAddProduct}
+                        handleDeletePackage={handleDeletePackage}
+                      />
                     </td>
                   </tr>
                 ))}

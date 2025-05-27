@@ -361,5 +361,15 @@
   "Previous": "Previous",
   "Next": "Next",
   "All_Packages": "All Packages",
-  "package_products": "Package's Products:"
+  "package_products": "Package's Products:",
+  "addingPackage": "Adding...",
+  "editingPackage": "Updating...",
+  "duration": "duration",
+  "addProductsTitle": "Add Products to Package #{{id}}, remove products or update quantity",
+  "selectProduct": "Select Product",
+  "selectAProduct": "Select a product",
+  "noProductsSelected": "No products selected",
+  "saveProducts": "Save Products",
+  "product_image": "Product Image",
+  "edit_package_details": "Take Control of Your Package"
 }

@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { X, Plus, Minus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { DotSpinner } from "ldrs/react";
+import "ldrs/react/DotSpinner.css";
 
-const AddPackageForm = ({ products, onClose, onSubmit }) => {
+const AddPackageForm = ({
+  packageData,
+  onClose,
+  onSubmit,
+  products,
+  loading,
+}) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const isEditMode = !!packageData;
   const [activeTab, setActiveTab] = useState("basic-info");
   const [formData, setFormData] = useState({
     status: "active",
@@ -25,6 +34,39 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
     ar_short_description: "",
     selectedProducts: [],
   });
+
+  useEffect(() => {
+    if (packageData) {
+      const arTranslation = packageData.translations.find(
+        (translation) => translation.locale === "ar"
+      );
+      const enTranslation = packageData.translations.find(
+        (translation) => translation.locale === "en"
+      );
+
+      setFormData({
+        status: packageData.status || "active",
+        type: packageData.type || "percentage",
+        value: packageData.value || "",
+        image: null,
+        usage_limit: packageData.usage_limit || "",
+        user_usage_limit: packageData.user_usage_limit || "",
+        starts_at: packageData.starts_at
+          ? packageData.starts_at.split("T")[0]
+          : "",
+        expires_at: packageData.expires_at
+          ? packageData.expires_at.replace("Z", "")
+          : "",
+        en_name: enTranslation?.name || "",
+        en_description: enTranslation?.description || "",
+        en_short_description: enTranslation?.short_description || "",
+        ar_name: arTranslation?.name || "",
+        ar_description: arTranslation?.description || "",
+        ar_short_description: arTranslation?.short_description || "",
+        selectedProducts: [],
+      });
+    }
+  }, [packageData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -110,15 +152,20 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
       formData.ar_short_description || ""
     );
 
-    formData.selectedProducts.forEach((product, index) => {
-      formDataToSubmit.append(
-        `products[${index}][product_id]`,
-        product.product_id
-      );
-      formDataToSubmit.append(`products[${index}][quantity]`, product.quantity);
-    });
+    if (!isEditMode) {
+      formData.selectedProducts.forEach((product, index) => {
+        formDataToSubmit.append(
+          `products[${index}][product_id]`,
+          product.product_id
+        );
+        formDataToSubmit.append(
+          `products[${index}][quantity]`,
+          product.quantity
+        );
+      });
+    }
 
-    onSubmit(formDataToSubmit);
+    onSubmit(formDataToSubmit, isEditMode ? packageData.id : null);
   };
 
   return (
@@ -137,33 +184,47 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-t-xl px-8 py-6 text-center">
         <h2 className="text-2xl font-bold text-white mb-1">
-          {t("add_package")}
+          {t(isEditMode ? "edit_package" : "add_package")}
         </h2>
-        <p className="text-blue-100 text-sm">{t("fill_package_details")}</p>
+        <p className="text-blue-100 text-sm">
+          {t(isEditMode ? "edit_package_details" : "fill_package_details")}
+        </p>
       </div>
 
       {/* Tabs */}
       <div className="flex border-b border-gray-200 bg-gray-50 px-8 pt-4">
-        <button
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 cursor-pointer ${
-            activeTab === "basic-info"
-              ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
-              : "text-gray-500 hover:text-blue-600"
-          }`}
-          onClick={() => setActiveTab("basic-info")}
-        >
-          {t("basic_info")}
-        </button>
-        <button
-          className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 ml-2 cursor-pointer ${
-            activeTab === "products"
-              ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
-              : "text-gray-500 hover:text-blue-600"
-          }`}
-          onClick={() => setActiveTab("products")}
-        >
-          {t("products")}
-        </button>
+        {!isEditMode && (
+          <>
+            <button
+              className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 cursor-pointer ${
+                activeTab === "basic-info"
+                  ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
+                  : "text-gray-500 hover:text-blue-600"
+              }`}
+              onClick={() => setActiveTab("basic-info")}
+            >
+              {t("basic_info")}
+            </button>
+            <button
+              className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 ml-2 cursor-pointer ${
+                activeTab === "products"
+                  ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
+                  : "text-gray-500 hover:text-blue-600"
+              }`}
+              onClick={() => setActiveTab("products")}
+            >
+              {t("products")}
+            </button>
+          </>
+        )}
+        {isEditMode && (
+          <button
+            className="px-4 py-2 text-sm font-semibold rounded-t-lg bg-white border-b-2 border-blue-600 text-blue-600 shadow"
+            onClick={() => setActiveTab("basic-info")}
+          >
+            {t("basic_info")}
+          </button>
+        )}
       </div>
 
       {/* Form */}
@@ -190,6 +251,15 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
                     <img
                       src={URL.createObjectURL(formData.image)}
                       alt="preview"
+                      className="w-32 h-auto rounded mt-2"
+                    />
+                  </span>
+                )}
+                {!formData.image && packageData?.image_url && (
+                  <span className="text-xs text-gray-600 border border-gray-200 rounded p-2">
+                    <img
+                      src={packageData.image_url}
+                      alt="current"
                       className="w-32 h-auto rounded mt-2"
                     />
                   </span>
@@ -276,7 +346,7 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
                 {t("starts_at")}
               </label>
               <input
-                type="date"
+                type="datetime-local"
                 name="starts_at"
                 value={formData.starts_at}
                 onChange={handleInputChange}
@@ -380,7 +450,7 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
           </>
         )}
 
-        {activeTab === "products" && (
+        {activeTab === "products" && !isEditMode && (
           <div className="col-span-1 sm:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               {t("select_product")}
@@ -478,7 +548,7 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
         )}
 
         {/* Actions */}
-        <div className="col-span-1 sm:col-span-2 flex justify-end gap-3 pt-6 border-t mt-8">
+        <div className={`col-span-1 sm:col-span-2 flex ${language === 'ar' ? 'justify-start' : 'justify-end'}  gap-3 pt-6 border-t mt-8`}>
           <button
             type="button"
             onClick={onClose}
@@ -488,9 +558,14 @@ const AddPackageForm = ({ products, onClose, onSubmit }) => {
           </button>
           <button
             type="submit"
-            className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
+            className="p-2 bg-blue-600 hover:bg-blue-500 transition-all duration-200 text-white py-2 rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            disabled={loading}
           >
-            {t("add")}
+            {loading ? (
+              <DotSpinner size="20" speed="0.9" color="white" />
+            ) : (
+              <>{isEditMode ? t("edit_package") : t("add_package")}</>
+            )}
           </button>
         </div>
       </form>

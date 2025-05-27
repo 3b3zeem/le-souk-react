@@ -98,7 +98,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
                   <option value="">{t("select_variant")}</option>
                   {product?.variants?.map((variant) => (
                     <option key={variant.id} value={variant.id}>
-                      {variant.color} (ID: {variant.id})
+                      {variant.color} - {variant.size} (ID: {variant.id})
                     </option>
                   ))}
                 </select>

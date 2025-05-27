@@ -21,6 +21,7 @@ import SetPrimaryImageForm from "./SetPrimaryImageForm";
 import Swal from "sweetalert2";
 import AddDiscount from "./addDiscount";
 import AssignImagesModal from "./AssignImagesModal";
+import ProductDropdownActions from "./ProductDropdownActions";
 ring.register();
 
 const AdminProducts = () => {
@@ -347,12 +348,6 @@ const AdminProducts = () => {
                     {t("discount_percentage")}
                   </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
-                    {t("assign_images_to_variant")}
-                  </th>
-                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
-                    {t("discount")}
-                  </th>
-                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("actions")}
                   </th>
                 </tr>
@@ -370,14 +365,8 @@ const AdminProducts = () => {
                       <img
                         src={product.primary_image_url}
                         alt={product.name}
-                        onClick={() => {
-                          setSelectedProductId(product.id);
-                          setIsPrimaryOverlayOpen(true);
-                        }}
                         className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg object-cover border border-gray-200 cursor-pointer"
-                        onError={(e) =>
-                          (e.target.src = "/default_product.jpg")
-                        }
+                        onError={(e) => (e.target.src = "/default_product.jpg")}
                       />
                     </td>
                     <td
@@ -420,64 +409,28 @@ const AdminProducts = () => {
                       }`}
                       data-label={t("stock")}
                     >
-                      {product.discount_value ? product.discount_value + "%" : t("no_discount")}
-                    </td>
-                    <td>
-                      <button
-                        className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
-                        onClick={() => openModal(product)}
-                      >
-                        <Check size={14} />
-                        <span className="sm:inline hidden font-medium">
-                          {t("select_images")}
-                        </span>
-                      </button>
-                    </td>
-                    <td>
-                      <button
-                        className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
-                        onClick={() => handleAddDiscount(product.id)}
-                      >
-                        <Plus size={14} />
-                        <span className="sm:inline hidden font-medium">
-                          {t("add_discount")}
-                        </span>
-                      </button>
+                      {product.discount_value
+                        ? product.discount_value + "%"
+                        : t("no_discount")}
                     </td>
                     <td className="p-2 sm:p-3" data-label={t("actions")}>
                       <div className="flex justify-center items-center gap-2 flex-wrap">
-                        <button
-                          onClick={() => navigate(`/products/${product.id}`)}
-                          className="flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs"
-                          title={t("view")}
-                        >
-                          <Eye size={14} />
-                          <span className="sm:inline hidden font-medium">
-                            {t("view")}
-                          </span>
-                        </button>
-                        <button
-                          onClick={() => handleEdit(product.id)}
-                          className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs"
-                          title={t("edit")}
-                        >
-                          <SquarePen size={14} />
-                          <span className="sm:inline hidden font-medium">
-                            {t("edit")}
-                          </span>
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleDelete(() => deleteProduct(product.id), t)
+                        <ProductDropdownActions
+                          product={product}
+                          t={t}
+                          loading={loading}
+                          onView={() => navigate(`/products/${product.id}`)}
+                          onEdit={handleEdit}
+                          onDelete={(id) =>
+                            handleDelete(() => deleteProduct(id), t)
                           }
-                          className="flex items-center gap-1 px-2 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-all duration-200 cursor-pointer text-xs"
-                          title={t("delete")}
-                        >
-                          <Trash2 size={14} />
-                          <span className="sm:inline hidden font-medium">
-                            {t("delete")}
-                          </span>
-                        </button>
+                          onAddDiscount={handleAddDiscount}
+                          onAssignImages={openModal}
+                          onSetPrimaryImage={(id) => {
+                            setSelectedProductId(id);
+                            setIsPrimaryOverlayOpen(true);
+                          }}
+                        />
                       </div>
                     </td>
                   </tr>

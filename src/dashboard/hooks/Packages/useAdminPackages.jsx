@@ -78,7 +78,7 @@ const useAdminPackages = (page, packageId) => {
         {
           params: {
             per_page: perPage,
-            page: pageNum,
+            page: pageNum || currentPage,
             sort_by: sortBy,
             sort_direction: sortDirection,
             search: searchQuery,
@@ -137,21 +137,33 @@ const useAdminPackages = (page, packageId) => {
     fetchPackages(page);
   }, [language, searchParams, page]);
 
-  const addPackage = async (formData) => {
+  const addOrUpdatePackage = async (formData, packageId) => {
     setLoading(true);
     try {
-      await axios.post(
-        `https://le-souk.dinamo-app.com/api/admin/packages`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const url = packageId
+        ? `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}`
+        : `https://le-souk.dinamo-app.com/api/admin/packages`;
+
+      if (packageId) {
+        formData.append("_method", "PUT");
+      }
+
+      await axios.post(url, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      toast.success(
+        packageId
+          ? "Package updated successfully"
+          : "Package added successfully"
       );
-      toast.success("Package added successfully");
-      await fetchPackages();
+      await fetchPackages(currentPage);
+      if (packageId) {
+        await packageDetails(packageId);
+      }
       return true;
     } catch (err) {
       console.log(err.response);
@@ -159,8 +171,87 @@ const useAdminPackages = (page, packageId) => {
         console.log("Validation errors:", err.response.data.errors);
         toast.error(Object.values(err.response.data.errors).flat().join(" - "));
       } else {
-        toast.error(err.response?.data?.message || "Failed to add package");
+        toast.error(
+          err.response?.data?.message || "Failed to add/update package"
+        );
       }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addProductToPackage = async (packageId, productData) => {
+    setLoading(true);
+    try {
+      const url = `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}/products`;
+
+      await axios.post(url, productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      toast.success("Product added to package successfully");
+      await fetchPackages();
+      return true;
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Failed to add product to package"
+      );
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updatePackageProductQuantity = async (
+    packageId,
+    packageProductId,
+    quantity
+  ) => {
+    setLoading(true);
+    try {
+      await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}/products/${packageProductId}`,
+        { quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success("Quantity updated successfully");
+      await fetchPackages();
+      return true;
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update quantity");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeProductFromPackage = async (packageId, productId) => {
+    setLoading(true);
+    try {
+      await axios.delete(
+        `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}/products/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Product removed from package successfully");
+      await fetchPackages();
+      return true;
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Failed to remove product from package"
+      );
       return false;
     } finally {
       setLoading(false);
@@ -177,7 +268,7 @@ const useAdminPackages = (page, packageId) => {
         }
       );
       toast.success(res.data.message || "Package deleted successfully");
-      await fetchPackages();
+      await fetchPackages(currentPage);
       return true;
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to delete package");
@@ -193,7 +284,10 @@ const useAdminPackages = (page, packageId) => {
     packageDetails,
     details,
     products,
-    addPackage,
+    addOrUpdatePackage,
+    addProductToPackage,
+    updatePackageProductQuantity,
+    removeProductFromPackage,
     deletePackage,
     loading,
     error,

@@ -363,5 +363,15 @@
   "Previous": "السابق",
   "Next": "التالي",
   "All_Packages": "كل الباقات",
-  "package_products": "منتجات الباقة:"
+  "package_products": "منتجات الباقة:",
+  "addingPackage": "جاري الإضافة...",
+  "editingPackage": "جاري التعديل...",
+  "duration":"المدة",
+  "edit_package_details": "تحكّم في تفاصيل باقتك",
+  "addProductsTitle": "إضافة منتجات إلى الباقة رقم #{{id}}, إزالة المنتجات او تعديل الكمية",
+  "selectProduct": "اختر المنتج",
+  "selectAProduct": "اختر منتجًا",
+  "noProductsSelected": "لم يتم اختيار منتجات",
+  "saveProducts": "حفظ المنتجات",
+  "product_image": "صورة المنتج"
 }
