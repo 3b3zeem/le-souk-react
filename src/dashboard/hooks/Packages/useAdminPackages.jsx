@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import toast from "react-hot-toast";
 
-const useAdminPackages = (page, packageId) => {
+const useAdminPackages = (page, product_id) => {
   const [searchParams] = useSearchParams();
   const { token } = useAuthContext();
   const { language } = useLanguage();
@@ -73,17 +73,24 @@ const useAdminPackages = (page, packageId) => {
         throw new Error("No token found. Please log in.");
       }
 
+      const params = {
+        per_page: perPage,
+        page: pageNum || currentPage,
+        sort_by: sortBy,
+        sort_direction: sortDirection,
+        search: searchQuery,
+        with: "packageProducts.product,usages",
+      };
+
+      if (product_id) {
+        params.product_id = product_id;
+        params.pagination = 0;
+      }
+
       const response = await axios.get(
         `https://le-souk.dinamo-app.com/api/admin/packages`,
         {
-          params: {
-            per_page: perPage,
-            page: pageNum || currentPage,
-            sort_by: sortBy,
-            sort_direction: sortDirection,
-            search: searchQuery,
-            with: "packageProducts.product,usages",
-          },
+          params,
           headers: {
             Authorization: `Bearer ${token}`,
           },

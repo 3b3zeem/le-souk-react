@@ -14,7 +14,7 @@ const useProducts = (
   sortBy = "id",
   sortDirection = "desc",
   inStock = null,
-  productId
+  productId,
 ) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,6 +68,8 @@ const useProducts = (
         params.append("sort_by", sortBy);
         params.append("sort_direction", sortDirection);
 
+        if(productId) params.append("pagination", 0);
+
         // * Filters
         if (searchQuery) params.append("search", searchQuery);
         if (categoryId) params.append("category_id", categoryId);
@@ -119,6 +121,7 @@ const useProducts = (
     sortBy,
     sortDirection,
     inStock,
+    productId,
   ]);
 
   const fetchProductDetails = async (id) => {

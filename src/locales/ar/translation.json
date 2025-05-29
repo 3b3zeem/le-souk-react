@@ -373,5 +373,6 @@
   "selectAProduct": "اختر منتجًا",
   "noProductsSelected": "لم يتم اختيار منتجات",
   "saveProducts": "حفظ المنتجات",
-  "product_image": "صورة المنتج"
+  "product_image": "صورة المنتج",
+  "Related_Products": "منتجات ذات صلة"
 }

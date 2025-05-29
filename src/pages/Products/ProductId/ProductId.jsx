@@ -16,6 +16,8 @@ import { useOrder } from "../../../hooks/Order/useOrder";
 import Slider from "react-slick";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
 import { motion } from "framer-motion";
+import PackagesSlider from "./PackagesSlider";
+import RelatedProducts from "./RelatedProducts";
 
 const colors = {
   primary: "#1e70d0",
@@ -306,10 +308,10 @@ const ProductId = () => {
 
   return (
     <div
-      className="max-w-8xl mx-auto py-10 px-4 sm:px-6 md:px-8 lg:px-12"
+      className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="flex flex-col items-start lg:flex-row gap-6">
+      <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
         <div
           className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-center ${
@@ -472,7 +474,8 @@ const ProductId = () => {
           {productDetails &&
             productDetails.sale_starts_at &&
             productDetails.sale_ends_at &&
-            timeLeft && productDetails.min_sale_price && (
+            timeLeft &&
+            productDetails.min_sale_price && (
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex gap-1">
                   <span className="bg-gray-100 text-gray-800 font-bold px-3 py-2 rounded text-lg">
@@ -802,6 +805,13 @@ const ProductId = () => {
           </div>
         </div>
       </div>
+
+      <PackagesSlider product_id={productId} language={language} />
+      <RelatedProducts
+        productId={productId}
+        language={language}
+        category={productDetails.categories}
+      />
       {/* <Reviews
         reviews={productDetails.reviews || []}
         productId={productId}
