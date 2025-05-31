@@ -32,7 +32,7 @@ const ProductCard = ({ product, getTranslatedText }) => {
       <div className="mt-2 text-[#1e70d0] font-semibold">
         {product.min_sale_price &&
             product.min_sale_price !== product.min_price ? (
-              <>
+              <div className="flex gap-2">
                 <span className="line-through text-gray-400 text-base font-normal">
                   {product.min_price} {language === "ar" ? "ج.م" : "LE"}
                 </span>
@@ -45,7 +45,7 @@ const ProductCard = ({ product, getTranslatedText }) => {
                     {t("discount")}-{product.discount_percentage}%
                   </span>
                 )}
-              </>
+              </div>
             ) : (
               <span>
                 {product.min_price} {language === "ar" ? "ج.م" : "LE"}

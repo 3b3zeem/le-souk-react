@@ -5,6 +5,7 @@ import ProductCard from "./ProductCard";
 import Loader from "../../../layouts/Loader";
 import { PackageX } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const CategoryId = () => {
   const { categoryId } = useParams();
@@ -13,6 +14,7 @@ const CategoryId = () => {
     null,
     categoryId
   );
+  const { language } = useLanguage()
   const { t } = useTranslation();
 
   if (loading) return <Loader />;
@@ -21,7 +23,7 @@ const CategoryId = () => {
   if (!category) return <div className="text-center py-4">لا توجد بيانات</div>;
 
   return (
-    <div className="">
+    <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="bg-[#1e70d0] text-white text-center py-20 mb-6">
         <h2 className="text-2xl font-bold">{category.name}</h2>
       </div>
