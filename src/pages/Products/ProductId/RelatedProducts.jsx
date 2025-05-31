@@ -73,7 +73,7 @@ const RelatedProducts = ({ productId, language, category }) => {
 
   if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
-  if (!related.length) null;
+  if (!related.length) return null;
 
   return (
     <div
