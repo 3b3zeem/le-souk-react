@@ -144,7 +144,8 @@ const OfferItem = ({ product }) => {
           </div>
           <div className="text-sm text-gray-700">
             <span className="font-medium">{t("limited_time_offer")}</span>{" "}
-            {t("the_deal_will_expire")} {end.toLocaleDateString(language)}{" "}
+            {t("the_deal_will_expire")}{" "}
+            {end.toLocaleDateString(language, { timeZone: "UTC" })}{" "}
             <span className="font-bold text-red-600">{t("hurry_up")}</span>
           </div>
         </div>
@@ -156,14 +157,15 @@ const OfferItem = ({ product }) => {
 const WeaklyOffers = () => {
   const { offers, loading, error } = useHome();
 
+  const now = new Date();
   const weeklyOffers = offers.filter((product) => {
     if (!product.sale_starts_at || !product.sale_ends_at) return false;
     const start = new Date(product.sale_starts_at);
     const end = new Date(product.sale_ends_at);
     const diffDays = (end - start) / (1000 * 60 * 60 * 24);
-    return diffDays >= 7;
+    return diffDays >= 7 && end > now;
   });
-
+  
   const settings = {
     dots: false,
     infinite: weeklyOffers.length > 1,
