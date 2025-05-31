@@ -47,6 +47,10 @@ const OfferItem = ({ product }) => {
     return () => clearInterval(timer);
   }, [end]);
 
+  const day = end.getUTCDate();
+  const month = end.getUTCMonth() + 1;
+  const year = end.getUTCFullYear();
+
   return (
     <div
       className="flex flex-col lg:flex-row items-center bg-white lg:h-[550px] overflow-hidden"
@@ -144,8 +148,7 @@ const OfferItem = ({ product }) => {
           </div>
           <div className="text-sm text-gray-700">
             <span className="font-medium">{t("limited_time_offer")}</span>{" "}
-            {t("the_deal_will_expire")}{" "}
-            {end.toLocaleDateString(language, { timeZone: "UTC" })}{" "}
+            {t("the_deal_will_expire")} {`${day}/${month}/${year}`}{" "}
             <span className="font-bold text-red-600">{t("hurry_up")}</span>
           </div>
         </div>
@@ -165,7 +168,7 @@ const WeaklyOffers = () => {
     const diffDays = (end - start) / (1000 * 60 * 60 * 24);
     return diffDays >= 7 && end > now;
   });
-  
+
   const settings = {
     dots: false,
     infinite: weeklyOffers.length > 1,
