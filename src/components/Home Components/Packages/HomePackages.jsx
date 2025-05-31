@@ -155,9 +155,7 @@ const HomePackages = () => {
                   </div>
                 </div>
                 <div
-                  className={`flex flex-col justify-end gap-4 w-full h-full ${
-                    language === "ar" ? "items-start" : "items-end"
-                  }`}
+                  className={`flex flex-col justify-end gap-4 w-full h-full items-start`}
                 >
                   <h2 className="text-2xl sm:text-3xl font-normal uppercase text-gray-50">
                     {t("package_products")}
