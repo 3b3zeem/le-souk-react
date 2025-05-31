@@ -30,6 +30,10 @@ const HomePackages = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchWishlist();
+  }, []);
+
+  useEffect(() => {
     const updateProductsToShow = () => {
       if (window.innerWidth < 640) setProductsToShow(1);
       else if (window.innerWidth < 1024) setProductsToShow(2);
@@ -164,7 +168,7 @@ const HomePackages = () => {
                       .map((product) => (
                         <div
                           className="flex flex-col md:flex-row bg-white/90 p-4 items-start justify-between gap-4"
-                          key={product.id}
+                          key={product.product_id}
                         >
                           <div className="flex flex-col sm:flex-row  gap-4">
                             <img
@@ -190,14 +194,14 @@ const HomePackages = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleToggleWishlist(product.id);
+                                handleToggleWishlist(product.product_id);
                               }}
-                              disabled={loadingStates.wishlist[product.id]}
+                              disabled={loadingStates.wishlist[product.product_id]}
                               className={`z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
                                 ${
-                                  loadingStates.wishlist[product.id]
+                                  loadingStates.wishlist[product.product_id]
                                     ? "opacity-50 cursor-not-allowed"
-                                    : isProductInWishlist(product.id)
+                                    : isProductInWishlist(product.product_id)
                                     ? "bg-red-100 hover:bg-red-200"
                                     : "hover:bg-blue-100"
                                 }`}
@@ -206,14 +210,14 @@ const HomePackages = () => {
                               <Heart
                                 size={22}
                                 className={`transition ${
-                                  loadingStates.wishlist[product.id]
+                                  loadingStates.wishlist[product.product_id]
                                     ? "text-gray-400"
-                                    : isProductInWishlist(product.id)
+                                    : isProductInWishlist(product.product_id)
                                     ? "text-red-500"
                                     : "text-gray-500"
                                 }`}
                                 fill={
-                                  isProductInWishlist(product.id)
+                                  isProductInWishlist(product.product_id)
                                     ? "red"
                                     : "none"
                                 }
@@ -224,12 +228,12 @@ const HomePackages = () => {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleAddToCart(product.id, 1);
+                                handleAddToCart(product.product_id, 1);
                               }}
-                              disabled={loadingStates.cart[product.id]}
+                              disabled={loadingStates.cart[product.product_id]}
                               className={`z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
                                 ${
-                                  loadingStates.cart[product.id]
+                                  loadingStates.cart[product.product_id]
                                     ? "opacity-50 cursor-not-allowed"
                                     : "hover:bg-blue-100"
                                 }`}
