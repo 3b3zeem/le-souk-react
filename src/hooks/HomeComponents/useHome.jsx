@@ -1,23 +1,14 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useAuthContext } from "../../context/Auth/AuthContext";
+import { useEffect } from "react";
 
 const useHome = (perPage) => {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [offers, setOffers] = useState([]);
-  const [packages, setPackages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const { language } = useLanguage();
-  const { token } = useAuthContext()
+  const { token } = useAuthContext();
 
   const BaseURL = "https://le-souk.dinamo-app.com/api";
-  const categoriesURL = `${BaseURL}/categories?per_page=4&page=1`;
-  const productsURL = `${BaseURL}/products?per_page=${perPage}&with=images,categories,variants`;
-  const offersURL = `${BaseURL}/products?on_sale=1&pagination=0&with=images`;
-  const packagesURL = `${BaseURL}/admin/packages?per_page=${perPage}&with=packageProducts.product,usages`;
 
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
@@ -30,46 +21,75 @@ const useHome = (perPage) => {
     };
   }, [language]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  // Fetch Categories
+  const categoriesQuery = useQuery({
+    queryKey: ["categories", language],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BaseURL}/categories?per_page=4&page=1`
+      );
+      return response.data.data || [];
+    },
+  });
 
-        // Fetch categories
-        const categoriesResponse = await axios.get(categoriesURL);
-        const categoriesData = categoriesResponse.data.data || [];
-        setCategories(categoriesData);
+  // Fetch Products
+  const productsQuery = useQuery({
+    queryKey: ["products", perPage, language],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BaseURL}/products?per_page=${perPage}&with=images,categories,variants`
+      );
+      return response.data.data || [];
+    },
+  });
 
-        // Fetch products
-        const productsResponse = await axios.get(productsURL);
-        const rawProducts = productsResponse.data.data || [];
-        setProducts(rawProducts);
+  // Fetch Offers
+  const offersQuery = useQuery({
+    queryKey: ["offers", language],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BaseURL}/products?on_sale=1&pagination=0&with=images`
+      );
+      return response.data.data || [];
+    },
+  });
 
-        // Fetch offers
-        const offersResponse = await axios.get(offersURL);
-        const rawOffers = offersResponse.data.data || [];
-        setOffers(rawOffers);
-
-        // Fetch Packages
-        const packagesResponse = await axios.get(packagesURL, {
+  // Fetch Packages (Protected with token)
+  const packagesQuery = useQuery({
+    queryKey: ["packages", perPage, language],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${BaseURL}/admin/packages?per_page=${perPage}&with=packageProducts.product,usages`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-        const rawPackages = packagesResponse.data.data || [];
-        setPackages(rawPackages);
+        }
+      );
+      return response.data.data || [];
+    },
+    enabled: !!token,
+  });
 
-        setLoading(false);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch data");
-        setLoading(false);
-      }
-    };
+  const loading =
+    categoriesQuery.isLoading ||
+    productsQuery.isLoading ||
+    offersQuery.isLoading ||
+    packagesQuery.isLoading;
+  const error =
+    categoriesQuery.error ||
+    productsQuery.error ||
+    offersQuery.error ||
+    packagesQuery.error;
 
-    fetchData();
-  }, [language, perPage]);
-
-  return { categories, products, offers, packages, loading, error };
+  return {
+    categories: categoriesQuery.data || [],
+    products: productsQuery.data || [],
+    offers: offersQuery.data || [],
+    packages: packagesQuery.data || [],
+    loading,
+    error,
+  };
 };
 
 export default useHome;

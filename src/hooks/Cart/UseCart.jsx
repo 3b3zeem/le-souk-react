@@ -4,15 +4,15 @@ import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useCart } from "../../context/Cart/CartContext";
 import toast from "react-hot-toast";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
 
 const useCartCRUD = () => {
-  const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const { addItemToCart, removeItemFromCart } = useCart();
-  const [subtotal, setSubtotal] = useState(0);
   const [finalTotal, setFinalTotal] = useState(0);
+
+  const { addItemToCart, removeItemFromCart } = useCart();
   const { token } = useAuthContext();
   const { language } = useLanguage();
 
@@ -27,37 +27,48 @@ const useCartCRUD = () => {
     };
   }, [language]);
 
-  const fetchCart = async () => {
-    setLoading(true);
-    setError(null);
+  const fetchCartData = async (token, language) => {
+    if (!token) return { items: [], subtotal: 0 };
 
-    try {
-      if (!token) {
-        setCartItems([]);
-        return;
+    const response = await axios.get(
+      "https://le-souk.dinamo-app.com/api/cart",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Accept-Language": language,
+        },
       }
+    );
 
-      const response = await axios.get(
-        "https://le-souk.dinamo-app.com/api/cart",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setCartItems(response.data.data.items);
-      setSubtotal(response.data.data.subtotal);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch cart data");
-      setCartItems([]);
-    } finally {
-      setLoading(false);
-    }
+    return {
+      items: response.data.data.items,
+      subtotal: response.data.data.subtotal,
+    };
   };
+  const {
+    data: cartData = { items: [], subtotal: 0 },
+    refetch: fetchCart,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["cart", token, language],
+    queryFn: () => fetchCartData(token, language),
+    enabled: !!token,
+  });
 
   useEffect(() => {
-    fetchCart();
-  }, [language, token]);
+    if (isError) {
+      setError(
+        queryError?.response?.data?.message || "Failed to fetch cart data"
+      );
+    } else {
+      setError(null);
+    }
+  }, [isError, queryError]);
+
+  const cartItems = cartData.items;
+  const subtotal = cartData.subtotal;
 
   const addToCart = async (productId, quantity, productVariantId) => {
     setLoading(true);
@@ -242,7 +253,7 @@ const useCartCRUD = () => {
     validateCoupon,
     finalTotal,
     subtotal,
-    loading,
+    loading: loading || isLoading,
     error,
     success,
   };
