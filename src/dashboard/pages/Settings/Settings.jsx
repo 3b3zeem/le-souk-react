@@ -3,9 +3,10 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import useSettings from "../../hooks/Settings/useSettings";
 import { useSearchParams } from "react-router-dom";
-import { Search, SquarePen, Trash2 } from "lucide-react";
+import { Layers, Search, SquarePen, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Loader from "../../../layouts/Loader";
 
 const Settings = () => {
   const { language } = useLanguage();
@@ -75,12 +76,6 @@ const Settings = () => {
         {t("settings.title", "Settings")}
       </h2>
 
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
-          {t("error", "Error:")} {error}
-        </div>
-      )}
-
       <div className="mb-4 flex flex-col sm:flex-row justify-between items-center gap-3">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <input
@@ -125,42 +120,49 @@ const Settings = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto shadow-md rounded-lg">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.name", "Name")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.key", "Key")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.value", "Value")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.group", "Group")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.type", "Type")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.description", "Description")}
-              </th>
-              <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
-                {t("settings.actions", "Actions")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+          {t("error", "Error:")} {error}
+        </div>
+      ) : settings.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-12">
+          <Settings size={48} className="text-gray-400 mb-4" />
+          <p className="text-center text-gray-600 text-lg">
+            {t("no_data", "No settings found.")}
+          </p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto shadow-md rounded-lg">
+          <table className="min-w-full bg-white">
+            <thead className="bg-gray-100">
               <tr>
-                <td colSpan={7} className="py-4 text-center text-gray-500">
-                  {t("loading", "Loading...")}
-                </td>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.name", "Name")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.key", "Key")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.value", "Value")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.group", "Group")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.type", "Type")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.description", "Description")}
+                </th>
+                <th className="py-3 px-4 text-left text-sm font-semibold text-gray-600">
+                  {t("settings.actions", "Actions")}
+                </th>
               </tr>
-            ) : settings.length > 0 ? (
-              settings.map((setting) => (
+            </thead>
+            <tbody>
+              {settings.map((setting) => (
                 <tr
                   key={setting.id}
                   className="border-b border-gray-400 hover:bg-gray-50 transition-colors"
@@ -210,17 +212,11 @@ const Settings = () => {
                     </button>
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="py-4 text-center text-gray-500">
-                  {t("no_data", "No settings found.")}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {settings.length > 0 && (
         <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">

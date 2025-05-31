@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HeroSection from "../../components/Home Components/HomeSwiper/HeroSection";
 import Categories from "../../components/Home Components/Categories/Categories";
 import Products from "../../components/Home Components/Products/Products";
@@ -9,6 +9,9 @@ import WeaklyOffers from "../../components/Home Components/WeaklyOffers/WeaklyOf
 
 const Home = () => {
   const { language } = useLanguage();
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
   return (
     <React.Fragment>
       <div dir={language === "ar" ? "rtl" : "ltr"}>

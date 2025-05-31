@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useAdminPackages from "../../dashboard/hooks/Packages/useAdminPackages";
 import PackagesCard from "./PackagesCard";
@@ -11,19 +11,20 @@ const Packages = () => {
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const {
-    packages,
-    loading,
-    error,
-    totalPages,
-    currentPage,
-    meta,
-  } = useAdminPackages(page);
+  const { packages, loading, error, totalPages, currentPage, meta } =
+    useAdminPackages(page);
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
   return (
-    <div className="container mx-auto py-6" dir={language === "ar" ? "rtl" : "ltr"}>
+    <div
+      className="container mx-auto py-6"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <h2 className="text-4xl font-bold text-gray-900 text-center mb-12 relative">
         {t("Explore_Packages")}
         <span class="block w-16 h-1 bg-[#1e70d0] rounded-full mx-auto mt-2"></span>

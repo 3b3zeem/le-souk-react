@@ -88,6 +88,10 @@ const WishList = () => {
     }
   };
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+
   return (
     <React.Fragment>
       <div

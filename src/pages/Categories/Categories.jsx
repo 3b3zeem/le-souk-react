@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CategoryCard from "./CategoryCard";
 import Pagination from "./Pagination";
 import useCategories from "../../hooks/Categories/useCategories";
@@ -12,11 +12,18 @@ const Categories = () => {
   const { language } = useLanguage();
   const { categories, meta, loading, error } = useCategories(10, page);
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="container mx-auto py-6" dir={language === "ar" ? "rtl" : "ltr"}>
+    <div
+      className="container mx-auto py-6"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <h2 className="text-4xl font-bold text-gray-900 text-center mb-12 relative">
         {t("Explore_Categories")}
         <span class="block w-16 h-1 bg-[#1e70d0] rounded-full mx-auto mt-2"></span>

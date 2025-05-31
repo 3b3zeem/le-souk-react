@@ -203,11 +203,10 @@ const Products = () => {
           <button
             key={p}
             onClick={() => handlePageChange(p)}
-            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
-              meta.current_page === p
+            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${meta.current_page === p
                 ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
                 : "hover:bg-gray-200 transition-all duration-200"
-            }`}
+              }`}
           >
             {p}
           </button>
@@ -222,6 +221,10 @@ const Products = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <div
@@ -262,9 +265,8 @@ const Products = () => {
                 style={{ borderColor: colors.borderLight }}
               />
               <span
-                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
-                  language === "ar" ? "left-3" : "right-3"
-                }`}
+                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${language === "ar" ? "left-3" : "right-3"
+                  }`}
               >
                 <Search size={20} className="text-gray-500" />
               </span>
@@ -344,27 +346,24 @@ const Products = () => {
                             handleToggleWishlist(product.id);
                           }}
                           disabled={loadingStates.wishlist[product.id]}
-                          className={`absolute top-3 ${
-                            language === "ar" ? "left-3" : "right-3"
-                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${
-                            loadingStates.wishlist[product.id]
+                          className={`absolute top-3 ${language === "ar" ? "left-3" : "right-3"
+                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${loadingStates.wishlist[product.id]
                               ? "opacity-50 cursor-not-allowed"
                               : isProductInWishlist(product.id)
-                              ? "bg-red-100 hover:bg-red-200"
-                              : "hover:bg-blue-100"
-                          }`}
+                                ? "bg-red-100 hover:bg-red-200"
+                                : "hover:bg-blue-100"
+                            }`}
                           style={{ borderColor: colors.borderLight }}
                         >
                           <Heart
                             size={22}
-                            className={`transition ${
-                              loadingStates.wishlist[product.id]
+                            className={`transition ${loadingStates.wishlist[product.id]
                                 ? "text-gray-400"
                                 : isProductInWishlist(product.id)
-                                ? "text-red-500"
-                                : "text-gray-500"
-                            }`}
+                                  ? "text-red-500"
+                                  : "text-gray-500"
+                              }`}
                             fill={
                               isProductInWishlist(product.id) ? "red" : "none"
                             }
@@ -377,14 +376,12 @@ const Products = () => {
                             handleAddToCart(product.id, 1);
                           }}
                           disabled={loadingStates.cart[product.id]}
-                          className={`absolute bottom-3 ${
-                            language === "ar" ? "left-3" : "right-3"
-                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${
-                            loadingStates.cart[product.id]
+                          className={`absolute bottom-3 ${language === "ar" ? "left-3" : "right-3"
+                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${loadingStates.cart[product.id]
                               ? "opacity-50 cursor-not-allowed"
                               : "hover:bg-blue-100"
-                          }`}
+                            }`}
                           style={{ borderColor: colors.borderLight }}
                         >
                           <ShoppingCart size={22} className="text-gray-500" />
@@ -435,7 +432,7 @@ const Products = () => {
                         {/* Price */}
                         <div className="flex items-end gap-2 mb-2">
                           {product.min_sale_price &&
-                          product.min_sale_price !== product.min_price ? (
+                            product.min_sale_price !== product.min_price ? (
                             <div className="flex flex-col">
                               <span className="line-through text-gray-400 text-xs font-normal">
                                 {product.min_price}{" "}
@@ -482,11 +479,11 @@ const Products = () => {
                                 <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
                                   {diffMonths > 0
                                     ? t("discount_for_months", {
-                                        count: diffMonths,
-                                      })
+                                      count: diffMonths,
+                                    })
                                     : t("discount_for_days", {
-                                        count: diffDays,
-                                      })}
+                                      count: diffDays,
+                                    })}
                                 </span>
                               </div>
                             );

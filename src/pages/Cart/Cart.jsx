@@ -127,10 +127,10 @@ const Cart = () => {
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
-      if(profile.is_admin === false){
+      if (profile.is_admin === false) {
         await validateCoupon(coupon);
       } else {
-        toast.error("Not allowed foe the admin!")
+        toast.error("Not allowed foe the admin!");
       }
       setCoupon("");
     } catch (err) {
@@ -138,6 +138,10 @@ const Cart = () => {
     }
     setCouponLoading(false);
   };
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <React.Fragment>
@@ -399,7 +403,8 @@ const Cart = () => {
                     {t("estimatedTotal")}
                   </p>
                   <p style={{ color: colors.productTitle }}>
-                    {finalTotal ? finalTotal: subtotal} {language === "ar" ? "ج.م" : "LE"}
+                    {finalTotal ? finalTotal : subtotal}{" "}
+                    {language === "ar" ? "ج.م" : "LE"}
                   </p>
                 </div>
 

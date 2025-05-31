@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Edit2, Eye, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useUserProfile from "../../hooks/Profile/useProfile";
@@ -84,6 +84,10 @@ const Profile = () => {
       setUpdateError(result.error);
     }
   };
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   if (loading) {
     return (

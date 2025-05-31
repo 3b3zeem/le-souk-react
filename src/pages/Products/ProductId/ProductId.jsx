@@ -315,7 +315,9 @@ const ProductId = () => {
         {/* Left Section - Product Image */}
         <div
           className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-center ${
-            language === "ar" ? "lg:flex-row-reverse gap-4" : "lg:flex-row-reverse gap-0"
+            language === "ar"
+              ? "lg:flex-row-reverse gap-4"
+              : "lg:flex-row-reverse gap-0"
           }`}
         >
           {/* Main Image with Magnifier */}
@@ -446,13 +448,15 @@ const ProductId = () => {
             style={{ color: colors.primary }}
           >
             {selectedVariant ? (
-              selectedVariant.sale_price && selectedVariant.sale_price !== selectedVariant.price ? (
+              selectedVariant.sale_price &&
+              selectedVariant.sale_price !== selectedVariant.price ? (
                 <>
                   <span className="line-through text-gray-400 text-base font-normal">
                     {selectedVariant.price} {language === "ar" ? "ج.م" : "LE"}
                   </span>
                   <span>
-                    {selectedVariant.sale_price} {language === "ar" ? "ج.م" : "LE"}
+                    {selectedVariant.sale_price}{" "}
+                    {language === "ar" ? "ج.م" : "LE"}
                   </span>
                   {selectedVariant.discount_percentage && (
                     <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
@@ -472,7 +476,8 @@ const ProductId = () => {
                   {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
                 </span>
                 <span>
-                  {productDetails.min_sale_price} {language === "ar" ? "ج.م" : "LE"}
+                  {productDetails.min_sale_price}{" "}
+                  {language === "ar" ? "ج.م" : "LE"}
                 </span>
                 {productDetails.discount_percentage && (
                   <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
