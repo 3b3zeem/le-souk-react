@@ -175,7 +175,7 @@ const Products = () => {
 
       <Slider {...settings}>
         {products.map((product, idx) => {
-          const primaryImage = product.images[0]?.image_url;
+          const primaryImage = product.primary_image_url;
           const secondImage =
             product.images && product.images.length > 1
               ? product.images[1].image_url

@@ -315,7 +315,7 @@ const ProductId = () => {
         {/* Left Section - Product Image */}
         <div
           className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-center ${
-            language === "ar" ? "lg:flex-row" : "lg:flex-row-reverse gap-0"
+            language === "ar" ? "lg:flex-row-reverse gap-4" : "lg:flex-row-reverse gap-0"
           }`}
         >
           {/* Main Image with Magnifier */}
@@ -347,9 +347,7 @@ const ProductId = () => {
 
           {/* Thumbnails Slider */}
           <div
-            className={`lg:order-2 focus:outline-none focus:border-none ${
-              language === "ar" ? "ml-4" : "mr-4"
-            }`}
+            className={`lg:order-2 focus:outline-none focus:border-none`}
             style={{ maxWidth: isDesktop ? 90 : "45%" }}
           >
             {variantImages.length > 1 ? (
@@ -447,15 +445,34 @@ const ProductId = () => {
             className="text-lg sm:text-xl font-semibold mb-4 flex items-center gap-3"
             style={{ color: colors.primary }}
           >
-            {productDetails.min_sale_price &&
-            productDetails.min_sale_price !== productDetails.min_price ? (
+            {selectedVariant ? (
+              selectedVariant.sale_price && selectedVariant.sale_price !== selectedVariant.price ? (
+                <>
+                  <span className="line-through text-gray-400 text-base font-normal">
+                    {selectedVariant.price} {language === "ar" ? "ج.م" : "LE"}
+                  </span>
+                  <span>
+                    {selectedVariant.sale_price} {language === "ar" ? "ج.م" : "LE"}
+                  </span>
+                  {selectedVariant.discount_percentage && (
+                    <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                      {t("discount")}-{selectedVariant.discount_percentage}%
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span>
+                  {selectedVariant.price} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+              )
+            ) : productDetails.min_sale_price &&
+              productDetails.min_sale_price !== productDetails.min_price ? (
               <>
                 <span className="line-through text-gray-400 text-base font-normal">
                   {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
                 </span>
                 <span>
-                  {productDetails.min_sale_price}{" "}
-                  {language === "ar" ? "ج.م" : "LE"}
+                  {productDetails.min_sale_price} {language === "ar" ? "ج.م" : "LE"}
                 </span>
                 {productDetails.discount_percentage && (
                   <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
@@ -470,7 +487,7 @@ const ProductId = () => {
             )}
           </p>
 
-          {/* Sale Duration */}
+          {/* offer duration */}
           {productDetails &&
             productDetails.sale_starts_at &&
             productDetails.sale_ends_at &&
