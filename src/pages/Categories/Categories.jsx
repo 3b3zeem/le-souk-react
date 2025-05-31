@@ -4,17 +4,19 @@ import Pagination from "./Pagination";
 import useCategories from "../../hooks/Categories/useCategories";
 import Loader from "../../layouts/Loader";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const Categories = () => {
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const { categories, meta, loading, error } = useCategories(10, page);
 
   if (loading) return <Loader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-6" dir={language === "ar" ? "rtl" : "ltr"}>
       <h2 className="text-4xl font-bold text-gray-900 text-center mb-12 relative">
         {t("Explore_Categories")}
         <span class="block w-16 h-1 bg-[#1e70d0] rounded-full mx-auto mt-2"></span>

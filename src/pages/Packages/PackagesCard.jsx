@@ -1,10 +1,12 @@
-import { MoveRight } from "lucide-react";
+import { MoveLeft, MoveRight } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const PackagesCard = ({ packages }) => {
   const [bgImage, setBgImage] = useState(packages?.image_url);
   const navigate = useNavigate();
+  const { language } = useLanguage();
 
   const productCount = packages.packageProducts?.length || 0;
 
@@ -30,7 +32,11 @@ const PackagesCard = ({ packages }) => {
           {/* Category Name */}
           <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-[#1e70d0] transition duration-300 truncate">
             {packages.name}
-            <MoveRight className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {language === "ar" ? (
+              <MoveLeft className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            ) : (
+              <MoveRight className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            )}
           </h3>
           {/* Products Count */}
           <span className="text-sm text-white mt-1 bg-gray-300/50 rounded-full px-3 py-1 hover:bg-[#1e70d0]  hover:text-white transition-colors duration-300">

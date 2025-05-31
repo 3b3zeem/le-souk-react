@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { MoveRight } from "lucide-react";
+import { MoveLeft, MoveRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const CategoryCard = ({ category }) => {
   const [bgImage, setBgImage] = useState(category.image_url);
   const navigate = useNavigate();
+  const { language } = useLanguage();
 
   return (
     <div className="relative bg-white rounded-lg overflow-hidden group h-70 transition-all duration-300">
@@ -27,8 +29,12 @@ const CategoryCard = ({ category }) => {
         <div className="absolute inset-0 flex flex-col gap-5 justify-end items-start p-7 transition-all duration-300">
           {/* Category Name */}
           <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-[#1e70d0] transition duration-300 truncate">
-            {category.name}
-            <MoveRight className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {category.name.slice(0, 20)}...
+            {language === "ar" ? (
+              <MoveLeft className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            ) : (
+              <MoveRight className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            )}
           </h3>
           {/* Products Count */}
           <span className="text-sm text-white mt-1 bg-gray-300/50 rounded-full px-3 py-1 hover:bg-[#1e70d0]  hover:text-white transition-colors duration-300">
