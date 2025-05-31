@@ -33,16 +33,16 @@ const useAuth = () => {
         }
       );
 
-      const data = res.data;
+      // const data = res.data;
 
-      setUser(data.data);
-      setToken(data.data.token);
+      // setUser(data.data);
+      // setToken(data.data.token);
 
       // localStorage.setItem("user", JSON.stringify(data.data));
       // localStorage.setItem("token", data.data.token);
 
       setLoading(false);
-      return data;
+      return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
       setLoading(false);

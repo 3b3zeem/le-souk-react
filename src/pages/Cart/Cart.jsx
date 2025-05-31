@@ -37,7 +37,7 @@ const Cart = () => {
   });
   const [coupon, setCoupon] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
-  const { token } = useAuthContext();
+  const { token, profile } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -127,7 +127,11 @@ const Cart = () => {
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
-      await validateCoupon(coupon);
+      if(profile.is_admin === false){
+        await validateCoupon(coupon);
+      } else {
+        toast.error("Not allowed foe the admin!")
+      }
       setCoupon("");
     } catch (err) {
       toast.error(err);
