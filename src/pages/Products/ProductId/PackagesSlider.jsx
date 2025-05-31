@@ -66,7 +66,7 @@ const PackagesSlider = ({ product_id, language }) => {
                 <img
                   src={pkg.image_url}
                   alt={pkg.name}
-                  className="object-contain p-4 transition-transform duration-200 group-hover:scale-105"
+                  className="w-full h-full object-contain p-4 transition-transform duration-200 group-hover:scale-105"
                   style={{ maxWidth: "90%" }}
                 />
                 {/* Discount badge */}

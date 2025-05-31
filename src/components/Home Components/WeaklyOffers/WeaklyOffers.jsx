@@ -181,7 +181,7 @@ const WeaklyOffers = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="p-6 bg-gray-100 w-full overflow-x-hidden">

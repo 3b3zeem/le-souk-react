@@ -105,8 +105,8 @@ const HomePackages = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <div>Error: {error}</div>;
-  if (!packages?.length) return <div>No packages available</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (packages?.length === 0) return <div>No packages available</div>;
 
   return (
     <div

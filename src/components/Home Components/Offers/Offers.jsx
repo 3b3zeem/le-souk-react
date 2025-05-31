@@ -396,7 +396,7 @@ const Offers = () => {
 
   if (loading) return <Loader />;
   if (error)
-    return <div className="text-center text-red-500">Error: {error}</div>;
+    return <div className="text-center text-red-500">Error: {error.message}</div>;
   if (!offers || offers.length === 0)
     return (
       <div className="text-center text-gray-500">

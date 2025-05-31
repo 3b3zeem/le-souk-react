@@ -78,7 +78,7 @@ const Categories = () => {
           <h2 className="text-lg font-bold mb-2">
             {t("Something went wrong!")}
           </h2>
-          <p className="text-sm">{error}</p>
+          <p className="text-sm">{error.message}</p>
         </div>
       </div>
     );
