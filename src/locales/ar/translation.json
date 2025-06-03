@@ -374,5 +374,7 @@
   "noProductsSelected": "لم يتم اختيار منتجات",
   "saveProducts": "حفظ المنتجات",
   "product_image": "صورة المنتج",
-  "Related_Products": "منتجات ذات صلة"
+  "Related_Products": "منتجات ذات صلة",
+  "highestPrice": "اعلي سعر",
+  "lowestPrice": "اقل سعر"
 }

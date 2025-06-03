@@ -295,35 +295,33 @@ const Filters = ({
                   type="button"
                   onClick={() => handleCategoryClick(category.id)}
                   className={`
-                    flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
-                    ${
-                      isSelected
-                        ? "border-blue-600 bg-blue-50 shadow-md"
-                        : "border-gray-200 bg-white"
-                    }
-                    hover:border-blue-400 hover:bg-blue-100
-                    focus:outline-none focus:ring-2 focus:ring-blue-300
+                  flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
+                  ${
+                    isSelected
+                      ? "border-blue-600 bg-blue-50 shadow-md"
+                      : "border-gray-200 bg-white"
+                  }
+                  hover:border-blue-400 hover:bg-blue-100
+                  focus:outline-none focus:ring-2 focus:ring-blue-300
                   `}
                   style={{ minWidth: 120 }}
                   aria-pressed={isSelected}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center border transition
-                      ${
-                        isSelected
-                          ? "border-blue-600 ring-2 ring-blue-200"
-                          : "border-gray-300"
-                      }
-                      bg-white overflow-hidden`}
+                  ${
+                    isSelected
+                      ? "border-blue-600 ring-2 ring-blue-200"
+                      : "border-gray-300"
+                  }
+                  bg-white overflow-hidden`}
                   >
                     <img
                       src={category.image_url}
                       alt={category.name}
                       className="w-7 h-7 object-cover rounded-full"
                       loading="lazy"
-                      onError={(e) =>
-                        (e.target.src = "/default_category.jpg")
-                      }
+                      onError={(e) => (e.target.src = "/default_category.jpg")}
                     />
                   </div>
                   <span

@@ -18,6 +18,8 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 import Filters from "./Filters";
+import { useRef, useState as useLocalState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 ring2.register();
 
 const colors = {
@@ -130,6 +132,12 @@ const Products = () => {
     } else if (value === "created_at_asc") {
       setSortBy("created_at");
       setSortDirection("asc");
+    } else if (value === "price_desc") {
+      setSortBy("price");
+      setSortDirection("desc");
+    } else if (value === "price_asc") {
+      setSortBy("price");
+      setSortDirection("asc");
     }
     setPage(1);
   };
@@ -203,10 +211,11 @@ const Products = () => {
           <button
             key={p}
             onClick={() => handlePageChange(p)}
-            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${meta.current_page === p
+            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
+              meta.current_page === p
                 ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
                 : "hover:bg-gray-200 transition-all duration-200"
-              }`}
+            }`}
           >
             {p}
           </button>
@@ -225,6 +234,31 @@ const Products = () => {
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
+
+  const sortOptions = [
+    { value: "created_at_desc", label: t("sortNewest") },
+    { value: "created_at_asc", label: t("sortOldest") },
+    { value: "price_desc", label: t("highestPrice") },
+    { value: "price_asc", label: t("lowestPrice") },
+  ];
+
+  function useOutsideAlerter(ref, setOpen) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setOpen(false);
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref, setOpen]);
+  }
+
+  const [sortDropdownOpen, setSortDropdownOpen] = useLocalState(false);
+  const sortDropdownRef = useRef(null);
+  useOutsideAlerter(sortDropdownRef, setSortDropdownOpen);
 
   return (
     <div
@@ -253,7 +287,6 @@ const Products = () => {
 
         {/* Products Section */}
         <div className="w-full lg:w-3/4">
-          {/* Search and Sort Section */}
           <div className="flex flex-col items-start gap-10 md:flex-row md:justify-between mb-6">
             <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
               <input
@@ -265,28 +298,63 @@ const Products = () => {
                 style={{ borderColor: colors.borderLight }}
               />
               <span
-                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${language === "ar" ? "left-3" : "right-3"
-                  }`}
+                className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
+                  language === "ar" ? "left-3" : "right-3"
+                }`}
               >
                 <Search size={20} className="text-gray-500" />
               </span>
             </div>
 
-            <div className="relative w-48">
-              <select
-                className={`block w-full py-2 pl-4 pr-10 rounded-lg border text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition bg-white border-gray-200 text-gray-700 appearance-none cursor-pointer`}
+            {/* Sort */}
+            <div className="relative w-48" ref={sortDropdownRef}>
+              <button
+                type="button"
+                className="flex justify-between items-center w-full py-2 pl-4 pr-10 rounded-lg border text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition bg-white border-gray-200 text-gray-700 appearance-none cursor-pointer"
                 style={{ borderColor: colors.borderLight }}
-                value={`${sortBy}_${sortDirection}`}
-                onChange={handleSortChange}
+                onClick={() => setSortDropdownOpen((open) => !open)}
               >
-                <option value="created_at_desc">{t("sortNewest")}</option>
-                <option value="created_at_asc">{t("sortOldest")}</option>
-              </select>
-              <span
-                className={`pointer-events-none absolute top-1/2 right-3 transform -translate-y-1/2`}
-              >
-                <ChevronDown className="w-5 h-5 text-blue-500" />
-              </span>
+                {
+                  sortOptions.find(
+                    (opt) => opt.value === `${sortBy}_${sortDirection}`
+                  )?.label
+                }
+                <ChevronDown
+                  className={`w-5 h-5 text-blue-500 absolute right-3 pointer-events-none ${
+                    sortDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+              <AnimatePresence>
+                {sortDropdownOpen && (
+                  <motion.ul
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg"
+                  >
+                    {sortOptions.map((option) => (
+                      <li
+                        key={option.value}
+                        className={`px-4 py-2 cursor-pointer hover:bg-blue-50 transition ${
+                          `${sortBy}_${sortDirection}` === option.value
+                            ? "bg-blue-100 text-blue-700 font-semibold"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setSortDropdownOpen(false);
+                          handleSortChange({
+                            target: { value: option.value },
+                          });
+                        }}
+                      >
+                        {option.label}
+                      </li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
             </div>
           </div>
 
@@ -346,24 +414,27 @@ const Products = () => {
                             handleToggleWishlist(product.id);
                           }}
                           disabled={loadingStates.wishlist[product.id]}
-                          className={`absolute top-3 ${language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${loadingStates.wishlist[product.id]
+                          className={`absolute top-3 ${
+                            language === "ar" ? "left-3" : "right-3"
+                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${
+                            loadingStates.wishlist[product.id]
                               ? "opacity-50 cursor-not-allowed"
                               : isProductInWishlist(product.id)
-                                ? "bg-red-100 hover:bg-red-200"
-                                : "hover:bg-blue-100"
-                            }`}
+                              ? "bg-red-100 hover:bg-red-200"
+                              : "hover:bg-blue-100"
+                          }`}
                           style={{ borderColor: colors.borderLight }}
                         >
                           <Heart
                             size={22}
-                            className={`transition ${loadingStates.wishlist[product.id]
+                            className={`transition ${
+                              loadingStates.wishlist[product.id]
                                 ? "text-gray-400"
                                 : isProductInWishlist(product.id)
-                                  ? "text-red-500"
-                                  : "text-gray-500"
-                              }`}
+                                ? "text-red-500"
+                                : "text-gray-500"
+                            }`}
                             fill={
                               isProductInWishlist(product.id) ? "red" : "none"
                             }
@@ -376,12 +447,14 @@ const Products = () => {
                             handleAddToCart(product.id, 1);
                           }}
                           disabled={loadingStates.cart[product.id]}
-                          className={`absolute bottom-3 ${language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${loadingStates.cart[product.id]
+                          className={`absolute bottom-3 ${
+                            language === "ar" ? "left-3" : "right-3"
+                          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
+                          ${
+                            loadingStates.cart[product.id]
                               ? "opacity-50 cursor-not-allowed"
                               : "hover:bg-blue-100"
-                            }`}
+                          }`}
                           style={{ borderColor: colors.borderLight }}
                         >
                           <ShoppingCart size={22} className="text-gray-500" />
@@ -432,7 +505,7 @@ const Products = () => {
                         {/* Price */}
                         <div className="flex items-end gap-2 mb-2">
                           {product.min_sale_price &&
-                            product.min_sale_price !== product.min_price ? (
+                          product.min_sale_price !== product.min_price ? (
                             <div className="flex flex-col">
                               <span className="line-through text-gray-400 text-xs font-normal">
                                 {product.min_price}{" "}
@@ -479,11 +552,11 @@ const Products = () => {
                                 <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
                                   {diffMonths > 0
                                     ? t("discount_for_months", {
-                                      count: diffMonths,
-                                    })
+                                        count: diffMonths,
+                                      })
                                     : t("discount_for_days", {
-                                      count: diffDays,
-                                    })}
+                                        count: diffDays,
+                                      })}
                                 </span>
                               </div>
                             );
