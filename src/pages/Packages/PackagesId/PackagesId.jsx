@@ -7,12 +7,21 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Clock4 } from "lucide-react";
 
 const PackagesId = () => {
+  const navigate = useNavigate();
   const { packagesId } = useParams();
   const { details, packageDetails, loading, error } = useAdminPackages();
   const [timeLeft, setTimeLeft] = useState(null);
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (details?.name) {
+      const slug = encodeURIComponent(details.name.replace(/\s+/g, "-"));
+      if (!window.location.pathname.includes(`/${slug}`)) {
+        navigate(`/packages/${packagesId}/${slug}`, { replace: true });
+      }
+    }
+  }, [details?.name, packagesId, navigate]);
 
   useEffect(() => {
     if (packagesId) {

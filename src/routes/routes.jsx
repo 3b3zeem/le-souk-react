@@ -81,7 +81,7 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: "products/:productId",
+        path: "products/:productId/*",
         element: (
           <Suspense fallback={<Loader />}>
             <ProductId />
@@ -97,7 +97,7 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: "packages/:packagesId",
+        path: "packages/:packagesId/*",
         element: (
           <Suspense fallback={<Loader />}>
             <PackagesId />
@@ -113,7 +113,7 @@ const routes = createBrowserRouter([
         ),
       },
       {
-        path: "categories/:categoryId",
+        path: "categories/:categoryId/*",
         element: (
           <Suspense fallback={<Loader />}>
             <CategoryId />

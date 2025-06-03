@@ -1,5 +1,5 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useCategories from "../../../hooks/Categories/useCategories";
 import ProductCard from "./ProductCard";
 import Loader from "../../../layouts/Loader";
@@ -8,14 +8,24 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const CategoryId = () => {
+  const navigate = useNavigate();
   const { categoryId } = useParams();
   const { category, loading, error, getTranslatedText } = useCategories(
     null,
     null,
     categoryId
   );
-  const { language } = useLanguage()
+  const { language } = useLanguage();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (category?.name) {
+      const slug = encodeURIComponent(category.name.replace(/\s+/g, "-"));
+      if (!window.location.pathname.includes(`/${slug}`)) {
+        navigate(`/categories/${categoryId}/${slug}`, { replace: true });
+      }
+    }
+  }, [category?.name, categoryId, navigate]);
 
   if (loading) return <Loader />;
   if (error)
@@ -23,7 +33,7 @@ const CategoryId = () => {
   if (!category) return <div className="text-center py-4">لا توجد بيانات</div>;
 
   return (
-    <div dir={language === 'ar' ? 'rtl' : 'ltr'}>
+    <div dir={language === "ar" ? "rtl" : "ltr"}>
       <div className="bg-[#1e70d0] text-white text-center py-20 mb-6">
         <h2 className="text-2xl font-bold">{category.name}</h2>
       </div>

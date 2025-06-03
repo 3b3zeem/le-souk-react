@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ShoppingCart, Heart, SearchX, X, CornerDownLeft } from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
@@ -29,6 +29,7 @@ const colors = {
 };
 
 const ProductId = () => {
+  const navigate = useNavigate();
   const { productId } = useParams();
   const {
     productDetails,
@@ -62,6 +63,15 @@ const ProductId = () => {
   const { token, profile } = useAuthContext();
   const { t } = useTranslation();
   const { language } = useLanguage();
+
+  useEffect(() => {
+    if (productDetails?.name) {
+      const slug = encodeURIComponent(productDetails.name.replace(/\s+/g, "-"));
+      if (!window.location.pathname.includes(`/${slug}`)) {
+        navigate(`/products/${productId}/${slug}`, { replace: true });
+      }
+    }
+  }, [productDetails?.name, productId, navigate]);
 
   useEffect(() => {
     if (productId) {
