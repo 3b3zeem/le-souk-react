@@ -376,5 +376,10 @@
   "product_image": "صورة المنتج",
   "Related_Products": "منتجات ذات صلة",
   "highestPrice": "اعلي سعر",
-  "lowestPrice": "اقل سعر"
+  "lowestPrice": "اقل سعر",
+  "filter_by_price": "الفلترة حسب السعر",
+  "filter": "فلتر",
+  "product_status": "حالة المنتج",
+  "showFilters": "عرض الفلاتر",
+  "shop": "المتجر"
 }

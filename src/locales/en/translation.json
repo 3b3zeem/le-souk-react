@@ -374,5 +374,10 @@
   "edit_package_details": "Take Control of Your Package",
   "Related_Products": "Related Products",
   "highestPrice": "Highest Price",
-  "lowestPrice": "Lowest Price" 
+  "lowestPrice": "Lowest Price",
+  "filter_by_price": "Filter By Price",
+  "filter": "filter",
+  "product_status": "Product Status",
+  "showFilters": "Show Filters",
+  "shop": "Shop"
 }

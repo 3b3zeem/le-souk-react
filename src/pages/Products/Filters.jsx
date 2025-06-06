@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { Minus, X } from "lucide-react";
 
 const Filters = ({
   t,
@@ -70,10 +70,10 @@ const Filters = ({
     >
       <button
         onClick={() => setShowFilters(true)}
-        className="lg:hidden bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="lg:hidden bg-blue-600 text-white px-4 py-2 shadow-md focus:outline-none focus:ring-2 cursor-pointer customEffect"
         aria-label={t("showFilters")}
       >
-        {t("showFilters")}
+        <span>{t("showFilters")}</span>
       </button>
 
       <AnimatePresence>
@@ -96,10 +96,7 @@ const Filters = ({
               aria-modal="true"
               aria-labelledby="filters-title"
             >
-              <div className="flex justify-between items-center mb-4">
-                <h2 id="filters-title" className="text-xl font-bold">
-                  {t("filters")}
-                </h2>
+              <div className="flex justify-end mb-4">
                 <button
                   onClick={() => setShowFilters(false)}
                   className="text-gray-600 text-lg font-bold hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer hover:bg-gray-100 rounded-full p-2 transition-all duration-200"
@@ -111,7 +108,69 @@ const Filters = ({
               <div className="space-y-6">
                 <div>
                   <h3
-                    className="relative inline-block font-bold text-2xl mb-6"
+                    className="relative inline-block font-bold text-2xl uppercase"
+                    style={{ color: colors.productName }}
+                  >
+                    {t("filter_by_price")}
+                    <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    <Slider
+                      range
+                      min={0}
+                      max={100000}
+                      value={sliderPrice}
+                      onChange={setSliderPrice}
+                      allowCross={false}
+                      step={100}
+                      trackStyle={[{ backgroundColor: colors.primary, cursor:"e-resize" }]}
+                      handleStyle={[
+                        {
+                          borderColor: colors.primary,
+                          backgroundColor: colors.primary,
+                          cursor:"e-resize"
+                        },
+                        {
+                          borderColor: colors.primary,
+                          backgroundColor: colors.primary,
+                          cursor:"e-resize"
+                        },
+                      ]}
+                      ariaLabelGroupForHandles={[
+                        "Minimum price",
+                        "Maximum price",
+                      ]}
+                    />
+                    <div className="flex justify-between text-sm">
+                      <div className="flex text-gray-950 font-semibold">
+                        <span>
+                          <span className="text-gray-600">{t("price")}:</span>{" "}
+                          {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                        </span>
+                        <span>
+                          <Minus />
+                        </span>
+                        <span>
+                          {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                        </span>
+                      </div>
+                      <button
+                        onClick={handleApplyPrice}
+                        className="w-[100px] py-2 text-sm font-medium hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer customEffect uppercase tracking-widest"
+                        style={{
+                          backgroundColor: colors.primary,
+                          color: colors.lightText,
+                        }}
+                      >
+                        <span>{t("filter")}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3
+                    className="relative inline-block font-bold text-2xl mt-6 uppercase"
                     style={{ color: colors.productName }}
                   >
                     {t("categories")}
@@ -183,92 +242,42 @@ const Filters = ({
                   </div>
                 </div>
 
-                <div className="flex justify-between">
-                  <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
-                    <span
-                      className="font-medium"
-                      style={{ color: colors.productName }}
-                    >
-                      {t("inStock")}
-                    </span>
-                    <span className="relative inline-block w-10 h-6">
-                      <input
-                        type="checkbox"
-                        checked={inStock === 1}
-                        onChange={() => {
-                          setInStock(inStock === 1 ? null : 1);
-                          setShowFilters(false);
-                        }}
-                        className="opacity-0 w-0 h-0 peer"
-                        aria-label={t("inStock")}
-                      />
-                      <span
-                        className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
-                          inStock === 1 ? "bg-blue-500" : "bg-gray-300"
-                        } peer-focus:ring-2 peer-focus:ring-blue-300`}
-                      ></span>
-                      <span
-                        className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
-                          inStock === 1 ? "translate-x-4" : ""
-                        }`}
-                      ></span>
-                    </span>
-                  </label>
-                </div>
-
                 <div>
                   <h3
-                    className="relative inline-block font-bold text-2xl mb-6"
+                    className="relative inline-block font-bold text-2xl mt-6 uppercase"
                     style={{ color: colors.productName }}
                   >
-                    {t("price")}
+                    {t("product_status")}
                     <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
                   </h3>
-                  <div className="flex flex-col gap-4">
-                    <Slider
-                      range
-                      min={0}
-                      max={100000}
-                      value={sliderPrice}
-                      onChange={setSliderPrice}
-                      allowCross={false}
-                      step={100}
-                      trackStyle={[{ backgroundColor: colors.primary }]}
-                      handleStyle={[
-                        {
-                          borderColor: colors.primary,
-                          backgroundColor: colors.primary,
-                        },
-                        {
-                          borderColor: colors.primary,
-                          backgroundColor: colors.primary,
-                        },
-                      ]}
-                      ariaLabelGroupForHandles={[
-                        "Minimum price",
-                        "Maximum price",
-                      ]}
-                    />
-                    <div className="flex justify-between text-sm">
-                      <span>
-                        {t("Minimum")}: {sliderPrice[0]}{" "}
-                        {language === "ar" ? "ج.م" : "LE"}
+                  <div className="flex justify-between">
+                    <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
+                      <span
+                        className="font-medium"
+                        style={{ color: colors.productName }}
+                      >
+                        {t("inStock")}
                       </span>
-                      <span>
-                        {t("Maximum")}: {sliderPrice[1]}{" "}
-                        {language === "ar" ? "ج.م" : "LE"}
+                      <span className="relative inline-block w-10 h-6">
+                        <input
+                          type="checkbox"
+                          checked={inStock === 1}
+                          onChange={() => setInStock(inStock === 1 ? null : 1)}
+                          className="opacity-0 w-0 h-0 peer"
+                          aria-label={t("inStock")}
+                        />
+                        <span
+                          className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
+                            inStock === 1 ? "bg-blue-500" : "bg-gray-300"
+                          } peer-focus:ring-2 peer-focus:ring-blue-300`}
+                        ></span>
+                        <span
+                          className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
+                            inStock === 1 ? "translate-x-4" : ""
+                          }`}
+                        ></span>
                       </span>
-                    </div>
-                    <button
-                      onClick={handleApplyPrice}
-                      className="w-[100px] py-2 text-sm font-medium rounded-md hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer customEffect"
-                      style={{
-                        backgroundColor: colors.primary,
-                        color: colors.lightText,
-                      }}
-                    >
-                      <span>{t("apply")}</span>
-                    </button>
+                    </label>
                   </div>
                 </div>
               </div>
@@ -280,7 +289,64 @@ const Filters = ({
       <div className="hidden lg:block space-y-6">
         <div>
           <h3
-            className="relative inline-block font-bold text-2xl mb-6"
+            className="relative inline-block font-bold text-2xl uppercase"
+            style={{ color: colors.productName }}
+          >
+            {t("filter_by_price")}
+            <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+          </h3>
+          <div className="flex flex-col gap-4 px-3">
+            <Slider
+              range
+              min={0}
+              max={100000}
+              value={sliderPrice}
+              onChange={setSliderPrice}
+              allowCross={false}
+              step={100}
+              trackStyle={[{ backgroundColor: colors.primary }]}
+              handleStyle={[
+                {
+                  borderColor: colors.primary,
+                  backgroundColor: colors.primary,
+                },
+                {
+                  borderColor: colors.primary,
+                  backgroundColor: colors.primary,
+                },
+              ]}
+              ariaLabelGroupForHandles={["Minimum price", "Maximum price"]}
+            />
+            <div className="flex justify-between text-sm">
+              <div className="flex text-gray-950 font-semibold">
+                <span>
+                  <span className="text-gray-600">{t("price")}:</span>{" "}
+                  {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+                <span>
+                  <Minus />
+                </span>
+                <span>
+                  {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                </span>
+              </div>
+              <button
+                onClick={handleApplyPrice}
+                className="w-[100px] py-2 text-sm font-medium hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer customEffect uppercase tracking-widest"
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.lightText,
+                }}
+              >
+                <span>{t("filter")}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3
+            className="relative inline-block font-bold text-2xl mt-6 uppercase"
             style={{ color: colors.productName }}
           >
             {t("categories")}
@@ -353,83 +419,42 @@ const Filters = ({
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
-            <span className="font-medium" style={{ color: colors.productName }}>
-              {t("inStock")}
-            </span>
-            <span className="relative inline-block w-10 h-6">
-              <input
-                type="checkbox"
-                checked={inStock === 1}
-                onChange={() => setInStock(inStock === 1 ? null : 1)}
-                className="opacity-0 w-0 h-0 peer"
-                aria-label={t("inStock")}
-              />
-              <span
-                className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
-                  inStock === 1 ? "bg-blue-500" : "bg-gray-300"
-                } peer-focus:ring-2 peer-focus:ring-blue-300`}
-              ></span>
-              <span
-                className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
-                  inStock === 1 ? "translate-x-4" : ""
-                }`}
-              ></span>
-            </span>
-          </label>
-        </div>
-
         <div>
           <h3
-            className="relative inline-block font-bold text-2xl mb-6"
+            className="relative inline-block font-bold text-2xl mt-6 uppercase"
             style={{ color: colors.productName }}
           >
-            {t("price")}
+            {t("product_status")}
             <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
           </h3>
-          <div className="flex flex-col gap-4">
-            <Slider
-              range
-              min={0}
-              max={100000}
-              value={sliderPrice}
-              onChange={setSliderPrice}
-              allowCross={false}
-              step={100}
-              trackStyle={[{ backgroundColor: colors.primary }]}
-              handleStyle={[
-                {
-                  borderColor: colors.primary,
-                  backgroundColor: colors.primary,
-                },
-                {
-                  borderColor: colors.primary,
-                  backgroundColor: colors.primary,
-                },
-              ]}
-              ariaLabelGroupForHandles={["Minimum price", "Maximum price"]}
-            />
-            <div className="flex justify-between text-sm">
-              <span>
-                {t("Minimum")}: {sliderPrice[0]}{" "}
-                {language === "ar" ? "ج.م" : "LE"}
+          <div className="flex justify-between">
+            <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
+              <span
+                className="font-medium"
+                style={{ color: colors.productName }}
+              >
+                {t("inStock")}
               </span>
-              <span>
-                {t("Maximum")}: {sliderPrice[1]}{" "}
-                {language === "ar" ? "ج.م" : "LE"}
+              <span className="relative inline-block w-10 h-6">
+                <input
+                  type="checkbox"
+                  checked={inStock === 1}
+                  onChange={() => setInStock(inStock === 1 ? null : 1)}
+                  className="opacity-0 w-0 h-0 peer"
+                  aria-label={t("inStock")}
+                />
+                <span
+                  className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
+                    inStock === 1 ? "bg-blue-500" : "bg-gray-300"
+                  } peer-focus:ring-2 peer-focus:ring-blue-300`}
+                ></span>
+                <span
+                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
+                    inStock === 1 ? "translate-x-4" : ""
+                  }`}
+                ></span>
               </span>
-            </div>
-            <button
-              onClick={handleApplyPrice}
-              className="w-[100px] py-2 text-sm font-medium rounded-md hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer customEffect"
-              style={{
-                backgroundColor: colors.primary,
-                color: colors.lightText,
-              }}
-            >
-              <span>{t("apply")}</span>
-            </button>
+            </label>
           </div>
         </div>
       </div>
