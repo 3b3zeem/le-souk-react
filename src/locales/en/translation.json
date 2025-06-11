@@ -379,5 +379,6 @@
   "filter": "filter",
   "product_status": "Product Status",
   "showFilters": "Show Filters",
-  "shop": "Shop"
+  "shop": "Shop",
+   "search_placeholder": "Search what you looking for?"
 }

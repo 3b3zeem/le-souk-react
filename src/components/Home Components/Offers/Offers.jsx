@@ -5,9 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import Loader from "./../../../layouts/Loader";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import SkeletonLoader from "../../../layouts/SkeletonLoader";
 
 const colors = {
   primary: "#1e70d0",
@@ -394,7 +394,7 @@ const Offers = () => {
 
   const { offers, loading, error } = useHome();
 
-  if (loading) return <Loader />;
+  if (loading) return <SkeletonLoader />;
   if (error)
     return <div className="text-center text-red-500">Error: {error.message}</div>;
   if (!offers || offers.length === 0)

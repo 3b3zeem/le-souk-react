@@ -21,6 +21,8 @@ import useUserProfile from "../../hooks/Profile/useProfile";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import LanguageDropdown from "../Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
+import NavbarTop from "./NavbarTop";
+import NavbarBottom from "./NavbarBottom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -157,150 +159,27 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200  transition-all duration-300 ease-in-out bg-white hidden md:flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
-          }`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-300 ease-in-out bg-white hidden md:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="relative w-full flex items-center justify-between">
-          <Link to={"/"}>
-            <div className="flex items-center">
-              <img src={logo} width={150} alt="logo" />
-            </div>
-          </Link>
-
-          {/* Links */}
-          <div className="flex items-center gap-4 lg:gap-8">
-            {navLinks.map((link, index) => (
-              <NavLink
-                key={index}
-                to={link.path}
-                className={({ isActive }) =>
-                  `
-                  cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]
-                  ${isActive ? "text-[#1e70d0] font-[700]" : ""}
-                  ${hover === index ? "text-[#1e70d0]" : ""}
-                `
-                }
-                onMouseEnter={() => setHover(index)}
-                onMouseLeave={() => setHover(null)}
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </div>
-
-          <div className="flex gap-4">
-            <LanguageDropdown />
-            {isLoggedIn ? (
-              <div className="cursor-pointer relative">
-                <div className="flex items-center gap-5">
-                  {/* Cart & Wishlist */}
-                  <div className="flex justify-center gap-4">
-                    <button
-                      onClick={handleCartClick}
-                      className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
-                      style={{ borderColor: colors.borderLight }}
-                    >
-                      <ShoppingCart size={20} className="text-gray-500" />
-                      {cartCount > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
-                          {cartCount}
-                        </span>
-                      )}
-                    </button>
-
-                    <button
-                      onClick={handleWishlistClick}
-                      className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
-                      style={{ borderColor: colors.borderLight }}
-                    >
-                      <Heart size={20} className="text-gray-500" />
-                      {wishlistCount > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
-                          {wishlistCount}
-                        </span>
-                      )}
-                    </button>
-                  </div>
-
-                  <div
-                    ref={avatarRef}
-                    className="flex items-center gap-2"
-                    onClick={() => setIsOpenUser((prev) => !prev)}
-                  >
-                    <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
-                      {(userData || navUser) && (
-                        <img
-                          src={avatar}
-                          alt={t("userProfile")}
-                          className="h-full w-full rounded-full object-cover"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/user.png";
-                          }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <AnimatePresence>
-                  {isOpenUser && (
-                    <motion.div
-                      ref={overlayRef}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className={`absolute ${language === "ar" ? "left-0" : "right-0"
-                        } mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
-                    >
-                      <div className="flex flex-col gap-3 px-4 py-6 bg-gray-50 border-b border-gray-100">
-                        <p className="text-sm text-gray-600">{t("welcome")}</p>
-                        <p className="font-bold text-gray-800">{userName}</p>
-                      </div>
-                      {renderAdminLink()}
-                      <button
-                        onClick={() => {
-                          navigate("/profile");
-                          setIsOpenUser(false);
-                        }}
-                        className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
-                      >
-                        <User className="w-5 h-5" />
-                        {t("userProfile")}
-                      </button>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 w-full text-right px-4 py-3 text-red-600 hover:bg-red-50 cursor-pointer transition-colors duration-200"
-                      >
-                        <LogOut className="w-5 h-5" />
-                        {t("logout")}
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <button
-                onClick={() => navigate("/login")}
-                className="bg-[#1e70d0] text-white font-bold py-2 px-4 rounded me-5 cursor-pointer customEffect"
-              >
-                <span>{t("login")}</span>
-              </button>
-            )}
-          </div>
-
-          <div
-            className={`h-[3px] w-full bg-gray-100 absolute  left-0 ${scrolled ? "-bottom-6" : "-bottom-4"
-              }`}
-          >
-            <div
-              className="h-full bg-[#1e70d0] transition-all duration-150"
-              style={{ width: `${scrollProgress}%` }}
-            ></div>
-          </div>
-        </div>
+        <NavbarTop
+          handleCartClick={handleCartClick}
+          handleWishlistClick={handleWishlistClick}
+          cartCount={cartCount}
+          wishlistCount={wishlistCount}
+          isLoggedIn={isLoggedIn}
+          isOpenUser={isOpenUser}
+          setIsOpenUser={setIsOpenUser}
+          overlayRef={overlayRef}
+          avatarRef={avatarRef}
+          avatar={avatar}
+          userName={userName}
+          t={t}
+          language={language}
+          renderAdminLink={renderAdminLink}
+          handleLogout={handleLogout}
+        />
+        <NavbarBottom navLinks={navLinks} hover={hover} setHover={setHover} />
       </div>
 
       {/* Mobile Navigation */}

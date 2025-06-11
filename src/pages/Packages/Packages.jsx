@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useAdminPackages from "../../dashboard/hooks/Packages/useAdminPackages";
 import PackagesCard from "./PackagesCard";
-import Loader from "../../layouts/Loader";
 import Pagination from "./Pagination";
 import { FolderX } from "lucide-react";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import SkeletonLoader from "../../layouts/SkeletonLoader";
 
 const Packages = () => {
   const [page, setPage] = useState(1);
@@ -18,7 +18,7 @@ const Packages = () => {
     scrollTo(0, 0);
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <SkeletonLoader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
   return (
     <div

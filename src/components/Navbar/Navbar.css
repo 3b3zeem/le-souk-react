@@ -41,11 +41,11 @@
   content: "";
   position: absolute;
   width: 0;
-  height: 5px;
-  border-radius: 2px;
-  background-color: #1A76D1;
+  height: 3px;
+  border-radius: 1px;
+  background-color: #ffffff;
   bottom: -1px;
-  left: -5px;
+  left: -2px;
   z-index: -1;
   opacity: 0;
   transition: .3s;
@@ -54,4 +54,11 @@
 .b-bottom:hover::after {
   width: 100%;
   opacity: 1;
+}
+
+.navbar-bottom {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
 }

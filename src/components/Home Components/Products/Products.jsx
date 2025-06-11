@@ -10,7 +10,6 @@ import {
   CornerDownRight,
 } from "lucide-react";
 import useHome from "../../../hooks/HomeComponents/useHome";
-import Loader from "../../../layouts/Loader";
 import { Link } from "react-router-dom";
 import { renderStars } from "../../../utils/ratingUtils";
 import useCartCRUD from "./../../../hooks/Cart/UseCart";
@@ -18,6 +17,7 @@ import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
+import SkeletonLoader from "../../../layouts/SkeletonLoader";
 
 const Products = () => {
   const { products, loading, error } = useHome(5);
@@ -142,7 +142,7 @@ const Products = () => {
   };
 
   if (loading) {
-    return <Loader />;
+    return <SkeletonLoader />;
   }
 
   if (error) {

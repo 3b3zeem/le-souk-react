@@ -1,11 +1,11 @@
 import React from "react";
 import Slider from "react-slick";
-import Loader from "../../../layouts/Loader";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Link, useNavigate } from "react-router-dom";
+import SkeletonLoader from "../../../layouts/SkeletonLoader";
 
 const Categories = () => {
   const { categories, loading, error } = useHome();
@@ -65,7 +65,7 @@ const Categories = () => {
   };
 
   if (loading) {
-    return <Loader />;
+    return <SkeletonLoader />;
   }
 
   if (error) {

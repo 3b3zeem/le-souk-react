@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import CategoryCard from "./CategoryCard";
 import Pagination from "./Pagination";
 import useCategories from "../../hooks/Categories/useCategories";
-import Loader from "../../layouts/Loader";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import SkeletonLoader from "../../layouts/SkeletonLoader";
 
 const Categories = () => {
   const [page, setPage] = useState(1);
@@ -16,7 +16,7 @@ const Categories = () => {
     scrollTo(0, 0);
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <SkeletonLoader />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (

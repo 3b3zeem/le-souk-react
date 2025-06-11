@@ -381,5 +381,6 @@
   "filter": "فلتر",
   "product_status": "حالة المنتج",
   "showFilters": "عرض الفلاتر",
-  "shop": "المتجر"
+  "shop": "المتجر",
+  "search_placeholder": "ابحث عما تبحث عنه"
 }
