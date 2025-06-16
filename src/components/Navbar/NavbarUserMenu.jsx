@@ -17,7 +17,7 @@ const NavbarUserMenu = ({
   handleLogout,
 }) => {
   const navigate = useNavigate();
-  if (!isLoggedIn) return null;
+  // if (!isLoggedIn) return null;
   return (
     <div className="cursor-pointer relative">
       <div
