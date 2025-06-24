@@ -290,11 +290,11 @@ const AdminPackages = () => {
                     </td>
                     <td className="p-3 text-xs sm:text-sm text-center text-gray-700">
                       {Number(pkg.original_price).toLocaleString()}{" "}
-                      {language === "ar" ? "ج.م" : "LE"}
+                      {language === "ar" ? "د.ك" : "KWD"}
                     </td>
                     <td className="p-3 text-xs sm:text-sm text-center text-blue-700 font-bold">
                       {Number(pkg.discounted_price).toLocaleString()}{" "}
-                      {language === "ar" ? "ج.م" : "LE"}
+                      {language === "ar" ? "د.ك" : "KWD"}
                     </td>
                     <td className="p-3 text-xs sm:text-sm text-center text-green-700 font-bold">
                       {pkg.packageProducts.length || 0} {t("products")}

@@ -131,7 +131,7 @@ const Order = () => {
                     className="py-3 px-4"
                     style={{ color: colors.productName }}
                   >
-                    {order.total_price} {language === "ar" ? "ج.م" : "LE"}
+                    {order.total_price} {language === "ar" ? "د.ك" : "KWD"}
                   </td>
                   <td
                     className="py-3 px-4"

@@ -151,7 +151,7 @@ const RelatedProducts = ({ productId, language, category }) => {
                     product.min_sale_price !== product.min_price ? (
                       <div className="flex flex-col">
                         <span className="line-through text-gray-400 text-xs font-normal">
-                          {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+                          {product.min_price} {language === "ar" ? "د.ك" : "KWD"}
                         </span>
                         <div className="flex items-center gap-2">
                           <CornerDownRight
@@ -163,7 +163,7 @@ const RelatedProducts = ({ productId, language, category }) => {
                             style={{ color: colors.primary }}
                           >
                             {product.min_sale_price}{" "}
-                            {language === "ar" ? "ج.م" : "LE"}
+                            {language === "ar" ? "د.ك" : "KWD"}
                           </span>
                         </div>
                       </div>
@@ -172,7 +172,7 @@ const RelatedProducts = ({ productId, language, category }) => {
                         className="text-lg font-bold"
                         style={{ color: colors.primary }}
                       >
-                        {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+                        {product.min_price} {language === "ar" ? "د.ك" : "KWD"}
                       </span>
                     )}
                   </div>

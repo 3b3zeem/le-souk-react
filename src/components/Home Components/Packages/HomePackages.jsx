@@ -183,7 +183,7 @@ const HomePackages = () => {
                               </p>
                               <p className="text-md font-bold text-gray-900">
                                 {product.product.max_price}{" "}
-                                {language === "ar" ? "ج.م" : "LE"}
+                                {language === "ar" ? "د.ك" : "KWD"}
                               </p>
                             </div>
                           </div>

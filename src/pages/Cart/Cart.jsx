@@ -260,7 +260,7 @@ const Cart = () => {
                             <p>
                               {t("unitPrice")}:{" "}
                               {(item.unit_price / 100).toFixed(2)}{" "}
-                              {language === "ar" ? "ج.م" : "LE"}
+                              {language === "ar" ? "د.ك" : "KWD"}
                             </p>
                           </div>
                         ) : (
@@ -312,7 +312,7 @@ const Cart = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          {item.total} {language === "ar" ? "ج.م" : "LE"}
+                          {item.total} {language === "ar" ? "د.ك" : "KWD"}
                         </p>
                         <button
                           onClick={() => handleRemove(item.id)}
@@ -378,7 +378,7 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
-                    ${subtotal} {language === "ar" ? "ج.م" : "LE"}
+                    ${subtotal} {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                 </div>
 
@@ -404,7 +404,7 @@ const Cart = () => {
                   </p>
                   <p style={{ color: colors.productTitle }}>
                     {finalTotal ? finalTotal : subtotal}{" "}
-                    {language === "ar" ? "ج.م" : "LE"}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                 </div>
 

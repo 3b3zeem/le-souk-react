@@ -155,11 +155,11 @@ const PackagesId = () => {
           {/* Price & Discount */}
           <div className="flex flex-wrap items-center gap-4 mt-2">
             <span className="text-2xl md:text-3xl font-bold text-green-300">
-              {details?.discounted_price} {language === "ar" ? "ج.م" : "LE"}
+              {details?.discounted_price} {language === "ar" ? "د.ك" : "KWD"}
             </span>
             {details?.original_price && (
               <span className="text-lg md:text-xl line-through text-red-200">
-                {details?.original_price} {language === "ar" ? "ج.م" : "LE"}
+                {details?.original_price} {language === "ar" ? "د.ك" : "KWD"}
               </span>
             )}
             {details?.formatted_discount && (
@@ -271,7 +271,7 @@ const PackagesId = () => {
                   <p className="text-gray-600 mb-2">
                     <span>
                       {product.product.min_price}{" "}
-                      {language === "ar" ? "ج.م" : "LE"}
+                      {language === "ar" ? "د.ك" : "KWD"}
                     </span>
                   </p>
                   <button
