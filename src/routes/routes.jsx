@@ -128,14 +128,14 @@ const routes = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "about",
-        element: (
-          <Suspense fallback={<Loader />}>
-            <About />
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "about",
+      //   element: (
+      //     <Suspense fallback={<Loader />}>
+      //       <About />
+      //     </Suspense>
+      //   ),
+      // },
       {
         element: <ProtectedRoute />,
         children: [
