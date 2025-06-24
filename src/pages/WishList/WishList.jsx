@@ -208,7 +208,7 @@ const WishList = () => {
                           className="text-lg font-semibold"
                           style={{ color: colors.primary }}
                         >
-                          ${Number(item.product.min_price).toFixed(2)}
+                          {Number(item.product.min_price)} {language === "ar" ? "د.ك" : "KWD"}
                         </p>
                         <div className="flex flex-col gap-2">
                           <button
