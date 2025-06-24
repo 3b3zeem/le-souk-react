@@ -4,15 +4,12 @@ import {
   Mail,
   Clock,
   MapPin,
-  Facebook,
-  Twitter,
-  Youtube,
-  Linkedin,
   Send,
-  ChevronUp,
+  Instagram,
 } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
-import logo from "../../assets/Images/3x/footer.png"
+import logo from "../../assets/Images/3x/footer.png";
 
 const colors = {
   primary: "#1e70d0",
@@ -38,7 +35,7 @@ const Footer = () => {
             <div>
               <h4 className="text-sm font-medium text-white">Call Us 7/24</h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                +208-555-0112
+                66511123
               </p>
             </div>
           </div>
@@ -56,30 +53,17 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Opening Hour */}
-          <div className="flex items-center space-x-4">
-            <div className="p-4 rounded-full border border-dotted border-gray-600">
-              <Clock size={25} className="text-white" />
-            </div>
-            <div>
-              <h4 className="text-sm font-medium text-white">Opening Hour</h4>
-              <p className="text-sm" style={{ color: colors.textSecondary }}>
-                Sunday - Fry: 9 AM - 6 PM
-              </p>
-            </div>
-          </div>
-
           {/* Location */}
           <div className="flex items-center space-x-4">
             <div className="p-4 rounded-full border border-dotted border-gray-600">
               <MapPin size={25} className="text-white" />
             </div>
-            <div>
+            <a href="https://maps.app.goo.gl/DV95vcWCubMko3v68" target="_blank" rel="noopener noreferrer" className="flex flex-col">
               <h4 className="text-sm font-medium text-white">Location</h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                4517 Washington ave.
+                Street 2, 70073, Kuwait.
               </p>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -88,34 +72,33 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <img src={logo} alt="logo" width={150} draggable={false} />
-            <p className="text-sm my-6" style={{ color: colors.textSecondary }}>
-              Phasellus ultricies aliqum volutpt utpat ullamcorper laoreet
-              neque, a lacinia curabitur lacinia mollis
-            </p>
+            {/* Opening Hour */}
+          <div className="flex flex-col items-start my-6 gap-3">
+            <div className="p-4 rounded-full border border-dotted border-gray-600">
+              <Clock size={25} className="text-white" />
+            </div>
+            <div>
+              <h4 className="text-sm font-medium text-white">Opening Hour</h4>
+              <p className="text-sm" style={{ color: colors.textSecondary }}>
+                Saturday to Thursday <br /> Morning time: 10 am - 1 pm <br /> Evening time: 5pm
+                - 9:30pm <br /> Friday <br /> Evening time: 5pm - 9:30pm
+              </p>
+            </div>
+          </div>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://www.instagram.com/lesoukkuwait/"
+                target="_blank"
                 className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
               >
-                <Facebook size={25} className="text-white" />
+                <Instagram size={25} className="text-white" />
               </a>
               <a
-                href="#"
+                href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
+                target="_blank"
                 className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
               >
-                <Twitter size={25} className="text-white" />
-              </a>
-              <a
-                href="#"
-                className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
-              >
-                <Youtube size={25} className="text-white" />
-              </a>
-              <a
-                href="#"
-                className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
-              >
-                <Linkedin size={25} className="text-white" />
+                <FaTiktok size={25} className="text-white" />
               </a>
             </div>
           </div>

@@ -308,7 +308,8 @@ const Products = () => {
                     product.min_sale_price !== product.min_price ? (
                       <div className="flex flex-col">
                         <span className="line-through text-gray-400 text-xs font-normal">
-                          {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+                          {product.min_price}{" "}
+                          {language === "ar" ? "د.ك" : "KWD"}
                         </span>
                         <div className="flex items-center gap-2">
                           <CornerDownRight
@@ -320,7 +321,7 @@ const Products = () => {
                             style={{ color: colors.primary }}
                           >
                             {product.min_sale_price}{" "}
-                            {language === "ar" ? "ج.م" : "LE"}
+                            {language === "ar" ? "د.ك" : "KWD"}
                           </span>
                         </div>
                       </div>
@@ -329,19 +330,21 @@ const Products = () => {
                         className="text-lg font-bold"
                         style={{ color: colors.primary }}
                       >
-                        {product.min_price} {language === "ar" ? "ج.م" : "LE"}
+                        {product.min_price} {language === "ar" ? "د.ك" : "KWD"}
                       </span>
                     )}
                   </div>
                   {/* Stock */}
-                  <div className="flex items-center gap-2 mt-auto">
-                    <span className="text-xs text-gray-400">
-                      {t("inStock")}:
-                    </span>
-                    <span className="text-xs font-semibold text-green-600">
-                      {product.total_stock}
-                    </span>
-                  </div>
+                  {product.total_stock === 0 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-400">
+                        {t("outOfStock")}:
+                      </span>
+                      <span className="text-xs font-semibold text-red-600">
+                        {t("soldOut")}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

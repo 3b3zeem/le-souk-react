@@ -213,8 +213,8 @@ const SwiperSection = ({ products }) => {
                 className="text-center text-lg font-bold mb-2"
                 style={{ color: colors.primary }}
               >
-                {language === "ar" ? "ج.م" : "LE"}
-                {product.min_sale_price} - {language === "ar" ? "ج.م" : "LE"}
+                {language === "ar" ? "د.ك" : "KWD"}
+                {product.min_sale_price} - {language === "ar" ? "د.ك" : "KWD"}
                 {product.max_sale_price}
               </p>
               <p className="text-sm text-center text-gray-600">

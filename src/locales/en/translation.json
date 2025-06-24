@@ -380,5 +380,8 @@
   "product_status": "Product Status",
   "showFilters": "Show Filters",
   "shop": "Shop",
-   "search_placeholder": "Search what you looking for?"
+  "search_placeholder": "Search what you looking for?",
+  "soldOut": "Sold Out",
+  "phone": "Phone Number",
+  "enterPhoneNumber": "phone number"
 }

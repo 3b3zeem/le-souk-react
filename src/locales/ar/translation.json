@@ -382,5 +382,8 @@
   "product_status": "حالة المنتج",
   "showFilters": "عرض الفلاتر",
   "shop": "المتجر",
-  "search_placeholder": "ابحث عما تبحث عنه"
+  "search_placeholder": "ابحث عما تبحث عنه",
+  "soldOut": "نفد المخزون",
+  "phone": "الهاتف المحمول",
+  "enterPhoneNumber": "أدخل رقم الهاتف"
 }

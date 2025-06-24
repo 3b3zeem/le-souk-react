@@ -462,11 +462,11 @@ const ProductId = () => {
               selectedVariant.sale_price !== selectedVariant.price ? (
                 <>
                   <span className="line-through text-gray-400 text-base font-normal">
-                    {selectedVariant.price} {language === "ar" ? "ج.م" : "LE"}
+                    {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
                   </span>
                   <span>
                     {selectedVariant.sale_price}{" "}
-                    {language === "ar" ? "ج.م" : "LE"}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </span>
                   {selectedVariant.discount_percentage && (
                     <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
@@ -476,18 +476,18 @@ const ProductId = () => {
                 </>
               ) : (
                 <span>
-                  {selectedVariant.price} {language === "ar" ? "ج.م" : "LE"}
+                  {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
                 </span>
               )
             ) : productDetails.min_sale_price &&
               productDetails.min_sale_price !== productDetails.min_price ? (
               <>
                 <span className="line-through text-gray-400 text-base font-normal">
-                  {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
+                  {productDetails.min_price} {language === "ar" ? "د.ك" : "KWD"}
                 </span>
                 <span>
                   {productDetails.min_sale_price}{" "}
-                  {language === "ar" ? "ج.م" : "LE"}
+                  {language === "ar" ? "د.ك" : "KWD"}
                 </span>
                 {productDetails.discount_percentage && (
                   <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
@@ -497,7 +497,7 @@ const ProductId = () => {
               </>
             ) : (
               <span>
-                {productDetails.min_price} {language === "ar" ? "ج.م" : "LE"}
+                {productDetails.min_price} {language === "ar" ? "د.ك" : "KWD"}
               </span>
             )}
           </p>
@@ -589,129 +589,85 @@ const ProductId = () => {
               >
                 {t("variants")}:
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              {/* خيارات القطع أو المقاسات */}
+              <div className="flex flex-wrap gap-2 mt-4">
                 {productDetails.variants.map((variant) => {
                   const isSelected = selectedVariant?.id === variant.id;
-
+                  const label = variant.size;
                   return (
-                    <motion.button
+                    <button
                       key={variant.id}
                       type="button"
                       onClick={() => handleVariantSelect(variant)}
-                      whileTap={{ scale: 0.95 }}
+                      className={`px-4 py-2 rounded-md border font-medium transition
+              ${isSelected ? "border-blue-600 bg-blue-50" : "border-gray-200 bg-white"}
+              ${variant.stock <= 0 ? "opacity-50 cursor-not-allowed" : "hover:border-blue-500 hover:bg-blue-100"}
+              focus:outline-none cursor-pointer`}
                       disabled={variant.stock <= 0}
-                      className={`px-4 sm:px-6 py-3 sm:py-4 rounded-md border transition-all duration-300 text-left flex flex-col gap-2 sm:gap-3 w-full  shadow-md
-                        ${
-                          isSelected
-                            ? "border-blue-600 bg-blue-50 shadow-lg"
-                            : "border-gray-200 bg-white"
-                        }
-                        ${
-                          variant.stock <= 0
-                            ? "opacity-50 cursor-not-allowed"
-                            : "hover:border-blue-500 hover:bg-blue-100"
-                        }
-                        focus:outline-none cursor-pointer font-medium
-                      `}
                     >
-                      <div className="flex flex-col gap-1 sm:gap-2 text-gray-800">
-                        {/* Size */}
-                        <div className="flex items-center gap-1 sm:gap-2">
-                          <span className="text-gray-700 font-medium text-sm sm:text-base">
-                            {t("Size")}:
-                          </span>
-                          <span className="font-semibold text-sm sm:text-base">
-                            {variant.size}
-                          </span>
-                        </div>
-
-                        {/* Color */}
-                        <div className="flex items-center gap-1 sm:gap-2">
-                          <span className="text-gray-700 font-medium text-sm sm:text-base">
-                            {t("Color")}:
-                          </span>
-                          <span className="font-semibold capitalize text-sm sm:text-base">
-                            {variant.color}
-                          </span>
-                          <span
-                            className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-gray-300"
-                            style={{ backgroundColor: variant.color }}
-                          ></span>
-                        </div>
-
-                        {/* Price */}
-                        <div className="flex items-center gap-1 sm:gap-2 my-5">
-                          <span className="text-gray-700 font-medium text-sm sm:text-base">
-                            {t("Price")}:
-                          </span>
-                          {variant.sale_price &&
-                          variant.sale_price !== variant.price ? (
-                            <>
-                              <div className="flex flex-col items-start gap-1 sm:gap-2">
-                                <div className="flex items-center gap-1 sm:gap-2">
-                                  <span className="line-through text-gray-400 text-sm font-normal">
-                                    {variant.price}{" "}
-                                    {language === "ar" ? "ج.م" : "LE"}
-                                  </span>
-                                  {variant.discount_percentage && (
-                                    <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
-                                      {t("discount")}-
-                                      {variant.discount_percentage}%
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-1 sm:gap-2">
-                                  <span
-                                    className="text-base font-semibold"
-                                    style={{ color: colors.primary }}
-                                  >
-                                    {variant.sale_price}{" "}
-                                    {language === "ar" ? "ج.م" : "LE"}
-                                  </span>
-                                  <CornerDownLeft
-                                    size={22}
-                                    style={{ color: colors.primary }}
-                                  />
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <span
-                              className="text-base font-semibold"
-                              style={{ color: colors.primary }}
-                            >
-                              {variant.price} {language === "ar" ? "ج.م" : "LE"}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Stock */}
-                        <div className="flex items-center gap-1 sm:gap-2">
-                          <span className="text-gray-700 font-medium text-sm sm:text-base">
-                            {t("Stock")}:
-                          </span>
-                          <span
-                            className={`font-semibold flex items-center gap-1 px-1 sm:px-2 py-0.5 sm:py-1 rounded-md ${
-                              variant.stock > 0
-                                ? "text-green-700 bg-green-100"
-                                : "text-red-700 bg-red-100"
-                            }`}
-                          >
-                            {variant.stock > 0
-                              ? `${variant.stock}`
-                              : t("Out of stock")}
-                            {variant.stock > 0 && (
-                              <span className="text-green-700 font-medium text-xs sm:text-base">
-                                {t("available")}
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </motion.button>
+                      {label}
+                    </button>
                   );
                 })}
               </div>
+              {/* تفاصيل المتغير المختار */}
+              {selectedVariant && (
+                <div className="mt-4 p-4 border rounded-md bg-gray-50">
+                  <div className="flex flex-col gap-2 text-gray-800">
+                    {/* Size or pcs */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">{t("Size")}:</span>
+                      <span className="font-semibold">{selectedVariant.size || selectedVariant.pcs}</span>
+                    </div>
+                    {/* Color */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">{t("Color")}:</span>
+                      <span className="font-semibold capitalize">{selectedVariant.color}</span>
+                      <span
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        style={{ backgroundColor: selectedVariant.color }}
+                      ></span>
+                    </div>
+                    {/* Price */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">{t("Price")}:</span>
+                      {selectedVariant.sale_price && selectedVariant.sale_price !== selectedVariant.price ? (
+                        <>
+                          <span className="line-through text-gray-400 text-sm font-normal">
+                            {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
+                          </span>
+                          <span className="text-base font-semibold" style={{ color: colors.primary }}>
+                            {selectedVariant.sale_price} {language === "ar" ? "د.ك" : "KWD"}
+                          </span>
+                          {selectedVariant.discount_percentage && (
+                            <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                              {t("discount")}-{selectedVariant.discount_percentage}%
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-base font-semibold" style={{ color: colors.primary }}>
+                          {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
+                        </span>
+                      )}
+                    </div>
+                    {/* Stock */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">{t("Stock")}:</span>
+                      <span className={`font-semibold flex items-center gap-1 px-2 py-1 rounded-md ${
+                        selectedVariant.stock > 0 ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
+                      }`}>
+                        {selectedVariant.stock > 0 ? `${selectedVariant.stock}` : t("Out of stock")}
+                        {selectedVariant.stock > 0 && (
+                          <span className="text-green-700 font-medium text-xs sm:text-base">
+                            {t("available")}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

@@ -84,10 +84,9 @@ const Navbar = () => {
 
   const navLinks = [
     { path: "/", label: t("home"), isPrimary: true },
-    { path: "/about", label: t("about"), isPrimary: true },
-    { path: "/products", label: t("shop"), isPrimary: true },
-    { path: "/packages", label: t("packages"), isPrimary: true },
     { path: "/categories", label: t("categories"), isPrimary: true },
+    { path: "/products", label: t("products"), isPrimary: true },
+    { path: "/packages", label: t("packages"), isPrimary: true },
     { path: "/contact", label: t("contact"), isPrimary: true },
   ];
 

@@ -65,6 +65,20 @@ const Contact = () => {
                 </div>
                 <div>
                   <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    {t("phone")}
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    className={`mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 ${language === "ar" ? "text-right" : "text-left"}`}
+                    placeholder={t("enterPhoneNumber")}
+                  />
+                </div>
+                <div>
+                  <label
                     htmlFor="subject"
                     className="block text-sm font-medium text-gray-700"
                   >
@@ -88,7 +102,7 @@ const Contact = () => {
           <div className="md:w-1/2 flex flex-col gap-4">
             <div className="bg-white rounded-lg shadow-md p-4">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1620708.777384139!2d31.196143000000003!3d30.059379!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145841dc55624d6f%3A0x9ca3eff65f565b3e!2sEcommerce!5e1!3m2!1sar!2seg!4v1745863720056!5m2!1sar!2seg"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12829.559166403684!2d47.9201499!3d29.3057355!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3fcf9ba2ae78ef57%3A0xf5f2a6b63d01f498!2sLe%20Souk!5e1!3m2!1sen!2seg!4v1750797660017!5m2!1sen!2seg"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}

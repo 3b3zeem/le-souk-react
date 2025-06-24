@@ -173,7 +173,7 @@ const HeroSection = () => {
                   <div className={language === "ar" ? "text-right" : "text-left"}>
                     <h2
                       className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4 w-[90%]"
-                      style={{ color: colors.primary }}
+                      style={{ color: colors.text }}
                     >
                       {slide.title[language]}
                     </h2>

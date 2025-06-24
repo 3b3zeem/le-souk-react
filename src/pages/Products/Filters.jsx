@@ -145,13 +145,13 @@ const Filters = ({
                       <div className="flex text-gray-950 font-semibold">
                         <span>
                           <span className="text-gray-600">{t("price")}:</span>{" "}
-                          {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                          {sliderPrice[0]} {language === "ar" ? "د.ك" : "KWD"}
                         </span>
                         <span>
                           <Minus />
                         </span>
                         <span>
-                          {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                          {sliderPrice[1]} {language === "ar" ? "د.ك" : "KWD"}
                         </span>
                       </div>
                       <button
@@ -321,13 +321,13 @@ const Filters = ({
               <div className="flex text-gray-950 font-semibold">
                 <span>
                   <span className="text-gray-600">{t("price")}:</span>{" "}
-                  {sliderPrice[0]} {language === "ar" ? "ج.م" : "LE"}
+                  {sliderPrice[0]} {language === "ar" ? "د.ك" : "KWD"}
                 </span>
                 <span>
                   <Minus />
                 </span>
                 <span>
-                  {sliderPrice[1]} {language === "ar" ? "ج.م" : "LE"}
+                  {sliderPrice[1]} {language === "ar" ? "د.ك" : "KWD"}
                 </span>
               </div>
               <button
