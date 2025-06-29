@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import Order from "./Order/Order";
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   lightText: "#ffffff",
   productTitle: "#4b5563",
   productName: "#6b7280",

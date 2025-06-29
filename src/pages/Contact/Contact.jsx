@@ -91,7 +91,7 @@ const Contact = () => {
                     placeholder={t("subject")}
                   ></textarea>
                 </div>
-                <button className="w-[200px] bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
+                <button className="w-[200px] bg-[#333e2c] text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
                   {t("sendMessage")}
                 </button>
               </div>

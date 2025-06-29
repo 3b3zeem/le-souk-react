@@ -120,7 +120,7 @@ const SetPrimaryImageForm = ({
               </button>
               <button
                 onClick={handleSetPrimary}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 flex items-center justify-center transition-all duration-200 cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (

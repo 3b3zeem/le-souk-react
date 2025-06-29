@@ -77,7 +77,7 @@ const Navbar = () => {
   }, [overlayRef, avatarRef, drawerRef]);
 
   const colors = {
-    primary: "#1e70d0",
+    primary: "#333e2c",
     textDark: "#333333",
     bgLight: "#ffffff",
   };
@@ -158,7 +158,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200 transition-all duration-300 ease-in-out bg-white hidden md:block`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-300 ease-in-out bg-[#e8e4dd] hidden md:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
@@ -183,7 +183,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-white md:hidden flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-[#e8e4dd] md:hidden flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
           } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
@@ -237,7 +237,7 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="bg-[#1e70d0] text-white font-bold py-1 px-4 rounded me-5 cursor-pointer customEffect"
+                className="bg-[#333e2c] text-white font-bold py-1 px-4 rounded me-5 cursor-pointer customEffect"
               >
                 <span>{t("login")}</span>
               </Link>
@@ -255,7 +255,7 @@ const Navbar = () => {
           className={`h-[3px] w-full bg-gray-100 absolute  left-0 -bottom-0`}
         >
           <div
-            className="h-full bg-[#1e70d0] transition-all duration-150"
+            className="h-full bg-[#333e2c] transition-all duration-150"
             style={{ width: `${scrollProgress}%` }}
           ></div>
         </div>
@@ -278,7 +278,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ duration: 0.3 }}
-              className="h-full w-[300px] bg-white flex flex-col"
+              className="h-full w-[300px] bg-[#e8e4dd] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center p-4 border-b">
@@ -301,8 +301,8 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       `
                         cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]
-                        ${isActive ? "text-[#1e70d0]" : ""}
-                        ${hover === index ? "text-[#1e70d0]" : ""}
+                        ${isActive ? "text-[#333e2c]" : ""}
+                        ${hover === index ? "text-[#333e2c]" : ""}
                       `
                     }
                     onMouseEnter={() => setHover(index)}
@@ -349,7 +349,7 @@ const Navbar = () => {
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
                         className={`absolute ${language === "ar" ? "left-0" : "right-0"
-                          } absolute mt-3 w-full bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
+                          } absolute mt-3 w-full bg-[#e8e4dd] rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
                       >
                         {renderAdminLink()}
                         <button

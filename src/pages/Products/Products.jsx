@@ -25,7 +25,7 @@ import { motion, AnimatePresence } from "framer-motion";
 ring2.register();
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   lightText: "#ffffff",
   productTitle: "#4b5563",
   productName: "#6b7280",
@@ -225,7 +225,7 @@ const Products = () => {
             onClick={() => handlePageChange(p)}
             className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
               meta.current_page === p
-                ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
+                ? "bg-blue-500 text-white hover:bg-[#333e2c] transition-all duration-100"
                 : "hover:bg-gray-200 transition-all duration-200"
             }`}
           >
@@ -351,7 +351,7 @@ const Products = () => {
                       }}
                       className={
                         perPage === num
-                          ? "font-bold text-[#1e70d0] cursor-pointer"
+                          ? "font-bold text-[#333e2c] cursor-pointer"
                           : "text-gray-400 cursor-pointer hover:text-black transition-all duration-200"
                       }
                       style={{ userSelect: "none" }}
@@ -379,7 +379,7 @@ const Products = () => {
                     size={22}
                     className={
                       viewMode === "list"
-                        ? "text-[#1e70d0] cursor-pointer"
+                        ? "text-[#333e2c] cursor-pointer"
                         : "text-gray-400 cursor-pointer"
                     }
                   />
@@ -396,7 +396,7 @@ const Products = () => {
                     size={22}
                     className={
                       viewMode === "grid"
-                        ? "text-[#1e70d0] cursor-pointer"
+                        ? "text-[#333e2c] cursor-pointer"
                         : "text-gray-400 cursor-pointer"
                     }
                   />

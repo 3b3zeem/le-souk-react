@@ -154,7 +154,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all font-medium shadow-sm flex items-center gap-2"
+                className="px-6 py-2 text-white bg-[#333e2c] rounded-lg hover:bg-blue-700 transition-all font-medium shadow-sm flex items-center gap-2"
                 disabled={loading}
               >
                 {loading && (

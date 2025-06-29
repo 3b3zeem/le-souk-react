@@ -8,7 +8,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   lightText: "#ffffff",
   productTitle: "#4b5563",
   productDesc: "#374149 ",
@@ -88,7 +88,7 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const NextArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -right-2 md:-right-5 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -right-2 md:-right-5 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronRight size={20} />
     </button>
@@ -97,7 +97,7 @@ const Reviews = ({ reviews, productId, fetchProductDetails }) => {
   const PrevArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -left-2 md:-left-5 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -left-2 md:-left-5 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronLeft size={20} />
     </button>

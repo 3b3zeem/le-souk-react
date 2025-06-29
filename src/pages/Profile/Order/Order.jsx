@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   lightText: "#ffffff",
   productTitle: "#4b5563",
   productName: "#6b7280",
@@ -166,7 +166,7 @@ const Order = () => {
                     )}
                     <button
                       onClick={() => navigate(`/order/${order.id}`)}
-                      className="text-sm py-2 px-4 text-light bg-[#1e70d0] flex items-center gap-1 customEffect cursor-pointer rounded"
+                      className="text-sm py-2 px-4 text-light bg-[#333e2c] flex items-center gap-1 customEffect cursor-pointer rounded"
                     >
                       <span className="flex items-center gap-1">
                         {t("moreDetails")}
@@ -204,7 +204,7 @@ const Order = () => {
                     </ul>
                     <button
                       onClick={() => setShowItemsModal(false)}
-                      className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
+                      className="mt-6 bg-[#333e2c] text-white px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
                     >
                       {t("close")}
                     </button>

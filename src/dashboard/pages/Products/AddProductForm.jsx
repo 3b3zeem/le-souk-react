@@ -526,7 +526,7 @@ const AddProductForm = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow transition cursor-pointer"
+                  className="px-6 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow transition cursor-pointer"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

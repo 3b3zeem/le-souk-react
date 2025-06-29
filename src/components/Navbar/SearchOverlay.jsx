@@ -64,7 +64,7 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 40, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="bg-white flex w-[80vw] max-w-4xl min-h-[400px] overflow-hidden cursor-default"
+            className="bg-[#e8e4dd] flex w-[80vw] max-w-4xl min-h-[400px] overflow-hidden cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Suggestions */}
@@ -79,7 +79,7 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
                                     className="w-full border rounded-full px-4 py-2 mb-6"
                                     />
                                 </form> */}
-              <h3 className="text-lg font-bold mb-4 text-[#1e70d0]">
+              <h3 className="text-lg font-bold mb-4 text-[#333e2c]">
                 {language === 'ar' ? 'منتجات مقترحة' : 'Suggestion products'}
               </h3>
               <div>
@@ -107,12 +107,12 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
                               <span className="line-through text-gray-400 mr-2">
                                 {product.min_price}$
                               </span>
-                              <span className="text-[#1e70d0] font-bold">
+                              <span className="text-[#333e2c] font-bold">
                                 {product.min_sale_price}$
                               </span>
                             </>
                           ) : (
-                            <span className="text-[#1e70d0] font-bold">
+                            <span className="text-[#333e2c] font-bold">
                               {product.min_price}$
                             </span>
                           )}
@@ -125,7 +125,7 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
             </div>
             {/* Categories */}
             <div className="w-1/3 bg-gray-100 p-8">
-              <h3 className="text-lg font-bold mb-4 text-[#1e70d0]">
+              <h3 className="text-lg font-bold mb-4 text-[#333e2c]">
                 {t("categories")}
               </h3>
               <ul>
@@ -136,7 +136,7 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
                       navigate(`/products?category=${cat.id}`);
                       onClose();
                     }}
-                    className="mb-2 text-gray-700 hover:text-[#1e70d0] transition-all duration-200 cursor-pointer"
+                    className="mb-2 text-gray-700 hover:text-[#333e2c] transition-all duration-200 cursor-pointer"
                   >
                     {cat.name}
                   </li>

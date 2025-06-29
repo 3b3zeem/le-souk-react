@@ -275,7 +275,7 @@ const PackagesId = () => {
                     </span>
                   </p>
                   <button
-                    className="mt-2 w-full bg-blue-600 text-white py-2 rounded-lg transition-colors font-semibold cursor-pointer customEffect"
+                    className="mt-2 w-full bg-[#333e2c] text-white py-2 rounded-lg transition-colors font-semibold cursor-pointer customEffect"
                     onClick={() => navigate(`/products/${product.product.id}`)}
                   >
                     <span>{t("View Details")}</span>

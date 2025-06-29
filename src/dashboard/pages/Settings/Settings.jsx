@@ -114,7 +114,7 @@ const Settings = () => {
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-auto">
-          <button className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm">
+          <button className="w-auto px-4 py-2 bg-[#333e2c] text-white rounded customEffect cursor-pointer text-sm">
             <span>{t("settings.add")}</span>
           </button>
         </div>
@@ -244,7 +244,7 @@ const Settings = () => {
                 key={index + 1}
                 onClick={() => handlePageChange(index + 1)}
                 className={`px-2 sm:px-3 py-1 border rounded-lg text-xs sm:text-sm ${
-                  page === index + 1 ? "bg-blue-600 text-white" : ""
+                  page === index + 1 ? "bg-[#333e2c] text-white" : ""
                 }`}
                 disabled={loading}
               >

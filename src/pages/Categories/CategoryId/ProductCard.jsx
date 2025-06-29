@@ -29,7 +29,7 @@ const ProductCard = ({ product, getTranslatedText }) => {
       ></div>
       <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
       <p className="text-sm text-gray-600 mb-2 line-clamp-2">{description}</p>
-      <div className="mt-2 text-[#1e70d0] font-semibold">
+      <div className="mt-2 text-[#333e2c] font-semibold">
         {product.min_sale_price &&
             product.min_sale_price !== product.min_price ? (
               <div className="flex gap-2">

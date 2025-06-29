@@ -124,7 +124,7 @@ const Coupons = () => {
           <div className="flex flex-col sm:flex-row gap-3 w-auto">
             <button
               onClick={() => setIsOverlayOpen(true)}
-              className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm"
+              className="w-auto px-4 py-2 bg-[#333e2c] text-white rounded customEffect cursor-pointer text-sm"
             >
               <span>{t("add_coupon")}</span>
             </button>
@@ -334,7 +334,7 @@ const Coupons = () => {
                     onClick={() => handlePageChange(pageNum)}
                     className={`px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium ${
                       currentPage === pageNum
-                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        ? "bg-[#333e2c] text-white hover:bg-blue-700"
                         : "text-gray-700 hover:bg-gray-100"
                     } transition-all duration-200`}
                   >

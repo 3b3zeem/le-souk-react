@@ -130,7 +130,7 @@ const AdminPackages = () => {
             onClick={handleOpenAdd}
             className="flex flex-col sm:flex-row gap-3 w-auto"
           >
-            <button className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm">
+            <button className="w-auto px-4 py-2 bg-[#333e2c] text-white rounded customEffect cursor-pointer text-sm">
               <span>{t("add_package")}</span>
             </button>
           </div>
@@ -350,7 +350,7 @@ const AdminPackages = () => {
                   onClick={() => handlePageChange(index + 1)}
                   className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
                     currentPage === index + 1
-                      ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
+                      ? "bg-blue-500 text-white hover:bg-[#333e2c] transition-all duration-100"
                       : "hover:bg-gray-200 transition-all duration-200"
                   }`}
                 >

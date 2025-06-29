@@ -26,11 +26,11 @@ export default function Loader() {
           alignItems: "center",
         }}
       >
-        <Helix size="70" speed="2.2" color="#1e70d0" />
+        <Helix size="70" speed="2.2" color="#333e2c" />
         <span
           style={{
             marginTop: "1.5rem",
-            color: "#1e70d0",
+            color: "#333e2c",
             fontWeight: 600,
             fontSize: "1.1rem",
             letterSpacing: "1px",
@@ -38,7 +38,7 @@ export default function Loader() {
           }}
         >
           {language === "ar" ? "جاري التحميل" : "Loading"}{" "}
-          <DotPulse size="25" speed="1.3" color="#1e70d0" />
+          <DotPulse size="25" speed="1.3" color="#333e2c" />
         </span>
       </div>
     </div>

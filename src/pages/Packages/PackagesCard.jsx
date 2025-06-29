@@ -30,16 +30,16 @@ const PackagesCard = ({ packages }) => {
 
         <div className="absolute inset-0 flex flex-col gap-5 justify-end items-start p-7 transition-all duration-300">
           {/* Category Name */}
-          <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-[#1e70d0] transition duration-300 truncate">
+          <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-[#333e2c] transition duration-300 truncate">
             {packages.name}
             {language === "ar" ? (
-              <MoveLeft className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <MoveLeft className="text-white group-hover:text-[#333e2c] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             ) : (
-              <MoveRight className="text-white group-hover:text-[#1e70d0] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <MoveRight className="text-white group-hover:text-[#333e2c] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             )}
           </h3>
           {/* Products Count */}
-          <span className="text-sm text-white mt-1 bg-gray-300/50 rounded-full px-3 py-1 hover:bg-[#1e70d0]  hover:text-white transition-colors duration-300">
+          <span className="text-sm text-white mt-1 bg-gray-300/50 rounded-full px-3 py-1 hover:bg-[#333e2c]  hover:text-white transition-colors duration-300">
             {productCount} {productCount === 1 ? "Product" : "Products"}
           </span>
         </div>

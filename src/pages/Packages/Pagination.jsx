@@ -54,7 +54,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, links = [] }) => {
                 onClick={() => handlePageChange(pageNumber)}
                 className={`relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 ${
                   isActive
-                    ? "bg-[#1e70d0] text-white"
+                    ? "bg-[#333e2c] text-white"
                     : "bg-white text-gray-700 hover:bg-gray-50"
                 }`}
               >

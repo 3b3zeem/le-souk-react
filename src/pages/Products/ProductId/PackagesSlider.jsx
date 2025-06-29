@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CornerDownLeft, CornerDownRight, Percent } from "lucide-react";
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   borderLight: "#e5e7eb",
   categoryTitle: "#22223b",
   productTitle: "#22223b",
@@ -169,7 +169,7 @@ const PackagesSlider = ({ product_id, language }) => {
       <div className="flex justify-center mt-8">
         <Link
           to={"/packages"}
-          className="px-6 py-2 border rounded text-md font-medium bg-[#1e70d0] transition duration-200 customEffect"
+          className="px-6 py-2 border rounded text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
           style={{ borderColor: colors.primary, color: colors.primary }}
         >
           <span>{t("All_Packages")}</span>

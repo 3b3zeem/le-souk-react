@@ -61,7 +61,7 @@ const sliderData = [
 ];
 
 const colors = {
-  primary: "#1e70d0",
+  primary: "#333e2c",
   secondary: "#475569",
   accent: "#6366f1",
   text: "#333333",

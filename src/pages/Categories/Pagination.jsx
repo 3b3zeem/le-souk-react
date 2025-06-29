@@ -13,7 +13,7 @@ const Pagination = ({ meta, onPageChange }) => {
             onClick={() => link.url && onPageChange(parseInt(link.label))}
             className={`px-3 py-1 rounded ${
               link.active
-                ? "bg-[#1e70d0] text-white cursor-pointer hover:opacity-85 transition-all duration-200"
+                ? "bg-[#333e2c] text-white cursor-pointer hover:opacity-85 transition-all duration-200"
                 : "bg-gray-200 text-gray-700 cursor-pointer hover:opacity-85 transition-all duration-200"
             }`}
             disabled={!link.url}

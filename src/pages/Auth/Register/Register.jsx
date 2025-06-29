@@ -24,7 +24,7 @@ const Register = () => {
   const { language } = useLanguage();
 
   const colors = {
-    primary: "#1e70d0",
+    primary: "#333e2c",
     secondary: "#475569",
     text: "#333333",
     lightText: "#ffffff",
@@ -254,7 +254,7 @@ const Register = () => {
               type="submit"
               onClick={handleSubmit}
               disabled={loading}
-              className={`w-full py-3 rounded-md text-white font-medium bg-[var(--primary)] hover:bg-blue-600 transition duration-200 customEffect cursor-pointer ${
+              className={`w-full py-3 rounded-md text-white font-medium bg-[var(--primary)] hover:bg-[#333e2c] transition duration-200 customEffect cursor-pointer ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
               style={{ backgroundColor: colors.primary }}

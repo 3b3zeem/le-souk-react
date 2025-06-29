@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const NavbarBottom = ({ navLinks, hover, setHover }) => (
-  <div className="bg-[#1e70d0]">
+  <div className="bg-[#333e2c]">
     <div className="container mx-auto max-w-7xl flex items-center justify-start py-6">
       {navLinks.map((link, index) => (
         <NavLink

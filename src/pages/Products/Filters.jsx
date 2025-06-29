@@ -70,7 +70,7 @@ const Filters = ({
     >
       <button
         onClick={() => setShowFilters(true)}
-        className="lg:hidden bg-blue-600 text-white px-4 py-2 shadow-md focus:outline-none focus:ring-2 cursor-pointer customEffect"
+        className="lg:hidden bg-[#333e2c] text-white px-4 py-2 shadow-md focus:outline-none focus:ring-2 cursor-pointer customEffect"
         aria-label={t("showFilters")}
       >
         <span>{t("showFilters")}</span>
@@ -112,7 +112,7 @@ const Filters = ({
                     style={{ color: colors.productName }}
                   >
                     {t("filter_by_price")}
-                    <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+                    <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
                   </h3>
                   <div className="flex flex-col gap-4">
                     <Slider
@@ -174,7 +174,7 @@ const Filters = ({
                     style={{ color: colors.productName }}
                   >
                     {t("categories")}
-                    <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+                    <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
                   </h3>
                   <div className="flex flex-wrap gap-3">
                     {categories.map((category) => {
@@ -248,7 +248,7 @@ const Filters = ({
                     style={{ color: colors.productName }}
                   >
                     {t("product_status")}
-                    <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+                    <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
                   </h3>
                   <div className="flex justify-between">
                     <label className="flex items-center gap-3 text-sm cursor-pointer select-none">
@@ -293,7 +293,7 @@ const Filters = ({
             style={{ color: colors.productName }}
           >
             {t("filter_by_price")}
-            <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+            <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
           </h3>
           <div className="flex flex-col gap-4 px-3">
             <Slider
@@ -350,7 +350,7 @@ const Filters = ({
             style={{ color: colors.productName }}
           >
             {t("categories")}
-            <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+            <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
           </h3>
           <div className="flex flex-wrap gap-3">
             {categories.map((category) => {
@@ -425,7 +425,7 @@ const Filters = ({
             style={{ color: colors.productName }}
           >
             {t("product_status")}
-            <div className="w-[50px] h-[3px] bg-[#1A76D1] mb-5 mt-1"></div>
+            <div className="w-[50px] h-[3px] bg-[#333e2c] mb-5 mt-1"></div>
           </h3>
           <div className="flex justify-between">
             <label className="flex items-center gap-3 text-sm cursor-pointer select-none">

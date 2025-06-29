@@ -45,7 +45,7 @@ const NavbarUserMenu = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className={`absolute ${language === "ar" ? "left-0" : "right-0"} mt-3 w-52 bg-white rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
+            className={`absolute ${language === "ar" ? "left-0" : "right-0"} mt-3 w-52 bg-[#e8e4dd] rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
           >
             <div className="flex flex-col gap-3 px-4 py-6 bg-gray-50 border-b border-gray-100">
               <p className="text-sm text-gray-600">{t("welcome")}</p>

@@ -168,7 +168,7 @@ const Categories = () => {
                 });
                 setIsOverlayOpen(true);
               }}
-              className="w-auto px-4 py-2 bg-blue-600 text-white rounded customEffect cursor-pointer text-sm"
+              className="w-auto px-4 py-2 bg-[#333e2c] text-white rounded customEffect cursor-pointer text-sm"
             >
               <span>{t("add_category")}</span>
             </button>
@@ -373,7 +373,7 @@ const Categories = () => {
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
+                      className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
                     >
                       {isEditMode ? t("update") : t("add")}
                     </button>
@@ -509,7 +509,7 @@ const Categories = () => {
                   onClick={() => handlePageChange(index + 1)}
                   className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
                     page === index + 1
-                      ? "bg-blue-500 text-white hover:bg-blue-600 transition-all duration-100"
+                      ? "bg-blue-500 text-white hover:bg-[#333e2c] transition-all duration-100"
                       : "hover:bg-gray-200 transition-all duration-200"
                   }`}
                 >

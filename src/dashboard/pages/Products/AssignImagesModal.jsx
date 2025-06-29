@@ -149,7 +149,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
               </button>
               <button
                 type="submit"
-                className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all font-medium shadow-sm flex items-center gap-2 cursor-pointer"
+                className="px-6 py-2 text-white bg-[#333e2c] rounded-lg hover:bg-blue-700 transition-all font-medium shadow-sm flex items-center gap-2 cursor-pointer"
                 disabled={loading}
               >
                 {loading && (

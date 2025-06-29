@@ -34,7 +34,7 @@ const CategoryId = () => {
 
   return (
     <div dir={language === "ar" ? "rtl" : "ltr"}>
-      <div className="bg-[#1e70d0] text-white text-center py-20 mb-6">
+      <div className="bg-[#333e2c] text-white text-center py-20 mb-6">
         <h2 className="text-2xl font-bold">{category.name}</h2>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

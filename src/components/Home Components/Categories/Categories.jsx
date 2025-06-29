@@ -16,7 +16,7 @@ const Categories = () => {
   const NextArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -right-4 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -right-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronRight size={20} />
     </button>
@@ -25,7 +25,7 @@ const Categories = () => {
   const PrevArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="absolute top-1/2 -left-4 -translate-y-1/2 bg-blue-600 hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      className="absolute top-1/2 -left-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
     >
       <ChevronLeft size={20} />
     </button>
@@ -85,7 +85,7 @@ const Categories = () => {
   }
 
   const colors = {
-    primary: "#1e70d0",
+    primary: "#333e2c",
     categoryTitle: "#808080",
     categoryName: "#6b7271",
     borderLight: "#e5e7eb",
@@ -107,7 +107,7 @@ const Categories = () => {
         <div className="flex justify-center">
           <Link
             to={"/categories"}
-            className="px-6 py-2 border rounded-md text-md font-medium bg-[#1e70d0] transition duration-200 customEffect"
+            className="px-6 py-2 border rounded-md text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
             style={{ borderColor: colors.primary, color: colors.primary }}
           >
             <span>{t("seeMore")}</span>
