@@ -185,6 +185,8 @@ const EditProductForm = ({
       const newSelected = isSelected
         ? prev.category_ids.filter((catId) => catId !== id)
         : [...prev.category_ids, id];
+
+        
       return { ...prev, category_ids: newSelected };
     });
   };

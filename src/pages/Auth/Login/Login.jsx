@@ -81,7 +81,7 @@ const Login = () => {
       <div className="w-full md:w-1/2 p-8 flex items-center justify-center md:min-h-screen">
         <div className="w-full max-w-md pb-16 md:pb-0">
           <div className="flex justify-center mb-4">
-            <div className="p-4 bg-blue-500 rounded-lg">
+            <div className="p-4 bg-[#333e2c] rounded-lg">
               <Lock size={24} color="white" />
             </div>
           </div>

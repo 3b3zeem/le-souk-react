@@ -225,7 +225,7 @@ const Products = () => {
             onClick={() => handlePageChange(p)}
             className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
               meta.current_page === p
-                ? "bg-blue-500 text-white hover:bg-[#333e2c] transition-all duration-100"
+                ? "bg-[#333e2c] text-white hover:bg-[#333e2c] transition-all duration-100"
                 : "hover:bg-gray-200 transition-all duration-200"
             }`}
           >

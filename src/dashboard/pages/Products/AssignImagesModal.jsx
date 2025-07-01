@@ -126,7 +126,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
                           className="w-full h-24 object-cover"
                         />
                         {isSelected && (
-                          <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
+                          <div className="absolute inset-0 bg-[#333e2c]/20 flex items-center justify-center">
                             <Check color="#fff" />
                           </div>
                         )}

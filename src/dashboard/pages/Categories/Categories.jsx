@@ -509,7 +509,7 @@ const Categories = () => {
                   onClick={() => handlePageChange(index + 1)}
                   className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
                     page === index + 1
-                      ? "bg-blue-500 text-white hover:bg-[#333e2c] transition-all duration-100"
+                      ? "bg-[#333e2c] text-white hover:bg-[#333e2c] transition-all duration-100"
                       : "hover:bg-gray-200 transition-all duration-200"
                   }`}
                 >

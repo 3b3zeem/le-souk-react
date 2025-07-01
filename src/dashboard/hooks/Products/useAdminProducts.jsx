@@ -101,76 +101,85 @@ const useAdminProducts = () => {
   };
 
   const updateProduct = async (productId, formData, section) => {
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
-      let url = "";
-      let body = formData;
-      let contentType = "multipart/form-data";
-
-      switch (section) {
-        case "basic":
-          url = `https://le-souk.dinamo-app.com/api/admin/products/${productId}`;
-          contentType = "application/json";
-          body = {
-            status: formData.get("status") || "active",
-            en: {
-              name: formData.get("en[name]") || "",
-              description: formData.get("en[description]") || "",
-            },
-            ar: {
-              name: formData.get("ar[name]") || "",
-              description: formData.get("ar[description]") || "",
-            },
-            category_ids: Array.from(formData.entries())
-              .filter(([key]) => key.startsWith("categories["))
-              .map(([, value]) => value),
-          };
-          break;
-        case "variants":
-          url = `https://le-souk.dinamo-app.com/api/admin/products/${productId}/variants`;
-          contentType = "application/json";
-          const variants = [];
-          formData.forEach((value, key) => {
-            const match = key.match(/variants\[(\d+)\]\[(\w+)\]/);
-            if (match) {
-              const index = parseInt(match[1]);
-              const field = match[2];
-              if (!variants[index]) variants[index] = {};
-              variants[index][field] = value;
-            }
-          });
-          body = {
-            variants: variants.filter((v) => Object.keys(v).length > 0),
-          };
-          break;
-        default:
-          throw new Error("Invalid section");
-      }
-
-      const response = await axios.put(url, body, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": contentType,
-        },
-      });
-
-      setProducts((prev) =>
-        prev.map((p) => (p.id === productId ? response.data.data : p))
-      );
-      toast.success(`Product ${section} updated successfully!`);
-      await fetchProducts();
-      return true;
-    } catch (err) {
-      console.error("Error details:", err);
-      const errorMessage =
-        err.response?.data?.message || `Failed to update product ${section}`;
-      toast.error(errorMessage);
-      return false;
+  try {
+    if (!token) {
+      throw new Error("No token found. Please log in.");
     }
-  };
+
+    let url = "";
+    let body = formData;
+    let contentType = "multipart/form-data";
+
+    switch (section) {
+      case "basic":
+        url = `https://le-souk.dinamo-app.com/api/admin/products/${productId}`;
+        contentType = "application/json";
+        
+        const categoryIds = Array.from(formData.entries())
+          .filter(([key]) => key.startsWith("categories["))
+          .map(([, value]) => value);
+
+       
+        const categories = categoryIds.length > 0 ? { id: parseInt(categoryIds[0]) } : null;
+
+        body = {
+          status: formData.get("status") || "active",
+          en: {
+            name: formData.get("en[name]") || "",
+            description: formData.get("en[description]") || "",
+          },
+          ar: {
+            name: formData.get("ar[name]") || "",
+            description: formData.get("ar[description]") || "",
+          },
+          ...(categories && { categories })
+        };
+        break;
+        
+      case "variants":
+        url = `https://le-souk.dinamo-app.com/api/admin/products/${productId}/variants`;
+        contentType = "application/json";
+        const variants = [];
+        formData.forEach((value, key) => {
+          const match = key.match(/variants\[(\d+)\]\[(\w+)\]/);
+          if (match) {
+            const index = parseInt(match[1]);
+            const field = match[2];
+            if (!variants[index]) variants[index] = {};
+            variants[index][field] = value;
+          }
+        });
+        body = {
+          variants: variants.filter((v) => Object.keys(v).length > 0),
+        };
+        break;
+        
+      default:
+        throw new Error("Invalid section");
+    }
+
+    const response = await axios.put(url, body, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": contentType,
+      },
+    });
+
+    setProducts((prev) =>
+      prev.map((p) => (p.id === productId ? response.data.data : p))
+    );
+    toast.success(`Product ${section} updated successfully!`);
+    
+    await fetchProducts();
+    return true;
+  } catch (err) {
+    console.error("Error details:", err);
+    const errorMessage =
+      err.response?.data?.message || `Failed to update product ${section}`;
+    toast.error(errorMessage);
+    return false;
+  }
+};
 
   const updateProductImages = async (productId, formData) => {
     try {

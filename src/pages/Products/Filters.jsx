@@ -268,7 +268,7 @@ const Filters = ({
                         />
                         <span
                           className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
-                            inStock === 1 ? "bg-blue-500" : "bg-gray-300"
+                            inStock === 1 ? "bg-[#333e2c]" : "bg-gray-300"
                           } peer-focus:ring-2 peer-focus:ring-blue-300`}
                         ></span>
                         <span
@@ -445,7 +445,7 @@ const Filters = ({
                 />
                 <span
                   className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
-                    inStock === 1 ? "bg-blue-500" : "bg-gray-300"
+                    inStock === 1 ? "bg-[#333e2c]" : "bg-gray-300"
                   } peer-focus:ring-2 peer-focus:ring-blue-300`}
                 ></span>
                 <span

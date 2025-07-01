@@ -558,7 +558,7 @@ const AddPackageForm = ({
           </button>
           <button
             type="submit"
-            className="p-2 bg-[#333e2c] hover:bg-blue-500 transition-all duration-200 text-white py-2 rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            className="p-2 bg-[#333e2c] hover:bg-[#333e2c] transition-all duration-200 text-white py-2 rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
             disabled={loading}
           >
             {loading ? (
