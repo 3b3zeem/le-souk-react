@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { ring } from "ldrs";
+import imageCompression from "browser-image-compression";
+
 ring.register();
 
 const AddProductForm = ({
@@ -80,13 +82,36 @@ const AddProductForm = ({
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async  (e) => {
     const files = Array.from(e.target.files);
+    const compressionOptions = {
+      maxSizeMB: 1,          
+      maxWidthOrHeight: 1920, 
+      useWebWorker: true,     
+    };
 
-    setProductData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...files],
-    }));
+    try {
+      // Compress all selected images simultaneously using Promise.all
+      const compressedFiles = await Promise.all(
+        files.map(async (file) => {
+          try {
+            const compressedFile = await imageCompression(file, compressionOptions);
+            return compressedFile;
+          } catch (error) {
+            console.error("Error compressing image:", error);
+            return file;
+          }
+        })
+      );
+
+      setProductData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...compressedFiles],
+      }));
+    } catch (error) {
+      console.error("Error processing images:", error);
+      toast.error("Error processing images");
+    }
 
     if (imageInputRef.current) {
       imageInputRef.current.value = "";
