@@ -8,6 +8,8 @@ import {
   Instagram,
 } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 
 import logo from "../../assets/Images/3x/navbar.png";
 
@@ -70,83 +72,39 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div>
-            <img src={logo} alt="logo" width={200} draggable={false} />
-            {/* Opening Hour */}
-          <div className="flex flex-col items-start my-6 gap-3">
-            <div className="p-4 rounded-full border border-dotted border-gray-600">
-              <Clock size={25} className="text-[#353535]" />
-            </div>
-            <div>
-              <h4 className="text-lg font-medium text-[#353535]">Opening Hour</h4>
-              <p className="text-md" style={{ color: colors.textSecondary }}>
-                Saturday to Thursday <br /> Morning time: 10 am - 1 pm <br /> Evening time: 5pm
-                - 9:30pm <br /> Friday <br /> Evening time: 5pm - 9:30pm
-              </p>
-            </div>
-          </div>
-            <div className="flex space-x-4">
-              <a
-                href="https://www.instagram.com/lesoukkuwait/"
-                target="_blank"
-                className="px-2 py-3 border border-gray-600 hover:bg-white transition duration-200"
-              >
-                <Instagram size={25} className="text-[#353535]" />
-              </a>
-              <a
-                href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
-                target="_blank"
-                className="px-2 py-3 border border-gray-600 hover:bg-white text-white transition duration-200"
-              >
-                <FaTiktok size={25} className="text-[#353535]" />
-              </a>
-            </div>
+          <div className="flex justify-center  items-center sm:items-start">
+            <img src={logo} alt="logo" width={250} draggable={false} />
+        
           </div>
 
           {/* Costumers Support */}
           <div>
             <h3 className="relative inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              Costumers Support
+              Opening Hour
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
-            <ul className="space-y-2">
-              {[
-                "Store List",
-                "Opening Hours",
-                "Contact Us",
-                "Return Policy",
-              ].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className="text-sm flex items-center hover:translate-x-1.5 transition-all duration-200"
-                    style={{ color: colors.textSecondary }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = colors.primary)
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = colors.textSecondary)
-                    }
-                  >
-                    <span className="mr-2">&gt;</span> {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
+              <div>
+              {/* <h4 className="text-lg font-medium text-[#353535]">Opening Hour</h4> */}
+              <p className="text-md" style={{ color: colors.textSecondary }}>
+                Saturday to Thursday <br /> Morning time: 10 am - 1 pm <br /> Evening time: 5pm
+                - 9:30pm <br /> Friday <br /> Evening time: 5pm - 9:30pm
+              </p>
+            </div>
+         
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="relative inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
+            <h3 className="relative mb-1 inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
               Quick Links
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
+
+
             <ul className="space-y-2">
-              {["About Us", "Testimonial", "Faq", "Blog"].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href="#"
-                    className="text-sm flex items-center hover:translate-x-1.5 transition-all duration-200"
+                <li >
+                    <Link to={"/"}
+                     className="text-sm mb-1 flex items-center hover:translate-x-1.5 transition-all duration-200"
                     style={{ color: colors.textSecondary }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.color = colors.primary)
@@ -154,17 +112,60 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >
-                    <span className="mr-2">&gt;</span> {item}
-                  </a>
+                  >  <span className="mr-2">&gt;</span> Home
+             </Link>
+              <Link to={"/categories"}
+                     className="text-sm flex items-center mb-1 hover:translate-x-1.5 transition-all duration-200"
+                    style={{ color: colors.textSecondary }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = colors.primary)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = colors.textSecondary)
+                    }
+                  >  <span className="mr-2">&gt;</span> Categories
+             </Link>
+               <Link to={"/products"}
+                     className="text-sm mb-1 flex items-center hover:translate-x-1.5 transition-all duration-200"
+                    style={{ color: colors.textSecondary }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = colors.primary)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = colors.textSecondary)
+                    }
+                  >  <span className="mr-2">&gt;</span> Products
+             </Link>
+               <Link to={"/packages"}
+                     className="text-sm mb-1 flex items-center hover:translate-x-1.5 transition-all duration-200"
+                    style={{ color: colors.textSecondary }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = colors.primary)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = colors.textSecondary)
+                    }
+                  >  <span className="mr-2">&gt;</span> Packages
+             </Link>
+               <Link to={"/contact"}
+                     className="text-sm flex items-center hover:translate-x-1.5 transition-all duration-200"
+                    style={{ color: colors.textSecondary }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = colors.primary)
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = colors.textSecondary)
+                    }
+                  >  <span className="mr-2">&gt;</span> Contact
+             </Link>
+             
                 </li>
-              ))}
-            </ul>
+            </ul> 
           </div>
 
           {/* Newsletter */}
           <div>
-            <h3 className="relative inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
+            <h3 className="relative inline-block mb-1 text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
               newsletter
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
