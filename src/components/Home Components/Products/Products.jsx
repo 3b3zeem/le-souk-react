@@ -152,7 +152,7 @@ const Products = () => {
           <div className="flex items-center justify-center mb-3">
             <AlertCircle className="h-8 w-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold mb-2">
+          <h2 className="text-lg font-bold mb-2 ">
             {t("Something went wrong!")}
           </h2>
           <p className="text-sm">{error.message}</p>
@@ -167,7 +167,7 @@ const Products = () => {
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <h2
-        className="text-2xl sm:text-3xl font-normal mb-6 uppercase"
+        className="text-2xl sm:text-3xl font-normal mb-6 uppercase font-serif "
         style={{ color: colors.categoryTitle }}
       >
         {t("products")}

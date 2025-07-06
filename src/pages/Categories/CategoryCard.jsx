@@ -28,12 +28,12 @@ const CategoryCard = ({ category }) => {
 
         <div className="absolute inset-0 flex flex-col gap-5 justify-end items-start p-7 transition-all duration-300">
           {/* Category Name */}
-          <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-[#333e2c] transition duration-300 truncate">
+          <h3 className="flex gap-2 items-center text-xl font-semibold text-white group-hover:text-white transition duration-300 truncate">
             {category.name.slice(0, 20)}...
             {language === "ar" ? (
-              <MoveLeft className="text-white group-hover:text-[#333e2c] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <MoveLeft className="text-white group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             ) : (
-              <MoveRight className="text-white group-hover:text-[#333e2c] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <MoveRight className="text-white group-hover:text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             )}
           </h3>
           {/* Products Count */}

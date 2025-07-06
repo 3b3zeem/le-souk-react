@@ -21,7 +21,7 @@ const Login = () => {
   // Color variables
   const colors = {
     primary: "#333e2c",
-    secondary: "#475569",
+    secondary: "#e8e3de",
     accent: "#6366f1",
     text: "#333333",
     lightText: "#ffffff",
@@ -57,23 +57,23 @@ const Login = () => {
     >
       {/* Left Panel - Dark blue with illustration */}
       <div
-        className="w-full md:w-1/2 p-8 flex flex-col items-center justify-center text-center"
+        className="w-full md:w-1/2 p-8 flex flex-col items-center justify-center "
         style={{ backgroundColor: colors.secondary }}
       >
         <div className="max-w-md">
-          <h1 className="text-4xl font-bold mb-6">
-            <span className="text-white">{t("stayConnected")}</span>
+          <h1 className="text-4xl font-bold mb-6 font-serif ">
+            <span className="text-[#353535]">{t("stayConnected")}</span>
             <span style={{ color: colors.primary }}> {t("always")}</span>
           </h1>
 
-          <p className="text-white text-lg mb-10 leading-relaxed">
+          <p className="text-[#353535] text-lg mb-10 leading-relaxed">
             {t("loginDescription")}
           </p>
 
           {/* Phone Illustration */}
-          <div className="relative flex justify-center mt-8">
+          {/* <div className="relative flex justify-center mt-8">
             <img src={loginImg} alt={t("signIn")} />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -86,7 +86,7 @@ const Login = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8">{t("signIn")}</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 font-serif text-[#333e2c]">{t("signIn")}</h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -96,7 +96,7 @@ const Login = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd ] transition-all duration-200 ease-in-out"
                 placeholder=" "
                 onFocus={() => setFocusedField("email")}
                 onBlur={() => setFocusedField(null)}
@@ -112,7 +112,7 @@ const Login = () => {
                   }
                   ${
                     focusedField === "email" || email
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#353535] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -127,7 +127,7 @@ const Login = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out pr-10"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd ] transition-all duration-200 ease-in-out pr-10"
                 placeholder=" "
                 onFocus={() => setFocusedField("password")}
                 onBlur={() => setFocusedField(null)}
@@ -143,7 +143,7 @@ const Login = () => {
                   }
                   ${
                     focusedField === "password" || password
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#353535] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -153,7 +153,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500  transition-all duration-200 ease-in-out cursor-pointer ${
                   language === "ar" ? "left-3" : "right-3"
                 }`}
               >
@@ -174,7 +174,7 @@ const Login = () => {
             <div className="text-center mt-6">
               <p className="text-gray-700">
                 {t("noAccount")}
-                <Link to={"/register"} className="text-blue-500 ml-1">
+                <Link to={"/register"} className="text-[#333e2c] font-serif  ml-1 h4 text-decoration-underline font-medium hover:underline">
                   {t("signUp")}
                 </Link>
               </p>

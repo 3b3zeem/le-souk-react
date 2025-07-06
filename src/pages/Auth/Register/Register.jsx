@@ -25,7 +25,7 @@ const Register = () => {
 
   const colors = {
     primary: "#333e2c",
-    secondary: "#475569",
+    secondary: "#e8e3de",
     text: "#333333",
     lightText: "#ffffff",
   };
@@ -55,39 +55,39 @@ const Register = () => {
 
   return (
     <div
-      className="flex flex-col md:flex-row w-full min-h-screen"
+      className="flex flex-col md:flex-row w-full min-h-screen "
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       {/* Left Panel - Dark blue with illustration */}
       <div
-        className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center"
+        className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center "
         style={{ backgroundColor: colors.secondary }}
       >
         <div className="max-w-md">
-          <h1 className="text-4xl font-bold mb-6">
-            <span className="text-white">{t("joinUsIn")} </span>
-            <span className="text-gray-300">Le-Sock</span>
+          <h1 className="text-4xl font-bold mb-6 font-serif ">
+            <span className="text-[#353535]">{t("joinUsIn")} </span>
+            <span className="text-[#333e2c]">Le-Sock</span>
             {/* {t("leSock")} */}
           </h1>
 
-          <p className="text-white text-lg mb-6 leading-relaxed">
+          <p className="text-[#353535] text-lg mb-6 leading-relaxed">
             {t("signUpDescription")}
           </p>
 
-          <p className="text-white mt-6">
+          <p className="text-[#353535]  mt-6">
             {t("alreadyHaveAccount")}
             <Link
               to={"/login"}
-              className="text-white font-medium hover:underline ms-2"
+              className="text-[#353535] h4 font-medium hover:underline ms-2 font-serif "
             >
               {t("signIn")}
             </Link>
           </p>
 
           {/* Laptop Illustration */}
-          <div className="relative flex justify-center mt-12">
+          {/* <div className="relative flex justify-center mt-12">
             <img src={RegImg} alt={t("signUp")} />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -100,7 +100,7 @@ const Register = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8">{t("signUp")}</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 text-[#333e2c] font-serif ">{t("signUp")}</h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6">
@@ -111,7 +111,7 @@ const Register = () => {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className={`w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out`}
+                className={`w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd ]  transition-all duration-200 ease-in-out`}
                 placeholder=" "
                 onFocus={() => setFocusedField("username")}
                 onBlur={() => setFocusedField(null)}
@@ -127,7 +127,7 @@ const Register = () => {
                   }
                   ${
                     focusedField === "username" || username
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#333e2c] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -143,7 +143,7 @@ const Register = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd ] transition-all duration-200 ease-in-out"
                 placeholder=" "
                 onFocus={() => setFocusedField("email")}
                 onBlur={() => setFocusedField(null)}
@@ -159,7 +159,7 @@ const Register = () => {
                   }
                   ${
                     focusedField === "email" || email
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#333e2c] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -175,7 +175,7 @@ const Register = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd] transition-all duration-200 ease-in-out"
                 placeholder=" "
                 onFocus={() => setFocusedField("password")}
                 onBlur={() => setFocusedField(null)}
@@ -191,7 +191,7 @@ const Register = () => {
                   }
                   ${
                     focusedField === "password" || password
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#333e2c] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -201,7 +201,7 @@ const Register = () => {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#333e2c] transition-all duration-200 ease-in-out cursor-pointer ${
                   language === "ar" ? "left-3" : "right-3"
                 }`}
               >
@@ -216,7 +216,7 @@ const Register = () => {
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd] transition-all duration-200 ease-in-out"
                 placeholder=" "
                 onFocus={() => setFocusedField("confirmPassword")}
                 onBlur={() => setFocusedField(null)}
@@ -232,7 +232,7 @@ const Register = () => {
                   }
                   ${
                     focusedField === "confirmPassword" || confirmPassword
-                      ? "text-xs text-blue-500 -top-2 bg-white px-1"
+                      ? "text-xs text-[#333e2c] -top-2 bg-white px-1"
                       : "text-gray-400 top-3"
                   }
                 `}
@@ -242,7 +242,7 @@ const Register = () => {
               <button
                 type="button"
                 onClick={toggleConfirmPasswordVisibility}
-                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500 transition-all duration-200 ease-in-out cursor-pointer ${
+                className={`absolute top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-[#333e2c] transition-all duration-200 ease-in-out cursor-pointer ${
                   language === "ar" ? "left-3" : "right-3"
                 }`}
               >

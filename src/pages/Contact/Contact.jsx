@@ -16,9 +16,9 @@ const Contact = () => {
             "url('https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         }}
       >
-        <div className="absolute inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-          <div className="text-center text-white">
-            <h1 className="text-4xl font-bold mb-2">{t("contactUs")}</h1>
+        <div className="absolute inset-0 bg-[#e8e4dd] bg-opacity-50 flex items-center justify-center">
+          <div className="text-center text-[#353535]">
+            <h1 className="text-4xl font-bold mb-2 font-serif ">{t("contactUs")}</h1>
             <p className="text-lg">{t("contactUsDescription")}</p>
           </div>
         </div>
@@ -29,7 +29,7 @@ const Contact = () => {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Left Section - Contact Form */}
           <div className="md:w-1/2">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            <h2 className="text-3xl font-bold text-[#333e2c] font-serif  mb-4">
               {t("sayHello")}
             </h2>
             <p className="text-gray-600 mb-6">{t("sayHelloDescription")}</p>
@@ -45,7 +45,7 @@ const Contact = () => {
                   <input
                     type="text"
                     id="name"
-                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:[#e8e4dd] focus:border-[#e8e4dd]"
                     placeholder={t("name")}
                   />
                 </div>
@@ -91,7 +91,7 @@ const Contact = () => {
                     placeholder={t("subject")}
                   ></textarea>
                 </div>
-                <button className="w-[200px] bg-[#333e2c] text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
+                <button className="w-[200px] bg-[#333e2c] text-white py-2 rounded-md hover:bg-[#353535] transition-all">
                   {t("sendMessage")}
                 </button>
               </div>

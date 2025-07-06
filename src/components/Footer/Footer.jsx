@@ -89,14 +89,14 @@ const Footer = () => {
               <a
                 href="https://www.instagram.com/lesoukkuwait/"
                 target="_blank"
-                className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
+                className="px-2 py-3 border border-gray-600 hover:bg-white transition duration-200"
               >
                 <Instagram size={25} className="text-[#353535]" />
               </a>
               <a
                 href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
                 target="_blank"
-                className="px-2 py-3 border border-gray-600 hover:bg-gray-700 transition duration-200"
+                className="px-2 py-3 border border-gray-600 hover:bg-white text-white transition duration-200"
               >
                 <FaTiktok size={25} className="text-[#353535]" />
               </a>
