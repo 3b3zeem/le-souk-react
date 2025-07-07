@@ -17,7 +17,16 @@ const NavbarUserMenu = ({
   handleLogout,
 }) => {
   const navigate = useNavigate();
-  // if (!isLoggedIn) return null;
+  if (!isLoggedIn) return(
+    <>
+      <Link
+        to="/login"
+        className="bg-[#333e2c] text-white font-bold py-1 px-4 rounded me-5 cursor-pointer customEffect"
+      >
+        <span>{t("login")}</span>
+      </Link>
+    </>
+  );
   return (
     <div className="cursor-pointer relative">
       <div

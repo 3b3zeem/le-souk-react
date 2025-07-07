@@ -162,6 +162,7 @@ const Navbar = () => {
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
+          show={!scrolled}
           handleCartClick={handleCartClick}
           handleWishlistClick={handleWishlistClick}
           cartCount={cartCount}
@@ -178,7 +179,33 @@ const Navbar = () => {
           renderAdminLink={renderAdminLink}
           handleLogout={handleLogout}
         />
-        <NavbarBottom navLinks={navLinks} hover={hover} setHover={setHover} />
+        <NavbarBottom
+          navLinks={navLinks}
+          hover={hover}
+          setHover={setHover}
+          scrolled={scrolled}
+          iconsProps={{
+            handleCartClick,
+            handleWishlistClick,
+            cartCount,
+            wishlistCount,
+            isWhite: scrolled,
+          }}
+          userMenuProps={{
+            isLoggedIn,
+            isOpenUser,
+            setIsOpenUser,
+            overlayRef,
+            avatarRef,
+            avatar,
+            userName,
+            t,
+            language,
+            renderAdminLink,
+            handleLogout,
+            isWhite: scrolled,
+          }}
+        />
       </div>
 
       {/* Mobile Navigation */}
@@ -319,7 +346,7 @@ const Navbar = () => {
                   {isLoggedIn && (
                     <div
                       ref={avatarRef}
-                      className="flex items-center justify-between gap-2 bg-gray-50 px-2"
+                      className="flex items-center justify-between gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
