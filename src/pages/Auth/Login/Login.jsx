@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Lock } from "lucide-react";
 
-import loginImg from "../../../assets/home-art.svg";
+import loginImg from "../../../assets/Sign_in.svg";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
@@ -66,14 +66,14 @@ const Login = () => {
             <span style={{ color: colors.primary }}> {t("always")}</span>
           </h1>
 
-          <p className="text-[#353535] text-lg mb-10 leading-relaxed">
+          <p className="text-[#353535] text-md mb-0 leading-relaxed">
             {t("loginDescription")}
           </p>
 
           {/* Phone Illustration */}
-          {/* <div className="relative flex justify-center mt-8">
+          <div className="relative flex justify-center mt-0">
             <img src={loginImg} alt={t("signIn")} />
-          </div> */}
+          </div>
         </div>
       </div>
 

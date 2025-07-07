@@ -74,6 +74,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="flex justify-center  items-center sm:items-start">
             <img src={logo} alt="logo" width={250} draggable={false} />
+         
         
           </div>
 
@@ -166,12 +167,25 @@ const Footer = () => {
           {/* Newsletter */}
           <div>
             <h3 className="relative inline-block mb-1 text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              newsletter
+              Follow Us
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
-            <p className="text-sm mb-4" style={{ color: colors.textSecondary }}>
-              Sign up to searing weekly newsletter to get the latest updates.
-            </p>
+            <div className="flex space-x-4 mb-4">
+              <a
+                href="https://www.instagram.com/lesoukkuwait/"
+                target="_blank"
+                className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+              >
+                <Instagram size={25} className="text-[#333e2c]" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
+                target="_blank"
+                className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+              >
+                <FaTiktok size={25} className="text-[#333e2c]" />
+              </a>
+            </div>
             <div className="flex">
               <input
                 type="email"

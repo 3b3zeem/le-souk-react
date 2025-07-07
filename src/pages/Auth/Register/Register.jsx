@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Lock } from "lucide-react";
 
-import RegImg from "../../../assets/sign_up.svg";
+import RegImg from "../../../assets/sign_up2.svg";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
@@ -70,11 +70,11 @@ const Register = () => {
             {/* {t("leSock")} */}
           </h1>
 
-          <p className="text-[#353535] text-lg mb-6 leading-relaxed">
+          <p className="text-[#353535] text-md mb-0 leading-relaxed">
             {t("signUpDescription")}
           </p>
 
-          <p className="text-[#353535]  mt-6">
+          <p className="text-[#353535]  mt-1">
             {t("alreadyHaveAccount")}
             <Link
               to={"/login"}
@@ -85,9 +85,9 @@ const Register = () => {
           </p>
 
           {/* Laptop Illustration */}
-          {/* <div className="relative flex justify-center mt-12">
+          <div className="relative flex justify-center mt-0">
             <img src={RegImg} alt={t("signUp")} />
-          </div> */}
+          </div>
         </div>
       </div>
 
