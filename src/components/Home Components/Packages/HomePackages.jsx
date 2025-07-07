@@ -150,7 +150,7 @@ const HomePackages = () => {
                       className="relative z-10 px-4 py-2 bg-[#333e2c] text-white font-medium hover:bg-[#1e6fe9f6] transition cursor-pointer"
                       onClick={() => navigate(`/packages/${pkg.id}`)}
                     >
-                      {language === "ar" ? "عرض التفاصيل" : "View Collections"}
+                      {language === "ar" ? "عرض التفاصيل" : "View details"}
                     </button>
                   </div>
                 </div>
