@@ -383,5 +383,13 @@
   "search_placeholder": "Search what you looking for?",
   "soldOut": "Sold Out",
   "phone": "Phone Number",
-  "enterPhoneNumber": "phone number"
+  "enterPhoneNumber": "phone number",
+    "callUs": "Call Us 7/24",
+  "makeQuote": "Make a Quote",
+  "location": "Location",
+  "openingHour": "Opening Hour",
+  "quickLinks": "Quick Links",
+  "followUs": "Follow Us",
+  "enterEmail": "ENTER EMAIL ADDRESS",
+  "copyright": "© ALL Copyright 2024 by Le-Souk"
 }

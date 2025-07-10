@@ -15,6 +15,18 @@ const NavbarSearch = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (query.trim()) {
+      // Always navigate to products page with search query
+      // This ensures the page re-renders and search works
+      navigate(`/products?search=${encodeURIComponent(query)}`);
+      setQuery("");
+      setOpen(false);
+    }
+  };
+
+  const handleIconClick = () => {
+    if (query.trim()) {
+      // Always navigate to products page with search query
+      // This ensures the page re-renders and search works
       navigate(`/products?search=${encodeURIComponent(query)}`);
       setQuery("");
       setOpen(false);
@@ -32,11 +44,12 @@ const NavbarSearch = () => {
         onFocus={() => setOpen(true)}
       />
       <span
-        className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
+        className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
           language === "ar" ? "left-3" : "right-3"
         }`}
+        onClick={handleIconClick}
       >
-        <Search size={19} className="text-gray-500" />
+        <Search size={19} className="text-gray-500 hover:text-gray-700 transition-colors" />
       </span>
 
       <SearchOverlay

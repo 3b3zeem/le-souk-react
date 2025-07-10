@@ -118,7 +118,7 @@ const Navbar = () => {
   // Scroll Effect
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 30) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -158,7 +158,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200 transition-all duration-300 ease-in-out bg-[#e8e4dd] hidden md:block`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-150  bg-[#e8e4dd] hidden md:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
@@ -210,15 +210,16 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-300 ease-in-out bg-[#e8e4dd] md:hidden flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150  bg-[#e8e4dd] md:hidden flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
           } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <Link to={"/"}>
+       
           <div className="text-2xl font-bold" style={{ color: colors.primary }}>
-            <img src={logo} width={150} alt="logo" />
+             <Link to={"/"} >
+               <img src={logo} width={150} alt="logo" />
+             </Link>
           </div>
-        </Link>
 
         <div className="flex items-center space-x-2">
           {isLoggedIn ? (
@@ -264,13 +265,13 @@ const Navbar = () => {
             <>
               <Link
                 to="/login"
-                className="bg-[#333e2c] text-white font-bold py-1 px-4 rounded me-5 cursor-pointer customEffect"
+                className="bg-[#333e2c] text-white font-bold py-2 px-4 rounded-md me-5 cursor-pointer customEffect"
               >
                 <span>{t("login")}</span>
               </Link>
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"
+                className="p-7 focus:outline-none rounded-md cursor-pointer"
               >
                 <Menu size={24} />
               </button>

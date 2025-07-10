@@ -119,14 +119,14 @@ const Categories = () => {
         {categories.map((category) => (
           <div key={category.id} className="px-2">
             <div
-              className="border rounded-lg overflow-hidden group transition-all duration-300 cursor-pointer"
+              className="border rounded-md overflow-hidden group  cursor-pointer hover:scale-105 transition-transform duration-300"
               style={{ borderColor: colors.borderLight }}
               onClick={() => navigate(`/products?category=${category.id}`)}
             >
               <img
                 src={category.image_url}
                 alt={category.name}
-                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-48 object-cover "
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "/default_category.jpg";

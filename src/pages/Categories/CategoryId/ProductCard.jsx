@@ -20,10 +20,10 @@ const ProductCard = ({ product, getTranslatedText }) => {
       className="bg-white rounded-lg shadow-md p-4 flex flex-col items-start max-w-xs group overflow-hidden hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
     >
       <div
-        className="w-full h-48 bg-gray-200 rounded-lg mb-4"
+        className="w-full h-65  bg-no-repeat bg-contain  rounded-md mb-4"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          backgroundSize: "cover",
+          // backgroundSize: "container",
           backgroundPosition: "center",
         }}
       ></div>

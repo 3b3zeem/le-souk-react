@@ -3,16 +3,27 @@ import { NavLink } from "react-router-dom";
 import NavbarIcons from "./NavbarIcons";
 import NavbarUserMenu from "./NavbarUserMenu";
 
-const NavbarBottom = ({ navLinks, hover, setHover, scrolled, iconsProps, userMenuProps }) => (
+const NavbarBottom = ({
+  navLinks,
+  hover,
+  setHover,
+  scrolled,
+  iconsProps,
+  userMenuProps,
+}) => (
   <div className="bg-[#333e2c]">
-    <div className={`container mx-auto max-w-7xl flex items-center justify-between ${scrolled ? "py-8" : "py-6"} transition-all duration-200`}>
+    <div
+      className={`container mx-auto max-w-7xl flex items-center justify-between transition-all duration-150 ${
+        scrolled ? "py-4" : "py-6"
+      }`}
+    >
       <div className="flex items-center">
         {navLinks.map((link, index) => (
           <NavLink
             key={index}
             to={link.path}
             className={({ isActive }) =>
-              `mx-4 cursor-pointer font-[500] transition duration-200 ease-in-out b-bottom text-[.90rem]
+              `${scrolled ? "mx-4" : "mx-4"} cursor-pointer font-[500] transition duration-150  b-bottom text-[.90rem]
               ${
                 isActive
                   ? "text-white font-[700] underline"

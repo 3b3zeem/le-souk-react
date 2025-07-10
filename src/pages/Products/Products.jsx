@@ -130,12 +130,42 @@ const Products = () => {
       categoryFromParams ? parseInt(categoryFromParams) : null
     );
   }, [searchParams]);
+  useEffect(() => {
+  const searchFromParams = searchParams.get("search") || "";
+  setSearchQuery(searchFromParams);
+}, [searchParams]);
 
   // * Handle Search, Sort, and Category Change
+  // const handleSearchChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  //   setPage(1);
+  // };
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    setPage(1);
-  };
+  const newQuery = e.target.value;
+  setSearchQuery(newQuery);
+  setPage(1);
+  
+  // Update URL parameters immediately
+  const params = new URLSearchParams(searchParams);
+  if (newQuery.trim()) {
+    params.set("search", newQuery);
+  } else {
+    params.delete("search");
+  }
+  params.delete("page"); // Reset page to 1
+  setSearchParams(params);
+};
+const handleSearchSubmit = (e) => {
+  e.preventDefault();
+  const params = new URLSearchParams(searchParams);
+  if (searchQuery.trim()) {
+    params.set("search", searchQuery);
+  } else {
+    params.delete("search");
+  }
+  params.delete("page"); // Reset page to 1
+  setSearchParams(params);
+};
   const handleSortChange = (e) => {
     const value = e.target.value;
     if (value === "created_at_desc") {
@@ -319,7 +349,7 @@ const Products = () => {
           <div className="w-full lg:w-3/4">
             <div className="flex flex-wrap items-start ms-3 md:items-center gap-10 md:flex-row md:justify-between mb-6">
               {/* Search */}
-              <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
+              {/* <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
                 <input
                   type="text"
                   placeholder={t("search")}
@@ -335,7 +365,25 @@ const Products = () => {
                 >
                   <Search size={15} className="text-gray-500" />
                 </span>
-              </div>
+              </div> */}
+              <form onSubmit={handleSearchSubmit} className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
+  <input
+    type="text"
+    placeholder={t("search")}
+    value={searchQuery}
+    onChange={handleSearchChange}
+    className="w-full py-3 px-4 pr-7 border text-sm focus:outline-none shadow-sm"
+    style={{ borderColor: colors.borderLight }}
+  />
+  <span
+    className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
+      language === "ar" ? "left-3" : "right-3"
+    }`}
+    onClick={handleSearchSubmit}
+  >
+    <Search size={15} className="text-gray-500 hover:text-gray-700 transition-colors" />
+  </span>
+</form>
 
               {/* Show Per Page Selector */}
               <div className="flex items-center gap-2 text-base select-none">

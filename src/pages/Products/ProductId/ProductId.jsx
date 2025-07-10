@@ -657,7 +657,7 @@ const ProductId = () => {
                       <span className={`font-semibold flex items-center gap-1 px-2 py-1 rounded-md ${
                         selectedVariant.stock > 0 ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
                       }`}>
-                        {selectedVariant.stock > 0 ? `${selectedVariant.stock}` : t("Out of stock")}
+                        {selectedVariant.stock > 0 ? `` : t("Out of stock")}
                         {selectedVariant.stock > 0 && (
                           <span className="text-green-700 font-medium text-xs sm:text-base">
                             {t("available")}

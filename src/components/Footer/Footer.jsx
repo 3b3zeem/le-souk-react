@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 
 import logo from "../../assets/Images/3x/navbar.png";
@@ -22,10 +24,13 @@ const colors = {
 };
 
 const Footer = () => {
+   const { t } = useTranslation();
+  const { language } = useLanguage();
   return (
     <footer
       className="w-full p-12"
       style={{ backgroundColor: colors.footerBg }}
+      dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gray-700 pb-6 mb-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -35,7 +40,7 @@ const Footer = () => {
               <Phone size={25} className="text-[#353535]" />
             </div>
             <div>
-              <h4 className="text-sm font-medium text-[#353535]">Call Us 7/24</h4>
+              <h4 className="text-sm font-medium text-[#353535]">{t("callUs")} </h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
                 66511123
               </p>
@@ -48,7 +53,7 @@ const Footer = () => {
               <Mail size={25} className="text-[#353535]" />
             </div>
             <div>
-              <h4 className="text-sm font-medium text-[#353535]">Make a Quote</h4>
+              <h4 className="text-sm font-medium text-[#353535]">{t("makeQuote")}</h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
                 example@gmail.com
               </p>
@@ -61,7 +66,7 @@ const Footer = () => {
               <MapPin size={25} className="text-[#353535]" />
             </div>
             <a href="https://maps.app.goo.gl/DV95vcWCubMko3v68" target="_blank" rel="noopener noreferrer" className="flex flex-col">
-              <h4 className="text-sm font-medium text-[#353535]">Location</h4>
+              <h4 className="text-sm font-medium text-[#353535]">{t("location")}</h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
                 Street 2, 70073, Kuwait.
               </p>
@@ -78,10 +83,10 @@ const Footer = () => {
         
           </div>
 
-          {/* Costumers Support */}
+          {/* Opening Hours */}
           <div>
             <h3 className="relative inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              Opening Hour
+              {t("openingHour")}
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
               <div>
@@ -97,7 +102,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h3 className="relative mb-1 inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              Quick Links
+              {t("quickLinks")} 
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
 
@@ -113,7 +118,7 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >  <span className="mr-2">&gt;</span> Home
+                  >  <span className="mr-2">&gt;</span> {t("home")}
              </Link>
               <Link to={"/categories"}
                      className="text-sm flex items-center mb-1 hover:translate-x-1.5 transition-all duration-200"
@@ -124,7 +129,7 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >  <span className="mr-2">&gt;</span> Categories
+                  >  <span className="mr-2">&gt;</span> {t("categories")}
              </Link>
                <Link to={"/products"}
                      className="text-sm mb-1 flex items-center hover:translate-x-1.5 transition-all duration-200"
@@ -135,7 +140,7 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >  <span className="mr-2">&gt;</span> Products
+                  >  <span className="mr-2">&gt;</span> {t("products")}
              </Link>
                <Link to={"/packages"}
                      className="text-sm mb-1 flex items-center hover:translate-x-1.5 transition-all duration-200"
@@ -146,7 +151,7 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >  <span className="mr-2">&gt;</span> Packages
+                  >  <span className="mr-2">&gt;</span> {t("packages")}
              </Link>
                <Link to={"/contact"}
                      className="text-sm flex items-center hover:translate-x-1.5 transition-all duration-200"
@@ -157,7 +162,7 @@ const Footer = () => {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.color = colors.textSecondary)
                     }
-                  >  <span className="mr-2">&gt;</span> Contact
+                  >  <span className="mr-2">&gt;</span> {t("contact")}
              </Link>
              
                 </li>
@@ -167,7 +172,7 @@ const Footer = () => {
           {/* Newsletter */}
           <div>
             <h3 className="relative inline-block mb-1 text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              Follow Us
+              {t("followUs")}
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
             <div className="flex space-x-4 mb-4">
@@ -187,17 +192,25 @@ const Footer = () => {
               </a>
             </div>
             <div className="flex">
-              <input
+                  <input
                 type="email"
-                placeholder="ENTER EMAIL ADDRESS"
-                className="w-full px-4 py-2 text-sm text-[#353535] rounded-l-md focus:outline-none focus:ring-1 focus:ring-offset-green-900 transition duration-200"
-                style={{ backgroundColor: colors.inputBg ,borderBlockColor:"#353535" }}
+                placeholder={t("enterEmail")}
+                className={`w-full px-4 py-2 text-sm text-[#353535] focus:outline-none focus:ring-1 focus:ring-offset-green-900 transition duration-200 ${
+                  language === "ar" ? "rounded-r-md" : "rounded-l-md"
+                }`}
+                style={{ backgroundColor: colors.inputBg, borderBlockColor: "#353535" }}
               />
               <button
-                className="px-4 py-2 rounded-r-md cursor-pointer"
+                className={`px-4 py-2 cursor-pointer ${
+                  language === "ar" ? "rounded-l-md" : "rounded-r-md"
+                }`}
                 style={{ backgroundColor: colors.primary }}
               >
-                <Send size={20} className="text-white" />
+                <Send 
+                  size={20} 
+                  className="text-white" 
+                  style={{ transform: language === "ar" ? "scaleX(-1)" : "none" }}
+                />
               </button>
             </div>
           </div>
@@ -206,7 +219,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-gray-700 text-center">
         <p className="text-sm" style={{ color: colors.textSecondary }}>
-          © ALL Copyright 2024 by Le-Souk
+          {t("copyright")}
         </p>
       </div>
     </footer>
