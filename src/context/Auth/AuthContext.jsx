@@ -6,7 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [token, setToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Start with loading true
+  const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
   const logoutInProgress = useRef(false);
 
@@ -16,16 +16,15 @@ export const AuthProvider = ({ children }) => {
       try {
         const storedProfile = localStorage.getItem("profile");
         const storedToken = localStorage.getItem("token");
-        
+
         if (storedProfile && storedToken) {
           const parsedProfile = JSON.parse(storedProfile);
           const expiry = new Date(parsedProfile.expires_at);
-          
-          if (expiry > new Date()) {
+
+          if (!parsedProfile.expires_at || expiry > new Date()) {
             setProfile(parsedProfile);
             setToken(storedToken);
           } else {
-            // Token expired, clear storage
             localStorage.removeItem("profile");
             localStorage.removeItem("token");
           }
@@ -47,13 +46,12 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(async () => {
     if (logoutInProgress.current) return;
     logoutInProgress.current = true;
-    
-    // Clear state immediately to prevent further API calls
+
     setProfile(null);
     setToken(null);
     localStorage.removeItem("profile");
     localStorage.removeItem("token");
-    
+
     try {
       if (token) {
         await axios.post(
@@ -74,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Sync to localStorage when profile or token changes (only after initialization)
+  // Sync to localStorage
   useEffect(() => {
     if (!isInitialized) return;
 
@@ -94,10 +92,20 @@ export const AuthProvider = ({ children }) => {
     const interceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.response?.status === 401 && !logoutInProgress.current && token) {
+        const isUnauthorized = error.response?.status === 401;
+        const errorMessage = error.response?.data?.message;
+
+        if (
+          isUnauthorized &&
+          !logoutInProgress.current &&
+          token &&
+          errorMessage !== "You are not an admin" &&
+          profile?.role !== "admin"
+        ) {
           console.warn("401 Unauthorized – clearing auth state");
           logout();
         }
+
         return Promise.reject(error);
       }
     );
@@ -105,7 +113,7 @@ export const AuthProvider = ({ children }) => {
     return () => {
       axios.interceptors.response.eject(interceptor);
     };
-  }, [logout, isInitialized, token]);
+  }, [logout, isInitialized, token, profile]);
 
   // Custom setter functions
   const setUser = useCallback((user) => {

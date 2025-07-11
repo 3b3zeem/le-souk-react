@@ -4,31 +4,26 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useEffect } from "react";
 
-const useHome = (perPage) => {
+const useHome = (perPage = 8) => {
   const { language } = useLanguage();
-  const { token } = useAuthContext();
-
+  const { token, profile } = useAuthContext();
   const BaseURL = "https://le-souk.dinamo-app.com/api";
 
+  // Attach language header globally
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
       config.headers["Accept-Language"] = language;
       return config;
     });
-
-    return () => {
-      axios.interceptors.request.eject(interceptor);
-    };
+    return () => axios.interceptors.request.eject(interceptor);
   }, [language]);
 
   // Fetch Categories
   const categoriesQuery = useQuery({
     queryKey: ["categories", language],
     queryFn: async () => {
-      const response = await axios.get(
-        `${BaseURL}/categories?per_page=4&page=1`
-      );
-      return response.data.data || [];
+      const res = await axios.get(`${BaseURL}/categories?per_page=4&page=1`);
+      return res.data.data || [];
     },
   });
 
@@ -36,10 +31,10 @@ const useHome = (perPage) => {
   const productsQuery = useQuery({
     queryKey: ["products", perPage, language],
     queryFn: async () => {
-      const response = await axios.get(
+      const res = await axios.get(
         `${BaseURL}/products?per_page=${perPage}&with=images,categories,variants`
       );
-      return response.data.data || [];
+      return res.data.data || [];
     },
   });
 
@@ -47,35 +42,32 @@ const useHome = (perPage) => {
   const offersQuery = useQuery({
     queryKey: ["offers", language],
     queryFn: async () => {
-      const response = await axios.get(
+      const res = await axios.get(
         `${BaseURL}/products?on_sale=1&pagination=0&with=images`
       );
-      return response.data.data || [];
+      return res.data.data || [];
     },
   });
 
-  // Fetch Packages (Protected with token)
+  // Fetch Admin Packages — only if token exists and role is admin
+  const isAdmin = profile?.role === "admin";
+
   const packagesQuery = useQuery({
     queryKey: ["packages", perPage, language],
     queryFn: async () => {
-      const response = await axios.get(
-        `${BaseURL}/admin/packages?per_page=${perPage}&with=packageProducts.product,usages`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data.data || [];
+      const res = await axios.get(
+        `${BaseURL}/packages?per_page=${perPage}&with=packageProducts.product,usages`);
+      return res.data.data || [];
     },
-    enabled: !!token,
   });
 
+  // Combined loading and error
   const loading =
     categoriesQuery.isLoading ||
     productsQuery.isLoading ||
-    offersQuery.isLoading ||
-    packagesQuery.isLoading;
+    offersQuery.isLoading 
+     // فقط نعتبر تحميل الباقات إذا المستخدم أدمن
+
   const error =
     categoriesQuery.error ||
     productsQuery.error ||

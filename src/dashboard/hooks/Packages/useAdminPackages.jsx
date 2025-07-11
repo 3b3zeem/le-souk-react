@@ -88,7 +88,7 @@ const useAdminPackages = (page, product_id) => {
       }
 
       const response = await axios.get(
-        `https://le-souk.dinamo-app.com/api/admin/packages`,
+        `https://le-souk.dinamo-app.com/api/packages`,
         {
           params,
           headers: {
@@ -121,7 +121,7 @@ const useAdminPackages = (page, product_id) => {
 
     try {
       const res = await axios.get(
-        `https://le-souk.dinamo-app.com/api/admin/packages/${packageId}`,
+        `https://le-souk.dinamo-app.com/api/packages/${packageId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

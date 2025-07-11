@@ -13,7 +13,7 @@ import { Heart, ShoppingCart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const HomePackages = () => {
-  const { packages, loading, error } = useHome(5);
+  const { packages, loading, error } = useHome();
   const [productsToShow, setProductsToShow] = useState(4);
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -26,6 +26,7 @@ const HomePackages = () => {
     cart: {},
     wishlist: {},
   });
+  
 
   const navigate = useNavigate();
 
@@ -110,12 +111,12 @@ const HomePackages = () => {
 
   return (
     <div
-      className="relative w-full py-16"
+      className="relative w-full py-16  "
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="flex items-center justify-between mb-6 px-4">
+      <div className="flex items-center justify-between mb-6 px-4  @container">
         <h2
-          className="text-2xl sm:text-3xl font-normal uppercase"
+          className="text-2xl sm:text-3xl font-normal uppercase font-serif"
           style={{ color: colors.categoryTitle }}
         >
           {t("packages")}
