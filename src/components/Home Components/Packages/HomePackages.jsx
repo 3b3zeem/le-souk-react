@@ -107,7 +107,12 @@ const HomePackages = () => {
 
   if (loading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
-  if (packages?.length === 0) return <div>No packages available</div>;
+  if (packages?.length === 0) return    <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
+          <h2 className="text-2xl font-semibold mb-2">
+            {t("noPackagesTitle")}
+          </h2>
+          <p className="text-md text-gray-400">{t("noPackagesSubtitle")}</p>
+        </div>;
 
   return (
     <div

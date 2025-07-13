@@ -105,15 +105,15 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
                           {product.min_sale_price ? (
                             <>
                               <span className="line-through text-gray-400 mr-2">
-                                {product.min_price}$
+                                {product.min_price} KWD
                               </span>
                               <span className="text-[#333e2c] font-bold">
-                                {product.min_sale_price}$
+                                {product.min_sale_price} KWD
                               </span>
                             </>
                           ) : (
                             <span className="text-[#333e2c] font-bold">
-                              {product.min_price}$
+                              {product.min_price} KWD
                             </span>
                           )}
                         </div>

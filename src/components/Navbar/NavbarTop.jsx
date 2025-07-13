@@ -6,9 +6,33 @@ import NavbarUserMenu from "./NavbarUserMenu";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navbarTopVariants = {
-  hidden: { opacity: 0, y: -40, pointerEvents: "none", transition: { duration: 0.35, ease: "easeInOut" } },
-  visible: { opacity: 1, y: 0, pointerEvents: "auto", transition: { duration: 0.45, ease: "easeOut" } },
-  exit: { opacity: 0, y: -40, pointerEvents: "none", transition: { duration: 0.35, ease: "easeInOut" } },
+  hidden: {
+    opacity: 0,
+    y: -40,
+    pointerEvents: "none",
+    transition: {
+      duration: 0.08, 
+      ease: "linear",   
+    },
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    pointerEvents: "auto",
+    transition: {
+      duration: 0.1,
+      ease: "linear",
+    },
+  },
+  exit: {
+    opacity: 0,
+    y: -40,
+    pointerEvents: "none",
+    transition: {
+      duration: 0.08,
+      ease: "linear",
+    },
+  },
 };
 
 const NavbarTop = (props) => (

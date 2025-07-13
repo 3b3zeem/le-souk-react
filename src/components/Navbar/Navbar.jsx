@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   X,
   Menu,
@@ -41,6 +41,7 @@ const Navbar = () => {
   const drawerRef = useRef(null);
   const { language } = useLanguage();
   const { t } = useTranslation();
+  const ticking = useRef(false);
 
   const isLoggedIn = !!profile;
   const avatar =
@@ -115,32 +116,31 @@ const Navbar = () => {
     navigate("/wishlist");
   };
 
-  // Scroll Effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  // Optimized scroll handler with throttling
+  const handleScroll = useCallback(() => {
+    if (!ticking.current) {
+      requestAnimationFrame(() => {
+        const scrollTop = window.scrollY;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        
+        // Update scrolled state
+        setScrolled(scrollTop > 10);
+        
+        // Update progress
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        setScrollProgress(progress);
+        
+        ticking.current = false;
+      });
+      ticking.current = true;
+    }
   }, []);
 
+  // Combined scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / scrollHeight) * 100;
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   const handleLogout = async () => {
     await logout();

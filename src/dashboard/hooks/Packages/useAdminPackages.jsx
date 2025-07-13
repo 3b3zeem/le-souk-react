@@ -45,7 +45,7 @@ const useAdminPackages = (page, product_id) => {
         `https://le-souk.dinamo-app.com/api/products?with=images,variants&pagination=0`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`||"",
           },
         }
       );
@@ -69,9 +69,9 @@ const useAdminPackages = (page, product_id) => {
       const sortDirection = searchParams.get("sort_direction") || "asc";
       const searchQuery = searchParams.get("search") || "";
 
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
+      // if (!token) {
+      //   throw new Error("No token found. Please log in.");
+      // }
 
       const params = {
         per_page: perPage,

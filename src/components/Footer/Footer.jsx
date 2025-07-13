@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState,useEffect } from "react";
 import {
   Phone,
   Mail,
@@ -14,6 +14,8 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 
 
 import logo from "../../assets/Images/3x/navbar.png";
+import axios from "axios";
+
 
 const colors = {
   primary: "#333e2c",
@@ -23,9 +25,28 @@ const colors = {
   inputBg: "transparent",
 };
 
+ 
 const Footer = () => {
    const { t } = useTranslation();
   const { language } = useLanguage();
+
+
+const [footerData,setFooterData]= useState([])
+ useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://le-souk.dinamo-app.com/api/settings");
+        setFooterData(response.data);
+        // console.log("API response:", response.data);
+      } catch (error) {
+        console.error("Error fetching footer data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   return (
     <footer
       className="w-full p-12"
