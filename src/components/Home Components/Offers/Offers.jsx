@@ -55,7 +55,7 @@ const ProductCard = ({ product }) => {
       </h3>
       <div className="flex items-center gap-2 mb-1">
         <span className="text-lg font-bold" style={{ color: colors.primary }}>
-          {language === "ar" ? "ج.م" : "$"}
+          {language === "ar" ? "د.ك" : "KWD"}{" "}
           {salePrice.toFixed(2)}
         </span>
         {discount > 0 && (
@@ -63,14 +63,12 @@ const ProductCard = ({ product }) => {
             className="text-sm line-through"
             style={{ color: colors.productName }}
           >
-            {language === "ar" ? "ج.م" : "$"}
+            {language === "ar" ? "د.ك" : "KWD"}{" "}
             {price.toFixed(2)}
           </span>
         )}
       </div>
-      <span className="text-xs text-gray-500 mt-1">
-        {product.total_stock} {t("inStock", "in stock")}
-      </span>
+
     </div>
   );
 };
@@ -213,14 +211,9 @@ const SwiperSection = ({ products }) => {
                 className="text-center text-lg font-bold mb-2"
                 style={{ color: colors.primary }}
               >
-                {language === "ar" ? "د.ك" : "KWD"}
-                {product.min_sale_price} - {language === "ar" ? "د.ك" : "KWD"}
+                {language === "ar" ? "د.ك" : "KWD"}{" "}
+                {product.min_sale_price} - {language === "ar" ? "د.ك" : "KWD"}{" "}
                 {product.max_sale_price}
-              </p>
-              <p className="text-sm text-center text-gray-600">
-                {language === "ar"
-                  ? `تم بيع: 0 | متوفر: ${product.total_stock}`
-                  : `Sold: 0 | In Stock: ${product.total_stock}`}
               </p>
               <div className="mt-3 text-center">
                 <span className="inline-block px-3 py-1 rounded text-sm font-medium bg-green-600 text-white">
@@ -230,7 +223,7 @@ const SwiperSection = ({ products }) => {
               </div>
 
               {product.sale_ends_at && (
-                <div className="mt-4">
+                <div className="mt-4 flex justify-center">
                   <ProductCountdown saleEndsAt={product.sale_ends_at} />
                 </div>
               )}
