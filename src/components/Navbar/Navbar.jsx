@@ -121,15 +121,17 @@ const Navbar = () => {
     if (!ticking.current) {
       requestAnimationFrame(() => {
         const scrollTop = window.scrollY;
-        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-        
+        const scrollHeight =
+          document.documentElement.scrollHeight - window.innerHeight;
+
         // Update scrolled state
         setScrolled(scrollTop > 10);
-        
+
         // Update progress
-        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        const progress =
+          scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
         setScrollProgress(progress);
-        
+
         ticking.current = false;
       });
       ticking.current = true;
@@ -210,16 +212,16 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150  bg-[#e8e4dd] md:hidden flex items-center justify-between ${scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
-          } px-6`}
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150  bg-[#e8e4dd] md:hidden flex items-center justify-between ${
+          scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
+        } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-       
-          <div className="text-2xl font-bold" style={{ color: colors.primary }}>
-             <Link to={"/"} >
-               <img src={logo} width={150} alt="logo" />
-             </Link>
-          </div>
+        <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+          <Link to={"/"}>
+            <img src={logo} width={150} alt="logo" />
+          </Link>
+        </div>
 
         <div className="flex items-center space-x-2">
           {isLoggedIn ? (
@@ -376,8 +378,9 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute ${language === "ar" ? "left-0" : "right-0"
-                          } absolute mt-3 w-full bg-[#e8e4dd] rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
+                        className={`absolute ${
+                          language === "ar" ? "left-0" : "right-0"
+                        } absolute mt-3 w-full bg-[#e8e4dd] rounded-xl shadow-lg z-50 border border-gray-100 overflow-hidden`}
                       >
                         {renderAdminLink()}
                         <button

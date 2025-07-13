@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import Meta from "../../components/Meta/Meta";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -8,6 +9,10 @@ const Contact = () => {
 
   return (
     <div className="w-full" dir={language === "ar" ? "rtl" : "ltr"}>
+      <Meta
+        title="Contact Us"
+        description="Get in touch with us for any inquiries or support."
+      />
       {/* Header Section */}
       <div
         className="relative w-full h-64 bg-cover bg-center"
@@ -18,7 +23,9 @@ const Contact = () => {
       >
         <div className="absolute inset-0 bg-[#e8e4dd] bg-opacity-50 flex items-center justify-center">
           <div className="text-center text-[#353535]">
-            <h1 className="text-4xl font-bold mb-2 font-serif ">{t("contactUs")}</h1>
+            <h1 className="text-4xl font-bold mb-2 font-serif ">
+              {t("contactUs")}
+            </h1>
             <p className="text-lg">{t("contactUsDescription")}</p>
           </div>
         </div>
@@ -73,7 +80,9 @@ const Contact = () => {
                   <input
                     type="tel"
                     id="phone"
-                    className={`mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 ${language === "ar" ? "text-right" : "text-left"}`}
+                    className={`mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500 ${
+                      language === "ar" ? "text-right" : "text-left"
+                    }`}
                     placeholder={t("enterPhoneNumber")}
                   />
                 </div>

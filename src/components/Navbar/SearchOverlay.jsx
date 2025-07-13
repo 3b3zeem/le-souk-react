@@ -69,16 +69,6 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
           >
             {/* Suggestions */}
             <div className="flex-1 p-8">
-              {/* <form onSubmit={handleSubmit}>
-                                    <input
-                                    autoFocus
-                                    type="text"
-                                    value={query}
-                                    onChange={e => setQuery(e.target.value)}
-                                    placeholder={t("search_placeholder")}
-                                    className="w-full border rounded-full px-4 py-2 mb-6"
-                                    />
-                                </form> */}
               <h3 className="text-lg font-bold mb-4 text-[#333e2c]">
                 {language === 'ar' ? 'منتجات مقترحة' : 'Suggestion products'}
               </h3>

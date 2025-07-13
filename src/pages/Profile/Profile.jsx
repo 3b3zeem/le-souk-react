@@ -7,6 +7,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import LanguageDropdown from "../../components/Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
 import Order from "./Order/Order";
+import Meta from "../../components/Meta/Meta";
 
 const colors = {
   primary: "#333e2c",
@@ -110,6 +111,10 @@ const Profile = () => {
       className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+    <Meta
+        title="My Profile"
+        description="View and manage your profile settings."
+      />
       <div className="w-full bg-white p-8 shadow-md">
         <div className="flex justify-between items-center mb-6">
           <h1

@@ -6,6 +6,7 @@ import { Search, Trash2 } from "lucide-react";
 import useAdminReviews from "../../hooks/Reviews/useAdminReviews";
 import { renderStars } from "../../../utils/ratingUtils";
 import Loader from "../../../layouts/Loader";
+import Meta from "../../../components/Meta/Meta";
 
 const AdminReviews = () => {
   const { language } = useLanguage();
@@ -43,6 +44,10 @@ const AdminReviews = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Reviews Management"
+        description="Manage your reviews effectively with our dashboard."
+      />
       <div className="container mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           {t("reviews")}

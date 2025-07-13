@@ -9,6 +9,7 @@ import { ring } from "ldrs";
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import CouponFormOverlay from "./CouponFormOverlay";
+import Meta from "../../../components/Meta/Meta";
 ring.register();
 
 const Coupons = () => {
@@ -92,6 +93,10 @@ const Coupons = () => {
       className="min-h-screen bg-gray-100 p-4 sm:p-8 w-full"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+    <Meta
+        title="Coupons Management"
+        description="Manage your coupons effectively with our dashboard."
+      />
       <div className="container mx-auto w-full">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
           {t("coupons")}

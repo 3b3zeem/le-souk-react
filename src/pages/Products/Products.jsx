@@ -22,6 +22,7 @@ import { useWishlist } from "../../context/WishList/WishlistContext";
 import Filters from "./Filters";
 import { useRef, useState as useLocalState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Meta from "../../components/Meta/Meta";
 ring2.register();
 
 const colors = {
@@ -131,9 +132,9 @@ const Products = () => {
     );
   }, [searchParams]);
   useEffect(() => {
-  const searchFromParams = searchParams.get("search") || "";
-  setSearchQuery(searchFromParams);
-}, [searchParams]);
+    const searchFromParams = searchParams.get("search") || "";
+    setSearchQuery(searchFromParams);
+  }, [searchParams]);
 
   // * Handle Search, Sort, and Category Change
   // const handleSearchChange = (e) => {
@@ -141,31 +142,31 @@ const Products = () => {
   //   setPage(1);
   // };
   const handleSearchChange = (e) => {
-  const newQuery = e.target.value;
-  setSearchQuery(newQuery);
-  setPage(1);
-  
-  // Update URL parameters immediately
-  const params = new URLSearchParams(searchParams);
-  if (newQuery.trim()) {
-    params.set("search", newQuery);
-  } else {
-    params.delete("search");
-  }
-  params.delete("page"); // Reset page to 1
-  setSearchParams(params);
-};
-const handleSearchSubmit = (e) => {
-  e.preventDefault();
-  const params = new URLSearchParams(searchParams);
-  if (searchQuery.trim()) {
-    params.set("search", searchQuery);
-  } else {
-    params.delete("search");
-  }
-  params.delete("page"); // Reset page to 1
-  setSearchParams(params);
-};
+    const newQuery = e.target.value;
+    setSearchQuery(newQuery);
+    setPage(1);
+
+    // Update URL parameters immediately
+    const params = new URLSearchParams(searchParams);
+    if (newQuery.trim()) {
+      params.set("search", newQuery);
+    } else {
+      params.delete("search");
+    }
+    params.delete("page"); // Reset page to 1
+    setSearchParams(params);
+  };
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams);
+    if (searchQuery.trim()) {
+      params.set("search", searchQuery);
+    } else {
+      params.delete("search");
+    }
+    params.delete("page"); // Reset page to 1
+    setSearchParams(params);
+  };
   const handleSortChange = (e) => {
     const value = e.target.value;
     if (value === "created_at_desc") {
@@ -304,6 +305,11 @@ const handleSearchSubmit = (e) => {
 
   return (
     <div>
+      <Meta
+        title="Explore Products"
+        description="Discover a wide range of products available for purchase."
+      />
+
       {/* Shop Banner */}
       <div className="relative w-full h-58 mb-8 overflow-hidden shadow-md">
         <img
@@ -366,24 +372,30 @@ const handleSearchSubmit = (e) => {
                   <Search size={15} className="text-gray-500" />
                 </span>
               </div> */}
-              <form onSubmit={handleSearchSubmit} className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
-  <input
-    type="text"
-    placeholder={t("search")}
-    value={searchQuery}
-    onChange={handleSearchChange}
-    className="w-full py-3 px-4 pr-7 border text-sm focus:outline-none shadow-sm"
-    style={{ borderColor: colors.borderLight }}
-  />
-  <span
-    className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
-      language === "ar" ? "left-3" : "right-3"
-    }`}
-    onClick={handleSearchSubmit}
-  >
-    <Search size={15} className="text-gray-500 hover:text-gray-700 transition-colors" />
-  </span>
-</form>
+              <form
+                onSubmit={handleSearchSubmit}
+                className="relative w-[200px] focus-within:w-[300px] transition-all duration-200"
+              >
+                <input
+                  type="text"
+                  placeholder={t("search")}
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="w-full py-3 px-4 pr-7 border text-sm focus:outline-none shadow-sm"
+                  style={{ borderColor: colors.borderLight }}
+                />
+                <span
+                  className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
+                    language === "ar" ? "left-3" : "right-3"
+                  }`}
+                  onClick={handleSearchSubmit}
+                >
+                  <Search
+                    size={15}
+                    className="text-gray-500 hover:text-gray-700 transition-colors"
+                  />
+                </span>
+              </form>
 
               {/* Show Per Page Selector */}
               <div className="flex items-center gap-2 text-base select-none">

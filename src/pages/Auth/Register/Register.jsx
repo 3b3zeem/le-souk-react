@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import Meta from "../../../components/Meta/Meta";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -58,6 +59,10 @@ const Register = () => {
       className="flex flex-col md:flex-row w-full min-h-screen "
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Sign Up"
+        description="Create a new account to join Le-Sock and start shopping."
+      />
       {/* Left Panel - Dark blue with illustration */}
       <div
         className="w-full md:w-1/2 flex p-5 flex-col items-center justify-center "
@@ -100,7 +105,9 @@ const Register = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8 text-[#333e2c] font-serif ">{t("signUp")}</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 text-[#333e2c] font-serif ">
+            {t("signUp")}
+          </h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6">

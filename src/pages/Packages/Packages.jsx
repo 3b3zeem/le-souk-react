@@ -6,6 +6,7 @@ import Pagination from "./Pagination";
 import { FolderX } from "lucide-react";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
+import Meta from "../../components/Meta/Meta";
 
 const Packages = () => {
   const [page, setPage] = useState(1);
@@ -25,11 +26,15 @@ const Packages = () => {
       className="@container mx-auto py-6  px-4 "
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-     
+      <Meta
+        title={t("Explore_Packages")}
+        keywords="packages, explore packages, shop packages"
+        description="Discover a variety of packages to explore and shop from."
+      />
       <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
-    {t("Explore_Packages")}
-    <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
-  </h2>
+        {t("Explore_Packages")}
+        <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
+      </h2>
       {packages.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
           <FolderX size={60} className="mb-4 text-gray-400" />

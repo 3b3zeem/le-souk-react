@@ -9,6 +9,10 @@ const About = () => {
 
   return (
     <div className="w-full" dir={language === "ar" ? "rtl" : "ltr"}>
+      <Meta
+        title="About Us"
+        description="Learn more about Le-Souk and our story."
+      />
       <div
         className="relative w-full h-64 bg-cover bg-center"
         style={{

@@ -5,6 +5,7 @@ import { DollarSign, Users, Package } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import Loader from "../../../layouts/Loader";
+import Meta from "../../../components/Meta/Meta";
 
 const Dashboard = () => {
   const { stats, loading, error } = useDashboard();
@@ -22,8 +23,7 @@ const Dashboard = () => {
     }
   }, [error, navigate]);
 
-  if (loading)
-    return <Loader />;
+  if (loading) return <Loader />;
   if (error)
     return <div className="text-center text-red-600">Error: {error}</div>;
 
@@ -32,6 +32,10 @@ const Dashboard = () => {
       className="min-h-screen bg-gray-100 font-sans"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Dashboard Statistics"
+        description="View your dashboard statistics and insights."
+      />
       <div className="container mx-auto p-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
           {t("dashboard")}

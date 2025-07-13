@@ -7,6 +7,7 @@ import { Edit, Layers, Search, Trash2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import Loader from "./../../../layouts/Loader";
+import Meta from "../../../components/Meta/Meta";
 
 const Categories = () => {
   const { language } = useLanguage();
@@ -123,6 +124,10 @@ const Categories = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Categories Management"
+        description="Manage your product categories efficiently."
+      />
       <div className="container mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           {t("categories")}
@@ -192,7 +197,7 @@ const Categories = () => {
                 transition={{ duration: 0.3 }}
                 className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
-                style={{ maxHeight: '90vh' }}
+                style={{ maxHeight: "90vh" }}
               >
                 <button
                   onClick={() => setIsOverlayOpen(false)}

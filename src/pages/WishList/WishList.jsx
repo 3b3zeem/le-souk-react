@@ -6,6 +6,7 @@ import useWishlistCRUD from "../../hooks/WishList/useWishlist";
 import useCartCRUD from "../../hooks/Cart/UseCart";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import Meta from "../../components/Meta/Meta";
 
 const colors = {
   primary: "#333e2c",
@@ -98,6 +99,10 @@ const WishList = () => {
         className="bg-gray-200 p-10 mb-10"
         dir={language === "ar" ? "rtl" : "ltr"}
       >
+      <Meta
+        title="My Wishlist"
+        description="View and manage your wishlist items."
+      />
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
             className="text-2xl font-bold uppercase"

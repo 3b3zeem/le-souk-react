@@ -6,6 +6,7 @@ import Loader from "../../../layouts/Loader";
 import { PackageX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import Meta from "../../../components/Meta/Meta";
 
 const CategoryId = () => {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ const CategoryId = () => {
       }
     }
     console.log(category);
-    
   }, [category?.name, categoryId, navigate]);
+  
 
   if (loading) return <Loader />;
   if (error)
@@ -36,12 +37,18 @@ const CategoryId = () => {
 
   return (
     <div dir={language === "ar" ? "rtl" : "ltr"}>
-      <div className="bg-[#e8e4dd] text-[#333e2c] text-center py-25 mb-6"
-  //       style={{
-  //   background: category.image_url
-  //     ? `url(${category.image_url}) center/cover no-repeat`
-  //     : '#e8e4dd',
-  // }}
+      <Meta
+        title={category.name}
+        description={`Explore products in the ${category.name} category.`}
+        image={category.image_url}
+      />
+      <div
+        className="bg-[#e8e4dd] text-[#333e2c] text-center py-25 mb-6"
+        //       style={{
+        //   background: category.image_url
+        //     ? `url(${category.image_url}) center/cover no-repeat`
+        //     : '#e8e4dd',
+        // }}
       >
         <h2 className="text-4xl font-bold font-serif ">{category.name}</h2>
       </div>

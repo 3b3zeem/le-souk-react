@@ -5,6 +5,7 @@ import Loader from "./../../../layouts/Loader";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Clock4 } from "lucide-react";
+import Meta from "../../../components/Meta/Meta";
 
 const PackagesId = () => {
   const navigate = useNavigate();
@@ -92,6 +93,14 @@ const PackagesId = () => {
       className="max-w-7xl mx-auto py-10 px-4"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title={details?.name}
+        description={details?.description || ""}
+        image={details?.image_url || "/default-package.jpg"}
+        url={`https://le-souk.vercel.app/packages/${packagesId}/${encodeURIComponent(
+          details?.name.replace(/\s+/g, "-")
+        )}`}
+      />
       {/* Hero Section */}
       <div className="relative flex flex-col lg:flex-row bg-gradient-to-r from-gray-700 via-gray-500 to-gray-400 rounded-xl shadow-2xl overflow-hidden mb-12 min-h-[400px]">
         {/* Image */}

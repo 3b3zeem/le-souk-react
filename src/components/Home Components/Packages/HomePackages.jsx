@@ -26,7 +26,6 @@ const HomePackages = () => {
     cart: {},
     wishlist: {},
   });
-  
 
   const navigate = useNavigate();
 
@@ -107,12 +106,13 @@ const HomePackages = () => {
 
   if (loading) return <Loader />;
   if (error) return <div>Error: {error.message}</div>;
-  if (packages?.length === 0) return    <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
-          <h2 className="text-2xl font-semibold mb-2">
-            {t("noPackagesTitle")}
-          </h2>
-          <p className="text-md text-gray-400">{t("noPackagesSubtitle")}</p>
-        </div>;
+  if (packages?.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
+        <h2 className="text-2xl font-semibold mb-2">{t("noPackagesTitle")}</h2>
+        <p className="text-md text-gray-400">{t("noPackagesSubtitle")}</p>
+      </div>
+    );
 
   return (
     <div
@@ -200,7 +200,9 @@ const HomePackages = () => {
                                 e.stopPropagation();
                                 handleToggleWishlist(product.product_id);
                               }}
-                              disabled={loadingStates.wishlist[product.product_id]}
+                              disabled={
+                                loadingStates.wishlist[product.product_id]
+                              }
                               className={`z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
                                 ${
                                   loadingStates.wishlist[product.product_id]

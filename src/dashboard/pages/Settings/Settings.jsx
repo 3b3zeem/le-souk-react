@@ -3,11 +3,19 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import useSettings from "../../hooks/Settings/useSettings";
 import { useSearchParams } from "react-router-dom";
-import { Layers, Search, SquarePen, Trash2, Settings as SettingsIcon, X } from "lucide-react";
+import {
+  Layers,
+  Search,
+  SquarePen,
+  Trash2,
+  Settings as SettingsIcon,
+  X,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Loader from "../../../layouts/Loader";
+import Meta from "../../../components/Meta/Meta";
 
 const Settings = () => {
   const { language } = useLanguage();
@@ -71,14 +79,12 @@ const Settings = () => {
   const handleEdit = (setting) => {
     setIsEditMode(true);
     setEditSettingId(setting.id);
-    
-    
+
     // Get English translation (default values)
-    const enTranslation = setting.translations?.find(t => t.locale === 'en');
+    const enTranslation = setting.translations?.find((t) => t.locale === "en");
     // Get Arabic translation
-    const arTranslation = setting.translations?.find(t => t.locale === 'ar');
-    
-    
+    const arTranslation = setting.translations?.find((t) => t.locale === "ar");
+
     setSettingData({
       group: setting.group || "site",
       type: setting.type || "text",
@@ -91,14 +97,13 @@ const Settings = () => {
       en_description: enTranslation?.description || setting.description || "",
       ar_description: arTranslation?.description || "",
     });
-    
 
     setIsOverlayOpen(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!settingData.en_name) {
       toast.error(t("settings.nameRequired", "Name is required"));
       return;
@@ -195,6 +200,10 @@ const Settings = () => {
       className={`container mx-auto p-1 ${language === "ar" ? "rtl" : "ltr"}`}
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Settings Management"
+        description="Manage your settings effectively with our dashboard."
+      />
       <h2 className="text-2xl font-bold mb-4">
         {t("settings.title", "Settings")}
       </h2>
@@ -237,7 +246,7 @@ const Settings = () => {
           </select>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-auto">
-          <button 
+          <button
             className="w-auto px-4 py-2 bg-[#333e2c] text-white rounded customEffect cursor-pointer text-sm hover:bg-[#2a3225] transition-colors"
             onClick={() => {
               setIsEditMode(false);
@@ -278,7 +287,7 @@ const Settings = () => {
               transition={{ duration: 0.3 }}
               className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8 overflow-y-auto z-index-50 mt-6"
               onClick={(e) => e.stopPropagation()}
-              style={{ maxHeight: '90vh' }}
+              style={{ maxHeight: "90vh" }}
             >
               <button
                 onClick={() => setIsOverlayOpen(false)}
@@ -288,10 +297,15 @@ const Settings = () => {
               </button>
 
               <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                {isEditMode ? t("settings.edit", "Edit Setting") : t("settings.add", "Add Setting")}
+                {isEditMode
+                  ? t("settings.edit", "Edit Setting")
+                  : t("settings.add", "Add Setting")}
               </h2>
-              
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+
+              <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2"
+              >
                 {/* English Name and Value */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -300,7 +314,12 @@ const Settings = () => {
                   <input
                     type="text"
                     value={settingData.en_name}
-                    onChange={(e) => setSettingData({ ...settingData, en_name: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        en_name: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                     placeholder={t("settings.enterName", "Enter setting name")}
                     required
@@ -313,9 +332,17 @@ const Settings = () => {
                   <input
                     type="text"
                     value={settingData.en_value}
-                    onChange={(e) => setSettingData({ ...settingData, en_value: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        en_value: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    placeholder={t("settings.enterValue", "Enter setting value")}
+                    placeholder={t(
+                      "settings.enterValue",
+                      "Enter setting value"
+                    )}
                   />
                 </div>
 
@@ -327,9 +354,17 @@ const Settings = () => {
                   <input
                     type="text"
                     value={settingData.ar_name}
-                    onChange={(e) => setSettingData({ ...settingData, ar_name: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        ar_name: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    placeholder={t("settings.enterNameAr", "Enter setting name in Arabic")}
+                    placeholder={t(
+                      "settings.enterNameAr",
+                      "Enter setting name in Arabic"
+                    )}
                     dir="rtl"
                   />
                 </div>
@@ -340,9 +375,17 @@ const Settings = () => {
                   <input
                     type="text"
                     value={settingData.ar_value}
-                    onChange={(e) => setSettingData({ ...settingData, ar_value: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        ar_value: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    placeholder={t("settings.enterValueAr", "Enter setting value in Arabic")}
+                    placeholder={t(
+                      "settings.enterValueAr",
+                      "Enter setting value in Arabic"
+                    )}
                     dir="rtl"
                   />
                 </div>
@@ -354,10 +397,18 @@ const Settings = () => {
                   </label>
                   <textarea
                     value={settingData.en_description}
-                    onChange={(e) => setSettingData({ ...settingData, en_description: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        en_description: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                     rows="3"
-                    placeholder={t("settings.enterDescription", "Enter description")}
+                    placeholder={t(
+                      "settings.enterDescription",
+                      "Enter description"
+                    )}
                   />
                 </div>
 
@@ -368,10 +419,18 @@ const Settings = () => {
                   </label>
                   <textarea
                     value={settingData.ar_description}
-                    onChange={(e) => setSettingData({ ...settingData, ar_description: e.target.value })}
+                    onChange={(e) =>
+                      setSettingData({
+                        ...settingData,
+                        ar_description: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                     rows="3"
-                    placeholder={t("settings.enterDescriptionAr", "Enter description in Arabic")}
+                    placeholder={t(
+                      "settings.enterDescriptionAr",
+                      "Enter description in Arabic"
+                    )}
                     dir="rtl"
                   />
                 </div>
@@ -463,7 +522,12 @@ const Settings = () => {
                         <SquarePen size={14} />
                       </button>
                       <button
-                        onClick={() => onDelete(setting.id, getTranslatedField(setting, "name"))}
+                        onClick={() =>
+                          onDelete(
+                            setting.id,
+                            getTranslatedField(setting, "name")
+                          )
+                        }
                         className="p-1.5 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
                         title={t("delete", "Delete")}
                       >
@@ -482,8 +546,10 @@ const Settings = () => {
       {totalPages > 1 && (
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
           <div className="text-sm text-gray-600">
-            {t("pagination.showing", "Showing")} {((page - 1) * perPage) + 1} {t("pagination.to", "to")}{" "}
-            {Math.min(page * perPage, total)} {t("pagination.of", "of")} {total} {t("pagination.results", "results")}
+            {t("pagination.showing", "Showing")} {(page - 1) * perPage + 1}{" "}
+            {t("pagination.to", "to")} {Math.min(page * perPage, total)}{" "}
+            {t("pagination.of", "of")} {total}{" "}
+            {t("pagination.results", "results")}
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -493,7 +559,7 @@ const Settings = () => {
             >
               {t("pagination.previous", "Previous")}
             </button>
-            
+
             {/* Page numbers */}
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
@@ -507,7 +573,7 @@ const Settings = () => {
                 } else {
                   pageNum = page - 2 + i;
                 }
-                
+
                 return (
                   <button
                     key={pageNum}
@@ -523,7 +589,7 @@ const Settings = () => {
                 );
               })}
             </div>
-            
+
             <button
               onClick={() => handlePageChange(page + 1)}
               disabled={page === totalPages}

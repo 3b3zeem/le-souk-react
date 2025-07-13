@@ -5,6 +5,7 @@ import useCategories from "../../hooks/Categories/useCategories";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
+import Meta from "../../components/Meta/Meta";
 
 const Categories = () => {
   const [page, setPage] = useState(1);
@@ -20,40 +21,45 @@ const Categories = () => {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
-<div
-  className="@container mx-auto py-6 px-4 sm:px-6 lg:px-8"
-  dir={language === "ar" ? "rtl" : "ltr"}
->
-  {/* Section Heading */}
-  <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
-    {t("Explore_Categories")}
-    <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
-  </h2>
-
-  {/* If no categories */}
-  {categories.length === 0 ? (
-    <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
-      <FolderX size={60} className="mb-4 text-gray-400" />
-      <h2 className="text-2xl font-semibold mb-2">
-        {t("noCategoriesTitle")}
+    <div
+      className="@container mx-auto py-6 px-4 sm:px-6 lg:px-8"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      <Meta
+        title="Explore Categories"
+        description="Discover a variety of categories to explore and shop from."
+        image="/default_category.jpg"
+        url
+      />
+      {/* Section Heading */}
+      <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
+        {t("Explore_Categories")}
+        <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
       </h2>
-      <p className="text-md text-gray-400">{t("noCategoriesSubtitle")}</p>
-    </div>
-  ) : (
-    // Grid of categories
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-      {categories.map((category) => (
-        <CategoryCard key={category.id} category={category} />
-      ))}
-    </div>
-  )}
 
-  {/* Pagination component */}
-  <div className="mt-10">
-    <Pagination meta={meta} onPageChange={setPage} />
-  </div>
-</div>
+      {/* If no categories */}
+      {categories.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
+          <FolderX size={60} className="mb-4 text-gray-400" />
+          <h2 className="text-2xl font-semibold mb-2">
+            {t("noCategoriesTitle")}
+          </h2>
+          <p className="text-md text-gray-400">{t("noCategoriesSubtitle")}</p>
+        </div>
+      ) : (
+        // Grid of categories
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+          {categories.map((category) => (
+            <CategoryCard key={category.id} category={category} />
+          ))}
+        </div>
+      )}
 
+      {/* Pagination component */}
+      <div className="mt-10">
+        <Pagination meta={meta} onPageChange={setPage} />
+      </div>
+    </div>
   );
 };
 

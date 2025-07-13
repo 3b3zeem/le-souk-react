@@ -7,6 +7,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import { useOrder } from "../../hooks/Order/useOrder";
 import { useAuthContext } from "../../context/Auth/AuthContext";
+import Meta from "../../components/Meta/Meta";
 
 const colors = {
   primary: "#333e2c",
@@ -149,6 +150,10 @@ const Cart = () => {
         className="bg-gray-200 p-10 mb-10"
         dir={language === "ar" ? "rtl" : "ltr"}
       >
+      <Meta
+        title="My Shopping Bag"
+        description="View and manage your shopping cart items."
+      />
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
             className="text-2xl font-bold uppercase"

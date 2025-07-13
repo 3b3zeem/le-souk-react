@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/Auth/useAuth";
 import toast from "react-hot-toast";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import Meta from "../../../components/Meta/Meta";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -55,6 +56,10 @@ const Login = () => {
       className="flex flex-col md:flex-row w-full min-h-screen"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Login"
+        description="Sign in to your account to access exclusive features and content."
+      />
       {/* Left Panel - Dark blue with illustration */}
       <div
         className="w-full md:w-1/2 p-8 flex flex-col items-center justify-center "
@@ -86,7 +91,9 @@ const Login = () => {
             </div>
           </div>
 
-          <h2 className="text-3xl font-bold text-center mb-8 font-serif text-[#333e2c]">{t("signIn")}</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 font-serif text-[#333e2c]">
+            {t("signIn")}
+          </h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -174,7 +181,10 @@ const Login = () => {
             <div className="text-center mt-6">
               <p className="text-gray-700">
                 {t("noAccount")}
-                <Link to={"/register"} className="text-[#333e2c] font-serif  ml-1 h4 text-decoration-underline font-medium hover:underline">
+                <Link
+                  to={"/register"}
+                  className="text-[#333e2c] font-serif  ml-1 h4 text-decoration-underline font-medium hover:underline"
+                >
                   {t("signUp")}
                 </Link>
               </p>

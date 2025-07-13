@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { Edit, Search, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import Meta from "../../../components/Meta/Meta";
 
 const Users = () => {
   const { language } = useLanguage();
@@ -40,6 +41,10 @@ const Users = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Users Management"
+        description="Manage your users effectively with our dashboard."
+      />
       <div className="max-w-7xl mx-auto w-full">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           {t("users")}
@@ -109,9 +114,7 @@ const Users = () => {
                         src={user.image}
                         alt={user.name}
                         className="w-8 h-8 rounded-full object-cover border border-gray-200"
-                        onError={(e) =>
-                          (e.target.src = "/user.png")
-                        }
+                        onError={(e) => (e.target.src = "/user.png")}
                       />
                       <div className="flex-1">
                         <p className="text-xs sm:text-sm font-medium text-gray-800">

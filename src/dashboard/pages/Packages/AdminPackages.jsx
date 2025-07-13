@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AddPackageForm from "./AddPackageForm";
 import ManageProductForm from "./ManageProductForm";
 import DropdownActions from "./DropdownActions";
+import Meta from "../../../components/Meta/Meta";
 
 const AdminPackages = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const AdminPackages = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const updateSearchParams = (newParams) => {
     const params = {};
@@ -97,6 +98,10 @@ const AdminPackages = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Packages Management"
+        description="Manage your packages effectively with our dashboard."
+      />
       <div className="container mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           {t("packages")}

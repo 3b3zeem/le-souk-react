@@ -1,6 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ShoppingCart, Heart, SearchX, X, CornerDownLeft ,ChevronUp ,ChevronDown } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  SearchX,
+  X,
+  CornerDownLeft,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import useProducts from "../../../hooks/Products/useProduct";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
@@ -18,6 +26,7 @@ import { useWishlist } from "../../../context/WishList/WishlistContext";
 import { motion } from "framer-motion";
 import PackagesSlider from "./PackagesSlider";
 import RelatedProducts from "./RelatedProducts";
+import Meta from "../../../components/Meta/Meta";
 
 const colors = {
   primary: "#333e2c",
@@ -91,20 +100,22 @@ const ProductId = () => {
   }, []);
 
   useEffect(() => {
-  if (productDetails) {
-    // Set main image only once when product details are loaded
-    if (productDetails.images && productDetails.images.length > 0) {
-      setMainImage(productDetails.images[0].image_url);
-    } else if (productDetails.primary_image_url) {
-      setMainImage(`https://le-souk.dinamo-app.com/storage/${productDetails.primary_image_url}`);
+    if (productDetails) {
+      // Set main image only once when product details are loaded
+      if (productDetails.images && productDetails.images.length > 0) {
+        setMainImage(productDetails.images[0].image_url);
+      } else if (productDetails.primary_image_url) {
+        setMainImage(
+          `https://le-souk.dinamo-app.com/storage/${productDetails.primary_image_url}`
+        );
+      }
+
+      // Reset variant-related states
+      setSelectedVariant(null);
+      setVariantImages([]);
+      setSliderIndex(0);
     }
-    
-    // Reset variant-related states
-    setSelectedVariant(null);
-    setVariantImages([]);
-    setSliderIndex(0);
-  }
-}, [productDetails]);
+  }, [productDetails]);
 
   useEffect(() => {
     setSelectedVariant(null);
@@ -316,9 +327,18 @@ const ProductId = () => {
 
   return (
     <div
-      className="max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12"
+      className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title={productDetails.name}
+        keywords={productDetails.keywords || ""}
+        description={productDetails.description || ""}
+        image={productDetails.images[0].image_url}
+        url={`https://le-souk.vercel.app/products/${productId}/${encodeURIComponent(
+          productDetails.name.replace(/\s+/g, "-")
+        )}`}
+      />
       <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
         <div
@@ -579,103 +599,145 @@ const ProductId = () => {
           </div>
 
           {/* Variants */}
-{/* Variants */}
-         {productDetails.variants && productDetails.variants.length > 0 && (
-  <div className="mb-4">
-    <span
-      className="font-medium text-sm sm:text-base mb-2 block"
-      style={{ color: colors.productTitle }}
-    >
-      {t("variants")}:
-    </span>
-    {/* خيارات القطع أو المقاسات */}
-    <div className="flex flex-wrap gap-2 mb-4">
-      {productDetails.variants.map((variant) => {
-        const isSelected = selectedVariant?.id === variant.id;
-        return (
-          <button
-            key={variant.id}
-            type="button"
-            onClick={() => handleVariantSelect(variant)}
-            className={`px-4 py-2 rounded-md border font-medium transition flex items-center gap-2
-              ${isSelected ? "border-[#333e2c] bg-blue-50" : "border-gray-200 bg-white"}
-              ${variant.stock <= 0 ? "opacity-50 cursor-not-allowed" : "hover:border-[#333e2c] hover:bg-blue-100"}
-              focus:outline-none cursor-pointer`}
-            disabled={variant.stock <= 0}
-          >
-            {isSelected ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            {variant.color != "undefined" ? (
+          {productDetails.variants && productDetails.variants.length > 0 && (
+            <div className="mb-4">
               <span
-                className="w-4 h-4 rounded-full border border-gray-300"
-                style={{ backgroundColor: variant?.color }}
-              ></span>
-            ) : ""}
-            <span className="font-semibold capitalize">{variant?.size || variant?.pcs}</span>
-          </button>
-        );
-      })}
-    </div>
-    
-    {/* تفاصيل المتغير المختار */}
-    {selectedVariant && (
-      <div className="mt-4 p-4 border rounded-md bg-gray-50">
-        <div className="flex flex-col gap-2 text-gray-800">
-          {/* Size or pcs */}
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700 font-medium">{t("Size")}:</span>
-            <span className="font-semibold">{selectedVariant.size || selectedVariant.pcs}</span>
-          </div>
-          {/* Color */}
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700 font-medium">{t("Color")}:</span>
-            <span className="font-semibold capitalize">{selectedVariant.color}</span>
-            <span
-              className="w-4 h-4 rounded-full border border-gray-300"
-              style={{ backgroundColor: selectedVariant.color }}
-            ></span>
-          </div>
-          {/* Price */}
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700 font-medium">{t("Price")}:</span>
-            {selectedVariant.sale_price && selectedVariant.sale_price !== selectedVariant.price ? (
-              <>
-                <span className="line-through text-gray-400 text-sm font-normal">
-                  {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
-                </span>
-                <span className="text-base font-semibold" style={{ color: colors.primary }}>
-                  {selectedVariant.sale_price} {language === "ar" ? "د.ك" : "KWD"}
-                </span>
-                {selectedVariant.discount_percentage && (
-                  <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
-                    {t("discount")}-{selectedVariant.discount_percentage}%
-                  </span>
-                )}
-              </>
-            ) : (
-              <span className="text-base font-semibold" style={{ color: colors.primary }}>
-                {selectedVariant.price} {language === "ar" ? "د.ك" : "KWD"}
+                className="font-medium text-sm sm:text-base mb-2 block"
+                style={{ color: colors.productTitle }}
+              >
+                {t("variants")}:
               </span>
-            )}
-          </div>
-          {/* Stock */}
-          <div className="flex items-center gap-2">
-            <span className="text-gray-700 font-medium">{t("Stock")}:</span>
-            <span className={`font-semibold flex items-center gap-1 px-2 py-1 rounded-md ${
-              selectedVariant.stock > 0 ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"
-            }`}>
-              {selectedVariant.stock > 0 ? `` : t("Out of stock")}
-              {selectedVariant.stock > 0 && (
-                <span className="text-green-700 font-medium text-xs sm:text-base">
-                  {t("available")}
-                </span>
+              {/* خيارات القطع أو المقاسات */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {productDetails.variants.map((variant) => {
+                  const isSelected = selectedVariant?.id === variant.id;
+                  return (
+                    <button
+                      key={variant.id}
+                      type="button"
+                      onClick={() => handleVariantSelect(variant)}
+                      className={`px-4 py-2 rounded-md border font-medium transition flex items-center gap-2
+              ${
+                isSelected
+                  ? "border-[#333e2c] bg-blue-50"
+                  : "border-gray-200 bg-white"
+              }
+              ${
+                variant.stock <= 0
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:border-[#333e2c] hover:bg-blue-100"
+              }
+              focus:outline-none cursor-pointer`}
+                      disabled={variant.stock <= 0}
+                    >
+                      {isSelected ? (
+                        <ChevronUp size={16} />
+                      ) : (
+                        <ChevronDown size={16} />
+                      )}
+                      {variant.color != "undefined" ? (
+                        <span
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: variant?.color }}
+                        ></span>
+                      ) : (
+                        ""
+                      )}
+                      <span className="font-semibold capitalize">
+                        {variant?.size}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* تفاصيل المتغير المختار */}
+              {selectedVariant && (
+                <div className="mt-4 p-4 border rounded-md bg-gray-50">
+                  <div className="flex flex-col gap-2 text-gray-800">
+                    {/* Size or pcs */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">
+                        {t("Size")}:
+                      </span>
+                      <span className="font-semibold">
+                        {selectedVariant.size || selectedVariant.pcs}
+                      </span>
+                    </div>
+                    {/* Color */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">
+                        {t("Color")}:
+                      </span>
+                      <span className="font-semibold capitalize">
+                        {selectedVariant.color}
+                      </span>
+                      <span
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        style={{ backgroundColor: selectedVariant.color }}
+                      ></span>
+                    </div>
+                    {/* Price */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">
+                        {t("Price")}:
+                      </span>
+                      {selectedVariant.sale_price &&
+                      selectedVariant.sale_price !== selectedVariant.price ? (
+                        <>
+                          <span className="line-through text-gray-400 text-sm font-normal">
+                            {selectedVariant.price}{" "}
+                            {language === "ar" ? "د.ك" : "KWD"}
+                          </span>
+                          <span
+                            className="text-base font-semibold"
+                            style={{ color: colors.primary }}
+                          >
+                            {selectedVariant.sale_price}{" "}
+                            {language === "ar" ? "د.ك" : "KWD"}
+                          </span>
+                          {selectedVariant.discount_percentage && (
+                            <span className="ml-2 px-2 py-0.5 bg-red-100 text-red-600 rounded text-xs font-bold">
+                              {t("discount")}-
+                              {selectedVariant.discount_percentage}%
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span
+                          className="text-base font-semibold"
+                          style={{ color: colors.primary }}
+                        >
+                          {selectedVariant.price}{" "}
+                          {language === "ar" ? "د.ك" : "KWD"}
+                        </span>
+                      )}
+                    </div>
+                    {/* Stock */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-700 font-medium">
+                        {t("Stock")}:
+                      </span>
+                      <span
+                        className={`font-semibold flex items-center gap-1 px-2 py-1 rounded-md ${
+                          selectedVariant.stock > 0
+                            ? "text-green-700 bg-green-100"
+                            : "text-red-700 bg-red-100"
+                        }`}
+                      >
+                        {selectedVariant.stock > 0 ? `` : t("Out of stock")}
+                        {selectedVariant.stock > 0 && (
+                          <span className="text-green-700 font-medium text-xs sm:text-base">
+                            {t("available")}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               )}
-            </span>
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-)}
+            </div>
+          )}
 
           {/* Quantity Selector */}
           <div className="flex items-center mb-6">

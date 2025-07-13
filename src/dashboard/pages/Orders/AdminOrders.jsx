@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import useOrders from "../../hooks/Orders/useOrders";
 import { CheckCircle, XCircle, Search } from "lucide-react";
+import Meta from "../../../components/Meta/Meta";
 
 const AdminOrders = () => {
   const { language } = useLanguage();
@@ -48,6 +49,10 @@ const AdminOrders = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Orders Management"
+        description="Manage your orders effectively with our dashboard."
+      />
       <div className="container mx-auto">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           {t("orders")}

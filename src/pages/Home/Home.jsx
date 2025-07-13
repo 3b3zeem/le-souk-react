@@ -6,6 +6,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import Offers from "../../components/Home Components/Offers/Offers";
 import HomePackages from "../../components/Home Components/Packages/HomePackages";
 import WeaklyOffers from "../../components/Home Components/WeaklyOffers/WeaklyOffers";
+import Meta from "../../components/Meta/Meta";
 
 const Home = () => {
   const { language } = useLanguage();
@@ -15,6 +16,10 @@ const Home = () => {
   return (
     <React.Fragment>
       <div dir={language === "ar" ? "rtl" : "ltr"}>
+        <Meta
+          title=""
+          description="Discover the best products and offers at Le-Souk."
+        />
         <HeroSection />
         <Categories />
         <WeaklyOffers />

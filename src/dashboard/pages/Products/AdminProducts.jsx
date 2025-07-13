@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import AddDiscount from "./addDiscount";
 import AssignImagesModal from "./AssignImagesModal";
 import ProductDropdownActions from "./ProductDropdownActions";
+import Meta from "../../../components/Meta/Meta";
 ring.register();
 
 const AdminProducts = () => {
@@ -192,6 +193,10 @@ const AdminProducts = () => {
       className="min-h-screen bg-gray-50 p-1 sm:p-6 w-[100%]"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
+      <Meta
+        title="Products Management"
+        description="Manage your products effectively with our dashboard."
+      />
       <div className="container mx-auto w-[100%]">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 w-[100%]">
           {t("products")}
