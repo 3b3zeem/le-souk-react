@@ -22,8 +22,8 @@ const ProductCard = ({ product }) => {
   const { language } = useLanguage();
   const { t } = useTranslation();
   const discount = product.discount_percentage || 0;
-  const price = product.min_price / 100;
-  const salePrice = product.min_sale_price / 100;
+  const price = product.min_price;
+  const salePrice = product.min_sale_price;
 
   const navigate = useNavigate();
 
@@ -55,20 +55,17 @@ const ProductCard = ({ product }) => {
       </h3>
       <div className="flex items-center gap-2 mb-1">
         <span className="text-lg font-bold" style={{ color: colors.primary }}>
-          {language === "ar" ? "د.ك" : "KWD"}{" "}
-          {salePrice.toFixed(2)}
+          {language === "ar" ? "د.ك" : "KWD"} {salePrice}
         </span>
         {discount > 0 && (
           <span
             className="text-sm line-through"
             style={{ color: colors.productName }}
           >
-            {language === "ar" ? "د.ك" : "KWD"}{" "}
-            {price.toFixed(2)}
+            {language === "ar" ? "د.ك" : "KWD"} {price}
           </span>
         )}
       </div>
-
     </div>
   );
 };
@@ -121,25 +118,25 @@ const ProductCountdown = ({ saleEndsAt }) => {
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.days}
+          {timeLeft.days} {language === "ar" ? "يوم" : "D"}
         </span>
         <span
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.hours.toString().padStart(2, "0")}
+          {timeLeft.hours.toString().padStart(2, "0")} {language === "ar" ? "ساعة" : "H"}
         </span>
         <span
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.minutes.toString().padStart(2, "0")}
+          {timeLeft.minutes.toString().padStart(2, "0")} {language === "ar" ? "دقيقة" : "M"}
         </span>
         <span
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.seconds.toString().padStart(2, "0")}
+          {timeLeft.seconds.toString().padStart(2, "0")} {language === "ar" ? "ثانية" : "S"}
         </span>
       </div>
     </div>
@@ -211,9 +208,10 @@ const SwiperSection = ({ products }) => {
                 className="text-center text-lg font-bold mb-2"
                 style={{ color: colors.primary }}
               >
-                {language === "ar" ? "د.ك" : "KWD"}{" "}
-                {product.min_sale_price} - {language === "ar" ? "د.ك" : "KWD"}{" "}
-                {product.max_sale_price}
+                {language === "ar" ? "د.ك" : "KWD"} {product.min_sale_price} -
+                <span className="line-through text-gray-500 font-semibold ms-1">
+                  {language === "ar" ? "د.ك" : "KWD"} {product.min_price}
+                </span>
               </p>
               <div className="mt-3 text-center">
                 <span className="inline-block px-3 py-1 rounded text-sm font-medium bg-green-600 text-white">
@@ -387,9 +385,13 @@ const Offers = () => {
 
   const { offers, loading, error } = useHome();
 
+  console.log("Offers data:", offers);
+
   if (loading) return <SkeletonLoader />;
   if (error)
-    return <div className="text-center text-red-500">Error: {error.message}</div>;
+    return (
+      <div className="text-center text-red-500">Error: {error.message}</div>
+    );
   if (!offers || offers.length === 0)
     return (
       <div className="text-center text-gray-500">

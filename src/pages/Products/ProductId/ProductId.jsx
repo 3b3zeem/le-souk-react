@@ -310,10 +310,10 @@ const ProductId = () => {
     );
 
   const sliderSettings = {
-    slidesToShow: Math.min(4, productDetails.images?.length || 1),
+    infinite: productDetails.images?.length > 1,
+    slidesToShow: Math.min(productDetails.images?.length, 1),
     slidesToScroll: 1,
     arrows: false,
-    infinite: true,
     autoplay: true,
     autoplaySpeed: 3000,
     vertical: window.innerWidth >= 1024,
