@@ -28,7 +28,7 @@ const useCartCRUD = () => {
   }, [language]);
 
   const fetchCartData = async (token, language) => {
-    if (!token) return { items: [], subtotal: 0 };
+    // if (!token) return { items: [], subtotal: 0 };
 
     const response = await axios.get(
       "https://le-souk.dinamo-app.com/api/cart",
@@ -39,7 +39,8 @@ const useCartCRUD = () => {
         },
       }
     );
-
+      console.log("Cart data fetched:", response.data);
+      
     return {
       items: response.data.data.items,
       subtotal: response.data.data.subtotal,
@@ -76,10 +77,10 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      if (!token) {
-        toast.error("Please log in to add items to your cart.");
-        return;
-      }
+      // if (!token) {
+      //   toast.error("Please log in to add items to your cart.");
+      //   return;
+      // }
 
       const payload = {
         product_id: productId,
@@ -100,6 +101,8 @@ const useCartCRUD = () => {
         }
       );
       setSuccess(response.data.message);
+      console.log(response.data);
+      
       await addItemToCart();
       toast.success(response.data.message);
       await fetchCart();
@@ -119,10 +122,10 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      if (!token) {
-        toast.error("Please log in to remove items to your cart.");
-        throw new Error("No authentication token found");
-      }
+      // if (!token) {
+      //   toast.error("Please log in to remove items to your cart.");
+      //   throw new Error("No authentication token found");
+      // }
 
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/cart/remove",
@@ -154,10 +157,10 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      if (!token) {
-        toast.error("Please log in to update your cart.");
-        throw new Error("No authentication token found");
-      }
+      // if (!token) {
+      //   toast.error("Please log in to update your cart.");
+      //   throw new Error("No authentication token found");
+      // }
 
       const formData = new FormData();
       formData.append(`cart_item_id`, productId);
@@ -200,13 +203,13 @@ const useCartCRUD = () => {
         }
       );
 
-      setCartItems([]);
+      // setCartItems([]);
       await removeItemFromCart();
       toast.success(response.data.message);
-
+       await fetchCart();
       return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to clear wishlist");
+      setError(err.response?.data?.message || "Failed to clear Cart");
       throw err;
     } finally {
       setLoading(false);

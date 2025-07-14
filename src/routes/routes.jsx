@@ -120,6 +120,14 @@ const routes = createBrowserRouter([
           </Suspense>
         ),
       },
+        {
+            path: "cart",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <Cart />
+              </Suspense>
+            ),
+          },
       {
         path: "contact",
         element: (
@@ -139,14 +147,7 @@ const routes = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-          {
-            path: "cart",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <Cart />
-              </Suspense>
-            ),
-          },
+        
           {
             path: "wishlist",
             element: (

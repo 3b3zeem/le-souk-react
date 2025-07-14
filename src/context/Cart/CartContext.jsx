@@ -10,10 +10,10 @@ export const CartProvider = ({ children }) => {
 
   const fetchCartCount = async () => {
     try {
-      if (!token) {
-        setCartCount(0);
-        return;
-      }
+      // if (!token) {
+      //   setCartCount(0);
+      //   return;
+      // }
 
       const response = await axios.get(
         "https://le-souk.dinamo-app.com/api/cart",
