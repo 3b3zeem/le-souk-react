@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Phone, Mail, Clock, MapPin, Send, Instagram } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import useSettings from "../../hooks/Settings/useSettings"; 
 
 import logo from "../../assets/Images/3x/navbar.png";
-import axios from "axios";
 
 const colors = {
   primary: "#333e2c",
@@ -19,23 +19,51 @@ const colors = {
 const Footer = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const { getSettingValueByName, getSettingByEitherName, getTranslatedText, loading, error } = useSettings();
 
-  const [footerData, setFooterData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://le-souk.dinamo-app.com/api/settings"
-        );
-        setFooterData(response.data);
-        // console.log("API response:", response.data);
-      } catch (error) {
-        console.error("Error fetching footer data:", error);
-      }
+  // Get contact information from settings using translated names
+  const phoneNumber = getSettingValueByName("Phone Number") || getSettingValueByName("رقم الهاتف");
+  const email = getSettingValueByName("Email Address") || getSettingValueByName("عنوان البريد الإلكتروني");
+  const location = getSettingValueByName("Location") || getSettingValueByName("الموقع");
+  const siteName = getSettingValueByName("Site Name") || getSettingValueByName("اسم الموقع");
+  
+  // Get business hours using getSettingByEitherName
+  const saturdayToThursdaySetting = getSettingByEitherName("Saturday to Thursday", "السبت إلى الخميس");
+  const fridaySetting = getSettingByEitherName("Friday", "الجمعة");
+
+  // Helper function to get names from setting
+  const getSettingNames = (setting) => {
+    if (!setting || !setting.translations) return { nameEn: "", nameAr: "", value: "" };
+    
+    const enTranslation = setting.translations.find(t => t.locale === "en");
+    const arTranslation = setting.translations.find(t => t.locale === "ar");
+    
+    return {
+      nameEn: enTranslation?.name || "",
+      nameAr: arTranslation?.name || "",
+      value: getTranslatedText(setting.translations, "value") || setting.value || ""
     };
+  };
 
-    fetchData();
-  }, []);
+  const saturdayToThursdayData = getSettingNames(saturdayToThursdaySetting);
+  const fridayData = getSettingNames(fridaySetting);
+
+  if (loading) {
+    return (
+      <footer
+        className="w-full p-12"
+        style={{ backgroundColor: colors.footerBg }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>Loading...</p>
+        </div>
+      </footer>
+    );
+  }
+
+  if (error) {
+    console.error("Error loading settings:", error);
+  }
 
   return (
     <footer
@@ -55,7 +83,7 @@ const Footer = () => {
                 {t("callUs")}{" "}
               </h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                66511123
+                {phoneNumber || "66511123"}
               </p>
             </div>
           </div>
@@ -70,7 +98,7 @@ const Footer = () => {
                 {t("makeQuote")}
               </h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                example@gmail.com
+                {email || "example@gmail.com"}
               </p>
             </div>
           </div>
@@ -90,7 +118,7 @@ const Footer = () => {
                 {t("location")}
               </h4>
               <p className="text-sm" style={{ color: colors.textSecondary }}>
-                Street 2, 70073, Kuwait.
+                {location || "Street 2, 70073, Kuwait."}
               </p>
             </a>
           </div>
@@ -99,8 +127,8 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="flex justify-center  items-center sm:items-start">
-            <img src={logo} alt="logo" width={250} draggable={false} />
+          <div className="flex justify-center items-center sm:items-start">
+            <img src={logo} alt={siteName || "logo"} width={250} draggable={false} />
           </div>
 
           {/* Opening Hours */}
@@ -110,12 +138,34 @@ const Footer = () => {
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
             <div>
-              {/* <h4 className="text-lg font-medium text-[#353535]">Opening Hour</h4> */}
-              <p className="text-md" style={{ color: colors.textSecondary }}>
-                Saturday to Thursday <br /> Morning time: 10 am - 1 pm <br />{" "}
-                Evening time: 5pm - 9:30pm <br /> Friday <br /> Evening time:
-                5pm - 9:30pm
-              </p>
+              <div className="text-md whitespace-pre-line" style={{ color: colors.textSecondary }}>
+                {saturdayToThursdayData.value && (
+                  <div className="mb-2">
+                    <strong>
+                      {language === "ar" ? saturdayToThursdayData.nameAr : saturdayToThursdayData.nameEn}
+                    </strong><br />
+                    {saturdayToThursdayData.value}
+                  </div>
+                )}
+                {fridayData.value && (
+                  <div>
+                    <strong>
+                      {language === "ar" ? fridayData.nameAr : fridayData.nameEn}
+                    </strong><br />
+                    {fridayData.value}
+                  </div>
+                )}
+                {/* Fallback to hardcoded values if settings are not available */}
+                {!saturdayToThursdayData.value && !fridayData.value && (
+                  <p>
+                    Saturday to Thursday <br /> 
+                    Morning time: 10 am - 1 pm <br />{" "}
+                    Evening time: 5pm - 9:30pm <br /> 
+                    Friday <br /> 
+                    Evening time: 5pm - 9:30pm
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -256,7 +306,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-gray-700 text-center">
         <p className="text-sm" style={{ color: colors.textSecondary }}>
-          {t("copyright")}
+          {t("copyright")} {siteName && `- ${siteName}`}
         </p>
       </div>
     </footer>

@@ -311,7 +311,7 @@ const ProductId = () => {
 
   const sliderSettings = {
     infinite: productDetails.images?.length > 1,
-    slidesToShow: Math.min(productDetails.images?.length, 1),
+    slidesToShow:  Math.min(4, productDetails.images?.length || 1),
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
@@ -354,7 +354,7 @@ const ProductId = () => {
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[400px] lg:h-[500px] object-cover rounded cursor-zoom-in"
+              className="w-full h-[400px] lg:h-[500px] m-1 object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
