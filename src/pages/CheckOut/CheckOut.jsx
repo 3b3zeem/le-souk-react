@@ -230,14 +230,14 @@ const CheckOut = () => {
               <button
                 disabled={loading}
                 onClick={handleBuyNow}
-                className={`w-full ${
+                className={`${
                   loading
-                    ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-[#333e2c] hover:bg-[#586450]"
-                } text-white font-bold py-3 rounded-lg transition duration-300 transform hover:scale-105 mt-4`}
+                    ? "bg-[#333e2c] cursor-not-allowed"
+                    : "bg-[#333e2c] hover:bg-[#586450] cursor-pointer"
+                } text-white font-bold py-3 px-8 transition duration-300 transform hover:scale-105 mt-4 flex items-center justify-center gap-2`}
               >
                 {loading ? (
-                  <span className="ml-2 spinner-border spinner-border-sm"></span>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   "Buy Now"
                 )}
@@ -259,9 +259,7 @@ const CheckOut = () => {
                       className="flex items-center gap-4 border-b pb-4"
                     >
                       <img
-                        src={
-                          item.product.primary_image_url
-                        }
+                        src={item.product.primary_image_url}
                         alt={item.product.name}
                         className="w-20 h-20 object-cover rounded-md"
                       />
