@@ -39,7 +39,7 @@ const usePayment = () => {
       };
       const mobileCountryCode = countryCodes[country] || "+965";
 
-      const res = await fetch("http://localhost:5000/send-payment", {
+      const res = await fetch("https://my-fatoorah-proxy.vercel.app/send-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
