@@ -5,6 +5,7 @@ import NotFound from "../components/NotFound/NotFound.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
+import CheckOut from "../pages/CheckOut/CheckOut.jsx";
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
@@ -14,11 +15,17 @@ const Profile = lazy(() => import("../pages/Profile/Profile.jsx"));
 const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
 const Register = lazy(() => import("../pages/Auth/Register/Register.jsx"));
 const Products = lazy(() => import("../pages/Products/Products.jsx"));
-const ProductId = lazy(() => import("../pages/Products/ProductId/ProductId.jsx"));
+const ProductId = lazy(() =>
+  import("../pages/Products/ProductId/ProductId.jsx")
+);
 const Packages = lazy(() => import("../pages/Packages/Packages.jsx"));
-const PackagesId = lazy(() => import("../pages/Packages/PackagesId/PackagesId.jsx"));
+const PackagesId = lazy(() =>
+  import("../pages/Packages/PackagesId/PackagesId.jsx")
+);
 const MainCategories = lazy(() => import("../pages/Categories/Categories.jsx"));
-const CategoryId = lazy(() => import("../pages/Categories/CategoryId/CategoryId.jsx"));
+const CategoryId = lazy(() =>
+  import("../pages/Categories/CategoryId/CategoryId.jsx")
+);
 const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
@@ -28,15 +35,26 @@ const OrderId = lazy(() => import("../pages/Profile/Order/OrderId.jsx"));
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
 const Dashboard = lazy(() => import("../dashboard/pages/Home/Dashboard.jsx"));
 const Users = lazy(() => import("../dashboard/pages/Users/Users.jsx"));
-const Categories = lazy(() => import("../dashboard/pages/Categories/Categories.jsx"));
-const AdminProducts = lazy(() => import("./../dashboard/pages/Products/AdminProducts"));
-const AdminPackages = lazy(() => import("../dashboard/pages/Packages/AdminPackages.jsx"));
-const AdminReviews = lazy(() => import("../dashboard/pages/Reviews/AdminReviews.jsx"));
-const AdminOrders = lazy(() => import("./../dashboard/pages/Orders/AdminOrders"));
+const Categories = lazy(() =>
+  import("../dashboard/pages/Categories/Categories.jsx")
+);
+const AdminProducts = lazy(() =>
+  import("./../dashboard/pages/Products/AdminProducts")
+);
+const AdminPackages = lazy(() =>
+  import("../dashboard/pages/Packages/AdminPackages.jsx")
+);
+const AdminReviews = lazy(() =>
+  import("../dashboard/pages/Reviews/AdminReviews.jsx")
+);
+const AdminOrders = lazy(() =>
+  import("./../dashboard/pages/Orders/AdminOrders")
+);
 const Coupons = lazy(() => import("../dashboard/pages/Coupons/Coupons.jsx"));
 const Settings = lazy(() => import("../dashboard/pages/Settings/Settings.jsx"));
-const Unauthorized = lazy(() => import("../components/Unauthorized/Unauthorized.jsx"));
-
+const Unauthorized = lazy(() =>
+  import("../components/Unauthorized/Unauthorized.jsx")
+);
 
 const routes = createBrowserRouter([
   {
@@ -120,19 +138,27 @@ const routes = createBrowserRouter([
           </Suspense>
         ),
       },
-        {
-            path: "cart",
-            element: (
-              <Suspense fallback={<Loader />}>
-                <Cart />
-              </Suspense>
-            ),
-          },
+      {
+        path: "cart",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Cart />
+          </Suspense>
+        ),
+      },
       {
         path: "contact",
         element: (
           <Suspense fallback={<Loader />}>
             <Contact />
+          </Suspense>
+        ),
+      },
+      {
+        path: "checkOut",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <CheckOut />
           </Suspense>
         ),
       },
@@ -147,7 +173,6 @@ const routes = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
-        
           {
             path: "wishlist",
             element: (
@@ -282,6 +307,5 @@ const routes = createBrowserRouter([
     ],
   },
 ]);
-
 
 export default routes;

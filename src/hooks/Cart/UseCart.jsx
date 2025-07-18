@@ -39,8 +39,7 @@ const useCartCRUD = () => {
         },
       }
     );
-      console.log("Cart data fetched:", response.data);
-      
+
     return {
       items: response.data.data.items,
       subtotal: response.data.data.subtotal,

@@ -7,6 +7,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import useSettings from "../../hooks/Settings/useSettings"; 
 
 import logo from "../../assets/Images/3x/navbar.png";
+import Loader from './../../layouts/Loader';
 
 const colors = {
   primary: "#333e2c",
@@ -49,16 +50,7 @@ const Footer = () => {
   const fridayData = getSettingNames(fridaySetting);
 
   if (loading) {
-    return (
-      <footer
-        className="w-full p-12"
-        style={{ backgroundColor: colors.footerBg }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>Loading...</p>
-        </div>
-      </footer>
-    );
+    return <Loader />;
   }
 
   if (error) {

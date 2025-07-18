@@ -9,8 +9,9 @@ import { CartProvider } from "./context/Cart/CartContext";
 import { WishlistProvider } from "./context/WishList/WishlistContext";
 import { UserProvider } from "./context/User/UserContext";
 import { LanguageProvider } from "./context/Language/LanguageContext";
+import { PackageProvider } from "./context/Package/PackageContext";
 import PreventImageDragAndRightClick from "./utils/PreventImageDragAndRightClick";
-import './utils/i18n'
+import "./utils/i18n";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
@@ -27,10 +28,12 @@ function App() {
           <WishlistProvider>
             <UserProvider>
               <LanguageProvider>
-                <PreventImageDragAndRightClick />
-                <Up_top />
-                <RouterProvider router={routes} />
-                <Toaster position="top-center" reverseOrder={false} />
+                <PackageProvider>
+                  <PreventImageDragAndRightClick />
+                  <Up_top />
+                  <RouterProvider router={routes} />
+                  <Toaster position="top-center" reverseOrder={false} />
+                </PackageProvider>
               </LanguageProvider>
             </UserProvider>
           </WishlistProvider>

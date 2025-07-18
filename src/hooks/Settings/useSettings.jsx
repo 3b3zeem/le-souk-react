@@ -16,7 +16,7 @@ const fetchSettings = async ({ queryKey }) => {
 
 const useSettings = () => {
   const { language } = useLanguage();
-  
+
   const {
     data: settingsData,
     isLoading: isSettingsLoading,
@@ -36,13 +36,13 @@ const useSettings = () => {
       : translations.find((t) => t.locale === "en")?.[field] || "";
   };
 
-
-  
   const getSettingValueByName = (name) => {
     if (!settingsData || !Array.isArray(settingsData)) return "";
-    const setting = settingsData.find(setting => {
+    const setting = settingsData.find((setting) => {
       if (!setting.translations) return false;
-      const translation = setting.translations.find(t => t.locale === language);
+      const translation = setting.translations.find(
+        (t) => t.locale === language
+      );
       return translation && translation.name === name;
     });
     if (!setting) return "";
@@ -50,20 +50,20 @@ const useSettings = () => {
     return translatedValue || setting.value || "";
   };
 
-
-
   // Alternative function to get setting by either English or Arabic name
   const getSettingByEitherName = (nameEn, nameAr) => {
     if (!settingsData || !Array.isArray(settingsData)) return null;
-    
-    const setting = settingsData.find(setting => {
+
+    const setting = settingsData.find((setting) => {
       if (!setting.translations) return false;
-      
-      const enTranslation = setting.translations.find(t => t.locale === "en");
-      const arTranslation = setting.translations.find(t => t.locale === "ar");
-      
-      return (enTranslation && enTranslation.name === nameEn) || 
-             (arTranslation && arTranslation.name === nameAr);
+
+      const enTranslation = setting.translations.find((t) => t.locale === "en");
+      const arTranslation = setting.translations.find((t) => t.locale === "ar");
+
+      return (
+        (enTranslation && enTranslation.name === nameEn) ||
+        (arTranslation && arTranslation.name === nameAr)
+      );
     });
 
     return setting;

@@ -311,7 +311,7 @@ const Products = () => {
       />
 
       {/* Shop Banner */}
-      <div className="relative w-full h-58 mb-8 overflow-hidden shadow-md">
+      <div className="relative w-full h-70 mb-8 overflow-hidden shadow-md">
         <img
           src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80"
           alt="Shop Banner"
@@ -322,7 +322,7 @@ const Products = () => {
             className="text-white text-5xl md:text-6xl font-bold drop-shadow-lg tracking-wide"
             style={{ textShadow: "0 4px 24px rgba(0,0,0,0.5)" }}
           >
-            {language === "ar" ? "المتجر" : "Shop"}
+            {language === "ar" ? "المتجر" : "Products"}
           </span>
         </div>
       </div>
@@ -896,7 +896,7 @@ const Products = () => {
 
                           {/* Price */}
                           <div className="flex items-end gap-2 mb-2">
-                            {product.min_sale_price &&
+                            {product.on_sale === "true" && product.min_sale_price &&
                             product.min_sale_price !== product.min_price ? (
                               <div className="flex flex-col">
                                 <span className="line-through text-gray-400 text-xs font-normal">

@@ -23,6 +23,7 @@ import LanguageDropdown from "../Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
 import NavbarTop from "./NavbarTop";
 import NavbarBottom from "./NavbarBottom";
+import { usePackageContext } from "../../context/Package/PackageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,11 +84,15 @@ const Navbar = () => {
     bgLight: "#ffffff",
   };
 
+  const { packages } = usePackageContext();
+
   const navLinks = [
     { path: "/", label: t("home"), isPrimary: true },
     { path: "/categories", label: t("categories"), isPrimary: true },
     { path: "/products", label: t("products"), isPrimary: true },
-    { path: "/packages", label: t("packages"), isPrimary: true },
+    ...(packages?.length > 0
+      ? [{ path: "/packages", label: t("packages"), isPrimary: true }]
+      : []),
     { path: "/contact", label: t("contact"), isPrimary: true },
   ];
 

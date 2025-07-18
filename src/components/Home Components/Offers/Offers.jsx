@@ -124,19 +124,22 @@ const ProductCountdown = ({ saleEndsAt }) => {
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.hours.toString().padStart(2, "0")} {language === "ar" ? "ساعة" : "H"}
+          {timeLeft.hours.toString().padStart(2, "0")}{" "}
+          {language === "ar" ? "ساعة" : "H"}
         </span>
         <span
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.minutes.toString().padStart(2, "0")} {language === "ar" ? "دقيقة" : "M"}
+          {timeLeft.minutes.toString().padStart(2, "0")}{" "}
+          {language === "ar" ? "دقيقة" : "M"}
         </span>
         <span
           className="px-4 py-2 border rounded"
           style={{ borderColor: colors.borderLight }}
         >
-          {timeLeft.seconds.toString().padStart(2, "0")} {language === "ar" ? "ثانية" : "S"}
+          {timeLeft.seconds.toString().padStart(2, "0")}{" "}
+          {language === "ar" ? "ثانية" : "S"}
         </span>
       </div>
     </div>
@@ -228,13 +231,7 @@ const SwiperSection = ({ products }) => {
             </div>
           ))}
         </Slider>
-      ) : (
-        <p className="text-center text-gray-500 mt-6">
-          {language === "ar"
-            ? "لا توجد منتجات ذات خصم مرتفع متاحة."
-            : "No high-discount products available."}
-        </p>
-      )}
+      ) : null}
     </div>
   );
 };
@@ -242,8 +239,28 @@ const SwiperSection = ({ products }) => {
 const TabsSection = ({ products, productsPerPage = 6 }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const [activeTab, setActiveTab] = useState("1-10");
   const [page, setPage] = useState({ "1-10": 1, "11-30": 1, "31-50": 1 });
+  const tabRanges = [
+    { key: "1-10", label: language === "ar" ? "خصم 1-10%" : "1-10% Offer" },
+    { key: "11-30", label: language === "ar" ? "خصم 11-30%" : "11-30% Offer" },
+    { key: "31-50", label: language === "ar" ? "خصم 31-50%" : "31-50% Offer" },
+  ];
+
+  const tabCounts = {
+    "1-10": products.filter(
+      (p) => p.discount_percentage >= 1 && p.discount_percentage <= 10
+    ).length,
+    "11-30": products.filter(
+      (p) => p.discount_percentage >= 11 && p.discount_percentage <= 30
+    ).length,
+    "31-50": products.filter(
+      (p) => p.discount_percentage >= 31 && p.discount_percentage <= 50
+    ).length,
+  };
+
+  const firstVisibleTab =
+    tabRanges.find((tab) => tabCounts[tab.key] > 0)?.key || "1-10";
+  const [activeTab, setActiveTab] = useState(firstVisibleTab);
 
   const filterProducts = (range, products) => {
     if (range === "1-10") {
@@ -290,47 +307,28 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
           : t("Daily_Deals", "Daily Deals! Get our best prices.")}
       </h2>
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
-        <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "1-10" ? "text-white" : ""
-          }`}
-          style={{
-            backgroundColor:
-              activeTab === "1-10" ? colors.primary : colors.lineBg,
-            color: activeTab === "1-10" ? colors.lightText : colors.productName,
-          }}
-          onClick={() => setActiveTab("1-10")}
-        >
-          {language === "ar" ? "خصم 1-10%" : "1-10% Offer"}
-        </button>
-        <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "11-30" ? "text-white" : ""
-          }`}
-          style={{
-            backgroundColor:
-              activeTab === "11-30" ? colors.primary : colors.lineBg,
-            color:
-              activeTab === "11-30" ? colors.lightText : colors.productName,
-          }}
-          onClick={() => setActiveTab("11-30")}
-        >
-          {language === "ar" ? "خصم 11-30%" : "11-30% Offer"}
-        </button>
-        <button
-          className={`px-4 py-2 rounded cursor-pointer ${
-            activeTab === "31-50" ? "text-white" : ""
-          }`}
-          style={{
-            backgroundColor:
-              activeTab === "31-50" ? colors.primary : colors.lineBg,
-            color:
-              activeTab === "31-50" ? colors.lightText : colors.productName,
-          }}
-          onClick={() => setActiveTab("31-50")}
-        >
-          {language === "ar" ? "خصم 31-50%" : "31-50% Offer"}
-        </button>
+        {tabRanges.map(
+          (tab) =>
+            tabCounts[tab.key] > 0 && (
+              <button
+                key={tab.key}
+                className={`px-4 py-2 rounded cursor-pointer ${
+                  activeTab === tab.key ? "text-white" : ""
+                }`}
+                style={{
+                  backgroundColor:
+                    activeTab === tab.key ? colors.primary : colors.lineBg,
+                  color:
+                    activeTab === tab.key
+                      ? colors.lightText
+                      : colors.productName,
+                }}
+                onClick={() => setActiveTab(tab.key)}
+              >
+                {tab.label}
+              </button>
+            )
+        )}
       </div>
 
       {paginatedProducts.length > 0 ? (
@@ -368,21 +366,12 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
             </div>
           )}
         </>
-      ) : (
-        <p className="text-center text-gray-500">
-          {language === "ar"
-            ? "لا توجد منتجات في هذا النطاق."
-            : t("No products available in this discount range.")}
-        </p>
-      )}
+      ) : null}
     </div>
   );
 };
 
 const Offers = () => {
-  const { t } = useTranslation();
-  const { language } = useLanguage();
-
   const { offers, loading, error } = useHome();
 
   console.log("Offers data:", offers);
@@ -392,17 +381,7 @@ const Offers = () => {
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>
     );
-  if (!offers || offers.length === 0)
-    return (
-      <div className="text-center text-gray-500">
-        {language === "ar"
-          ? "لا توجد منتجات متاحة حالياً. جرب تغيير الفلاتر أو الصفحة."
-          : t(
-              "noProductsTitle",
-              "No products available at the moment. Try adjusting the filters or page."
-            )}
-      </div>
-    );
+  if (!offers || offers.length === 0) return null;
 
   const highDiscountProducts = offers.filter(
     (product) => product.discount_percentage > 50
@@ -416,8 +395,13 @@ const Offers = () => {
   return (
     <div className="p-5 bg-gray-100 w-full">
       <div className="bg-white flex flex-col md:flex-row">
-        <SwiperSection products={highDiscountProducts} />
-        <TabsSection products={tabProducts} productsPerPage={6} />
+        {highDiscountProducts.length > 0 && (
+          <SwiperSection products={highDiscountProducts} />
+        )}
+
+        {tabProducts.length > 0 && (
+          <TabsSection products={tabProducts} productsPerPage={6} />
+        )}
       </div>
     </div>
   );

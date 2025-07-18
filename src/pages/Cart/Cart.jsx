@@ -31,7 +31,6 @@ const Cart = () => {
     error,
     success,
   } = useCartCRUD();
-  const { proceedOrder, loading: orderLoading } = useOrder();
   const [loadingStates, setLoadingStates] = useState({
     remove: {},
     quantity: {},
@@ -110,21 +109,6 @@ const Cart = () => {
     }
   };
 
-  const handleProceedOrder = async () => {
-    if (!token) {
-      toast.error(t("noAccount"));
-      return;
-    }
-
-    try {
-      await proceedOrder();
-      await clearCart();
-      await fetchCart();
-    } catch (err) {
-      toast.error(err);
-    }
-  };
-
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
@@ -150,10 +134,10 @@ const Cart = () => {
         className="bg-gray-200 p-10 mb-10"
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-      <Meta
-        title="My Shopping Bag"
-        description="View and manage your shopping cart items."
-      />
+        <Meta
+          title="My Shopping Bag"
+          description="View and manage your shopping cart items."
+        />
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
             className="text-2xl font-bold uppercase"
@@ -383,21 +367,8 @@ const Cart = () => {
                 <div className="flex justify-between text-sm">
                   <p style={{ color: colors.productName }}>{t("subtotal")}</p>
                   <p style={{ color: colors.productName }}>
-                    ${subtotal} {language === "ar" ? "د.ك" : "KWD"}
+                    {subtotal} {language === "ar" ? "د.ك" : "KWD"}
                   </p>
-                </div>
-
-                <div className="flex justify-between text-sm">
-                  <p style={{ color: colors.productName }}>{t("shipping")}</p>
-                  <p style={{ color: colors.productName }}>TBD</p>
-                </div>
-
-                <div className="flex justify-between text-sm">
-                  <p style={{ color: colors.productName }}>
-                    {t("salesTax")}
-                    <span className="text-gray-400 text-xs">(i)</span>
-                  </p>
-                  <p style={{ color: colors.productName }}>TBD</p>
                 </div>
 
                 <div
@@ -414,19 +385,14 @@ const Cart = () => {
                 </div>
 
                 <button
-                  onClick={handleProceedOrder}
-                  disabled={orderLoading}
-                  className={`w-full py-3 mt-4 customEffect cursor-pointer ${
-                    orderLoading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  onClick={() => navigate("/checkOut")}
+                  className={`w-full py-3 mt-4 customEffect cursor-pointer $`}
                   style={{
                     backgroundColor: colors.primary,
                     color: colors.lightText,
                   }}
                 >
-                  <span className="uppercase">
-                    {orderLoading ? t("loading") : t("checkout")}
-                  </span>
+                  <span className="uppercase">{t("checkout")}</span>
                 </button>
               </div>
             </div>

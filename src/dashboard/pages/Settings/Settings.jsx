@@ -182,19 +182,6 @@ const Settings = () => {
     return <div>Loading language context...</div>;
   }
 
-  const settingTypes = [
-    { value: "string", label: "String" },
-    { value: "number", label: "Number" },
-    { value: "boolean", label: "Boolean" },
-    { value: "text", label: "Text" },
-    { value: "json", label: "JSON" },
-  ];
-
-  const statusOptions = [
-    { value: "active", label: "Active" },
-    { value: "inactive", label: "Inactive" },
-  ];
-
   return (
     <div
       className={`container mx-auto p-1 ${language === "ar" ? "rtl" : "ltr"}`}
@@ -277,7 +264,7 @@ const Settings = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 overflow-y-auto mt-6"
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-500 overflow-y-auto"
             onClick={() => setIsOverlayOpen(false)}
           >
             <motion.div
@@ -329,8 +316,7 @@ const Settings = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t("settings.value", "Value")} (English)
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={settingData.en_value}
                     onChange={(e) =>
                       setSettingData({
@@ -339,6 +325,7 @@ const Settings = () => {
                       })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    rows="3"
                     placeholder={t(
                       "settings.enterValue",
                       "Enter setting value"
@@ -372,8 +359,7 @@ const Settings = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t("settings.value", "Value")} (Arabic)
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     value={settingData.ar_value}
                     onChange={(e) =>
                       setSettingData({
@@ -382,9 +368,10 @@ const Settings = () => {
                       })
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                    rows="3"
                     placeholder={t(
-                      "settings.enterValueAr",
-                      "Enter setting value in Arabic"
+                      "settings.enterValue",
+                      "Enter setting value"
                     )}
                     dir="rtl"
                   />
