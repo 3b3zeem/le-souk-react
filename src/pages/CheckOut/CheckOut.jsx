@@ -233,7 +233,7 @@ const CheckOut = () => {
                 className={`w-full ${
                   loading
                     ? "bg-blue-400 cursor-not-allowed"
-                    : "bg-[#333e2c] hover:bg-[#333e2c]"
+                    : "bg-[#333e2c] hover:bg-[#586450]"
                 } text-white font-bold py-3 rounded-lg transition duration-300 transform hover:scale-105 mt-4`}
               >
                 {loading ? (
@@ -283,10 +283,7 @@ const CheckOut = () => {
                   ))}
                 </ul>
                 <div className="pt-4 text-right space-y-2 text-gray-700">
-                  <div className="text-lg">Subtotal: {subtotal} KWD</div>
-                  <div className="text-xl font-bold">
-                    Total: {finalTotal} KWD
-                  </div>
+                  <div className="text-lg">Total: {subtotal} KWD</div>
                 </div>
               </>
             ) : (
