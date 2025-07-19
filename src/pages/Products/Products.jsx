@@ -23,6 +23,7 @@ import Filters from "./Filters";
 import { useRef, useState as useLocalState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
+import Banner from "../../assets/products.jpg";
 ring2.register();
 
 const colors = {
@@ -311,24 +312,24 @@ const Products = () => {
       />
 
       {/* Shop Banner */}
-      <div className="relative w-full h-70 mb-8 overflow-hidden shadow-md">
+      <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
         <img
-          src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80"
+          src={Banner}
           alt="Shop Banner"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* <div className="absolute inset-0 flex items-center justify-center">
           <span
             className="text-white text-5xl md:text-6xl font-bold drop-shadow-lg tracking-wide"
             style={{ textShadow: "0 4px 24px rgba(0,0,0,0.5)" }}
           >
             {language === "ar" ? "المتجر" : "Products"}
           </span>
-        </div>
+        </div> */}
       </div>
 
       <div
-        className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8"
+        className="max-w-7xl mx-auto py-14 sm:px-6 lg:px-8"
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <div className="flex flex-col lg:flex-row gap-8">
