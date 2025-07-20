@@ -29,6 +29,7 @@ const Cart = () => {
     validateCoupon,
     finalTotal,
     couponData,
+    discount,
     couponValue,
     subtotal,
     loading,
@@ -380,15 +381,32 @@ const Cart = () => {
                 </div>
 
                 {couponData && (
-                  <div
-                    className="border-t pt-4 flex justify-between font-semibold"
-                    style={{ borderColor: colors.lineBg }}
-                  >
-                    <p style={{ color: colors.productTitle }}>
-                      {language === "ar" ? "قيمة الخصم" : "Discount amount"}
-                    </p>
-                    <p style={{ color: colors.productTitle }}>{couponValue}</p>
-                  </div>
+                  <>
+                    <div
+                      className="border-t pt-4 flex justify-between font-semibold"
+                      style={{ borderColor: colors.lineBg }}
+                    >
+                      <p style={{ color: colors.productTitle }}>
+                        {language === "ar"
+                          ? "نسبة الخصم"
+                          : "Discount Percentage"}
+                      </p>
+                      <p style={{ color: colors.productTitle }}>
+                        {couponValue}
+                      </p>
+                    </div>
+                    <div
+                      className="border-t pt-4 flex justify-between font-semibold"
+                      style={{ borderColor: colors.lineBg }}
+                    >
+                      <p style={{ color: colors.productTitle }}>
+                        {language === "ar" ? "قيمة الخصم" : "Discount amount"}
+                      </p>
+                      <p style={{ color: colors.productTitle }}>
+                        {discount} {language === "ar" ? "د.ك" : "KWD"}
+                      </p>
+                    </div>
+                  </>
                 )}
 
                 <div

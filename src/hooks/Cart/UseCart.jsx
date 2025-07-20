@@ -12,6 +12,7 @@ const useCartCRUD = () => {
   const [success, setSuccess] = useState(null);
   const [finalTotal, setFinalTotal] = useState(0);
   const [couponValue, setCouponValue] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [couponData, setCouponData] = useState(null);
 
   const { addItemToCart, removeItemFromCart } = useCart();
@@ -249,6 +250,7 @@ const useCartCRUD = () => {
       setSuccess(response.data.message);
       setFinalTotal(response.data.data.final_total);
       setCouponData(response.data.data.coupon);
+      setDiscount(response.data.data.discount);
       setCouponValue(response.data.data.coupon.formatted_value);
       return response.data;
     } catch (err) {
@@ -269,6 +271,7 @@ const useCartCRUD = () => {
     validateCoupon,
     finalTotal,
     couponData,
+    discount,
     couponValue,
     subtotal,
     loading: loading || isLoading,
