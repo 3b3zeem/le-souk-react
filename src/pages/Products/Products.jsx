@@ -24,6 +24,7 @@ import { useRef, useState as useLocalState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
 import Banner from "../../assets/products.jpg";
+import Banner2 from "../../assets/products2.jpg";
 ring2.register();
 
 const colors = {
@@ -313,11 +314,19 @@ const Products = () => {
 
       {/* Shop Banner */}
       <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
-        <img
-          src={Banner}
-          alt="Shop Banner"
-          className="w-full h-full object-cover"
-        />
+        {language === "en" ? (
+          <img
+            src={Banner}
+            alt="Shop Banner"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <img
+            src={Banner2}
+            alt="Shop Banner"
+            className="w-full h-full object-cover"
+          />
+        )}
         {/* <div className="absolute inset-0 flex items-center justify-center">
           <span
             className="text-white text-5xl md:text-6xl font-bold drop-shadow-lg tracking-wide"
@@ -897,7 +906,8 @@ const Products = () => {
 
                           {/* Price */}
                           <div className="flex items-end gap-2 mb-2">
-                            {product.on_sale === "true" && product.min_sale_price &&
+                            {product.on_sale === "true" &&
+                            product.min_sale_price &&
                             product.min_sale_price !== product.min_price ? (
                               <div className="flex flex-col">
                                 <span className="line-through text-gray-400 text-xs font-normal">

@@ -10,16 +10,13 @@ export const CartProvider = ({ children }) => {
 
   const fetchCartCount = async () => {
     try {
-      // if (!token) {
-      //   setCartCount(0);
-      //   return;
-      // }
-
+      const guestId = localStorage.getItem("guest_id");
       const response = await axios.get(
         "https://le-souk.dinamo-app.com/api/cart",
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );

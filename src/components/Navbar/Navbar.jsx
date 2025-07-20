@@ -84,15 +84,13 @@ const Navbar = () => {
     bgLight: "#ffffff",
   };
 
-  const { packages } = usePackageContext();
+  // const { packages } = usePackageContext();
 
   const navLinks = [
     { path: "/", label: t("home"), isPrimary: true },
     { path: "/categories", label: t("categories"), isPrimary: true },
     { path: "/products", label: t("products"), isPrimary: true },
-    ...(packages?.length > 0
-      ? [{ path: "/packages", label: t("packages"), isPrimary: true }]
-      : []),
+    { path: "/packages", label: t("packages"), isPrimary: true },
     { path: "/contact", label: t("contact"), isPrimary: true },
   ];
 
@@ -229,61 +227,51 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-2">
-          {isLoggedIn ? (
-            <>
-              <div className="flex items-center gap-1 sm:gap-3">
-                {/* Cart & Wishlist */}
-                <div className={"flex justify-center gap-1 sm:gap-4"}>
-                  <button
-                    onClick={handleCartClick}
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
-                    style={{ borderColor: colors.borderLight }}
-                  >
-                    <ShoppingCart size={20} className="text-gray-500" />
-                    {cartCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
-                        {cartCount}
-                      </span>
-                    )}
-                  </button>
-
-                  <button
-                    onClick={handleWishlistClick}
-                    className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
-                    style={{ borderColor: colors.borderLight }}
-                  >
-                    <Heart size={20} className="text-gray-500" />
-                    {wishlistCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
-                        {wishlistCount}
-                      </span>
-                    )}
-                  </button>
-                </div>
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-1 focus:outline-none rounded hover:bg-gray-200 transition duration-200 ease-in-out cursor-pointer"
-                >
-                  <Menu size={24} />
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                to="/login"
-                className="bg-[#333e2c] text-white font-bold py-2 px-4 rounded-md me-5 cursor-pointer customEffect"
-              >
-                <span>{t("login")}</span>
-              </Link>
+          <div className="flex items-center gap-1 sm:gap-3">
+            {/* Cart & Wishlist */}
+            <div className={"flex justify-center gap-1 sm:gap-4"}>
               <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="p-7 focus:outline-none rounded-md cursor-pointer"
+                onClick={handleCartClick}
+                className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
+                style={{ borderColor: colors.borderLight }}
               >
-                <Menu size={24} />
+                <ShoppingCart size={20} className="text-gray-500" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs z-50">
+                    {cartCount}
+                  </span>
+                )}
               </button>
-            </>
+
+              <button
+                onClick={handleWishlistClick}
+                className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
+                style={{ borderColor: colors.borderLight }}
+              >
+                <Heart size={20} className="text-gray-500" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                    {wishlistCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {!isLoggedIn && (
+            <Link
+              to="/login"
+              className="bg-[#333e2c] text-white font-bold py-2 px-4 rounded-md me-5 cursor-pointer customEffect"
+            >
+              <span>{t("login")}</span>
+            </Link>
           )}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className=" focus:outline-none rounded-md cursor-pointer"
+          >
+            <Menu size={24} />
+          </button>
         </div>
 
         <div

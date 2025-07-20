@@ -6,6 +6,7 @@ const useAuth = () => {
   const { setUser, setToken } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  let guestId = localStorage.getItem("guest_id");
 
   const register = async (username, email, password, confirmPassword) => {
     setLoading(true);
@@ -28,6 +29,7 @@ const useAuth = () => {
         },
         {
           headers: {
+            ...(guestId && { 'X-Guest-ID': guestId }),
             "Content-Type": "application/json",
           },
         }
@@ -65,6 +67,7 @@ const useAuth = () => {
         },
         {
           headers: {
+            ...(guestId && { 'X-Guest-ID': guestId }),
             "Content-Type": "application/json",
           },
         }

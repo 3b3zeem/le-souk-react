@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useOrder } from "../../hooks/Order/useOrder";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import Meta from "../../components/Meta/Meta";
+import Loader from "../../layouts/Loader";
 
 const colors = {
   primary: "#333e2c",
@@ -28,6 +29,7 @@ const Cart = () => {
     validateCoupon,
     finalTotal,
     subtotal,
+    loading,
     error,
     success,
   } = useCartCRUD();
@@ -127,6 +129,10 @@ const Cart = () => {
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <React.Fragment>
@@ -348,7 +354,7 @@ const Cart = () => {
                       placeholder={t("enterCode")}
                       value={coupon}
                       onChange={(e) => setCoupon(e.target.value)}
-                      className="border border-gray-300 p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                      className="border border-gray-300 p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                     />
                     <button
                       className="px-4 uppercase customEffect cursor-pointer"

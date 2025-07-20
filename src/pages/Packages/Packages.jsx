@@ -20,6 +20,18 @@ const Packages = () => {
   }, []);
 
   if (loading) return <SkeletonLoader />;
+  if (packages.length === 0 && !loading)
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
+        <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
+          {t("Explore_Packages")}
+          <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
+        </h2>
+        <FolderX size={60} className="mb-4 text-gray-400" />
+        <h2 className="text-2xl font-semibold mb-2">{t("noPackagesTitle")}</h2>
+        <p className="text-md text-gray-400">{t("noPackagesSubtitle")}</p>
+      </div>
+    );
   if (error) return <div className="text-red-500 text-center">{error}</div>;
   return (
     <div
@@ -35,21 +47,12 @@ const Packages = () => {
         {t("Explore_Packages")}
         <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
       </h2>
-      {packages.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-gray-500 text-center">
-          <FolderX size={60} className="mb-4 text-gray-400" />
-          <h2 className="text-2xl font-semibold mb-2">
-            {t("noPackagesTitle")}
-          </h2>
-          <p className="text-md text-gray-400">{t("noPackagesSubtitle")}</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {packages.map((pkg) => (
-            <PackagesCard key={pkg.id} packages={pkg} />
-          ))}
-        </div>
-      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {packages.map((pkg) => (
+          <PackagesCard key={pkg.id} packages={pkg} />
+        ))}
+      </div>
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

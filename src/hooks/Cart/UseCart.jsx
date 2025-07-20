@@ -15,6 +15,7 @@ const useCartCRUD = () => {
   const { addItemToCart, removeItemFromCart } = useCart();
   const { token } = useAuthContext();
   const { language } = useLanguage();
+  const guestId = localStorage.getItem("guest_id");
 
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
@@ -34,7 +35,8 @@ const useCartCRUD = () => {
       "https://le-souk.dinamo-app.com/api/cart",
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          ...(guestId && { 'X-Guest-ID': guestId }),
+          ...(token && { Authorization: `Bearer ${token}` }),
           "Accept-Language": language,
         },
       }
@@ -54,7 +56,7 @@ const useCartCRUD = () => {
   } = useQuery({
     queryKey: ["cart", token, language],
     queryFn: () => fetchCartData(token, language),
-    enabled: !!token,
+    enabled: !!token || !!guestId,
   });
 
   useEffect(() => {
@@ -94,8 +96,9 @@ const useCartCRUD = () => {
         payload,
         {
           headers: {
+            ...(guestId && { 'X-Guest-ID': guestId }),
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
@@ -133,8 +136,9 @@ const useCartCRUD = () => {
         },
         {
           headers: {
+            ...(guestId && { 'X-Guest-ID': guestId }),
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
@@ -170,7 +174,8 @@ const useCartCRUD = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(token && { Authorization: `Bearer ${token}` }),
             "Content-Type": "multipart/form-data",
           },
         }
@@ -196,8 +201,9 @@ const useCartCRUD = () => {
         {},
         {
           headers: {
+            ...(guestId && { 'X-Guest-ID': guestId }),
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
@@ -229,7 +235,7 @@ const useCartCRUD = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );

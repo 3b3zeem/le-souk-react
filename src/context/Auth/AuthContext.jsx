@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -51,6 +58,8 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("profile");
     localStorage.removeItem("token");
+    localStorage.removeItem("guest_id");
+    localStorage.clear();
 
     try {
       if (token) {
@@ -66,9 +75,13 @@ export const AuthProvider = ({ children }) => {
         );
       }
     } catch (err) {
-      console.error("Logout error:", err.response?.data?.message || "Logout failed");
+      console.error(
+        "Logout error:",
+        err.response?.data?.message || "Logout failed"
+      );
     } finally {
       logoutInProgress.current = false;
+      window.location.reload();
     }
   }, [token]);
 
@@ -131,20 +144,18 @@ export const AuthProvider = ({ children }) => {
     setToken: setAuthToken,
     logout,
     isLoading,
-    isAuthenticated: !!(profile && token)
+    isAuthenticated: !!(profile && token),
   };
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
+    throw new Error("useAuthContext must be used within an AuthProvider");
   }
   return context;
 };
