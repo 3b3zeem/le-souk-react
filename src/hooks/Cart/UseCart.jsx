@@ -11,6 +11,8 @@ const useCartCRUD = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [finalTotal, setFinalTotal] = useState(0);
+  const [couponValue, setCouponValue] = useState(0);
+  const [couponData, setCouponData] = useState(null);
 
   const { addItemToCart, removeItemFromCart } = useCart();
   const { token } = useAuthContext();
@@ -41,6 +43,8 @@ const useCartCRUD = () => {
         },
       }
     );
+
+    console.log("Cart data fetched:", response.data);
 
     return {
       items: response.data.data.items,
@@ -240,8 +244,12 @@ const useCartCRUD = () => {
         }
       );
 
+      console.log("Coupon validation response:", response.data);
+
       setSuccess(response.data.message);
       setFinalTotal(response.data.data.final_total);
+      setCouponData(response.data.data.coupon);
+      setCouponValue(response.data.data.coupon.formatted_value);
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to validate coupon");
@@ -260,6 +268,8 @@ const useCartCRUD = () => {
     clearCart,
     validateCoupon,
     finalTotal,
+    couponData,
+    couponValue,
     subtotal,
     loading: loading || isLoading,
     error,

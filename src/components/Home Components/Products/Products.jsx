@@ -182,7 +182,7 @@ const Products = () => {
               : primaryImage;
 
           return (
-            <div key={product.id} className="px-2 h-full">
+            <div key={product.id} className="px-2 h-[570px]">
               <div
                 className="relative group border rounded-md overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
                 onMouseEnter={() => setHoveredIndex(idx)}

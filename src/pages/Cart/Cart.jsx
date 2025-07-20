@@ -28,6 +28,8 @@ const Cart = () => {
     clearCart,
     validateCoupon,
     finalTotal,
+    couponData,
+    couponValue,
     subtotal,
     loading,
     error,
@@ -376,6 +378,18 @@ const Cart = () => {
                     {subtotal} {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                 </div>
+
+                {couponData && (
+                  <div
+                    className="border-t pt-4 flex justify-between font-semibold"
+                    style={{ borderColor: colors.lineBg }}
+                  >
+                    <p style={{ color: colors.productTitle }}>
+                      {language === "ar" ? "قيمة الخصم" : "Discount amount"}
+                    </p>
+                    <p style={{ color: colors.productTitle }}>{couponValue}</p>
+                  </div>
+                )}
 
                 <div
                   className="border-t pt-4 flex justify-between font-semibold"
