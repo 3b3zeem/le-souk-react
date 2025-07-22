@@ -132,7 +132,7 @@ const Navbar = () => {
 
         // Update progress
         const progress =
-          scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+          scrollHeight > 0 ? (scrollTop / scrollHeight) * 10 : 0;
         setScrollProgress(progress);
 
         ticking.current = false;

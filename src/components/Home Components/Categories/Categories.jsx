@@ -70,7 +70,7 @@ const Categories = () => {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center py-14 ">
+      <div className="flex flex-col items-center justify-center py-20">
         <div className="bg-red-100 border border-red-400 text-red-700 px-10 py-16 rounded-md shadow-md max-w-md w-full text-center">
           <div className="flex items-center justify-center mb-3">
             <AlertCircle className="h-8 w-8 text-red-500" />
@@ -94,7 +94,7 @@ const Categories = () => {
 
   return (
     <div
-      className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 border-b border-gray-300"
+      className="max-w-7xl mx-auto py-30 px-4 sm:px-6 lg:px-8 border-b border-gray-300"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <div className="flex justify-between mt-8 mb-6">

@@ -6,6 +6,7 @@ import AuthRoute from "./AuthRoute.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import CheckOut from "../pages/CheckOut/CheckOut.jsx";
+import AdminHero from "../dashboard/pages/Hero/AdminHero.jsx";
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
@@ -224,6 +225,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <Dashboard />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "hero",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <AdminHero />
                   </Suspense>
                 ),
               },

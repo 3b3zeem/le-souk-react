@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Percent,
   Boxes,
+  Images,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -89,9 +90,15 @@ const Sidebar = () => {
           isOpen={isOpen}
         />
         <SidebarItem
+          to="/admin-dashboard/hero"
+          icon={<Images />}
+          label="Hero"
+          isOpen={isOpen}
+        />
+        <SidebarItem
           to="/admin-dashboard/users"
           icon={<Users />}
-          label="users"
+          label="Users"
           isOpen={isOpen}
         />
         <SidebarItem
