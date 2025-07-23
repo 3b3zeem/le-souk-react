@@ -181,7 +181,7 @@ const PackagesId = () => {
       </div>
 
       {/* Details Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
         <div className="md:sticky md:top-0 bg-gradient-to-br from-blue-50 via-white to-blue-100 rounded-xl p-8 border border-blue-100 md:h-100">
           <h2 className="text-2xl font-extrabold mb-8 text-blue-700 flex items-center gap-2">
             <Clock4 className="w-6 h-6 text-blue-500" />
@@ -252,7 +252,7 @@ const PackagesId = () => {
         </div>
 
         {/* Products */}
-        <div className="bg-white rounded-xl p-8 border border-gray-200">
+        <div className="bg-white rounded-xl p-2 border border-gray-200">
           <h2 className="text-xl font-bold mb-4 text-blue-700">
             {t("Included Products")}
           </h2>
@@ -260,12 +260,12 @@ const PackagesId = () => {
             {details?.packageProducts.map((product) => (
               <div
                 key={product.id}
-                className="border border-gray-400 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-50 p-3"
+                className="border border-gray-400 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-50 p-3 h-90"
               >
                 <img
                   src={product.product.primary_image_url}
                   alt={product.product.name}
-                  className="w-full h-32 object-contain bg-white"
+                  className="w-full h-50 object-cover bg-white"
                 />
                 <div className="p-4">
                   <h3 className="text-base font-semibold truncate mb-2">

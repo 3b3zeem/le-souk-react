@@ -355,7 +355,7 @@ const Products = () => {
       <div className="flex justify-center mt-8">
         <Link
           to={"/products"}
-          className="px-6 py-2 border rounded text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
+          className="px-6 py-2 text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
           style={{ borderColor: colors.primary, color: colors.primary }}
         >
           <span>{t("allProducts")}</span>

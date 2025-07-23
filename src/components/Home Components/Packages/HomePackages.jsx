@@ -122,7 +122,7 @@ const HomePackages = () => {
         </h2>
         <Link
           to={"/packages"}
-          className="px-6 py-2 border rounded text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
+          className="px-6 py-2 text-md font-medium bg-[#333e2c] transition duration-200 customEffect"
           style={{ borderColor: colors.primary, color: colors.primary }}
         >
           <span>{t("All_Packages")}</span>
@@ -147,7 +147,7 @@ const HomePackages = () => {
                   </h2>
                   <div className="">
                     <button
-                      className="relative z-10 px-4 py-2 bg-[#333e2c] text-white font-medium hover:bg-[#1e6fe9f6] transition cursor-pointer"
+                      className="relative z-10 px-4 py-2 bg-[#333e2c] text-white font-medium hover:bg-[#4a5543] transition duration-200 cursor-pointer"
                       onClick={() => navigate(`/packages/${pkg.id}`)}
                     >
                       {language === "ar" ? "عرض التفاصيل" : "View details"}

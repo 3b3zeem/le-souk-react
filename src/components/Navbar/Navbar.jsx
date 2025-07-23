@@ -128,11 +128,11 @@ const Navbar = () => {
           document.documentElement.scrollHeight - window.innerHeight;
 
         // Update scrolled state
-        setScrolled(scrollTop > 10);
+        setScrolled(scrollTop > 200);
 
         // Update progress
         const progress =
-          scrollHeight > 0 ? (scrollTop / scrollHeight) * 10 : 0;
+          scrollHeight > 0 ? (scrollTop / scrollHeight) * 200 : 0;
         setScrollProgress(progress);
 
         ticking.current = false;
