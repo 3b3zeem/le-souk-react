@@ -206,23 +206,17 @@ const PackagesId = () => {
               />
               <DetailRow
                 label={t("Original Price")}
-                value={`${details?.original_price} ${
-                  language === "ar" ? "ج.م" : "LE"
-                }`}
+                value={`${details?.original_price} ${language === "ar" ? "د.ك" : "KWD"}`}
                 color="text-red-500 line-through"
               />
               <DetailRow
                 label={t("Discounted Price")}
-                value={`${details?.discounted_price} ${
-                  language === "ar" ? "ج.م" : "LE"
-                }`}
+                value={`${details?.discounted_price} ${language === "ar" ? "د.ك" : "KWD"}`}
                 color="text-green-700 font-bold"
               />
               <DetailRow
                 label={t("Savings")}
-                value={`${details?.savings} ${
-                  language === "ar" ? "ج.م" : "LE"
-                }`}
+                value={`${details?.savings} ${language === "ar" ? "د.ك" : "KWD"}`}
                 color="text-green-500"
               />
             </div>
