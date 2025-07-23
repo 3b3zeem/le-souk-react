@@ -7,6 +7,7 @@ import useCartCRUD from "../../hooks/Cart/UseCart";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import Meta from "../../components/Meta/Meta";
+import Loader from "../../layouts/Loader";
 
 const colors = {
   primary: "#333e2c",
@@ -20,10 +21,11 @@ const colors = {
 const WishList = () => {
   const {
     wishlistItems,
-    fetchWishlist,
+    refetchWishlist,
     removeFromWishlist,
     clearWishlist,
     success: wishlistSuccess,
+    loading,
   } = useWishlistCRUD();
   const { addToCart } = useCartCRUD();
   const [loadingStates, setLoadingStates] = useState({
@@ -33,10 +35,6 @@ const WishList = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language } = useLanguage();
-
-  useEffect(() => {
-    fetchWishlist();
-  }, []);
 
   useEffect(() => {
     if (wishlistSuccess) {
@@ -52,7 +50,7 @@ const WishList = () => {
 
     try {
       await removeFromWishlist(productId);
-      await fetchWishlist();
+      await refetchWishlist();
     } catch (err) {
       console.error("Error removing from wishlist:", err);
       toast.error("Failed to remove item from wishlist.");
@@ -84,6 +82,7 @@ const WishList = () => {
   const handleClearWishlist = async () => {
     try {
       await clearWishlist();
+      await refetchWishlist();
     } catch (err) {
       console.error("Error clearing wishlist:", err);
     }
@@ -92,6 +91,10 @@ const WishList = () => {
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
+
+    if (loading) {
+    return <Loader />;
+  }
 
   return (
     <React.Fragment>

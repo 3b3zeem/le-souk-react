@@ -32,8 +32,6 @@ const useCartCRUD = () => {
   }, [language]);
 
   const fetchCartData = async (token, language) => {
-    // if (!token) return { items: [], subtotal: 0 };
-
     const response = await axios.get(
       "https://le-souk.dinamo-app.com/api/cart",
       {

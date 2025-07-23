@@ -8,6 +8,9 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
 import Meta from "../../components/Meta/Meta";
 
+import Banner from "../../assets/packagesEn.jpg";
+import Banner2 from "../../assets/packagesAr.jpg";
+
 const Packages = () => {
   const [page, setPage] = useState(1);
   const { t } = useTranslation();
@@ -35,7 +38,7 @@ const Packages = () => {
   if (error) return <div className="text-red-500 text-center">{error}</div>;
   return (
     <div
-      className="@container mx-auto py-6  px-4 "
+      className="@container mx-auto"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
       <Meta
@@ -43,15 +46,33 @@ const Packages = () => {
         keywords="packages, explore packages, shop packages"
         description="Discover a variety of packages to explore and shop from."
       />
-      <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
-        {t("Explore_Packages")}
-        <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
-      </h2>
+      {/* Shop Banner */}
+      <div className="relative w-full h-100 overflow-hidden shadow-md">
+        {language === "en" ? (
+          <img
+            src={Banner}
+            alt="Packages Banner"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <img
+            src={Banner2}
+            alt="Packages Banner"
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
+      <div className="flex flex-col py-10 px-8">
+        <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
+          {t("Explore_Packages")}
+          <span className="block w-16 h-1 bg-[#333e2c] rounded-full mx-auto mt-2"></span>
+        </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {packages.map((pkg) => (
-          <PackagesCard key={pkg.id} packages={pkg} />
-        ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {packages.map((pkg) => (
+            <PackagesCard key={pkg.id} packages={pkg} />
+          ))}
+        </div>
       </div>
       <Pagination
         currentPage={currentPage}

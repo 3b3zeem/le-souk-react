@@ -565,7 +565,7 @@ const Products = () => {
                           key={product.id}
                           onMouseEnter={() => setHoveredIndex(idx)}
                           onMouseLeave={() => setHoveredIndex(null)}
-                          className="flex flex-col md:flex-row bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer relative"
+                          className="flex flex-col md:flex-row bg-white shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer relative"
                           style={{ minHeight: 240 }}
                           onClick={() => handleProductClick(product.id)}
                         >
@@ -597,7 +597,7 @@ const Products = () => {
 
                           {/* Image */}
                           <div
-                            className="flex-shrink-0 flex items-center justify-center bg-gray-50 p-6 md:w-1/3 relative h-100"
+                            className="flex-shrink-0 flex items-center justify-center bg-gray-50 p-6 md:w-1/2 relative h-100"
                             style={{ minHeight: 220 }}
                           >
                             <img
@@ -787,7 +787,7 @@ const Products = () => {
                         key={product.id}
                         onMouseEnter={() => setHoveredIndex(idx)}
                         onMouseLeave={() => setHoveredIndex(null)}
-                        className="relative group border rounded-md overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
+                        className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
                         style={{
                           borderColor: colors.borderLight,
                           minHeight: 420,
@@ -803,8 +803,7 @@ const Products = () => {
                             }
                             alt={product.name}
                             loading="lazy"
-                            className="h-full max-h-52 object-contain p-4 transition-transform duration-200 group-hover:scale-105"
-                            style={{ maxWidth: "90%" }}
+                            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
                           />
                           {/* WishList */}
                           <button
@@ -815,14 +814,16 @@ const Products = () => {
                             disabled={loadingStates.wishlist[product.id]}
                             className={`absolute top-3 ${
                               language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${
-                            loadingStates.wishlist[product.id]
-                              ? "opacity-50 cursor-not-allowed"
-                              : isProductInWishlist(product.id)
-                              ? "bg-red-100 hover:bg-red-200"
-                              : "hover:bg-blue-100"
-                          }`}
+                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+                              opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
+                              transition-all duration-300 delay-50 cursor-pointer
+                            ${
+                              loadingStates.wishlist[product.id]
+                                ? "opacity-50 cursor-not-allowed"
+                                : isProductInWishlist(product.id)
+                                ? "bg-red-100 hover:bg-red-200"
+                                : "hover:bg-blue-100"
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <Heart
@@ -848,12 +849,14 @@ const Products = () => {
                             disabled={loadingStates.cart[product.id]}
                             className={`absolute bottom-3 ${
                               language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                          ${
-                            loadingStates.cart[product.id]
-                              ? "opacity-50 cursor-not-allowed"
-                              : "hover:bg-blue-100"
-                          }`}
+                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+                              opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
+                              transition-all duration-300 delay-150 cursor-pointer
+                            ${
+                              loadingStates.cart[product.id]
+                                ? "opacity-50 cursor-not-allowed"
+                                : "hover:bg-blue-100"
+                            }`}
                             style={{ borderColor: colors.borderLight }}
                           >
                             <ShoppingCart size={22} className="text-gray-500" />
@@ -940,7 +943,8 @@ const Products = () => {
                           </div>
 
                           {/* Discount duration */}
-                          {product.sale_starts_at &&
+                          {product.on_sale === "true" &&
+                            product.sale_starts_at &&
                             product.sale_ends_at &&
                             (() => {
                               const start = new Date(product.sale_starts_at);

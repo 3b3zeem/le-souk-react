@@ -349,7 +349,7 @@ const ProductId = () => {
           }`}
         >
           {/* Main Image with Magnifier */}
-          <div className="relative w-full">
+          <div className="relative w-full" style={{ maxWidth: 500 }}>
             <img
               ref={imageRef}
               src={mainImage}
@@ -377,7 +377,7 @@ const ProductId = () => {
 
           {/* Thumbnails Slider */}
           <div
-            className={`lg:order-2 focus:outline-none focus:border-none max-w-[85%] md:max-w-[70%] lg:max-w-[14%] overflow-hidden`}
+            className={`lg:order-2 focus:outline-none focus:border-none max-w-[85%] md:max-w-[70%] lg:max-w-[14%] overflow-hidden mr-2`}
           >
             {variantImages.length > 1 ? (
               <div
