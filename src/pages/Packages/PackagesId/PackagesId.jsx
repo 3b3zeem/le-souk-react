@@ -206,17 +206,23 @@ const PackagesId = () => {
               />
               <DetailRow
                 label={t("Original Price")}
-                value={`${details?.original_price} ${language === "ar" ? "د.ك" : "KWD"}`}
+                value={`${details?.original_price} ${
+                  language === "ar" ? "د.ك" : "KWD"
+                }`}
                 color="text-red-500 line-through"
               />
               <DetailRow
                 label={t("Discounted Price")}
-                value={`${details?.discounted_price} ${language === "ar" ? "د.ك" : "KWD"}`}
+                value={`${details?.discounted_price} ${
+                  language === "ar" ? "د.ك" : "KWD"
+                }`}
                 color="text-green-700 font-bold"
               />
               <DetailRow
                 label={t("Savings")}
-                value={`${details?.savings} ${language === "ar" ? "د.ك" : "KWD"}`}
+                value={`${details?.savings} ${
+                  language === "ar" ? "د.ك" : "KWD"
+                }`}
                 color="text-green-500"
               />
             </div>
@@ -252,33 +258,36 @@ const PackagesId = () => {
         </div>
 
         {/* Products */}
-        <div className="bg-white rounded-xl p-2 border border-gray-200">
-          <h2 className="text-xl font-bold mb-4 text-blue-700">
+        <div className="bg-white rounded-xl p-4 border border-gray-200">
+          <h2 className="text-2xl font-bold mb-6 text-blue-700">
             {t("Included Products")}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {details?.packageProducts.map((product) => (
               <div
                 key={product.id}
-                className="border border-gray-400 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-50 p-3 h-90"
+                className="border border-gray-300 overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white"
               >
-                <img
-                  src={product.product.primary_image_url}
-                  alt={product.product.name}
-                  className="w-full h-50 object-cover bg-white"
-                />
+                <div className="w-full aspect-[4/3] bg-gray-100 overflow-hidden">
+                  <img
+                    src={product.product.primary_image_url}
+                    alt={product.product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
                 <div className="p-4">
-                  <h3 className="text-base font-semibold truncate mb-2">
+                  <h3 className="text-lg font-semibold mb-1 truncate">
                     {product.product.name}
                   </h3>
-                  <p className="text-gray-600 mb-2">
-                    <span>
-                      {product.product.min_price}{" "}
-                      {language === "ar" ? "د.ك" : "KWD"}
-                    </span>
+                  <p className="text-gray-600 mb-3 text-sm">
+                    {product.product.min_price}{" "}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </p>
+
                   <button
-                    className="mt-2 w-full bg-[#333e2c] text-white py-2 rounded-lg transition-colors font-semibold cursor-pointer customEffect"
+                    className="w-full bg-[#333e2c] text-white py-2 rounded-md font-medium customEffect cursor-pointer"
                     onClick={() => navigate(`/products/${product.product.id}`)}
                   >
                     <span>{t("View Details")}</span>

@@ -60,7 +60,7 @@ const ProductId = () => {
   const [mainImage, setMainImage] = useState(null);
   const [variantImages, setVariantImages] = useState([]);
   const [sliderIndex, setSliderIndex] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+  // const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({
     x: 0,
@@ -93,11 +93,11 @@ const ProductId = () => {
     scrollTo(0, 0);
   }, [productId, language]);
 
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // useEffect(() => {
+  //   const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   useEffect(() => {
     if (productDetails) {
@@ -342,19 +342,19 @@ const ProductId = () => {
       <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
         <div
-          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-center ${
+          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-start lg:items-center ${
             language === "ar"
               ? "lg:flex-row-reverse gap-4"
               : "lg:flex-row-reverse gap-0"
           }`}
         >
           {/* Main Image with Magnifier */}
-          <div className="relative w-full" style={{ maxWidth: 350 }}>
+          <div className="relative w-full">
             <img
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[400px] lg:h-[500px] m-1 object-cover rounded cursor-zoom-in"
+              className="w-full h-[600px] lg:h-[500px] object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
@@ -377,21 +377,19 @@ const ProductId = () => {
 
           {/* Thumbnails Slider */}
           <div
-            className={`lg:order-2 focus:outline-none focus:border-none`}
-            style={{ maxWidth: isDesktop ? 90 : "45%" }}
+            className={`lg:order-2 focus:outline-none focus:border-none max-w-[85%] md:max-w-[70%] lg:max-w-[14%] overflow-hidden`}
           >
             {variantImages.length > 1 ? (
               <div
-                className={`flex ${
-                  isDesktop ? "flex-col" : "flex-row"
-                } gap-2 overflow-x-auto`}
+                className={`flex m-0 p-0 overflow-x-auto`}
+                style={{ gap: 0 }}
               >
                 {variantImages.map((img, idx) => (
                   <div key={img.id}>
                     <img
                       src={img.image_url}
                       alt={`thumb-${idx}`}
-                      className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
+                      className={`object-cover rounded-md border cursor-pointer transition
                         ${
                           mainImage === img.image_url
                             ? "ring-1 ring-[#333e2c] border-[#333e2c]"
@@ -408,7 +406,8 @@ const ProductId = () => {
               <Slider {...sliderSettings}>
                 {productDetails.images &&
                   productDetails.images.map((img, idx) => (
-                    <div key={img.id}>
+                    <div key={img.id} className={`flex m-0 p-0 overflow-x-auto`}
+                style={{ gap: 0 }}>
                       <img
                         src={img.image_url}
                         alt={`thumb-${idx}`}

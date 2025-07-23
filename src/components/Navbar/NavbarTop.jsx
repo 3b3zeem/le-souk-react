@@ -45,7 +45,7 @@ const NavbarTop = (props) => (
         animate="visible"
         exit="exit"
         className={`container mx-auto max-w-7xl flex items-center justify-between transition-all duration-150 px-4 bg-[#e8e4dd] relative ${
-          props.scrolled ? "py-2" : "py-6"
+          props.scrolled ? "py-4" : "py-6"
         }`}
         style={{ zIndex: 201 }}
       >

@@ -128,11 +128,11 @@ const Navbar = () => {
           document.documentElement.scrollHeight - window.innerHeight;
 
         // Update scrolled state
-        setScrolled(scrollTop > 200);
+        setScrolled(scrollTop > 5);
 
         // Update progress
         const progress =
-          scrollHeight > 0 ? (scrollTop / scrollHeight) * 200 : 0;
+          scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
         setScrollProgress(progress);
 
         ticking.current = false;
@@ -168,6 +168,7 @@ const Navbar = () => {
       >
         <NavbarTop
           show={!scrolled}
+          scrolled={scrolled}
           handleCartClick={handleCartClick}
           handleWishlistClick={handleWishlistClick}
           cartCount={cartCount}

@@ -14,7 +14,7 @@ const NavbarBottom = ({
   <div className="bg-[#333e2c]">
     <div
       className={`container mx-auto max-w-7xl flex items-center justify-between transition-all duration-150 ${
-        scrolled ? "py-4" : "py-6"
+        scrolled ? "py-8" : "py-6"
       }`}
     >
       <div className="flex items-center">
