@@ -4,6 +4,7 @@ import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSettingsContext } from "../../../context/Settings/SettingsContext";
 
 const useSettings = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,6 +16,7 @@ const useSettings = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const { token } = useAuthContext();
   const { language } = useLanguage();
+  const { refreshSettings } = useSettingsContext();
 
   const search = searchParams.get("search") || "";
   const perPage = parseInt(searchParams.get("per_page")) || 15;
@@ -35,7 +37,7 @@ const useSettings = () => {
   const fetchSettings = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       // Add error handling for missing token
       if (!token) {
@@ -52,7 +54,7 @@ const useSettings = () => {
           },
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
@@ -66,13 +68,14 @@ const useSettings = () => {
       }
     } catch (err) {
       console.error("Error fetching settings:", err);
-      
+
       let errorMessage = "Failed to fetch settings";
-      
+
       if (err.response?.status === 401) {
         errorMessage = "Unauthorized access. Please check your authentication.";
       } else if (err.response?.status === 403) {
-        errorMessage = "Access forbidden. You don't have permission to view settings.";
+        errorMessage =
+          "Access forbidden. You don't have permission to view settings.";
       } else if (err.response?.status === 404) {
         errorMessage = "Settings endpoint not found.";
       } else if (err.response?.data?.message) {
@@ -80,7 +83,7 @@ const useSettings = () => {
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -96,134 +99,52 @@ const useSettings = () => {
     }
   }, [search, perPage, page, token, language]);
 
-  const addSetting = async (formData) => {
+  const editSetting = async (setting_key, formData) => {
+    setLoading(true);
     try {
       if (!token) {
         throw new Error("Authentication token is missing");
       }
 
       const response = await axios.post(
-        "https://le-souk.dinamo-app.com/api/admin/settings",
+        `https://le-souk.dinamo-app.com/api/admin/settings/${setting_key}`,
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      setSettings((prev) => [...prev, response.data.data]);
-      toast.success("Setting added successfully!");
-      return true;
-    } catch (err) {
-      console.error("Error adding setting:", err);
-      
-      let errorMessage = "Failed to add setting";
-      
-      if (err.response?.status === 401) {
-        errorMessage = "Unauthorized access. Please check your authentication.";
-      } else if (err.response?.status === 403) {
-        errorMessage = "Access forbidden. You don't have permission to add settings.";
-      } else if (err.response?.data?.message) {
-        errorMessage = err.response.data.message;
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      
-      toast.error(errorMessage);
-      return false;
-    }
-  };
-
-  const editSetting = async (settingId, formData) => {
-    try {
-      if (!token) {
-        throw new Error("Authentication token is missing");
-      }
-
-      const response = await axios.put(
-        `https://le-souk.dinamo-app.com/api/admin/settings/${settingId}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       setSettings((prev) =>
         prev.map((setting) =>
-          setting.id === settingId ? response.data.data : setting
+          setting.key === setting_key ? response.data.data : setting
         )
       );
-      toast.success("Setting updated successfully!");
-      return true;
+      toast.success(response.data.message || "Setting updated successfully");
+      await refreshSettings();
+      return { success: true, data: response.data.data };
     } catch (err) {
-      console.error("Error updating setting:", err);
-      
+      console.error(
+        "Error updating setting:",
+        err.response?.data || err.message
+      );
       let errorMessage = "Failed to update setting";
-      
-      if (err.response?.status === 401) {
-        errorMessage = "Unauthorized access. Please check your authentication.";
-      } else if (err.response?.status === 403) {
-        errorMessage = "Access forbidden. You don't have permission to update settings.";
-      } else if (err.response?.status === 404) {
-        errorMessage = "Setting not found.";
+      if (err.response?.data?.errors) {
+        console.log("Errors:", err.response.data.errors);
+        errorMessage = Object.values(err.response.data.errors)
+          .flat()
+          .join(", ");
       } else if (err.response?.data?.message) {
         errorMessage = err.response.data.message;
       } else if (err.message) {
         errorMessage = err.message;
       }
-      
       toast.error(errorMessage);
       return false;
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      if (!token) {
-        throw new Error("Authentication token is missing");
-      }
-
-      const response = await axios.delete(
-        `https://le-souk.dinamo-app.com/api/admin/settings/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      setSettings((prev) => prev.filter((setting) => setting.id !== id));
-      setSuccessMessage(response.data?.message || "Setting deleted successfully");
-      toast.success("Setting deleted successfully!");
-      
-      // Refresh the settings list
-      await fetchSettings();
-    } catch (err) {
-      console.error("Error deleting setting:", err);
-      
-      let errorMessage = "Failed to delete setting";
-      
-      if (err.response?.status === 401) {
-        errorMessage = "Unauthorized access. Please check your authentication.";
-      } else if (err.response?.status === 403) {
-        errorMessage = "Access forbidden. You don't have permission to delete settings.";
-      } else if (err.response?.status === 404) {
-        errorMessage = "Setting not found.";
-      } else if (err.response?.data?.message) {
-        errorMessage = err.response.data.message;
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      
-      setError(errorMessage);
-      toast.error(errorMessage);
-      setTimeout(() => setError(null), 3000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -257,8 +178,6 @@ const useSettings = () => {
     perPage,
     handlePageChange,
     handlePerPageChange,
-    handleDelete,
-    addSetting,
     editSetting,
   };
 };

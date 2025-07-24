@@ -66,8 +66,6 @@ const useHome = (perPage = 8) => {
     categoriesQuery.isLoading ||
     productsQuery.isLoading ||
     offersQuery.isLoading 
-     // فقط نعتبر تحميل الباقات إذا المستخدم أدمن
-
   const error =
     categoriesQuery.error ||
     productsQuery.error ||

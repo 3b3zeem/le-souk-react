@@ -19,6 +19,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { SettingsProvider } from "./context/Settings/SettingsContext";
 
 function App() {
   return (
@@ -29,10 +30,12 @@ function App() {
             <UserProvider>
               <LanguageProvider>
                 <PackageProvider>
-                  <PreventImageDragAndRightClick />
-                  <Up_top />
-                  <RouterProvider router={routes} />
-                  <Toaster position="top-center" reverseOrder={false} />
+                  <SettingsProvider>
+                    <PreventImageDragAndRightClick />
+                    <Up_top />
+                    <RouterProvider router={routes} />
+                    <Toaster position="top-center" reverseOrder={false} />
+                  </SettingsProvider>
                 </PackageProvider>
               </LanguageProvider>
             </UserProvider>

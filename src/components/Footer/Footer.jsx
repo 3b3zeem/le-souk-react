@@ -4,10 +4,12 @@ import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
-import useSettings from "../../hooks/Settings/useSettings"; 
+// import useSettings from "../../hooks/Settings/useSettings";
 
 import logo from "../../assets/Images/3x/navbar.png";
-import Loader from './../../layouts/Loader';
+import Loader from "./../../layouts/Loader";
+import ReadOnlyRichText from "./ReadOnlyRichText";
+import { useSettingsContext } from "../../context/Settings/SettingsContext";
 
 const colors = {
   primary: "#333e2c",
@@ -20,34 +22,49 @@ const colors = {
 const Footer = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const { getSettingValueByName, getSettingByEitherName, getTranslatedText, loading, error } = useSettings();
+  const {
+    getSettingValueByName,
+    getSettingByEitherName,
+    getTranslatedText,
+    loading,
+    error,
+  } = useSettingsContext();
 
   // Get contact information from settings using translated names
-  const phoneNumber = getSettingValueByName("Phone Number") || getSettingValueByName("رقم الهاتف");
-  const email = getSettingValueByName("Email Address") || getSettingValueByName("عنوان البريد الإلكتروني");
-  const location = getSettingValueByName("Location") || getSettingValueByName("الموقع");
-  const siteName = getSettingValueByName("Site Name") || getSettingValueByName("اسم الموقع");
-  
+  const phoneNumber =
+    getSettingValueByName("Phone Number") ||
+    getSettingValueByName("رقم الهاتف");
+  const email =
+    getSettingValueByName("Email Address") ||
+    getSettingValueByName("عنوان البريد الإلكتروني");
+  const location =
+    getSettingValueByName("Location") || getSettingValueByName("الموقع");
+  const siteName =
+    getSettingValueByName("Site Name") || getSettingValueByName("اسم الموقع");
+
   // Get business hours using getSettingByEitherName
-  const saturdayToThursdaySetting = getSettingByEitherName("Saturday to Thursday", "السبت إلى الخميس");
-  const fridaySetting = getSettingByEitherName("Friday", "الجمعة");
+  const WorkingHoursSetting = getSettingByEitherName(
+    "Working Hours",
+    "ساعات العمل"
+  );
 
   // Helper function to get names from setting
   const getSettingNames = (setting) => {
-    if (!setting || !setting.translations) return { nameEn: "", nameAr: "", value: "" };
-    
-    const enTranslation = setting.translations.find(t => t.locale === "en");
-    const arTranslation = setting.translations.find(t => t.locale === "ar");
-    
+    if (!setting || !setting.translations)
+      return { nameEn: "", nameAr: "", value: "" };
+
+    const enTranslation = setting.translations.find((t) => t.locale === "en");
+    const arTranslation = setting.translations.find((t) => t.locale === "ar");
+
     return {
       nameEn: enTranslation?.name || "",
       nameAr: arTranslation?.name || "",
-      value: getTranslatedText(setting.translations, "value") || setting.value || ""
+      value:
+        getTranslatedText(setting.translations, "value") || setting.value || "",
     };
   };
 
-  const saturdayToThursdayData = getSettingNames(saturdayToThursdaySetting);
-  const fridayData = getSettingNames(fridaySetting);
+  const WorkingHoursData = getSettingNames(WorkingHoursSetting);
 
   if (loading) {
     return <Loader />;
@@ -120,42 +137,34 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="flex justify-center items-center sm:items-start">
-            <img src={logo} alt={siteName || "logo"} width={250} draggable={false} />
+            <img
+              src={logo}
+              alt={siteName || "logo"}
+              width={250}
+              draggable={false}
+            />
           </div>
 
           {/* Opening Hours */}
           <div>
             <h3 className="relative inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
-              {t("openingHour")}
+              {language === "ar"
+                ? WorkingHoursData.nameAr
+                : WorkingHoursData.nameEn}
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>
             <div>
-              <div className="text-md whitespace-pre-line" style={{ color: colors.textSecondary }}>
-                {saturdayToThursdayData.value && (
+              <div
+                className="text-md whitespace-pre-line"
+                style={{ color: colors.textSecondary }}
+              >
+                {WorkingHoursData.value && (
                   <div className="mb-2">
-                    <strong>
-                      {language === "ar" ? saturdayToThursdayData.nameAr : saturdayToThursdayData.nameEn}
-                    </strong><br />
-                    {saturdayToThursdayData.value}
+                    <ReadOnlyRichText
+                      value={WorkingHoursData.value}
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    />
                   </div>
-                )}
-                {fridayData.value && (
-                  <div>
-                    <strong>
-                      {language === "ar" ? fridayData.nameAr : fridayData.nameEn}
-                    </strong><br />
-                    {fridayData.value}
-                  </div>
-                )}
-                {/* Fallback to hardcoded values if settings are not available */}
-                {!saturdayToThursdayData.value && !fridayData.value && (
-                  <p>
-                    Saturday to Thursday <br /> 
-                    Morning time: 10 am - 1 pm <br />{" "}
-                    Evening time: 5pm - 9:30pm <br /> 
-                    Friday <br /> 
-                    Evening time: 5pm - 9:30pm
-                  </p>
                 )}
               </div>
             </div>

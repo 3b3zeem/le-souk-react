@@ -25,6 +25,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
 import Banner from "../../assets/products.jpg";
 import Banner2 from "../../assets/products2.jpg";
+import useSettings from "../../hooks/Settings/useSettings";
 ring2.register();
 
 const colors = {
@@ -68,6 +69,13 @@ const Products = () => {
     inStock
   );
   const { addToCart } = useCartCRUD();
+  const [bgImage, setBgImage] = useState(Banner);
+
+  // * Fetch Settings to show the Banner Image
+  const { settings } = useSettings();
+  const banner = settings.find(setting => setting.key === "products_banner_image");
+  const bannerUrl = banner?.value;
+  
   const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
   const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
     useWishlist();
@@ -138,24 +146,18 @@ const Products = () => {
     setSearchQuery(searchFromParams);
   }, [searchParams]);
 
-  // * Handle Search, Sort, and Category Change
-  // const handleSearchChange = (e) => {
-  //   setSearchQuery(e.target.value);
-  //   setPage(1);
-  // };
   const handleSearchChange = (e) => {
     const newQuery = e.target.value;
     setSearchQuery(newQuery);
     setPage(1);
 
-    // Update URL parameters immediately
     const params = new URLSearchParams(searchParams);
     if (newQuery.trim()) {
       params.set("search", newQuery);
     } else {
       params.delete("search");
     }
-    params.delete("page"); // Reset page to 1
+    params.delete("page");
     setSearchParams(params);
   };
   const handleSearchSubmit = (e) => {
@@ -166,7 +168,7 @@ const Products = () => {
     } else {
       params.delete("search");
     }
-    params.delete("page"); // Reset page to 1
+    params.delete("page");
     setSearchParams(params);
   };
   const handleSortChange = (e) => {
@@ -314,27 +316,12 @@ const Products = () => {
 
       {/* Shop Banner */}
       <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
-        {language === "en" ? (
           <img
-            src={Banner}
+            src={bannerUrl || Banner}
             alt="Shop Banner"
             className="w-full h-full object-cover"
+            onError={() => setBgImage(Banner)}
           />
-        ) : (
-          <img
-            src={Banner2}
-            alt="Shop Banner"
-            className="w-full h-full object-cover"
-          />
-        )}
-        {/* <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-white text-5xl md:text-6xl font-bold drop-shadow-lg tracking-wide"
-            style={{ textShadow: "0 4px 24px rgba(0,0,0,0.5)" }}
-          >
-            {language === "ar" ? "المتجر" : "Products"}
-          </span>
-        </div> */}
       </div>
 
       <div

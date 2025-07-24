@@ -43,8 +43,6 @@ const useCartCRUD = () => {
       }
     );
 
-    console.log("Cart data fetched:", response.data);
-
     return {
       items: response.data.data.items,
       subtotal: response.data.data.subtotal,
@@ -106,7 +104,6 @@ const useCartCRUD = () => {
         }
       );
       setSuccess(response.data.message);
-      console.log(response.data);
       
       await addItemToCart();
       toast.success(response.data.message);
@@ -242,8 +239,6 @@ const useCartCRUD = () => {
           },
         }
       );
-
-      console.log("Coupon validation response:", response.data);
 
       setSuccess(response.data.message);
       setFinalTotal(response.data.data.final_total);

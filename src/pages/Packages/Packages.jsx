@@ -10,6 +10,7 @@ import Meta from "../../components/Meta/Meta";
 
 import Banner from "../../assets/packagesEn.jpg";
 import Banner2 from "../../assets/packagesAr.jpg";
+import useSettings from "../../hooks/Settings/useSettings";
 
 const Packages = () => {
   const [page, setPage] = useState(1);
@@ -17,6 +18,14 @@ const Packages = () => {
   const { language } = useLanguage();
   const { packages, loading, error, totalPages, currentPage, meta } =
     useAdminPackages(page);
+  const [bgImage, setBgImage] = useState(Banner);
+
+  // * Fetch Settings to show the Banner Image
+  const { settings } = useSettings();
+  const banner = settings.find(
+    (setting) => setting.key === "packages_banner_image"
+  );
+  const bannerUrl = banner?.value;
 
   useEffect(() => {
     scrollTo(0, 0);
@@ -37,10 +46,7 @@ const Packages = () => {
     );
   if (error) return <div className="text-red-500 text-center">{error}</div>;
   return (
-    <div
-      className="@container mx-auto"
-      dir={language === "ar" ? "rtl" : "ltr"}
-    >
+    <div className="@container mx-auto" dir={language === "ar" ? "rtl" : "ltr"}>
       <Meta
         title={t("Explore_Packages")}
         keywords="packages, explore packages, shop packages"
@@ -48,19 +54,12 @@ const Packages = () => {
       />
       {/* Shop Banner */}
       <div className="relative w-full h-100 overflow-hidden shadow-md">
-        {language === "en" ? (
-          <img
-            src={Banner}
-            alt="Packages Banner"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <img
-            src={Banner2}
-            alt="Packages Banner"
-            className="w-full h-full object-cover"
-          />
-        )}
+        <img
+          src={bannerUrl || bgImage}
+          alt="Packages Banner"
+          className="w-full h-full object-cover"
+          onError={() => setBgImage(Banner)}
+        />
       </div>
       <div className="flex flex-col py-10 px-8">
         <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">

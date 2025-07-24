@@ -1,31 +1,39 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import { useEffect } from "react";
 
 const API_URL = "https://le-souk.dinamo-app.com/api/settings";
 
-const fetchSettings = async ({ queryKey }) => {
-  const [_key, { language }] = queryKey;
-  const response = await axios.get(API_URL, {
-    headers: {
-      "Accept-Language": language,
-    },
-  });
-  return response.data.data || [];
-};
-
 const useSettings = () => {
   const { language } = useLanguage();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use((config) => {
+      config.headers["Accept-Language"] = language;
+      return config;
+    });
+    return () => axios.interceptors.request.eject(interceptor);
+  }, [language]);
+
+  const fetchSettings = async () => {
+    const response = await axios.get(API_URL, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
+    return response.data.data || [];
+  };
 
   const {
     data: settingsData,
     isLoading: isSettingsLoading,
     error: settingsError,
   } = useQuery({
-    queryKey: ["settings", { language }],
+    queryKey: ["settings", language],
     queryFn: fetchSettings,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
   });
 
   const getTranslatedText = (translations, field) => {
@@ -50,7 +58,6 @@ const useSettings = () => {
     return translatedValue || setting.value || "";
   };
 
-  // Alternative function to get setting by either English or Arabic name
   const getSettingByEitherName = (nameEn, nameAr) => {
     if (!settingsData || !Array.isArray(settingsData)) return null;
 
