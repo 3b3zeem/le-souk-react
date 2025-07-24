@@ -118,7 +118,7 @@ const HeroSection = () => {
               <section
                 className={`h-full flex items-end justify-start w-full`}
               >
-                <div className={`z-100 lg:ms-23 ms-0 mb-25`}>
+                <div className={`z-100 lg:ms-31 ms-0 mb-25`}>
                     <Link
                       to={"/products"}
                       className="inline-block bg-transparent px-6 py-3 sm:px-6 sm:py-3 text-[#333e2c] text-sm sm:text-base font-medium rounded-full hover:bg-[#333e2c] hover:text-white transition-colors duration-300"
