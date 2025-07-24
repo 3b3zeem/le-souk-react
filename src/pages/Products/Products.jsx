@@ -317,7 +317,7 @@ const Products = () => {
       {/* Shop Banner */}
       <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
           <img
-            src={bannerUrl || Banner}
+            src={bannerUrl || bgImage}
             alt="Shop Banner"
             className="w-full h-full object-cover"
             onError={() => setBgImage(Banner)}
@@ -352,23 +352,6 @@ const Products = () => {
           <div className="w-full lg:w-3/4">
             <div className="flex flex-wrap items-start ms-3 md:items-center gap-10 md:flex-row md:justify-between mb-6">
               {/* Search */}
-              {/* <div className="relative w-[200px] focus-within:w-[300px] transition-all duration-200">
-                <input
-                  type="text"
-                  placeholder={t("search")}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full py-3 px-4 pr-7 border text-sm focus:outline-none shadow-sm"
-                  style={{ borderColor: colors.borderLight }}
-                />
-                <span
-                  className={`absolute top-1/2 transform -translate-y-1/2 pointer-events-none ${
-                    language === "ar" ? "left-3" : "right-3"
-                  }`}
-                >
-                  <Search size={15} className="text-gray-500" />
-                </span>
-              </div> */}
               <form
                 onSubmit={handleSearchSubmit}
                 className="relative w-[200px] focus-within:w-[300px] transition-all duration-200"

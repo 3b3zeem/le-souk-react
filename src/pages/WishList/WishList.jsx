@@ -21,7 +21,7 @@ const colors = {
 const WishList = () => {
   const {
     wishlistItems,
-    refetchWishlist,
+    fetchWishlist,
     removeFromWishlist,
     clearWishlist,
     success: wishlistSuccess,
@@ -50,10 +50,9 @@ const WishList = () => {
 
     try {
       await removeFromWishlist(productId);
-      await refetchWishlist();
+      await fetchWishlist();
     } catch (err) {
       console.error("Error removing from wishlist:", err);
-      toast.error("Failed to remove item from wishlist.");
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
@@ -82,7 +81,7 @@ const WishList = () => {
   const handleClearWishlist = async () => {
     try {
       await clearWishlist();
-      await refetchWishlist();
+      await fetchWishlist();
     } catch (err) {
       console.error("Error clearing wishlist:", err);
     }
