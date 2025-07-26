@@ -9,7 +9,6 @@ import SkeletonLoader from "../../layouts/SkeletonLoader";
 import Meta from "../../components/Meta/Meta";
 
 import Banner from "../../assets/packagesEn.jpg";
-import Banner2 from "../../assets/packagesAr.jpg";
 import useSettings from "../../hooks/Settings/useSettings";
 
 const Packages = () => {
@@ -52,7 +51,7 @@ const Packages = () => {
         keywords="packages, explore packages, shop packages"
         description="Discover a variety of packages to explore and shop from."
       />
-      {/* Shop Banner */}
+      {/* Package Banner */}
       <div className="relative w-full h-100 overflow-hidden shadow-md">
         <img
           src={bannerUrl || bgImage}

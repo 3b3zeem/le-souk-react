@@ -24,7 +24,6 @@ import { useRef, useState as useLocalState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
 import Banner from "../../assets/products.jpg";
-import Banner2 from "../../assets/products2.jpg";
 import useSettings from "../../hooks/Settings/useSettings";
 ring2.register();
 

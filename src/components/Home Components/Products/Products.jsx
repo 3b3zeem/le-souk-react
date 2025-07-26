@@ -182,7 +182,7 @@ const Products = () => {
               : primaryImage;
 
           return (
-            <div key={product.id} className="px-2 h-[570px]">
+            <div key={product.id} className="px-2 h-[470px] ">
               <div
                 className="relative group border rounded-md overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
                 onMouseEnter={() => setHoveredIndex(idx)}
@@ -193,14 +193,13 @@ const Products = () => {
                 }}
               >
                 <div
-                  className="relative flex justify-center items-center bg-gray-50 h-100"
+                  className="relative flex justify-center items-center bg-gray-50"
                   onClick={() => navigate(`/products/${product.id}`)}
                 >
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-full object-contain p-4 transition-transform duration-200 group-hover:scale-105"
-                    style={{ maxWidth: "90%" }}
+                    className="h-full object-contain transition-transform duration-200 group-hover:scale-105"
                   />
                   {/* Discount badge */}
                   {product.discount_percentage && (
@@ -236,15 +235,17 @@ const Products = () => {
                     }}
                     disabled={loadingStates.wishlist[product.id]}
                     className={`absolute top-3 ${
-                      language === "ar" ? "left-4" : "right-4"
-                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                      ${
-                        loadingStates.wishlist[product.id]
-                          ? "opacity-50 cursor-not-allowed"
-                          : isProductInWishlist(product.id)
-                          ? "bg-red-100 hover:bg-red-200"
-                          : "hover:bg-blue-100"
-                      }`}
+                      language === "ar" ? "left-3" : "right-3"
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+                      opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
+                      transition-all duration-300 delay-50 cursor-pointer
+                    ${
+                      loadingStates.wishlist[product.id]
+                        ? "opacity-50 cursor-not-allowed"
+                        : isProductInWishlist(product.id)
+                        ? "bg-red-100 hover:bg-red-200"
+                        : "hover:bg-blue-100"
+                    }`}
                     style={{ borderColor: colors.borderLight }}
                   >
                     <Heart
@@ -267,13 +268,15 @@ const Products = () => {
                     }}
                     disabled={loadingStates.cart[product.id]}
                     className={`absolute bottom-3 ${
-                      language === "ar" ? "left-4" : "right-4"
-                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                      ${
-                        loadingStates.cart[product.id]
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-blue-100"
-                      }`}
+                      language === "ar" ? "left-3" : "right-3"
+                    } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+                      opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
+                      transition-all duration-300 delay-150 cursor-pointer
+                    ${
+                      loadingStates.cart[product.id]
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-blue-100"
+                    }`}
                     style={{ borderColor: colors.borderLight }}
                   >
                     <ShoppingCart size={22} className="text-gray-500" />
