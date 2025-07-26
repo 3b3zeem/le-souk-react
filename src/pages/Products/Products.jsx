@@ -46,7 +46,7 @@ const Products = () => {
     initialCategory ? parseInt(initialCategory) : null
   );
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100000);
+  const [maxPrice, setMaxPrice] = useState(500);
   const [perPage, setPerPage] = useState(9);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("created_at");
@@ -101,7 +101,7 @@ const Products = () => {
     else params.delete("category");
     if (minPrice !== 0) params.set("min_price", minPrice);
     else params.delete("min_price");
-    if (maxPrice !== 100000) params.set("max_price", maxPrice);
+    if (maxPrice !== 500) params.set("max_price", maxPrice);
     else params.delete("max_price");
     if (inStock) params.set("in_stock", inStock);
     else params.delete("in_stock");

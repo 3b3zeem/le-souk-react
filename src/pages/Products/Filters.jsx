@@ -31,10 +31,16 @@ const Filters = ({
   );
 
   const handleApplyPrice = useCallback(() => {
-    setMinPrice(sliderPrice[0]);
-    setMaxPrice(sliderPrice[1]);
+    const maxAllowed = 1000;
+
+    const cappedMin = Math.min(sliderPrice[0], maxAllowed);
+    const cappedMax = Math.min(sliderPrice[1], maxAllowed);
+
+    setMinPrice(cappedMin);
+    setMaxPrice(cappedMax);
     setPage(1);
     setShowFilters(false);
+    setSliderPrice([cappedMin, cappedMax]);
   }, [sliderPrice, setMinPrice, setMaxPrice, setPage]);
 
   const handleOverlayClick = (e) => {
@@ -118,22 +124,24 @@ const Filters = ({
                     <Slider
                       range
                       min={0}
-                      max={100000}
+                      max={500}
                       value={sliderPrice}
                       onChange={setSliderPrice}
                       allowCross={false}
-                      step={100}
-                      trackStyle={[{ backgroundColor: colors.primary, cursor:"e-resize" }]}
+                      step={10}
+                      trackStyle={[
+                        { backgroundColor: colors.primary, cursor: "e-resize" },
+                      ]}
                       handleStyle={[
                         {
                           borderColor: colors.primary,
                           backgroundColor: colors.primary,
-                          cursor:"e-resize"
+                          cursor: "e-resize",
                         },
                         {
                           borderColor: colors.primary,
                           backgroundColor: colors.primary,
-                          cursor:"e-resize"
+                          cursor: "e-resize",
                         },
                       ]}
                       ariaLabelGroupForHandles={[
@@ -188,41 +196,42 @@ const Filters = ({
                             flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
                             ${
                               isSelected
-                                ? "border-blue-600 bg-blue-50 shadow-md"
+                                ? "border-[#333e2c] bg-[#e7ede2] shadow-md"
                                 : "border-gray-200 bg-white"
                             }
-                            hover:border-blue-400 hover:bg-blue-100
-                            focus:outline-none focus:ring-2 focus:ring-blue-300
+                            hover:border-[#333e2c] hover:bg-[#f0f4eb]
+                            focus:outline-none focus:ring-2 focus:ring-[#333e2c]
                           `}
                           style={{ minWidth: 120 }}
                           aria-pressed={isSelected}
                         >
                           <div
                             className={`w-8 h-8 rounded-full flex items-center justify-center border transition
-                              ${
-                                isSelected
-                                  ? "border-blue-600 ring-2 ring-blue-200"
-                                  : "border-gray-300"
-                              }
-                              bg-white overflow-hidden`}
+                            ${
+                              isSelected ? "border-gray-100 ring-2 ring-[#cbd5c0]" : "border-gray-300"
+                            }
+                            bg-white overflow-hidden`}
                           >
                             <img
                               src={category.image_url}
                               alt={category.name}
                               className="w-7 h-7 object-cover rounded-full"
                               loading="lazy"
+                              onError={(e) =>
+                                (e.target.src = "/default_category.jpg")
+                              }
                             />
                           </div>
                           <span
                             className={`text-sm font-medium ${
-                              isSelected ? "text-blue-700" : "text-gray-700"
+                              isSelected ? "text-[#333e2c]" : "text-gray-700"
                             }`}
                           >
                             {category.name}
                           </span>
                           {isSelected && (
                             <svg
-                              className="w-4 h-4 text-blue-600 ml-1"
+                              className="w-4 h-4 text-[#333e2c] ml-1"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth={2}
@@ -269,7 +278,7 @@ const Filters = ({
                         <span
                           className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
                             inStock === 1 ? "bg-[#333e2c]" : "bg-gray-300"
-                          } peer-focus:ring-2 peer-focus:ring-blue-300`}
+                          } peer-focus:ring-2 peer-focus:ring-[#333e2c]`}
                         ></span>
                         <span
                           className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
@@ -299,11 +308,11 @@ const Filters = ({
             <Slider
               range
               min={0}
-              max={100000}
+              max={500}
               value={sliderPrice}
               onChange={setSliderPrice}
               allowCross={false}
-              step={100}
+              step={10}
               trackStyle={[{ backgroundColor: colors.primary }]}
               handleStyle={[
                 {
@@ -332,7 +341,7 @@ const Filters = ({
               </div>
               <button
                 onClick={handleApplyPrice}
-                className="w-[100px] py-2 text-sm font-medium hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer customEffect uppercase tracking-widest"
+                className="w-[100px] py-2 text-sm font-medium hover:bg-opacity-90 transition focus:outline-none focus:ring-2 focus:ring-[#333e2c] cursor-pointer customEffect uppercase tracking-widest"
                 style={{
                   backgroundColor: colors.primary,
                   color: colors.lightText,
@@ -361,26 +370,26 @@ const Filters = ({
                   type="button"
                   onClick={() => handleCategoryClick(category.id)}
                   className={`
-                  flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
-                  ${
-                    isSelected
-                      ? "border-blue-600 bg-blue-50 shadow-md"
-                      : "border-gray-200 bg-white"
-                  }
-                  hover:border-blue-400 hover:bg-blue-100
-                  focus:outline-none focus:ring-2 focus:ring-blue-300
+                    flex items-center gap-2 px-4 py-2 rounded-lg border transition cursor-pointer
+                    ${
+                      isSelected
+                        ? "border-[#333e2c] bg-[#e7ede2] shadow-md"
+                        : "border-gray-200 bg-white"
+                    }
+                    hover:border-[#333e2c] hover:bg-[#f0f4eb]
+                    focus:outline-none focus:ring-2 focus:ring-[#333e2c]
                   `}
                   style={{ minWidth: 120 }}
                   aria-pressed={isSelected}
                 >
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center border transition
-                  ${
-                    isSelected
-                      ? "border-blue-600 ring-2 ring-blue-200"
-                      : "border-gray-300"
-                  }
-                  bg-white overflow-hidden`}
+                    ${
+                      isSelected
+                        ? "border-gray-100 ring-2 ring-[#cbd5c0]"
+                        : "border-gray-300"
+                    }
+                    bg-white overflow-hidden`}
                   >
                     <img
                       src={category.image_url}
@@ -392,14 +401,14 @@ const Filters = ({
                   </div>
                   <span
                     className={`text-sm font-medium ${
-                      isSelected ? "text-blue-700" : "text-gray-700"
+                      isSelected ? "text-[#333e2c]" : "text-gray-700"
                     }`}
                   >
                     {category.name}
                   </span>
                   {isSelected && (
                     <svg
-                      className="w-4 h-4 text-blue-600 ml-1"
+                      className="w-4 h-4 text-[#333e2c] ml-1"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth={2}
@@ -446,7 +455,7 @@ const Filters = ({
                 <span
                   className={`absolute left-0 top-0 w-10 h-6 rounded-full transition ${
                     inStock === 1 ? "bg-[#333e2c]" : "bg-gray-300"
-                  } peer-focus:ring-2 peer-focus:ring-blue-300`}
+                  } peer-focus:ring-2 peer-focus:ring-[#333e2c]`}
                 ></span>
                 <span
                   className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition ${
