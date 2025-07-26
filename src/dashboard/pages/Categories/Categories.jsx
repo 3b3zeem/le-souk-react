@@ -195,7 +195,7 @@ const Categories = () => {
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 40 }}
                 transition={{ duration: 0.3 }}
-                className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 overflow-y-auto"
+                className="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-8 overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
                 style={{ maxHeight: "90vh" }}
               >

@@ -409,5 +409,6 @@
   "image": "الصورة",
   "isActive": "نشط؟",
   "updateSliderHero": "تحديث السلايدر",
-  "imageRequired": "يجب رفع صورة"
+  "imageRequired": "يجب رفع صورة",
+  "search_settings": "بحث في الاعدادات..."
 }

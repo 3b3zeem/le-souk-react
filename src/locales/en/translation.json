@@ -407,5 +407,6 @@
   "image": "Image",
   "isActive": "Is Active?",
   "updateSliderHero": "Update Slider",
-  "imageRequired": "Image is required"
+  "imageRequired": "Image is required",
+  "search_settings": "Search Settings..."
 }

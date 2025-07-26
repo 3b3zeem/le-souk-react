@@ -61,6 +61,7 @@ const Packages = () => {
           onError={() => setBgImage(Banner)}
         />
       </div>
+
       <div className="flex flex-col py-10 px-8">
         <h2 className="text-4xl font-bold text-[#333e2c] font-serif mt-6  text-center mb-12 relative">
           {t("Explore_Packages")}
@@ -72,15 +73,15 @@ const Packages = () => {
             <PackagesCard key={pkg.id} packages={pkg} />
           ))}
         </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(newPage) => {
+            setPage(newPage);
+          }}
+          links={meta?.links || []}
+        />
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(newPage) => {
-          setPage(newPage);
-        }}
-        links={meta?.links || []}
-      />
     </div>
   );
 };
