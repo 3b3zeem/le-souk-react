@@ -1,6 +1,6 @@
 # Le Souk - React E-Commerce Platform
 
-![Le Souk Banner](https://github.com/3b3zeem/le-souk-react/issues/1#issue-3265691428)
+![Le Souk Banner](./src/assets/Screenshot.png)
 
 **Le Souk** is a modern e-commerce platform built with **React** and **Vite**, designed to provide a fast, responsive, and user-friendly shopping experience. This project leverages the power of Vite's lightning-fast development server and Hot Module Replacement (HMR) for an optimized development workflow.
 
