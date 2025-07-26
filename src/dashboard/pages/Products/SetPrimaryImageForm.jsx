@@ -83,7 +83,7 @@ const SetPrimaryImageForm = ({
                     onClick={() => setSelectedImageId(image.id)}
                     className={`relative rounded-xl border-4 cursor-pointer transition-all duration-200 overflow-hidden ${
                       selectedImageId === image.id
-                        ? "border-blue-500"
+                        ? "border-[#333e2c]"
                         : "border-transparent"
                     }`}
                   >
@@ -101,7 +101,7 @@ const SetPrimaryImageForm = ({
                       </div>
                     )}
                     {selectedImageId === image.id && (
-                      <div className="absolute inset-0 ring-4 ring-blue-400 rounded-xl pointer-events-none"></div>
+                      <div className="absolute inset-0 ring-4 ring-[#333e2c] transition duration-200 rounded-xl pointer-events-none"></div>
                     )}
                   </div>
                 ))
@@ -120,7 +120,7 @@ const SetPrimaryImageForm = ({
               </button>
               <button
                 onClick={handleSetPrimary}
-                className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 flex items-center justify-center transition-all duration-200 cursor-pointer"
+                className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 flex items-center justify-center transition-all duration-200 cursor-pointer"
                 disabled={isLoading}
               >
                 {isLoading ? (

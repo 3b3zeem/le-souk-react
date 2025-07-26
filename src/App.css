@@ -26,3 +26,8 @@ img {
   -ms-user-select: none;
   user-select: none;
 }
+
+body::selection {
+  background-color: #333e2c;
+  color: #fff;
+}

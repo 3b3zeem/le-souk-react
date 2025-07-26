@@ -196,7 +196,7 @@ const CouponFormOverlay = ({
                   name="code"
                   value={couponData.code}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                   required
                 />
               </div>
@@ -210,7 +210,7 @@ const CouponFormOverlay = ({
                   name="status"
                   value={couponData.status}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 appearance-none pr-10 transition-all duration-200 hover:border-gray-400 bg-white focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 appearance-none pr-10 transition-all duration-200 hover:border-gray-400 bg-white focus:outline-none"
                 >
                   <option value="active">{t("active")}</option>
                   <option value="inactive">{t("inactive")}</option>
@@ -229,7 +229,7 @@ const CouponFormOverlay = ({
                   name="type"
                   value={couponData.type}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 appearance-none pr-10 transition-all duration-200 hover:border-gray-400 bg-white focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 appearance-none pr-10 transition-all duration-200 hover:border-gray-400 bg-white focus:outline-none"
                 >
                   <option value="percentage">{t("percentage")}</option>
                   <option value="fixed_amount">{t("fixed_amount")}</option>
@@ -249,7 +249,7 @@ const CouponFormOverlay = ({
                   name="value"
                   value={couponData.value}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                   required
                 />
               </div>
@@ -264,7 +264,7 @@ const CouponFormOverlay = ({
                   name="minimum_spend"
                   value={couponData.minimum_spend}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -278,7 +278,7 @@ const CouponFormOverlay = ({
                   name="maximum_discount"
                   value={couponData.maximum_discount}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -292,7 +292,7 @@ const CouponFormOverlay = ({
                   name="usage_limit"
                   value={couponData.usage_limit}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -306,7 +306,7 @@ const CouponFormOverlay = ({
                   name="user_usage_limit"
                   value={couponData.user_usage_limit}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -320,7 +320,7 @@ const CouponFormOverlay = ({
                   name="starts_at"
                   value={couponData.starts_at}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -334,7 +334,7 @@ const CouponFormOverlay = ({
                   name="expires_at"
                   value={couponData.expires_at}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                 />
               </div>
 
@@ -348,7 +348,7 @@ const CouponFormOverlay = ({
                   name="en_name"
                   value={couponData.en_name}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                   required
                 />
               </div>
@@ -363,7 +363,7 @@ const CouponFormOverlay = ({
                   name="ar_name"
                   value={couponData.ar_name}
                   onChange={handleChange}
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 focus:outline-none"
                   required
                 />
               </div>
@@ -378,7 +378,7 @@ const CouponFormOverlay = ({
                   value={couponData.en_description}
                   onChange={handleChange}
                   rows="4"
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 resize-none focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 resize-none focus:outline-none"
                   required
                 />
               </div>
@@ -393,7 +393,7 @@ const CouponFormOverlay = ({
                   value={couponData.ar_description}
                   onChange={handleChange}
                   rows="4"
-                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3 transition-all duration-200 hover:border-gray-400 resize-none focus:outline-none"
+                  className="block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] p-3 transition-all duration-200 hover:border-gray-400 resize-none focus:outline-none"
                   required
                 />
               </div>
@@ -409,7 +409,7 @@ const CouponFormOverlay = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 text-white bg-[#333e2c] rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow-sm cursor-pointer"
+                  className="px-6 py-2 text-white bg-[#333e2c] rounded-lg hover:opacity-85 transition-all duration-200 font-medium shadow-sm cursor-pointer"
                   disabled={loadingButton !== null}
                 >
                   {loadingButton === "submit" ? (

@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import { useAuthContext } from "../context/Auth/AuthContext";
 import Meta from "../components/Meta/Meta";
+import CustomCursor from "../components/CustomCursor/CustomCursor";
+import CustomCursor2 from "../components/CustomCursor/CustomCursor2";
 
 function generateUniqueId(length = 16) {
   const chars =
@@ -35,6 +37,8 @@ const LayOut = () => {
 
   return (
     <React.Fragment>
+      <CustomCursor />
+      <CustomCursor2 />
       <Navbar />
       <Outlet />
       {!hideFooter && <Footer />}

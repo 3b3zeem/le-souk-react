@@ -146,7 +146,7 @@ const Categories = () => {
               dir={language === "ar" ? "rtl" : "ltr"}
               className={`w-[190px] sm:w-full focus:w-full ${
                 language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
-              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 placeholder:text-gray-400`}
+              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition-all duration-200 placeholder:text-gray-400`}
             />
             <span
               className={`absolute top-1/2 transform -translate-y-1/2 ${
@@ -226,7 +226,7 @@ const Categories = () => {
                           image: e.target.files[0],
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-[#333e2c] hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
                     />
                     {categoryData.image && (
                       <p className="mt-2 text-xs text-gray-600">
@@ -249,7 +249,7 @@ const Categories = () => {
                           name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t("enter_category_name")}
                     />
                   </div>
@@ -265,7 +265,7 @@ const Categories = () => {
                           en_description: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       rows="3"
                       placeholder={t("enter_description")}
                     />
@@ -285,7 +285,7 @@ const Categories = () => {
                           ar_name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t("enter_category_name_ar")}
                     />
                   </div>
@@ -301,7 +301,7 @@ const Categories = () => {
                           ar_description: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       rows="3"
                       placeholder={t("enter_description_ar")}
                     />
@@ -321,7 +321,7 @@ const Categories = () => {
                           status: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t("status")}
                     />
                   </div>
@@ -338,7 +338,7 @@ const Categories = () => {
                           is_featured: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t("is_featured")}
                     />
                   </div>
@@ -356,7 +356,7 @@ const Categories = () => {
                           parent_id: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                     >
                       <option value="">{t("none")}</option>
                       {categories.map((category) => (
@@ -378,7 +378,7 @@ const Categories = () => {
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
+                      className="px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 transition-all duration-200 text-sm cursor-pointer font-medium shadow"
                     >
                       {isEditMode ? t("update") : t("add")}
                     </button>

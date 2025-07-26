@@ -410,5 +410,6 @@
   "isActive": "نشط؟",
   "updateSliderHero": "تحديث السلايدر",
   "imageRequired": "يجب رفع صورة",
-  "search_settings": "بحث في الاعدادات..."
+  "search_settings": "بحث في الاعدادات...",
+  "is_featured": "مُميز؟"
 }

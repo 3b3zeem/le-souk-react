@@ -215,15 +215,6 @@ const AdminHero = () => {
                     <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                       {t("image")}
                     </th>
-                    {/* <th className="p-2 sm:p-3 text-xs font-semibold text-gray-700 text-left">
-                    {t('title')}
-                  </th>
-                  <th className="p-2 sm:p-3 text-xs font-semibold text-gray-700 text-left">
-                    {t('description')}
-                  </th>
-                  <th className="p-2 sm:p-3 text-xs font-semibold text-gray-700 text-left">
-                    {t('buttonText')}
-                  </th> */}
                     <th className="p-2 sm:p-3 text-xs font-semibold text-gray-700 text-left">
                       {t("isActive")}
                     </th>
@@ -251,15 +242,6 @@ const AdminHero = () => {
                           }
                         />
                       </td>
-                      {/* <td className="p-2 sm:p-3 text-xs font-medium text-gray-800 whitespace-nowrap text-left" data-label={t('title')}>
-                      {hero.title || '-'}
-                    </td>
-                    <td className="p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[200px] truncate text-left" data-label={t('description')}>
-                      {hero.description || '-'}
-                    </td>
-                    <td className="p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[200px] truncate text-left" data-label={t('buttonText')}>
-                      {hero.button_text || '-'}
-                    </td> */}
                       <td
                         className="p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[200px] truncate text-left"
                         data-label={t("isActive")}

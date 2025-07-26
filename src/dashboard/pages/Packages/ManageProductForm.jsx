@@ -159,7 +159,7 @@ const ManageProductForm = ({
           </label>
           <select
             onChange={handleProductSelect}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
             value=""
           >
             <option value="">{t("selectAProduct")}</option>

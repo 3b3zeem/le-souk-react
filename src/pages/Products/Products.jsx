@@ -72,9 +72,11 @@ const Products = () => {
 
   // * Fetch Settings to show the Banner Image
   const { settings } = useSettings();
-  const banner = settings.find(setting => setting.key === "products_banner_image");
+  const banner = settings.find(
+    (setting) => setting.key === "products_banner_image"
+  );
   const bannerUrl = banner?.value;
-  
+
   const { toggleWishlist, fetchWishlist } = useWishlistCRUD();
   const { wishlistItems, fetchWishlistItems, fetchWishlistCount } =
     useWishlist();
@@ -240,35 +242,74 @@ const Products = () => {
   // * Pagination component
   const Pagination = () => {
     if (!meta || meta.last_page <= 1) return null;
-    const pages = [];
-    for (let i = 1; i <= meta.last_page; i++) {
-      pages.push(i);
-    }
+
+    const totalPages = meta.last_page;
+    const currentPage = meta.current_page;
+
+    const getPages = () => {
+      const pages = new Set();
+
+      if (totalPages <= 7) {
+        // عرض كل الصفحات مباشرة
+        for (let i = 1; i <= totalPages; i++) {
+          pages.add(i);
+        }
+      } else {
+        // أول صفحتين
+        pages.add(1);
+
+        if (currentPage > 3) pages.add("...");
+
+        // صفحات قريبة من الحالية
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          if (i > 1 && i < totalPages) {
+            pages.add(i);
+          }
+        }
+
+        if (currentPage < totalPages - 2) pages.add("...");
+
+        pages.add(totalPages);
+      }
+
+      return Array.from(pages);
+    };
+
     return (
       <div className="flex justify-center mt-8 gap-2">
         <button
-          onClick={() => handlePageChange(Math.max(1, page - 1))}
-          disabled={meta.current_page === 1}
+          onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
           className="px-3 py-1 border border-gray-400 rounded disabled:opacity-50 cursor-pointer hover:bg-gray-200 transition-all duration-200"
         >
           {t("prev")}
         </button>
-        {pages.map((p) => (
-          <button
-            key={p}
-            onClick={() => handlePageChange(p)}
-            className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
-              meta.current_page === p
-                ? "bg-[#333e2c] text-white hover:bg-[#333e2c] transition-all duration-100"
-                : "hover:bg-gray-200 transition-all duration-200"
-            }`}
-          >
-            {p}
-          </button>
-        ))}
+
+        {getPages().map((p, index) =>
+          p === "..." ? (
+            <span key={`dots-${index}`} className="px-3 py-1">
+              ...
+            </span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => handlePageChange(Number(p))}
+              className={`px-3 py-1 border border-gray-400 rounded cursor-pointer ${
+                currentPage === p
+                  ? "bg-[#333e2c] text-white hover:bg-[#333e2c] transition-all duration-100"
+                  : "hover:bg-gray-200 transition-all duration-200"
+              }`}
+            >
+              {p}
+            </button>
+          )
+        )}
+
         <button
-          onClick={() => handlePageChange(Math.min(meta.last_page, page + 1))}
-          disabled={meta.current_page === meta.last_page}
+          onClick={() =>
+            handlePageChange(Math.min(totalPages, currentPage + 1))
+          }
+          disabled={currentPage === totalPages}
           className="px-3 py-1 border border-gray-400 rounded disabled:opacity-50 cursor-pointer hover:bg-gray-200 transition-all duration-200"
         >
           {t("next")}
@@ -315,12 +356,12 @@ const Products = () => {
 
       {/* Shop Banner */}
       <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
-          <img
-            src={bannerUrl || bgImage}
-            alt="Shop Banner"
-            className="w-full h-full object-cover"
-            onError={() => setBgImage(Banner)}
-          />
+        <img
+          src={bannerUrl || bgImage}
+          alt="Shop Banner"
+          className="w-full h-full object-cover"
+          onError={() => setBgImage(Banner)}
+        />
       </div>
 
       <div
@@ -511,7 +552,7 @@ const Products = () => {
                 </p>
               </div>
             ) : (
-              <>
+              <React.Fragment>
                 {/* Products List */}
                 <div
                   className={
@@ -603,7 +644,8 @@ const Products = () => {
 
                             {/* Price */}
                             <div className="flex items-end gap-2 mb-2">
-                              {product.min_sale_price &&
+                              {product.on_sale === true &&
+                              product.min_sale_price &&
                               product.min_sale_price !== product.min_price ? (
                                 <div className="flex flex-col">
                                   <span className="line-through text-gray-400 text-xs font-normal">
@@ -636,7 +678,8 @@ const Products = () => {
                             </div>
 
                             {/* Discount duration */}
-                            {product.sale_starts_at &&
+                            {product.on_sale === true &&
+                              product.sale_starts_at &&
                               product.sale_ends_at &&
                               (() => {
                                 const start = new Date(product.sale_starts_at);
@@ -756,10 +799,9 @@ const Products = () => {
                         key={product.id}
                         onMouseEnter={() => setHoveredIndex(idx)}
                         onMouseLeave={() => setHoveredIndex(null)}
-                        className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
+                        className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col rounded"
                         style={{
                           borderColor: colors.borderLight,
-                          minHeight: 420,
                         }}
                       >
                         <div
@@ -878,7 +920,7 @@ const Products = () => {
 
                           {/* Price */}
                           <div className="flex items-end gap-2 mb-2">
-                            {product.on_sale === "true" &&
+                            {product.on_sale === true &&
                             product.min_sale_price &&
                             product.min_sale_price !== product.min_price ? (
                               <div className="flex flex-col">
@@ -912,7 +954,7 @@ const Products = () => {
                           </div>
 
                           {/* Discount duration */}
-                          {product.on_sale === "true" &&
+                          {product.on_sale === true &&
                             product.sale_starts_at &&
                             product.sale_ends_at &&
                             (() => {
@@ -957,7 +999,7 @@ const Products = () => {
 
                 {/* Pagination */}
                 <Pagination />
-              </>
+              </React.Fragment>
             )}
           </div>
         </div>

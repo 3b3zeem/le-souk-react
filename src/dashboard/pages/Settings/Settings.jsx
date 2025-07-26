@@ -232,7 +232,7 @@ const Settings = () => {
           {t("settings.title", "Settings")}
         </h2>
 
-        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div className="mb-4 flex flex-col sm:flex-row justify-between items-center gap-3 pe-10">
           <div className="relative flex items-center gap-2 w-full sm:w-auto">
             <input
               type="text"
@@ -259,7 +259,7 @@ const Settings = () => {
             <select
               value={perPage}
               onChange={(e) => handlePerPageChange(parseInt(e.target.value))}
-              className="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-[#5e8db8] block px-4 py-2 transition duration-200 shadow-sm hover:border-gray-400 disabled:opacity-50 focus:outline-none cursor-pointer"
+              className="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-300 focus:border-[#333e2c] block px-4 py-2 transition duration-200 shadow-sm hover:border-gray-400 disabled:opacity-50 focus:outline-none cursor-pointer"
               disabled={loading}
             >
               {perPageOptions.map((option) => (
@@ -319,7 +319,7 @@ const Settings = () => {
                           en_name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t(
                         "settings.enterName",
                         "Enter setting name"
@@ -342,7 +342,7 @@ const Settings = () => {
                           ar_name: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       placeholder={t(
                         "settings.enterNameAr",
                         "Enter setting name in Arabic"
@@ -357,7 +357,7 @@ const Settings = () => {
                       {t("settings.value", "Value")} (English)
                     </label>
                     {settingData.type === "image" ? (
-                      <div className="flex flex-col gap-2 border border-dashed border-gray-300 rounded-lg p-2">
+                      <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
                         <label
                           htmlFor="file-en_value"
                           className="cursor-pointer"
@@ -399,7 +399,7 @@ const Settings = () => {
                             en_value: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                         rows="3"
                         placeholder={t(
                           "settings.enterValue",
@@ -415,7 +415,7 @@ const Settings = () => {
                       {t("settings.value", "Value")} (Arabic)
                     </label>
                     {settingData.type === "image" ? (
-                      <div className="flex flex-col gap-2 border border-dashed border-gray-300 rounded-lg p-2">
+                      <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
                         <label
                           htmlFor="file-ar_value"
                           className="cursor-pointer"
@@ -460,7 +460,7 @@ const Settings = () => {
                             ar_value: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                         rows="3"
                         placeholder={t(
                           "settings.enterValue",
@@ -484,7 +484,7 @@ const Settings = () => {
                           en_description: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       rows="3"
                       placeholder={t(
                         "settings.enterDescription",
@@ -506,7 +506,7 @@ const Settings = () => {
                           ar_description: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       rows="3"
                       placeholder={t(
                         "settings.enterDescriptionAr",
@@ -527,7 +527,7 @@ const Settings = () => {
                     </button>
                     <button
                       type="submit"
-                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-[#2a3225] transition-all duration-200 text-sm cursor-pointer font-medium shadow ${
+                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 transition-all duration-200 text-sm cursor-pointer font-medium shadow ${
                         loading ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                       disabled={loading}
@@ -639,7 +639,7 @@ const Settings = () => {
               <button
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
                 {t("pagination.previous", "Previous")}
               </button>
@@ -666,7 +666,7 @@ const Settings = () => {
                         page === pageNum
                           ? "bg-[#333e2c] text-white"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      } transition-colors`}
+                      } transition-colors cursor-pointer`}
                     >
                       {pageNum}
                     </button>
@@ -677,7 +677,7 @@ const Settings = () => {
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
-                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
                 {t("pagination.next", "Next")}
               </button>

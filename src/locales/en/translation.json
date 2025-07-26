@@ -408,5 +408,6 @@
   "isActive": "Is Active?",
   "updateSliderHero": "Update Slider",
   "imageRequired": "Image is required",
-  "search_settings": "Search Settings..."
+  "search_settings": "Search Settings...",
+  "is_featured": "Is Featured?"
 }

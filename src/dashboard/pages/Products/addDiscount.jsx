@@ -72,7 +72,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                     name="on_sale"
                     checked={form.on_sale}
                     onChange={handleChange}
-                    className="accent-blue-600 w-5 h-5 rounded border-gray-300"
+                    className="accent-[#333e2c] w-5 h-5 rounded border-gray-300"
                     id="on_sale"
                   />
                   <label
@@ -91,7 +91,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                   name="discount_type"
                   value={form.discount_type}
                   onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all focus:outline-none"
+                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] duration-200 transition-all focus:outline-none"
                 >
                   <option value="percentage">{t("percentage")}</option>
                   <option value="fixed_amount">{t("fixed_amount")}</option>
@@ -108,7 +108,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                   name="discount_value"
                   value={form.discount_value}
                   onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all focus:outline-none"
+                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] duration-200 transition-all focus:outline-none"
                   min={0}
                   required
                   placeholder={t("discount_value")}
@@ -125,7 +125,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                   name="sale_starts_at"
                   value={form.sale_starts_at}
                   onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all focus:outline-none"
+                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] duration-200 transition-all focus:outline-none"
                 />
               </div>
               <div>
@@ -137,7 +137,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                   name="sale_ends_at"
                   value={form.sale_ends_at}
                   onChange={handleChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all focus:outline-none"
+                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] duration-200 transition-all focus:outline-none"
                 />
               </div>
             </div>

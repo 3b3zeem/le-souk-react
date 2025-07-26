@@ -182,7 +182,7 @@ const AddPackageForm = ({
       </button>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-t-xl px-8 py-6 text-center">
+      <div className="bg-gradient-to-r from-[#333e2c] to-[#7a7e75] rounded-t-xl px-8 py-6 text-center">
         <h2 className="text-2xl font-bold text-white mb-1">
           {t(isEditMode ? "edit_package" : "add_package")}
         </h2>
@@ -198,8 +198,8 @@ const AddPackageForm = ({
             <button
               className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 cursor-pointer ${
                 activeTab === "basic-info"
-                  ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "bg-white border-b-2 border-[#333e2c] text-[#333e2c] shadow"
+                  : "text-gray-500 hover:text-[#333e2c]"
               }`}
               onClick={() => setActiveTab("basic-info")}
             >
@@ -208,8 +208,8 @@ const AddPackageForm = ({
             <button
               className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all duration-200 ml-2 cursor-pointer ${
                 activeTab === "products"
-                  ? "bg-white border-b-2 border-blue-600 text-blue-600 shadow"
-                  : "text-gray-500 hover:text-blue-600"
+                  ? "bg-white border-b-2 border-[#333e2c] text-[#333e2c] shadow"
+                  : "text-gray-500 hover:text-[#333e2c]"
               }`}
               onClick={() => setActiveTab("products")}
             >
@@ -219,7 +219,7 @@ const AddPackageForm = ({
         )}
         {isEditMode && (
           <button
-            className="px-4 py-2 text-sm font-semibold rounded-t-lg bg-white border-b-2 border-blue-600 text-blue-600 shadow"
+            className="px-4 py-2 text-sm font-semibold rounded-t-lg bg-white border-b-2 border-[#333e2c] text-[#333e2c] shadow"
             onClick={() => setActiveTab("basic-info")}
           >
             {t("basic_info")}
@@ -244,7 +244,7 @@ const AddPackageForm = ({
                   type="file"
                   accept="image/jpeg, image/jpg, image/webp,"
                   onChange={handleFileChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-[#333e2c] hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
                 />
                 {formData.image && (
                   <span className="text-xs text-gray-600 border border-gray-200 rounded p-2">
@@ -277,7 +277,7 @@ const AddPackageForm = ({
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
               >
                 <option value="active">{t("active")}</option>
                 <option value="inactive">{t("inactive")}</option>
@@ -292,7 +292,7 @@ const AddPackageForm = ({
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
               >
                 <option value="percentage">{t("percentage")}</option>
                 <option value="fixed_amount">{t("fixed_amount")}</option>
@@ -308,7 +308,7 @@ const AddPackageForm = ({
                 name="value"
                 value={formData.value}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 placeholder={t("enter_value")}
               />
             </div>
@@ -322,7 +322,7 @@ const AddPackageForm = ({
                 name="usage_limit"
                 value={formData.usage_limit}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 placeholder={t("enter_usage_limit")}
               />
             </div>
@@ -336,7 +336,7 @@ const AddPackageForm = ({
                 name="user_usage_limit"
                 value={formData.user_usage_limit}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 placeholder={t("enter_user_usage_limit")}
               />
             </div>
@@ -350,7 +350,7 @@ const AddPackageForm = ({
                 name="starts_at"
                 value={formData.starts_at}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
               />
             </div>
             {/* expires_at */}
@@ -363,7 +363,7 @@ const AddPackageForm = ({
                 name="expires_at"
                 value={formData.expires_at}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
               />
             </div>
 
@@ -377,7 +377,7 @@ const AddPackageForm = ({
                 name="en_name"
                 value={formData.en_name}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 placeholder={t("enter_package_name")}
               />
             </div>
@@ -389,7 +389,7 @@ const AddPackageForm = ({
                 name="en_description"
                 value={formData.en_description}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 rows="3"
                 placeholder={t("enter_description")}
               />
@@ -402,7 +402,7 @@ const AddPackageForm = ({
                 name="en_short_description"
                 value={formData.en_short_description}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 rows="2"
                 placeholder={t("enter_short_description")}
               />
@@ -417,7 +417,7 @@ const AddPackageForm = ({
                 name="ar_name"
                 value={formData.ar_name}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 placeholder={t("enter_package_name_ar")}
               />
             </div>
@@ -429,7 +429,7 @@ const AddPackageForm = ({
                 name="ar_description"
                 value={formData.ar_description}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 rows="3"
                 placeholder={t("enter_description_ar")}
               />
@@ -442,7 +442,7 @@ const AddPackageForm = ({
                 name="ar_short_description"
                 value={formData.ar_short_description}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                 rows="2"
                 placeholder={t("enter_short_description_ar")}
               />
@@ -457,7 +457,7 @@ const AddPackageForm = ({
             </label>
             <select
               onChange={handleProductSelect}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
               value=""
             >
               <option value="">{t("select_product")}</option>

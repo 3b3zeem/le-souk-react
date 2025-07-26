@@ -93,7 +93,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
                   name="product_variant_id"
                   value={form.product_variant_id}
                   onChange={handleVariantChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all focus:outline-none"
+                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-focus:ring-[#333e2c] duration-200 focus:border-focus:ring-[#333e2c] transition-all focus:outline-none"
                 >
                   <option value="">{t("select_variant")}</option>
                   {product?.variants?.map((variant) => (
@@ -116,7 +116,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
                       <div
                         key={image.id}
                         className={`relative cursor-pointer rounded-lg overflow-hidden transition-all ${
-                          isSelected ? "ring-2 ring-blue-500" : "ring-1 ring-gray-300"
+                          isSelected ? "ring-2 ring-focus:ring-[#333e2c] duration-200" : "ring-1 ring-gray-300"
                         }`}
                         onClick={() => handleImageToggle(String(image.id))}
                       >
@@ -127,7 +127,7 @@ const AssignImagesModal = ({ isOpen, onClose, product, onAssign, loading }) => {
                         />
                         {isSelected && (
                           <div className="absolute inset-0 bg-[#333e2c]/20 flex items-center justify-center">
-                            <Check color="#fff" />
+                            <Check color="#333e2c" />
                           </div>
                         )}
                       </div>

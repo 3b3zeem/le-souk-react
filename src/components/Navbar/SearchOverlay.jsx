@@ -35,14 +35,6 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
     onClose();
   };
 
-  //   const handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     if (query.trim()) {
-  //       navigate(`/products?search=${encodeURIComponent(query)}`);
-  //       onClose();
-  //     }
-  //   };
-
   useEffect(() => {
     if (!open) setQuery("");
   }, [open]);

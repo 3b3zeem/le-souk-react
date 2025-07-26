@@ -171,8 +171,8 @@ const AddProductForm = ({
                 onClick={() => setActiveTab("basic")}
                 className={`px-4 py-2 text-sm font-medium cursor-pointer ${
                   activeTab === "basic"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? "border-b-2 border-[#333e2c] text-[#333e2c]"
+                    : "text-gray-600 hover:text-[#333e2c]"
                 }`}
               >
                 {t("basic_info")}
@@ -182,8 +182,8 @@ const AddProductForm = ({
                 onClick={() => setActiveTab("images")}
                 className={`px-4 py-2 text-sm font-medium cursor-pointer ${
                   activeTab === "images"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? "border-b-2 border-[#333e2c] text-[#333e2c]"
+                    : "text-gray-600 hover:text-[#333e2c]"
                 }`}
               >
                 {t("images")}
@@ -193,8 +193,8 @@ const AddProductForm = ({
                 onClick={() => setActiveTab("variants")}
                 className={`px-4 py-2 text-sm font-medium cursor-pointer ${
                   activeTab === "variants"
-                    ? "border-b-2 border-blue-500 text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? "border-b-2 border-[#333e2c] text-[#333e2c]"
+                    : "text-gray-600 hover:text-[#333e2c]"
                 }`}
               >
                 {t("variants")}
@@ -215,7 +215,7 @@ const AddProductForm = ({
                         onClick={() =>
                           setShowCategoryDropdown(!showCategoryDropdown)
                         }
-                        className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300"
+                        className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm bg-gray-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
                       >
                         {productData.category_ids.length > 0
                           ? categories
@@ -242,7 +242,7 @@ const AddProductForm = ({
                                 onChange={() =>
                                   handleCategoryChange(category.id)
                                 }
-                                className="mr-2 accent-blue-500"
+                                className="mr-2 accent-[#333e2c]"
                               />
                               {category.name}
                             </label>
@@ -270,7 +270,7 @@ const AddProductForm = ({
                             en_name: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                         placeholder={t("enter_product_name")}
                       />
                     </div>
@@ -289,7 +289,7 @@ const AddProductForm = ({
                             ar_name: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-right"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50 text-right"
                         placeholder={t("enter_product_name_ar")}
                       />
                     </div>
@@ -307,7 +307,7 @@ const AddProductForm = ({
                             en_description: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                         rows="4"
                         placeholder={t("enter_description")}
                       />
@@ -326,7 +326,7 @@ const AddProductForm = ({
                             ar_description: e.target.value,
                           })
                         }
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 text-right"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50 text-right"
                         rows="4"
                         placeholder={t("enter_description_ar")}
                       />
@@ -348,7 +348,7 @@ const AddProductForm = ({
                       multiple
                       placeholder=""
                       onChange={handleImageChange}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-[#333e2c] hover:file:bg-blue-100 file:transition-all duration-200 file:cursor-pointer"
                     />
                     <span className="text-sm text-gray-500">
                       {productData.images.length > 0
@@ -421,7 +421,7 @@ const AddProductForm = ({
                                 }
                                 placeholder={t("size")}
                                 list="sizeSuggestions"
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                               />
                               <datalist id="sizeSuggestions">
                                 <option value="small">{t("small")}</option>
@@ -455,7 +455,7 @@ const AddProductForm = ({
                                   }
                                   placeholder={t("color")}
                                   list="colorSuggestions"
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 lowercase"
+                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50 lowercase"
                                 />
                               </div>
                               <datalist id="colorSuggestions">
@@ -490,7 +490,7 @@ const AddProductForm = ({
                                   updateVariant(index, "sku", e.target.value)
                                 }
                                 placeholder={t("sku")}
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                               />
                             </td>
                             <td className="p-3">
@@ -501,7 +501,7 @@ const AddProductForm = ({
                                   updateVariant(index, "price", e.target.value)
                                 }
                                 placeholder={t("price")}
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                               />
                             </td>
                             <td className="p-3">
@@ -512,7 +512,7 @@ const AddProductForm = ({
                                   updateVariant(index, "stock", e.target.value)
                                 }
                                 placeholder={t("stock")}
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50"
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 bg-gray-50"
                               />
                             </td>
                             <td className="p-3">
@@ -551,7 +551,7 @@ const AddProductForm = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-blue-700 text-sm font-medium shadow transition cursor-pointer"
+                  className="px-6 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 text-sm font-medium shadow transition cursor-pointer"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

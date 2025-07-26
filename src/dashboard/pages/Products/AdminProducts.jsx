@@ -188,6 +188,33 @@ const AdminProducts = () => {
     return success;
   };
 
+  function getPaginationPages(totalPages, currentPage) {
+    const pages = new Set();
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.add(i);
+      }
+    } else {
+      pages.add(1);
+
+      if (currentPage > 3) pages.add("...");
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.add(i);
+      }
+
+      if (currentPage < totalPages - 2) pages.add("...");
+
+      pages.add(totalPages);
+    }
+
+    return Array.from(pages);
+  }
+
   return (
     <div
       className="min-h-screen bg-gray-50 p-1 sm:p-6 w-[100%]"
@@ -215,7 +242,7 @@ const AdminProducts = () => {
               dir={language === "ar" ? "rtl" : "ltr"}
               className={`w-[190px] sm:w-full focus:w-full ${
                 language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
-              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 placeholder:text-gray-400`}
+              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 placeholder:text-gray-400`}
             />
             <span
               className={`absolute top-1/2 transform -translate-y-1/2 ${
@@ -447,7 +474,7 @@ const AdminProducts = () => {
 
         {/* Pagination */}
         {products.length > 0 && (
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-4 gap-3">
+          <div className="flex flex-col sm:flex-row justify-between items-start md:items-center mt-4 gap-3">
             <p className="text-xs sm:text-sm text-gray-600">
               {t("showing_products", {
                 count: products.length,
@@ -463,19 +490,30 @@ const AdminProducts = () => {
               >
                 {t("previous")}
               </button>
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index + 1}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
-                    page === index + 1
-                      ? "bg-[#333e2c] text-white hover:bg-[#333e2c] transition-all duration-100"
-                      : "hover:bg-gray-200 transition-all duration-200"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
+
+              {getPaginationPages(totalPages, page).map((p, index) =>
+                p === "..." ? (
+                  <span
+                    key={`dots-${index}`}
+                    className="px-2 sm:px-3 py-1 text-xs sm:text-sm"
+                  >
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={p}
+                    onClick={() => handlePageChange(p)}
+                    className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
+                      page === p
+                        ? "bg-[#333e2c] text-white hover:bg-[#333e2c]"
+                        : "hover:bg-gray-200"
+                    } transition-all duration-200`}
+                  >
+                    {p}
+                  </button>
+                )
+              )}
+
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}

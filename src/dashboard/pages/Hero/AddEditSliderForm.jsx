@@ -5,9 +5,6 @@ import imageCompression from "browser-image-compression";
 
 const defaultForm = {
   is_active: true,
-  // link: "",
-  // en: { title: "", description: "", button_text: "" },
-  // ar: { title: "", description: "", button_text: "" },
   image: null,
 };
 
@@ -21,7 +18,6 @@ const AddEditSliderForm = ({
   language,
 }) => {
   const [form, setForm] = useState(defaultForm);
-  // const [activeTab, setActiveTab] = useState("en");
   const [imagePreview, setImagePreview] = useState(null);
   const imageInputRef = useRef(null);
 
@@ -29,19 +25,6 @@ const AddEditSliderForm = ({
     if (initialData) {
       setForm({
         is_active: initialData.is_active ?? true,
-        // link: initialData.link || "",
-        // en: {
-        //   title: initialData.en?.title || "",
-        //   description: initialData.en?.description || "",
-        //   button_text: initialData.en?.button_text || "",
-        // },
-        // ar: {
-        //   title: initialData.ar?.title || initialData.title || "",
-        //   description:
-        //     initialData.ar?.description || initialData.description || "",
-        //   button_text:
-        //     initialData.ar?.button_text || initialData.button_text || "",
-        // },
         image: null,
       });
       setImagePreview(initialData.image_url || null);
@@ -104,19 +87,11 @@ const AddEditSliderForm = ({
     e.preventDefault();
     const formData = new FormData();
     formData.append("is_active", form.is_active ? 1 : 0);
-    // formData.append("link", form.link);
-    // formData.append("en[title]", form.en.title);
-    // formData.append("en[description]", form.en.description);
-    // formData.append("en[button_text]", form.en.button_text);
-    // formData.append("ar[title]", form.ar.title);
-    // formData.append("ar[description]", form.ar.description);
-    // formData.append("ar[button_text]", form.ar.button_text);
 
     // Handle image requirement for API
     if (form.image) {
-      formData.append("image", form.image); // New image uploaded
+      formData.append("image", form.image);
     } else {
-      // Preserve existing image URL for editing if API supports it
       formData.append("image_url", initialData.image_url);
     }
 
@@ -155,108 +130,8 @@ const AddEditSliderForm = ({
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               {initialData ? t("editSliderHero") : t("addSliderHero")}
             </h2>
-            {/* Tabs */}
-            {/* <div className="flex border-b border-gray-200 mb-6">
-              <button
-                type="button"
-                onClick={() => handleTab("en")}
-                className={`px-4 py-2 text-sm font-medium cursor-pointer ${
-                  activeTab === "en"
-                    ? "border-b-2 border-[#333e2c] text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
-                }`}
-              >
-                {t("english")}
-              </button>
-              <button
-                type="button"
-                onClick={() => handleTab("ar")}
-                className={`px-4 py-2 text-sm font-medium cursor-pointer ${
-                  activeTab === "ar"
-                    ? "border-b-2 border-[#333e2c] text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
-                }`}
-              >
-                {t("arabic")}
-              </button>
-            </div> */}
             {/* Form Fields */}
             <div className="grid grid-cols-1 gap-5">
-              <div className="flex justify-between">
-                {/* Title */}
-                {/* <div className="w-[48%]">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t("title")}
-                  </label>
-                  <input
-                    type="text"
-                    name={activeTab === "en" ? "en_title" : "ar_title"}
-                    value={activeTab === "en" ? form.en.title : form.ar.title}
-                    onChange={handleInputChange}
-                    className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] transition-all focus:outline-none"
-                  />
-                </div> */}
-                {/* Description */}
-                {/* <div className="w-[48%]">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {t("description")}
-                  </label>
-                  <textarea
-                    name={
-                      activeTab === "en" ? "en_description" : "ar_description"
-                    }
-                    value={
-                      activeTab === "en"
-                        ? form.en.description
-                        : form.ar.description
-                    }
-                    onChange={handleInputChange}
-                    className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] transition-all focus:outline-none"
-                    rows={2}
-                  />
-                </div> */}
-              </div>
-              {/* Button Text */}
-              {/* <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("buttonText")}
-                </label>
-                <input
-                  type="text"
-                  name={
-                    activeTab === "en" ? "en_button_text" : "ar_button_text"
-                  }
-                  value={
-                    activeTab === "en"
-                      ? form.en.button_text
-                      : form.ar.button_text
-                  }
-                  onChange={(e) => {
-                    const lang = e.target.name.startsWith("en_") ? "en" : "ar";
-                    const newValue = e.target.value;
-                    setForm((prev) => ({
-                      ...prev,
-                      [lang]: { ...prev[lang], button_text: newValue },
-                    }));
-                  }}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] transition-all focus:outline-none"
-                />
-              </div> */}
-              {/* Link */}
-              {/* <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("link")}*
-                </label>
-                <input
-                  type="text"
-                  name="link"
-                  placeholder="start with /"
-                  value={form.link}
-                  onChange={handleInputChange}
-                  className="border border-gray-300 rounded-lg p-3 w-full focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] transition-all focus:outline-none"
-                  required
-                />
-              </div> */}
               {/* Image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
