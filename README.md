@@ -1,6 +1,6 @@
 # Le Souk - React E-Commerce Platform
 
-![Le Souk Banner](le-sock/src/assets/Screenshot.png?text=Le+Souk+E-Commerce) <!-- Replace with actual banner image if available -->
+![Le Souk Banner](https://github.com/3b3zeem/le-souk-react/issues/1#issue-3265691428)
 
 **Le Souk** is a modern e-commerce platform built with **React** and **Vite**, designed to provide a fast, responsive, and user-friendly shopping experience. This project leverages the power of Vite's lightning-fast development server and Hot Module Replacement (HMR) for an optimized development workflow.
 
@@ -81,13 +81,10 @@ Contributions are welcome! To contribute:
 
 Please ensure your code follows the project's ESLint rules and includes relevant tests.
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Contact
 For questions or feedback, reach out to the project maintainer:
 - GitHub: [3b3zeem](https://github.com/3b3zeem)
-- Email: [Your email, if you want to include it]
+- Email: [Ahmed Mostafa](ahmedmostafaabdel3azem@gmail.com)
 
 ---
 
