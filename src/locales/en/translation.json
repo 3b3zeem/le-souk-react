@@ -409,5 +409,7 @@
   "updateSliderHero": "Update Slider",
   "imageRequired": "Image is required",
   "search_settings": "Search Settings...",
-  "is_featured": "Is Featured?"
+  "is_featured": "Is Featured?",
+  "basic_distribution": "Basic Distribution",
+  "basic_bar_chart": "Bar Chart Distribution"
 }

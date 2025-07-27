@@ -29,7 +29,7 @@ const useAuth = () => {
         },
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             "Content-Type": "application/json",
           },
         }
@@ -67,7 +67,7 @@ const useAuth = () => {
         },
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             "Content-Type": "application/json",
           },
         }
@@ -92,7 +92,65 @@ const useAuth = () => {
     }
   };
 
-  return { login, register, loading, error };
+  const forgotPassword = async (email) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.post(
+        "https://le-souk.dinamo-app.com/api/forgot-password",
+        { email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setLoading(false);
+      return res.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to send reset email");
+      setLoading(false);
+      return null;
+    }
+  };
+
+  const resetPassword = async (
+    email,
+    token,
+    password,
+    passwordConfirmation
+  ) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.post(
+        "https://le-souk.dinamo-app.com/api/reset-password",
+        {
+          email,
+          token,
+          password,
+          password_confirmation: passwordConfirmation,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setLoading(false);
+      return res.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Reset failed");
+      setLoading(false);
+      return null;
+    }
+  };
+
+  return { login, register, forgotPassword, resetPassword, loading, error };
 };
 
 export default useAuth;

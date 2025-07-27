@@ -26,9 +26,7 @@ const CategoryId = () => {
         navigate(`/categories/${categoryId}/${slug}`, { replace: true });
       }
     }
-    console.log(category);
   }, [category?.name, categoryId, navigate]);
-  
 
   if (loading) return <Loader />;
   if (error)
@@ -43,14 +41,13 @@ const CategoryId = () => {
         image={category.image_url}
       />
       <div
-        className="bg-[#e8e4dd] text-[#333e2c] text-center py-25 mb-6"
-        //       style={{
-        //   background: category.image_url
-        //     ? `url(${category.image_url}) center/cover no-repeat`
-        //     : '#e8e4dd',
-        // }}
+        className="text-[#333e2c] text-center py-25 mb-6 h-[100vh]"
+        style={{
+          background: category.image_url
+            ? `url(${category.image_url}) center/cover no-repeat`
+            : "#e8e4dd",
+        }}
       >
-        <h2 className="text-4xl font-bold font-serif ">{category.name}</h2>
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {category.products.length === 0 ? (

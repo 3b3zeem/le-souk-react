@@ -374,8 +374,6 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
 const Offers = () => {
   const { offers, loading, error } = useHome();
 
-  console.log("Offers data:", offers);
-
   if (loading) return <SkeletonLoader />;
   if (error)
     return (

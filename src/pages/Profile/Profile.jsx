@@ -8,6 +8,10 @@ import LanguageDropdown from "../../components/Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
 import Order from "./Order/Order";
 import Meta from "../../components/Meta/Meta";
+import useAuth from "../../hooks/Auth/useAuth";
+import { DotSpinner } from "ldrs/react";
+import "ldrs/react/DotSpinner.css";
+import toast from "react-hot-toast";
 
 const colors = {
   primary: "#333e2c",
@@ -31,6 +35,9 @@ const Profile = () => {
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { forgotPassword } = useAuth();
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
   const fileInputRef = useRef();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -86,6 +93,32 @@ const Profile = () => {
     }
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!forgotEmail) {
+      toast.error("Please enter your email.");
+      return;
+    }
+
+    const result = await forgotPassword(forgotEmail);
+
+    console.log(result);
+
+    if (result) {
+      toast.success(result.message || "Reset link sent to your email.", {
+        duration: 1500,
+        position: "top-right",
+      });
+      setShowForgotModal(false);
+      setForgotEmail("");
+    } else {
+      toast.error(error || "Failed to send reset link.", {
+        duration: 1500,
+        position: "top-right",
+      });
+    }
+  };
+
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
@@ -111,7 +144,7 @@ const Profile = () => {
       className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-    <Meta
+      <Meta
         title="My Profile"
         description="View and manage your profile settings."
       />
@@ -399,6 +432,72 @@ const Profile = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="w-full bg-white p-8 shadow-md border-t border-gray-200 my-5">
+        <button
+          type="button"
+          onClick={() => setShowForgotModal(true)}
+          className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline"
+          style={{ color: colors.productTitle }}
+        >
+          {language === "ar" ? "هل نسيت كلمة المرور؟" : "Forget Password?"}
+        </button>
+
+        <AnimatePresence>
+          {showForgotModal && (
+            <motion.div
+              className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999] h-[100vh]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md"
+              >
+                <h3 className="text-xl font-semibold mb-4 text-center text-[#333e2c]">
+                  Forgot Password
+                </h3>
+                <input
+                  type="email"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#333e2c]"
+                  placeholder="Enter your email"
+                />
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotModal(false)}
+                    className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition"
+                  >
+                    {language === "ar" ? "إلغاء" : "Cancel"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleForgotPassword}
+                    className={`px-4 py-2 bg-[#333e2c] text-white rounded-md hover:bg-[#2b3425] transition ${
+                      loading ? "cursor-not-allowed opacity-35" : ""
+                    }`}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <DotSpinner size="20" speed="0.9" color="#fff" />
+                    ) : language === "ar" ? (
+                      "إرسال الإيميل"
+                    ) : (
+                      "Send Email"
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <div className="w-full bg-white p-8 shadow-md border-t border-gray-200">
         <div className="flex justify-start items-start mb-6 gap-5">

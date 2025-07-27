@@ -411,5 +411,7 @@
   "updateSliderHero": "تحديث السلايدر",
   "imageRequired": "يجب رفع صورة",
   "search_settings": "بحث في الاعدادات...",
-  "is_featured": "مُميز؟"
+  "is_featured": "مُميز؟",
+  "basic_distribution": "التوزيع العام",
+  "basic_bar_chart": "رسم بياني عمودي للتوزيع"
 }

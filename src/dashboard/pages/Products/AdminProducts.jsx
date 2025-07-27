@@ -425,7 +425,7 @@ const AdminProducts = () => {
                       }`}
                       data-label={t("price")}
                     >
-                      ${product.min_price}
+                      {product.min_price} {language === "ar" ? "د.ك" : "KWD"}
                     </td>
                     <td
                       className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${

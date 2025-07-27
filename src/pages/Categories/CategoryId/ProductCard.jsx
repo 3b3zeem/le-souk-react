@@ -17,20 +17,19 @@ const ProductCard = ({ product, getTranslatedText }) => {
   return (
     <div
       onClick={() => navigate(`/products/${id}`)}
-      className="bg-white rounded-lg shadow-md p-4 flex flex-col items-start max-w-xs group overflow-hidden hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
+      className="bg-white rounded-lg shadow-md p-4 flex flex-col items-start max-w-lg group overflow-hidden hover:-translate-y-2 transition-transform duration-300 cursor-pointer"
     >
       <div
-        className="w-full h-65  bg-no-repeat bg-contain  rounded-md mb-4"
+        className="w-full h-75  bg-no-repeat bg-cover rounded-md mb-4"
         style={{
           backgroundImage: `url(${imageUrl})`,
-          // backgroundSize: "container",
           backgroundPosition: "center",
         }}
       ></div>
       <h3 className="text-lg font-semibold text-gray-800">{name}</h3>
       <p className="text-sm text-gray-600 mb-2 line-clamp-2">{description}</p>
       <div className="mt-2 text-[#333e2c] font-semibold">
-        {product.min_sale_price &&
+        {product.on_sale === true && product.min_sale_price &&
             product.min_sale_price !== product.min_price ? (
               <div className="flex gap-2">
                 <span className="line-through text-gray-400 text-base font-normal">

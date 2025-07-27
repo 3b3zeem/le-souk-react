@@ -6,6 +6,19 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import Loader from "../../../layouts/Loader";
 import Meta from "../../../components/Meta/Meta";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
 
 const Dashboard = () => {
   const { stats, loading, error } = useDashboard();
@@ -43,7 +56,7 @@ const Dashboard = () => {
         <p className="text-gray-600 mb-6">{t("welcome_message")}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card Template */}
+          {/* Sales */}
           <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
             <div className="flex items-center space-x-4">
               <div className="bg-blue-100 p-3 rounded-full">
@@ -60,6 +73,7 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Users */}
           <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
             <div className="flex items-center space-x-4">
               <div className="bg-green-100 p-3 rounded-full">
@@ -76,6 +90,7 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {/* Products */}
           <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
             <div className="flex items-center space-x-4">
               <div className="bg-purple-100 p-3 rounded-full">
@@ -90,6 +105,62 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {/* Pie Chart */}
+          <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+              {t("basic_distribution")}
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  nameKey="name"
+                  data={[
+                    { name: t("users"), value: stats.users_count },
+                    { name: t("products"), value: stats.products_count },
+                    { name: t("sales"), value: stats.total_sales },
+                  ]}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  label
+                >
+                  <Cell fill="#34D399" />
+                  <Cell fill="#60A5FA" />
+                  <Cell fill="#F87171" />
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+              {t("basic_bar_chart")}
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart
+                data={[
+                  { name: t("users"), value: stats.users_count },
+                  { name: t("products"), value: stats.products_count },
+                  { name: t("sales"), value: stats.total_sales },
+                ]}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#333e2c" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
