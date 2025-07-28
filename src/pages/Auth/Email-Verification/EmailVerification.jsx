@@ -14,9 +14,12 @@ const EmailVerification = () => {
   const messageFromQuery = queryParams.get("message");
 
   const isSuccess = status === "success";
+  const isAlreadyVerified = status === "already-verified";
+
+  const showConfetti = isSuccess;
 
   useEffect(() => {
-    if (!isSuccess) return;
+    if (!showConfetti) return;
 
     const duration = 15 * 1000;
     const animationEnd = Date.now() + duration;
@@ -48,25 +51,33 @@ const EmailVerification = () => {
     }, 250);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [showConfetti]);
 
-  const title = isSuccess
-    ? language === "ar"
-      ? "تم تأكيد الإيميل!"
-      : "Email Verified!"
-    : language === "ar"
-    ? "فشل في تأكيد الإيميل"
-    : "Email Verification Failed";
+  const title =
+    isSuccess || isAlreadyVerified
+      ? language === "ar"
+        ? isAlreadyVerified
+          ? "تم تأكيد الإيميل مسبقًا!"
+          : "تم تأكيد الإيميل!"
+        : isAlreadyVerified
+        ? "Email Already Verified!"
+        : "Email Verified!"
+      : language === "ar"
+      ? "فشل في تأكيد الإيميل"
+      : "Email Verification Failed";
+
   const message = messageFromQuery
     ? decodeURIComponent(messageFromQuery.replace(/\+/g, " "))
-    : isSuccess
+    : isSuccess || isAlreadyVerified
     ? language === "ar"
       ? "شكرًا لتأكيد بريدك الإلكتروني، يمكنك الآن تسجيل الدخول."
       : "Thanks for verifying your email. You can now log in."
     : language === "ar"
     ? "حدث خطأ أثناء تأكيد بريدك الإلكتروني. يرجى المحاولة لاحقًا."
     : "Something went wrong while verifying your email. Please try again later.";
-  const buttonText = language === "ar" ? "الذهاب للصفحة الرئيسية" : "Go to Home";
+
+  const buttonText =
+    language === "ar" ? "الذهاب للصفحة الرئيسية" : "Go to Home";
   const direction = language === "ar" ? "rtl" : "ltr";
 
   return (
@@ -75,7 +86,7 @@ const EmailVerification = () => {
       dir={direction}
     >
       <div className="bg-white p-5 rounded-xl shadow-xl max-w-lg w-full">
-        {isSuccess && (
+        {(isSuccess || isAlreadyVerified) && (
           <div className="flex items-center justify-center">
             <img src={verify} alt="verify" width={350} />
           </div>
