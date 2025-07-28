@@ -555,77 +555,79 @@ const Profile = () => {
       </div>
 
       {/* Verify Email */}
-      <div className="w-full bg-white p-8 shadow-md border-t border-gray-200 my-5">
-        <button
-          type="button"
-          onClick={() => setShowVerifyModal(true)}
-          className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline cursor-pointer"
-          style={{ color: colors.productTitle }}
-        >
-          {language === "ar"
-            ? "التحقق من بريدك الإلكتروني؟"
-            : "Verify Your Email?"}
-        </button>
+      {userData?.email_verification_status === "Not Verified" && (
+        <div className="w-full bg-white p-8 shadow-md border-t border-gray-200 my-5">
+          <button
+            type="button"
+            onClick={() => setShowVerifyModal(true)}
+            className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline cursor-pointer"
+            style={{ color: colors.productTitle }}
+          >
+            {language === "ar"
+              ? "التحقق من بريدك الإلكتروني؟"
+              : "Verify Your Email?"}
+          </button>
 
-        <AnimatePresence>
-          {showVerifyModal && (
-            <motion.div
-              className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999] h-[100vh]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
+          <AnimatePresence>
+            {showVerifyModal && (
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md"
+                className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999] h-[100vh]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <h3 className="text-xl font-semibold mb-4 text-center text-[#333e2c]">
-                  {language === "ar"
-                    ? "ادخل الاميل الالكتروني الخاص بك"
-                    : "Enter your email"}
-                </h3>
-                <input
-                  type="email"
-                  value={verification}
-                  onChange={(e) => setVerification(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#333e2c]"
-                  placeholder="Enter your email"
-                />
-                <div className="flex justify-between">
-                  <button
-                    type="button"
-                    onClick={() => setShowVerifyModal(false)}
-                    className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition cursor-pointer"
-                  >
-                    {language === "ar" ? "إلغاء" : "Cancel"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleVerifyEmail}
-                    className={`px-4 py-2 bg-[#333e2c] text-white rounded-md hover:bg-[#2b3425] transition ${
-                      loading
-                        ? "cursor-not-allowed opacity-35"
-                        : "cursor-pointer"
-                    }`}
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <DotSpinner size="20" speed="0.9" color="#fff" />
-                    ) : language === "ar" ? (
-                      "إرسال الإيميل"
-                    ) : (
-                      "Send Email"
-                    )}
-                  </button>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md"
+                >
+                  <h3 className="text-xl font-semibold mb-4 text-center text-[#333e2c]">
+                    {language === "ar"
+                      ? "ادخل الاميل الالكتروني الخاص بك"
+                      : "Enter your email"}
+                  </h3>
+                  <input
+                    type="email"
+                    value={verification}
+                    onChange={(e) => setVerification(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#333e2c]"
+                    placeholder="Enter your email"
+                  />
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setShowVerifyModal(false)}
+                      className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition cursor-pointer"
+                    >
+                      {language === "ar" ? "إلغاء" : "Cancel"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleVerifyEmail}
+                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-md hover:bg-[#2b3425] transition ${
+                        loading
+                          ? "cursor-not-allowed opacity-35"
+                          : "cursor-pointer"
+                      }`}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <DotSpinner size="20" speed="0.9" color="#fff" />
+                      ) : language === "ar" ? (
+                        "إرسال الإيميل"
+                      ) : (
+                        "Send Email"
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       <div className="w-full bg-white p-8 shadow-md border-t border-gray-200">
         <div className="flex justify-start items-start mb-6 gap-5">
