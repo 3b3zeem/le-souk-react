@@ -62,7 +62,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
             </div>
             <div className="grid grid-cols-1 gap-5">
               {/* On Sale */}
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {t("on_sale")}
                 </label>
@@ -80,7 +80,7 @@ const AddDiscount = ({ isOpen, onClose, onSubmit, t, loading }) => {
                     className="text-gray-600 text-sm"
                   >{`${t("on_sale")}`}</label>
                 </div>
-              </div>
+              </div> */}
 
               {/* discount_type */}
               <div>

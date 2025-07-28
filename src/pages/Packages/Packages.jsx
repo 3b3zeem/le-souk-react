@@ -8,8 +8,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
 import Meta from "../../components/Meta/Meta";
 
-import Banner from "../../assets/packagesEn.jpg";
-import useSettings from "../../hooks/Settings/useSettings";
+import { useSettingsContext } from "../../context/Settings/SettingsContext";
 
 const Packages = () => {
   const [page, setPage] = useState(1);
@@ -17,10 +16,9 @@ const Packages = () => {
   const { language } = useLanguage();
   const { packages, loading, error, totalPages, currentPage, meta } =
     useAdminPackages(page);
-  const [bgImage, setBgImage] = useState(Banner);
 
   // * Fetch Settings to show the Banner Image
-  const { settings } = useSettings();
+  const { settings } = useSettingsContext();
   const banner = settings.find(
     (setting) => setting.key === "packages_banner_image"
   );
@@ -54,10 +52,9 @@ const Packages = () => {
       {/* Package Banner */}
       <div className="relative w-full h-100 overflow-hidden shadow-md">
         <img
-          src={bannerUrl || bgImage}
+          src={bannerUrl}
           alt="Packages Banner"
           className="w-full h-full object-cover"
-          onError={() => setBgImage(Banner)}
         />
       </div>
 

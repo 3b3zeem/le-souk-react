@@ -148,14 +148,6 @@ const ResetPassword = () => {
             true
           )}
           {renderInput(
-            "token",
-            isArabic ? "رمز التحقق" : "Reset Token",
-            "text",
-            token,
-            setToken,
-            true
-          )}
-          {renderInput(
             "password",
             isArabic ? "كلمة المرور الجديدة" : "New Password",
             "password",

@@ -23,8 +23,7 @@ import Filters from "./Filters";
 import { useRef, useState as useLocalState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
-import Banner from "../../assets/products.jpg";
-import useSettings from "../../hooks/Settings/useSettings";
+import { useSettingsContext } from "../../context/Settings/SettingsContext";
 ring2.register();
 
 const colors = {
@@ -68,10 +67,10 @@ const Products = () => {
     inStock
   );
   const { addToCart } = useCartCRUD();
-  const [bgImage, setBgImage] = useState(Banner);
 
   // * Fetch Settings to show the Banner Image
-  const { settings } = useSettings();
+  // const { settings } = useSettings();
+  const { settings } = useSettingsContext();
   const banner = settings.find(
     (setting) => setting.key === "products_banner_image"
   );
@@ -357,10 +356,9 @@ const Products = () => {
       {/* Shop Banner */}
       <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
         <img
-          src={bannerUrl || bgImage}
+          src={bannerUrl}
           alt="Shop Banner"
           className="w-full h-full object-cover"
-          onError={() => setBgImage(Banner)}
         />
       </div>
 
