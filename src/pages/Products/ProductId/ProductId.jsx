@@ -520,8 +520,8 @@ const ProductId = () => {
           </p>
 
           {/* offer duration */}
-          {productDetails &&
-            productDetails.sale_starts_at &&
+          {productDetails && productDetails.discount_value > 0 &&
+            productDetails.sale_starts_at && 
             productDetails.sale_ends_at &&
             timeLeft &&
             productDetails.min_sale_price && (

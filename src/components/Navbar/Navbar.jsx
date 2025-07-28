@@ -48,7 +48,7 @@ const Navbar = () => {
   const avatar =
     (userData && userData.image) || (navUser && navUser.image) || "/user.png";
   const userName = userData?.name || navUser?.name;
-  const isAdmin = profile?.is_admin || 0;
+  const isAdmin = profile?.user?.is_admin || 0;
 
   // Click outSide { Drawer && USerOverlay }
   useEffect(() => {

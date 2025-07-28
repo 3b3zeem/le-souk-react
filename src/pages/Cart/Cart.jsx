@@ -117,10 +117,10 @@ const Cart = () => {
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
-      if (profile.is_admin === false) {
+      if (profile.user.is_admin === false) {
         await validateCoupon(coupon);
       } else {
-        toast.error("Not allowed foe the admin!");
+        toast.error("Not allowed for the admin!");
       }
       setCoupon("");
     } catch (err) {

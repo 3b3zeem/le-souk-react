@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
           !logoutInProgress.current &&
           token &&
           errorMessage !== "You are not an admin" &&
-          profile?.role !== "admin"
+          profile?.user?.is_admin !== "true"
         ) {
           console.warn("401 Unauthorized – clearing auth state");
           logout();

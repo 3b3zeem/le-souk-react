@@ -13,7 +13,7 @@ const AdminProtectedRoute = ({ redirectPath = "/unauthorized", allowedAdminValue
     return <Navigate to="/login" replace />;
   }
 
-  if (!profile || !allowedAdminValues.includes(profile.is_admin)) {
+  if (!profile || !allowedAdminValues.includes(profile.user.is_admin)) {
     return <Navigate to={redirectPath} replace />;
   }
 

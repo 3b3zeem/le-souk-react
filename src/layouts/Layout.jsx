@@ -18,7 +18,7 @@ function generateUniqueId(length = 16) {
 
 const LayOut = () => {
   const { profile } = useAuthContext();
-  const isAdmin = profile?.is_admin || false;
+  const isAdmin = profile?.user?.is_admin || false;
 
   const location = useLocation();
 

@@ -20,7 +20,7 @@ import { useWishlist } from "../../../context/WishList/WishlistContext";
 import SkeletonLoader from "../../../layouts/SkeletonLoader";
 
 const Products = () => {
-  const { products, loading, error } = useHome(5);
+  const { products, loading, error } = useHome();
   const [loadingStates, setLoadingStates] = useState({
     cart: {},
     wishlist: {},
@@ -170,7 +170,7 @@ const Products = () => {
         className="text-2xl sm:text-3xl font-normal mb-6 uppercase font-serif "
         style={{ color: colors.categoryTitle }}
       >
-        {t("products")}
+        {t("featured_products")}
       </h2>
 
       <Slider {...settings}>
@@ -193,13 +193,13 @@ const Products = () => {
                 }}
               >
                 <div
-                  className="relative flex justify-center items-center bg-gray-50"
+                  className="relative flex justify-center items-center bg-gray-50 h-80"
                   onClick={() => navigate(`/products/${product.id}`)}
                 >
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-full object-contain transition-transform duration-200 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
                   {/* Discount badge */}
                   {product.discount_percentage && (

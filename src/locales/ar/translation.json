@@ -413,5 +413,9 @@
   "search_settings": "بحث في الاعدادات...",
   "is_featured": "مُميز؟",
   "basic_distribution": "التوزيع العام",
-  "basic_bar_chart": "رسم بياني عمودي للتوزيع"
+  "basic_bar_chart": "رسم بياني عمودي للتوزيع",
+  "add_to_home": "أضف إلى الرئيسية",
+  "remove_from_home": "إزالة من الرئيسية",
+  "featured_products": "المنتجات المميزة",
+  "email_Verify": "تم توثيق الاميل؟"
 }

@@ -89,7 +89,32 @@ const useUserProfile = () => {
     }
   };
 
-  return { userData, loading, error, updateUserProfile };
+  const verifyEmail = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.post(
+        "https://le-souk.dinamo-app.com/api/email/verification-notification",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setLoading(false);
+      return res.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Verification failed");
+      setLoading(false);
+      return null;
+    }
+  };
+
+  return { userData, loading, error, updateUserProfile, verifyEmail };
 };
 
 export default useUserProfile;
