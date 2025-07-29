@@ -31,7 +31,7 @@ const useHome = (perPage = 8) => {
     queryKey: ["products", language],
     queryFn: async () => {
       const res = await axios.get(
-        `${BaseURL}/products/homepage?with=images,variants`
+        `${BaseURL}/products/homepage?with=images,variants,categories`
       );
       return res.data.data || [];
     },
