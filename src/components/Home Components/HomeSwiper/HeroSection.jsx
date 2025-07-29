@@ -95,7 +95,7 @@ const HeroSection = () => {
   if (!heroSliders || heroSliders.length === 0) null;
 
   return (
-    <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[80vh] max-h-[600px] mt-7">
+    <div className="relative w-full h-[25vh] sm:h-[40vh] md:h-[45vh] lg:h-[80vh] max-h-[600px] mt-7">
       <div
         className="relative w-full h-full"
         onMouseEnter={() => setIsHovered(true)}
@@ -105,7 +105,7 @@ const HeroSection = () => {
           {(heroSliders || []).map((slide, index) => (
             <div
               key={index}
-              className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[80vh] max-h-[700px] flex items-center justify-center"
+              className="relative w-full h-[25vh] sm:h-[40vh] md:h-[45vh] lg:h-[80vh] max-h-[700px] flex items-center justify-center"
             >
               <div className="w-full h-full">
                 <img
@@ -119,7 +119,7 @@ const HeroSection = () => {
                 className={`absolute inset-0 h-full flex items-end justify-start w-full`}
               >
                 <div
-                  className={`z-100 lg:ms-37 md:ms-17 ms-10 lg:mb-30 md:mb-50 mb-50`}>
+                  className={`z-100 lg:ms-43 md:ms-40 sm:ms-15 ms-7 lg:mb-30 md:mb-13 sm:mb-10 mb-10`}>
                   <Link
                     to={"/products"}
                     className="inline-block bg-transparent px-3 py-1 md:px-6 md:py-3 text-[#333e2c] text-[12px] md:text-base font-medium rounded-full hover:bg-[#333e2c] hover:text-white transition-colors duration-300"
