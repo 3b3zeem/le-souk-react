@@ -97,7 +97,7 @@ const Categories = () => {
       className="max-w-7xl mx-auto py-30 px-4 sm:px-6 lg:px-8 border-b border-gray-300"
       dir={language === "ar" ? "rtl" : "ltr"}
     >
-      <div className="flex justify-between mt-8 mb-6">
+      <div className="flex flex-wrap justify-between mt-8 mb-6">
         <h2
           className="text-2xl sm:text-3xl font-normal uppercase font-serif "
           style={{ color: colors.categoryTitle }}

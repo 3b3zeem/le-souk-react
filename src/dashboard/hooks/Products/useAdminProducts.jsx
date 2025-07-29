@@ -331,6 +331,31 @@ const useAdminProducts = () => {
     }
   };
 
+  const IsFeaturedProduct = async (productId) => {
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+      const response = await axios.post(
+        `https://le-souk.dinamo-app.com/api/admin/products/${productId}/toggle-featured`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success(response.data.message || "Product featured status updated!");
+      await fetchProducts();
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to update featured status";
+      toast.error(errorMessage);
+      return false;
+    }
+  };
+
   const deleteProduct = async (productId) => {
     try {
       if (!token) {
@@ -368,6 +393,7 @@ const useAdminProducts = () => {
     addProductDiscount,
     assignImagesToVariant,
     deleteProduct,
+    IsFeaturedProduct,
     loading,
     error,
     totalPages,

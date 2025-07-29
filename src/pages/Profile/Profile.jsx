@@ -12,6 +12,7 @@ import useAuth from "../../hooks/Auth/useAuth";
 import { DotSpinner } from "ldrs/react";
 import "ldrs/react/DotSpinner.css";
 import toast from "react-hot-toast";
+import Loader from "./../../layouts/Loader";
 
 const colors = {
   primary: "#333e2c",
@@ -23,7 +24,8 @@ const colors = {
 };
 
 const Profile = () => {
-  const { userData, loading, error, updateUserProfile } = useUserProfile();
+  const { userData, loading, error, updateUserProfile, verifyEmail } =
+    useUserProfile();
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,7 +39,9 @@ const Profile = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const { forgotPassword } = useAuth();
   const [showForgotModal, setShowForgotModal] = useState(false);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
+  const [verification, setVerification] = useState("");
   const fileInputRef = useRef();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -119,25 +123,43 @@ const Profile = () => {
     }
   };
 
+  const handleVerifyEmail = async (e) => {
+    e.preventDefault();
+    if (!verification) {
+      toast.error("Please enter your email.");
+      return;
+    }
+
+    const result = await verifyEmail(verification);
+
+    console.log(result);
+
+    if (result) {
+      toast.success(result.message || "Reset link sent to your email.", {
+        duration: 1500,
+        position: "top-right",
+      });
+      setShowVerifyModal(false);
+      setVerification("");
+    } else {
+      toast.error(error || "Failed to send reset link.", {
+        duration: 1500,
+        position: "top-right",
+      });
+    }
+  };
+
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <p className="text-red-500">Error: {error}</p>
-      </div>
-    );
-  }
+  if (loading) return <Loader />;
 
   return (
     <div
@@ -249,6 +271,34 @@ const Profile = () => {
               }}
             >
               {userData?.address || "Not provided"}
+            </div>
+          </div>
+          <div>
+            <div className="flex justify-between items-center">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: colors.productTitle }}
+              >
+                {t("email_Verify")}
+              </label>
+              {userData?.email_verification_status === "Not Verified" && (
+                <button
+                  onClick={() => setShowVerifyModal(true)}
+                  className="block text-md font-bold mb-1 cursor-pointer hover:underline"
+                  style={{ color: colors.productTitle }}
+                >
+                  {t("Verify")}
+                </button>
+              )}
+            </div>
+            <div
+              className="w-full p-3 rounded-md"
+              style={{
+                backgroundColor: colors.borderLight,
+                color: colors.productName,
+              }}
+            >
+              {userData?.email_verification_status || "Not provided"}
             </div>
           </div>
         </div>
@@ -433,11 +483,12 @@ const Profile = () => {
         )}
       </AnimatePresence>
 
+      {/* Forget Password */}
       <div className="w-full bg-white p-8 shadow-md border-t border-gray-200 my-5">
         <button
           type="button"
           onClick={() => setShowForgotModal(true)}
-          className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline"
+          className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline cursor-pointer"
           style={{ color: colors.productTitle }}
         >
           {language === "ar" ? "هل نسيت كلمة المرور؟" : "Forget Password?"}
@@ -459,7 +510,9 @@ const Profile = () => {
                 className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md"
               >
                 <h3 className="text-xl font-semibold mb-4 text-center text-[#333e2c]">
-                  Forgot Password
+                  {language === "ar"
+                    ? "ادخل الاميل الالكتروني الخاص بك"
+                    : "Enter your email"}
                 </h3>
                 <input
                   type="email"
@@ -472,7 +525,7 @@ const Profile = () => {
                   <button
                     type="button"
                     onClick={() => setShowForgotModal(false)}
-                    className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition"
+                    className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition cursor-pointer"
                   >
                     {language === "ar" ? "إلغاء" : "Cancel"}
                   </button>
@@ -480,7 +533,9 @@ const Profile = () => {
                     type="button"
                     onClick={handleForgotPassword}
                     className={`px-4 py-2 bg-[#333e2c] text-white rounded-md hover:bg-[#2b3425] transition ${
-                      loading ? "cursor-not-allowed opacity-35" : ""
+                      loading
+                        ? "cursor-not-allowed opacity-35"
+                        : "cursor-pointer"
                     }`}
                     disabled={loading}
                   >
@@ -498,6 +553,81 @@ const Profile = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Verify Email */}
+      {userData?.email_verification_status === "Not Verified" && (
+        <div className="w-full bg-white p-8 shadow-md border-t border-gray-200 my-5">
+          <button
+            type="button"
+            onClick={() => setShowVerifyModal(true)}
+            className="text-2xl font-semibold hover:text-gray-600 transition duration-200 hover:underline cursor-pointer"
+            style={{ color: colors.productTitle }}
+          >
+            {language === "ar"
+              ? "التحقق من بريدك الإلكتروني؟"
+              : "Verify Your Email?"}
+          </button>
+
+          <AnimatePresence>
+            {showVerifyModal && (
+              <motion.div
+                className="fixed inset-0 bg-black/50 flex items-center justify-center z-[999] h-[100vh]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white p-6 rounded-xl shadow-lg w-[90%] max-w-md"
+                >
+                  <h3 className="text-xl font-semibold mb-4 text-center text-[#333e2c]">
+                    {language === "ar"
+                      ? "ادخل الاميل الالكتروني الخاص بك"
+                      : "Enter your email"}
+                  </h3>
+                  <input
+                    type="email"
+                    value={verification}
+                    onChange={(e) => setVerification(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#333e2c]"
+                    placeholder="Enter your email"
+                  />
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setShowVerifyModal(false)}
+                      className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition cursor-pointer"
+                    >
+                      {language === "ar" ? "إلغاء" : "Cancel"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleVerifyEmail}
+                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-md hover:bg-[#2b3425] transition ${
+                        loading
+                          ? "cursor-not-allowed opacity-35"
+                          : "cursor-pointer"
+                      }`}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <DotSpinner size="20" speed="0.9" color="#fff" />
+                      ) : language === "ar" ? (
+                        "إرسال الإيميل"
+                      ) : (
+                        "Send Email"
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       <div className="w-full bg-white p-8 shadow-md border-t border-gray-200">
         <div className="flex justify-start items-start mb-6 gap-5">

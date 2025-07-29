@@ -34,6 +34,7 @@ const AdminProducts = () => {
     setPrimaryImage,
     addProductDiscount,
     assignImagesToVariant,
+    IsFeaturedProduct,
     deleteProduct,
     loading,
     error,
@@ -240,14 +241,12 @@ const AdminProducts = () => {
               onChange={handleSearch}
               placeholder={t("search_products")}
               dir={language === "ar" ? "rtl" : "ltr"}
-              className={`w-[190px] sm:w-full focus:w-full ${
-                language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
-              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 placeholder:text-gray-400`}
+              className={`w-[190px] sm:w-full focus:w-full ${language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
+                } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200 placeholder:text-gray-400`}
             />
             <span
-              className={`absolute top-1/2 transform -translate-y-1/2 ${
-                language === "ar" ? "right-3" : "left-3"
-              }`}
+              className={`absolute top-1/2 transform -translate-y-1/2 ${language === "ar" ? "right-3" : "left-3"
+                }`}
             >
               <Search size={17} className="text-gray-500" />
             </span>
@@ -345,39 +344,37 @@ const AdminProducts = () => {
                     {t("product_image")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
-                      language === "ar" ? "text-right" : "text-left"
-                    }`}
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${language === "ar" ? "text-right" : "text-left"
+                      }`}
                   >
                     {t("name")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
-                      language === "ar" ? "text-right" : "text-left"
-                    }`}
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${language === "ar" ? "text-right" : "text-left"
+                      }`}
                   >
                     {t("description")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
-                      language === "ar" ? "text-right" : "text-left"
-                    }`}
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${language === "ar" ? "text-right" : "text-left"
+                      }`}
                   >
                     {t("price")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
-                      language === "ar" ? "text-right" : "text-left"
-                    }`}
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${language === "ar" ? "text-right" : "text-left"
+                      }`}
                   >
                     {t("stock")}
                   </th>
                   <th
-                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${
-                      language === "ar" ? "text-right" : "text-left"
-                    }`}
+                    className={`p-2 sm:p-3 text-xs font-semibold text-gray-700 ${language === "ar" ? "text-right" : "text-left"
+                      }`}
                   >
                     {t("discount_percentage")}
+                  </th>
+                  <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
+                    {t("add_to_home")}
                   </th>
                   <th className="p-2 sm:p-3 text-center text-xs font-semibold text-gray-700">
                     {t("actions")}
@@ -402,48 +399,59 @@ const AdminProducts = () => {
                       />
                     </td>
                     <td
-                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 whitespace-nowrap ${
-                        language === "ar" ? "text-right" : "text-left"
-                      }`}
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 whitespace-nowrap ${language === "ar" ? "text-right" : "text-left"
+                        }`}
                       data-label={t("name")}
                       title={product.name}
                     >
                       {product.name.slice(0, 30)}...
                     </td>
                     <td
-                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[100px] sm:max-w-[200px] truncate ${
-                        language === "ar" ? "text-right" : "text-left"
-                      }`}
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-800 max-w-[100px] sm:max-w-[200px] truncate ${language === "ar" ? "text-right" : "text-left"
+                        }`}
                       data-label={t("description")}
                       title={product.description}
                     >
                       {product.description.slice(0, 30)}...
                     </td>
                     <td
-                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
-                        language === "ar" ? "text-right" : "text-left"
-                      }`}
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${language === "ar" ? "text-right" : "text-left"
+                        }`}
                       data-label={t("price")}
                     >
                       {product.min_price} {language === "ar" ? "د.ك" : "KWD"}
                     </td>
                     <td
-                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
-                        language === "ar" ? "text-right" : "text-left"
-                      }`}
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${language === "ar" ? "text-right" : "text-left"
+                        }`}
                       data-label={t("stock")}
                     >
                       {product.total_stock}
                     </td>
                     <td
-                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${
-                        language === "ar" ? "text-right" : "text-left"
-                      }`}
+                      className={`p-2 sm:p-3 text-xs font-medium text-gray-500 ${language === "ar" ? "text-right" : "text-left"
+                        }`}
                       data-label={t("stock")}
                     >
                       {product.discount_value
                         ? product.discount_value + "%"
                         : t("no_discount")}
+                    </td>
+                    <td className="p-2 sm:p-3 text-center" data-label={t("add_to_home")}>
+                      <label className="inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={!!product.is_featured}
+                          onChange={() => IsFeaturedProduct(product.id)}
+                          disabled={loading}
+                        />
+                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-green-500 relative transition-colors duration-200">
+                          <span
+                            className={`absolute ${product.is_featured ? "right-1" : "left-1"} top-1 bg-white w-4 h-4 rounded-full transition-transform duration-200 peer-checked:translate-x-5`}
+                          ></span>
+                        </div>
+                      </label>
                     </td>
                     <td className="p-2 sm:p-3" data-label={t("actions")}>
                       <div className="flex justify-center items-center gap-2 flex-wrap">
@@ -503,11 +511,10 @@ const AdminProducts = () => {
                   <button
                     key={p}
                     onClick={() => handlePageChange(p)}
-                    className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${
-                      page === p
-                        ? "bg-[#333e2c] text-white hover:bg-[#333e2c]"
-                        : "hover:bg-gray-200"
-                    } transition-all duration-200`}
+                    className={`px-2 sm:px-3 py-1 border rounded text-xs sm:text-sm cursor-pointer ${page === p
+                      ? "bg-[#333e2c] text-white hover:bg-[#333e2c]"
+                      : "hover:bg-gray-200"
+                      } transition-all duration-200`}
                   >
                     {p}
                   </button>

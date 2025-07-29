@@ -8,6 +8,7 @@ import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
 import CheckOut from "../pages/CheckOut/CheckOut.jsx";
 import AdminHero from "../dashboard/pages/Hero/AdminHero.jsx";
 import ResetPassword from "../pages/Auth/Reset-Password/ResetPassword.jsx";
+import EmailVerification from "../pages/Auth/Email-Verification/EmailVerification.jsx";
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
@@ -169,6 +170,14 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <ResetPassword />
+          </Suspense>
+        ),
+      },
+      {
+        path: "email-verification",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <EmailVerification />
           </Suspense>
         ),
       },

@@ -5,8 +5,7 @@ import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useEffect } from "react";
 
 const useHome = (perPage = 8) => {
-  const { language } = useLanguage();
-  const { token, profile } = useAuthContext();
+  const { language } = useLanguage();  
   const BaseURL = "https://le-souk.dinamo-app.com/api";
 
   // Attach language header globally
@@ -29,10 +28,10 @@ const useHome = (perPage = 8) => {
 
   // Fetch Products
   const productsQuery = useQuery({
-    queryKey: ["products", perPage, language],
+    queryKey: ["products", language],
     queryFn: async () => {
       const res = await axios.get(
-        `${BaseURL}/products?per_page=${perPage}&with=images,categories,variants`
+        `${BaseURL}/products/homepage?with=images,variants,categories`
       );
       return res.data.data || [];
     },
@@ -48,9 +47,6 @@ const useHome = (perPage = 8) => {
       return res.data.data || [];
     },
   });
-
-  // Fetch Admin Packages — only if token exists and role is admin
-  const isAdmin = profile?.role === "admin";
 
   const packagesQuery = useQuery({
     queryKey: ["packages", perPage, language],

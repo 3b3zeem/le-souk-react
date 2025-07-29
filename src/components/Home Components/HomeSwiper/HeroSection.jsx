@@ -20,7 +20,7 @@ const HeroSection = () => {
   const NextArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className={`absolute top-1/4 lg:top-1/2 right-4 sm:right-6 md:right-10 -translate-y-1/2 transition-all duration-500 ease-in-out rounded p-2 z-10 cursor-pointer hidden md:block ${
+      className={`absolute top-1/2 right-4 sm:right-6 md:right-10 -translate-y-1/2 transition-all duration-500 ease-in-out rounded p-2 z-10 cursor-pointer hidden md:block ${
         isHovered
           ? "translate-x-0 opacity-100 rotate-0"
           : "translate-x-8 opacity-0 rotate-12"
@@ -46,7 +46,7 @@ const HeroSection = () => {
   const PrevArrow = ({ onClick }) => (
     <button
       onClick={onClick}
-      className={`absolute top-1/4 lg:top-1/2 left-4 sm:left-6 md:left-10 -translate-y-1/2 transition-all duration-500 ease-in-out rounded p-2 z-10 cursor-pointer hidden md:block ${
+      className={`absolute top-1/2 left-4 sm:left-6 md:left-10 -translate-y-1/2 transition-all duration-500 ease-in-out rounded p-2 z-10 cursor-pointer hidden md:block ${
         isHovered
           ? "translate-x-0 opacity-100 rotate-0"
           : "-translate-x-8 opacity-0 -rotate-12"
@@ -95,7 +95,7 @@ const HeroSection = () => {
   if (!heroSliders || heroSliders.length === 0) null;
 
   return (
-    <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[80vh] max-h-[600px] p-2 sm:p-10 mt-2">
+    <div className="relative w-full h-[25vh] sm:h-[40vh] md:h-[45vh] lg:h-[80vh] max-h-[600px] mt-7">
       <div
         className="relative w-full h-full"
         onMouseEnter={() => setIsHovered(true)}
@@ -105,77 +105,33 @@ const HeroSection = () => {
           {(heroSliders || []).map((slide, index) => (
             <div
               key={index}
-              className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[80vh] max-h-[700px] flex items-center justify-center"
+              className="relative w-full h-[25vh] sm:h-[40vh] md:h-[45vh] lg:h-[80vh] max-h-[700px] flex items-center justify-center"
             >
-              <div className="absolute inset-0 w-full h-full">
+              <div className="w-full h-full">
                 <img
                   src={slide.image_url}
                   alt={slide.title}
-                  className="w-full h-full object-cover opacity-85"
+                  className="w-full h-full object-contain object-center opacity-85"
                 />
               </div>
 
               <section
-                className={`h-full flex items-end justify-start w-full`}
+                className={`absolute inset-0 h-full flex items-end justify-start w-full`}
               >
-                <div className={`z-100 lg:ms-31 ms-0 mb-25`}>
-                    <Link
-                      to={"/products"}
-                      className="inline-block bg-transparent px-6 py-3 sm:px-6 sm:py-3 text-[#333e2c] text-sm sm:text-base font-medium rounded-full hover:bg-[#333e2c] hover:text-white transition-colors duration-300"
-                      style={{ border: `1px solid ${colors.primary}` }}
-                    >
-                      Shop Now
-                    </Link>
+                <div
+                  className={`z-100 lg:ms-43 md:ms-40 sm:ms-15 ms-7 lg:mb-30 md:mb-13 sm:mb-10 mb-10`}>
+                  <Link
+                    to={"/products"}
+                    className="inline-block bg-transparent px-3 py-1 md:px-6 md:py-3 text-[#333e2c] text-[12px] md:text-base font-medium rounded-full hover:bg-[#333e2c] hover:text-white transition-colors duration-300"
+                    style={{ border: `1px solid ${colors.primary}` }}
+                  >
+                    Shop Now
+                  </Link>
                 </div>
               </section>
             </div>
           ))}
         </Slider>
-
-        {/* <div
-              key={index}
-              className="relative w-full h-[70vh] sm:h-[80vh] md:h-[85vh] lg:h-[80vh] max-h-[700px] flex items-center justify-center"
-            >
-              <div className="absolute inset-0 w-full h-full">
-                <img
-                  src={slide.image_url}
-                  alt={slide.title}
-                  className="w-full h-full object-cover opacity-85"
-                />
-              </div>
-
-              <section
-                className={`relative h-full flex items-center ${
-                  language === "ar" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div className={`z-10 flex px-4 sm:px-6 md:px-10 ${language === "ar" ? "lg:me-30" : "lg:ms-30"}`}>
-                  <div className={language === "ar" ? "text-right" : "text-left"}>
-                    <h2
-                      className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4 w-[90%] font-serif "
-                      style={{ color: colors.text }}
-                    >
-                      {slide.title}
-                    </h2>
-                    <p
-                      className="text-sm sm:text-base md:text-lg mb-4 sm:mb-6 mt-2 sm:mt-4 md:mt-6 w-[90%]"
-                      style={{ color: colors.lightText }}
-                    >
-                      {slide.description}
-                    </p>
-                    <Link
-                      to={slide.link}
-                      className="inline-block px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base customEffect font-medium"
-                      style={{ backgroundColor: colors.primary }}
-                    >
-                      <span>
-                        {slide.button_text}
-                      </span>
-                    </Link>
-                  </div>
-                </div>
-              </section>
-            </div> */}
       </div>
       {/* Dots */}
       <style>

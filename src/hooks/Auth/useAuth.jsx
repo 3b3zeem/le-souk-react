@@ -35,14 +35,6 @@ const useAuth = () => {
         }
       );
 
-      // const data = res.data;
-
-      // setUser(data.data);
-      // setToken(data.data.token);
-
-      // localStorage.setItem("user", JSON.stringify(data.data));
-      // localStorage.setItem("token", data.data.token);
-
       setLoading(false);
       return res.data;
     } catch (err) {

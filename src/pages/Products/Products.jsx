@@ -46,7 +46,7 @@ const Products = () => {
   );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500);
-  const [perPage, setPerPage] = useState(9);
+  const [perPage, setPerPage] = useState(12);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("created_at");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -420,7 +420,7 @@ const Products = () => {
                 <span className="text-gray-700 font-semibold">
                   {language === "ar" ? "عرض" : "Show"} :
                 </span>
-                {[9, 12, 18, 24].map((num, idx, arr) => (
+                {[12, 18, 24, 36].map((num, idx, arr) => (
                   <React.Fragment key={num}>
                     <span
                       onClick={() => {
@@ -642,7 +642,7 @@ const Products = () => {
 
                             {/* Price */}
                             <div className="flex items-end gap-2 mb-2">
-                              {product.on_sale === true &&
+                              {product.on_sale === true && product.discount_value > 0 &&
                               product.min_sale_price &&
                               product.min_sale_price !== product.min_price ? (
                                 <div className="flex flex-col">
@@ -676,7 +676,7 @@ const Products = () => {
                             </div>
 
                             {/* Discount duration */}
-                            {product.on_sale === true &&
+                            {product.on_sale === true && product.discount_value > 0 &&
                               product.sale_starts_at &&
                               product.sale_ends_at &&
                               (() => {
@@ -918,7 +918,7 @@ const Products = () => {
 
                           {/* Price */}
                           <div className="flex items-end gap-2 mb-2">
-                            {product.on_sale === true &&
+                            {product.on_sale === true && product.discount_value > 0 &&
                             product.min_sale_price &&
                             product.min_sale_price !== product.min_price ? (
                               <div className="flex flex-col">
@@ -952,7 +952,7 @@ const Products = () => {
                           </div>
 
                           {/* Discount duration */}
-                          {product.on_sale === true &&
+                          {product.on_sale === true && product.discount_value > 0 &&
                             product.sale_starts_at &&
                             product.sale_ends_at &&
                             (() => {
