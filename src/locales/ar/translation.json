@@ -413,5 +413,10 @@
   "search_settings": "بحث في الاعدادات...",
   "is_featured": "مُميز؟",
   "basic_distribution": "التوزيع العام",
-  "basic_bar_chart": "رسم بياني عمودي للتوزيع"
+  "basic_bar_chart": "رسم بياني عمودي للتوزيع",
+  "email_verification": "التحقق من البريد الإلكتروني ",
+  "admin_status": " الحالة" ,
+  "orders_count": "عدد الطلبات",
+  "User Details": "تفاصيل المستخدم" ,
+  "change_status":"تغيير الحالة" 
 }

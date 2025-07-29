@@ -411,5 +411,11 @@
   "search_settings": "Search Settings...",
   "is_featured": "Is Featured?",
   "basic_distribution": "Basic Distribution",
-  "basic_bar_chart": "Bar Chart Distribution"
+  "basic_bar_chart": "Bar Chart Distribution",
+  "email_verification": "Email Verification",
+  "admin_status": "Status",
+  "orders_count": "Orders Count",
+  "User Details": "User Details",
+  "change_status":"Change Status"
+
 }
