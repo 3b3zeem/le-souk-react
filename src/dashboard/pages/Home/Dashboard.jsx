@@ -21,7 +21,7 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { stats, loading, error } = useDashboard();
+  const { stats, userStats, loading, error } = useDashboard();
   const navigate = useNavigate();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -108,6 +108,7 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Basic Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Pie Chart */}
           <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
@@ -160,6 +161,60 @@ const Dashboard = () => {
                 <Legend />
                 <Bar dataKey="value" fill="#333e2c" />
               </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* User Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {/* Pie Chart */}
+          <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+            <h2 className="text-lg font-semibold text-gray-700 mb-4">
+              {t("basic_User_distribution")}
+            </h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  dataKey="value"
+                  nameKey="name"
+                  data={[
+                    { name: t("total_users"), value: userStats.total_users },
+                    { name: t("admin_users"), value: userStats.admin_users },
+                    {
+                      name: t("regular_users"),
+                      value: userStats.regular_users,
+                    },
+                    {
+                      name: t("verified_users"),
+                      value: userStats.verified_users,
+                    },
+                    {
+                      name: t("unverified_users"),
+                      value: userStats.unverified_users,
+                    },
+                    {
+                      name: t("users_this_month"),
+                      value: userStats.users_this_month,
+                    },
+                    { name: t("users_today"), value: userStats.users_today },
+                  ]}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  label
+                >
+                  <Cell fill="#10B981" />
+                  <Cell fill="#3B82F6" />
+                  <Cell fill="#F59E0B" />
+                  <Cell fill="#8B5CF6" />
+                  <Cell fill="#EF4444" />
+                  <Cell fill="#14B8A6" />
+                  <Cell fill="#6366F1" />
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>

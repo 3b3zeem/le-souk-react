@@ -416,11 +416,16 @@
   "remove_from_home": "Remove from Home",
   "featured_products": "Featured Products",
   "email_Verify": "Email Verified?",
-  "basic_bar_chart": "Bar Chart Distribution",
   "email_verification": "Email Verification",
   "admin_status": "Status",
   "orders_count": "Orders Count",
   "User Details": "User Details",
-  "change_status":"Change Status"
-
+  "change_status":"Change Status",
+  "admin_users": "Admin Users",
+  "regular_users": "Regular Users",
+  "verified_users": "Verified Users",
+  "unverified_users": "Unverified Users",
+  "users_this_month": "Users This Month",
+  "users_today": "Users Today",
+  "basic_User_distribution": "Basic User Distribution"
 }
