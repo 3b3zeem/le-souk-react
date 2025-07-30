@@ -5,7 +5,8 @@ import imageCompression from "browser-image-compression";
 
 const defaultForm = {
   is_active: true,
-  image: null,
+  en: { image: null },
+  ar: { image: null },
 };
 
 const AddEditSliderForm = ({
@@ -18,21 +19,31 @@ const AddEditSliderForm = ({
   language,
 }) => {
   const [form, setForm] = useState(defaultForm);
-  const [imagePreview, setImagePreview] = useState(null);
-  const imageInputRef = useRef(null);
+  const [imagePreview, setImagePreview] = useState({ en: null, ar: null });
+  const [error, setError] = useState(null);
+  const imageInputRef = useRef({ en: null, ar: null });
 
   useEffect(() => {
-    if (initialData) {
+    if (!isOpen) return;
+
+    if (!initialData) {
+      setForm(defaultForm);
+      setImagePreview({ en: null, ar: null });
+    } else {
       setForm({
         is_active: initialData.is_active ?? true,
-        image: null,
+        en: { image: null },
+        ar: { image: null },
       });
-      setImagePreview(initialData.image_url || null);
-    } else {
-      setForm(defaultForm);
-      setImagePreview(null);
+      setImagePreview({
+        en: initialData?.images?.en?.image_url || null,
+        ar: initialData?.images?.ar?.image_url || null,
+      });
     }
-    if (imageInputRef.current) imageInputRef.current.value = "";
+
+    if (imageInputRef.current.en) imageInputRef.current.en.value = "";
+    if (imageInputRef.current.ar) imageInputRef.current.ar.value = "";
+    setError(null);
   }, [initialData, isOpen]);
 
   const handleInputChange = (e) => {
@@ -55,7 +66,7 @@ const AddEditSliderForm = ({
     }
   };
 
-  const handleImageChange = async (e) => {
+  const handleImageChange = async (e, lang) => {
     const file = e.target.files[0];
     if (!file) return;
     try {
@@ -64,22 +75,42 @@ const AddEditSliderForm = ({
         maxWidthOrHeight: 1920,
         useWebWorker: true,
       });
-      setForm((prev) => ({ ...prev, image: compressed }));
-      setImagePreview(URL.createObjectURL(compressed));
+      setForm((prev) => ({
+        ...prev,
+        [lang]: {
+          ...prev[lang],
+          image: compressed,
+        },
+      }));
+      setImagePreview((prev) => ({
+        ...prev,
+        [lang]: URL.createObjectURL(compressed),
+      }));
+      setError(null);
     } catch (err) {
-      setForm((prev) => ({ ...prev, image: file }));
-      setImagePreview(URL.createObjectURL(file));
+      setForm((prev) => ({
+        ...prev,
+        [lang]: {
+          ...prev[lang],
+          image: file,
+        },
+      }));
+      setImagePreview((prev) => ({
+        ...prev,
+        [lang]: URL.createObjectURL(file),
+      }));
+      setError(`Error compressing ${lang} image: ${err.message}`);
     }
   };
-
-  // const handleTab = (tab) => setActiveTab(tab);
 
   const handleClose = () => {
     setIsOpen(false);
     setTimeout(() => {
       setForm(defaultForm);
-      setImagePreview(null);
-      if (imageInputRef.current) imageInputRef.current.value = "";
+      setImagePreview({ en: null, ar: null });
+      if (imageInputRef.current.en) imageInputRef.current.en.value = "";
+      if (imageInputRef.current.ar) imageInputRef.current.ar.value = "";
+      setError(null);
     }, 300);
   };
 
@@ -88,11 +119,26 @@ const AddEditSliderForm = ({
     const formData = new FormData();
     formData.append("is_active", form.is_active ? 1 : 0);
 
-    // Handle image requirement for API
-    if (form.image) {
-      formData.append("image", form.image);
-    } else {
-      formData.append("image_url", initialData.image_url);
+    // English Image (Add logic)
+    if (!initialData && !form.en.image) {
+      setError("The Arabic image is required.");
+      return;
+    }
+    if (form.en.image) {
+      formData.append("en[image]", form.en.image);
+    } else if (initialData?.images?.en?.image_url) {
+      formData.append("en_image_url", initialData?.images?.en?.image_url);
+    }
+
+    // Arabic Image (Add logic)
+    if (!initialData && !form.ar.image) {
+      setError("The Arabic image is required.");
+      return;
+    }
+    if (form.ar.image) {
+      formData.append("ar[image]", form.ar.image);
+    } else if (initialData?.images?.ar?.image_url) {
+      formData.append("ar_image_url", initialData?.images?.ar?.image_url);
     }
 
     const ok = await onSubmit(formData);
@@ -115,7 +161,7 @@ const AddEditSliderForm = ({
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 40 }}
             transition={{ duration: 0.3 }}
-            className="relative bg-white rounded-3xl shadow-2xl w-full max-w-2xl p-8"
+            className="relative bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8"
             onClick={(e) => e.stopPropagation()}
             onSubmit={handleSubmit}
             dir={language === "ar" ? "rtl" : "ltr"}
@@ -130,31 +176,77 @@ const AddEditSliderForm = ({
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               {initialData ? t("editSliderHero") : t("addSliderHero")}
             </h2>
+            {error && (
+              <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+                {error}
+              </div>
+            )}
             {/* Form Fields */}
-            <div className="grid grid-cols-1 gap-5">
-              {/* Image */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* English Image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("image")}
+                  {t("image")} (EN)
                 </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  ref={imageInputRef}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-[#333e2c] focus:border-[#333e2c] transition-all focus:outline-none cursor-pointer"
-                  required={!initialData || !initialData.image_url}
-                />
-                {imagePreview && (
-                  <div className="flex justify-center w-full mt-2">
-                    <img
-                    src={imagePreview}
-                    alt="preview"
-                    className="rounded-lg w-full h-50 object-cover border"
+                <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-1">
+                  <label
+                    htmlFor="file-en"
+                    className="cursor-pointer flex items-center justify-center w-full h-52 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+                  >
+                    {imagePreview.en ? (
+                      <img
+                        src={imagePreview.en}
+                        alt="Current/Selected English Image"
+                        className="w-full h-full object-cover rounded"
+                      />
+                    ) : (
+                      <span className="text-gray-500">{t("uploadImage")}</span>
+                    )}
+                  </label>
+                  <input
+                    id="file-en"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, "en")}
+                    ref={(el) => (imageInputRef.current.en = el)}
+                    className="hidden"
+                    required={!initialData?.images?.en?.image_url}
                   />
-                  </div>
-                )}
+                </div>
               </div>
+
+              {/* Arabic Image */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("image")} (AR)
+                </label>
+                <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-1">
+                  <label
+                    htmlFor="file-ar"
+                    className="cursor-pointer flex items-center justify-center w-full h-52 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+                  >
+                    {imagePreview.ar ? (
+                      <img
+                        src={imagePreview.ar}
+                        alt="Current/Selected Arabic Image"
+                        className="w-full h-full object-cover rounded"
+                      />
+                    ) : (
+                      <span className="text-gray-500">{t("uploadImage")}</span>
+                    )}
+                  </label>
+                  <input
+                    id="file-ar"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageChange(e, "ar")}
+                    ref={(el) => (imageInputRef.current.ar = el)}
+                    className="hidden"
+                    required={!initialData?.images?.ar?.image_url}
+                  />
+                </div>
+              </div>
+
               {/* is_active */}
               <div className="flex items-center gap-2">
                 <input

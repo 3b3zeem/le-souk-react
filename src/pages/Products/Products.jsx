@@ -347,14 +347,14 @@ const Products = () => {
   useOutsideAlerter(sortDropdownRef, setSortDropdownOpen);
 
   return (
-    <div>
+    <React.Fragment>
       <Meta
         title="Explore Products"
         description="Discover a wide range of products available for purchase."
       />
 
       {/* Shop Banner */}
-      <div className="relative w-full h-65 mb-8 overflow-hidden shadow-md">
+      <div className="relative w-full h-100 mb-8 overflow-hidden shadow-md">
         <img
           src={bannerUrl}
           alt="Shop Banner"
@@ -1002,7 +1002,7 @@ const Products = () => {
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

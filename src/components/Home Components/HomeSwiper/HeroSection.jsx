@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useHero } from "../../../hooks/Hero/useHero";
 import Loader from "../../../layouts/Loader";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const colors = {
   primary: "#333e2c",
@@ -16,6 +17,7 @@ const colors = {
 const HeroSection = () => {
   const [isHovered, setIsHovered] = useState(false);
   const { data: heroSliders, isLoading } = useHero();
+  const { language } = useLanguage();
 
   const NextArrow = ({ onClick }) => (
     <button
@@ -71,15 +73,15 @@ const HeroSection = () => {
 
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: heroSliders?.length > 1,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: Math.min(heroSliders?.length, 4),
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
+    nextArrow: heroSliders?.length > 1 ? <NextArrow /> : null,
+    prevArrow: heroSliders?.length > 1 ? <PrevArrow /> : null,
     customPaging: (i) => (
       <div
         className="w-4 h-4 rounded-full border-2 box-border flex items-center justify-center transition-all duration-300"
@@ -92,7 +94,7 @@ const HeroSection = () => {
 
   if (isLoading) <Loader />;
 
-  if (!heroSliders || heroSliders.length === 0) null;
+  if (!heroSliders || heroSliders.length === 0) return null;
 
   return (
     <div className="relative w-full h-[25vh] sm:h-[40vh] md:h-[45vh] lg:h-[80vh] max-h-[600px] mt-7">
@@ -109,7 +111,7 @@ const HeroSection = () => {
             >
               <div className="w-full h-full">
                 <img
-                  src={slide.image_url}
+                  src={slide?.images?.[language]?.image_url || slide.image_url}
                   alt={slide.title}
                   className="w-full h-full object-contain object-center opacity-85"
                 />
@@ -119,7 +121,8 @@ const HeroSection = () => {
                 className={`absolute inset-0 h-full flex items-end justify-start w-full`}
               >
                 <div
-                  className={`z-100 lg:ms-43 md:ms-40 sm:ms-15 ms-7 lg:mb-30 md:mb-13 sm:mb-10 mb-10`}>
+                  className={`z-100 lg:ms-43 md:ms-40 sm:ms-15 ms-7 lg:mb-30 md:mb-13 sm:mb-10 mb-10`}
+                >
                   <Link
                     to={"/products"}
                     className="inline-block bg-transparent px-3 py-1 md:px-6 md:py-3 text-[#333e2c] text-[12px] md:text-base font-medium rounded-full hover:bg-[#333e2c] hover:text-white transition-colors duration-300"

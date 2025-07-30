@@ -46,7 +46,14 @@ const useAdminHero = () => {
           },
         }
       );
-      setHeros(Array.isArray(response.data.data) ? response.data.data : []);
+      setHeros(
+      Array.isArray(response.data.data)
+        ? response.data.data.map((hero) => ({
+            ...hero,
+            images: hero.images || { en: {}, ar: {} },
+          }))
+        : []
+    );
       setTotalPages(response.data.meta?.last_page || 1);
       setTotalCount(response.data.meta?.total || 0);
       setCurrentPage(response.data.meta?.current_page || 1);
@@ -74,7 +81,7 @@ const useAdminHero = () => {
           },
         }
       );
-      toast.success("Slider hero added successfully!");
+      toast.success(response.data.message);
       fetchHeros();
       return true;
     } catch (err) {
