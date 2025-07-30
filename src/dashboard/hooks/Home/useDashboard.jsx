@@ -9,7 +9,7 @@ const useDashboard = () => {
     users_count: 0,
     products_count: 0,
   });
-  const [userStats, setUserStats] = useState(null);
+  const [userStats, setUserStats] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
