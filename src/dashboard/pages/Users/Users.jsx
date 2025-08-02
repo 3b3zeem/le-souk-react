@@ -13,6 +13,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 import Meta from "../../../components/Meta/Meta";
 import toast from "react-hot-toast";
 import UserDetails from "./UserDetails";
+import UserEdit from "./UserEdit";
 
 const Users = () => {
   const { language } = useLanguage();
@@ -20,6 +21,7 @@ const Users = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
 
   const {
@@ -33,6 +35,7 @@ const Users = () => {
     status,
     deleteUser,
     getUserById,
+    verifyEmail
   } = useUsers();
 
   const updateSearchParams = (newParams) => {
@@ -50,9 +53,13 @@ const Users = () => {
     updateSearchParams({ search, page: newPage, status });
   };
 
-  const handleEdit = (userId) => {
-    console.log(`Edit user with ID: ${userId}`);
-  };
+ const handleEdit = (userId) => {
+  setSelectedUser(users.find(user => user.id === userId));
+  setIsEditModalOpen(true);
+};
+const verifyUserEmail= async(userId)=>{
+  await verifyEmail(userId)
+}
 
   const handleDelete = async (userId) => {
     await deleteUser(userId);
@@ -80,12 +87,20 @@ const Users = () => {
       setModalLoading(false);
     }
   };
-
+const handleUserUpdate = () => {
+  // The user list is already updated in the updateUser function
+  // Just close the modal
+  setIsEditModalOpen(false);
+  setSelectedUser(null);
+};
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
   };
-
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedUser(null);
+  };
   useEffect(() => {
     if (error) {
       toast.error(error.message);
@@ -156,7 +171,10 @@ const Users = () => {
                     {t("admin_status") || "Admin Status"}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
-                    {t("change_status") || "Admin Status"}
+                    {t("change_status") }
+                  </th>
+                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+                    {t("email_verification")  }
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
                     {t("actions")}
@@ -189,8 +207,7 @@ const Users = () => {
                       <div className="flex justify-center items-center">
                         <span
                           className={`ml-2 text-xs font-medium px-2 py-1 rounded ${
-                            user?.admin_status_text === "Admin" ||
-                            user?.admin_status_text === "super_admin"
+                            user?.admin_status_text === "Admin"|| user?.admin_status_text === "مدير"
                               ? "bg-[#e8e4dd] text-[#333e2c]"
                               : "bg-gray-100 text-[gray-800]"
                           }`}
@@ -199,6 +216,7 @@ const Users = () => {
                         </span>
                       </div>
                     </td>
+                  
                     <td>
                       <div className="flex justify-center items-center">
                         <button
@@ -213,12 +231,21 @@ const Users = () => {
                           }: ${user.is_admin ? "Admin" : "User"}`}
                         >
                           <span
-                            className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ${
+                            className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform duration-200 ${
                               user.is_admin ? "translate-x-6" : "translate-x-1"
                             }`}
                           />
                         </button>
                       </div>
+                    </td>
+                    <td className="p-2 flex justify-center items-center">
+                      <p className="ml-2 text-xs font-medium px-2 py-1 rounded">{user.email_verification_status}</p>
+                      {user.email_verification_status!="Verified"&&<>
+                      <button 
+                        onClick={()=> verifyUserEmail(user.id)}
+                        className="flex items-center py-1 gap-2 px-2 mx-2 sm:px-3 rounded-lg bg-blue-50 text-blue-600  hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm ">
+                           {t("verify")} 
+                      </button></>}
                     </td>
                     <td className="p-3">
                       <div className="flex justify-center items-center gap-2 flex-wrap">
@@ -313,6 +340,15 @@ const Users = () => {
         modalLoading={modalLoading}
         selectedUser={selectedUser}
         handleEdit={handleEdit}
+      />
+
+      <UserEdit
+        isModalOpen={isEditModalOpen}
+        closeModal={closeEditModal}
+        language={language}
+        t={t}
+        selectedUser={selectedUser}
+        onUserUpdate={handleUserUpdate}
       />
     </div>
   );

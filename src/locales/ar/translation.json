@@ -423,5 +423,15 @@
   "admin_status": " الحالة" ,
   "orders_count": "عدد الطلبات",
   "User Details": "تفاصيل المستخدم" ,
-  "change_status":"تغيير الحالة" 
+  "change_status":"تغيير الحالة",
+  "verify": "تحقق",
+  "profile_information": "معلومات الملف الشخصي",
+  "reset_password":"إعادة تعيين كلمة المرور",
+  "admin_access":" حق الوصول إلى الإدارة",
+  "permissions": "الأذونات",
+  "save_changes":"حفظ التغييرات",
+  "new_password":"كلمة مرور جديدة",
+  "confirm_password":"تأكيد كلمة المرور",
+  "enter_password":"أدخل كلمة المرور",
+  "password_requirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وحرف كبير واحد، وحرف صغير واحد، ورقم واحد، ورمز خاص واحد."
 }

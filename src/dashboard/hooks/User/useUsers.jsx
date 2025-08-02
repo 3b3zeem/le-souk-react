@@ -8,7 +8,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 const useUsers = () => {
   const [searchParams] = useSearchParams();
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null); // Changed from array to null
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -147,6 +147,7 @@ const useUsers = () => {
             : user
         )
       );
+      
       toast.success(
         `User has been ${
           updatedStatus ? "granted" : "revoked"
@@ -160,6 +161,121 @@ const useUsers = () => {
     }
   };
 
+  const verifyEmail = async (userId)=>{
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      const response = await axios.post(
+        `https://le-souk.dinamo-app.com/api/admin/users/${userId}/verify-email`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success(response.data.message);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === userId ? { ...user, email_verification_status: "verified" } : user
+        )
+      );
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to verify email";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    }
+  }
+
+
+const resetPassword = async (userId, passwordData) => {
+  try {
+    if (!token) {
+      throw new Error("No token found. Please log in.");
+    }
+
+    // Client-side validation before sending to server
+    if (!passwordData.password || passwordData.password.length <= 6) {
+      const errorMessage = "Password must be more than 6 characters";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    if (passwordData.password !== passwordData.password_confirmation) {
+      const errorMessage = "Passwords do not match";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
+    }
+
+    const response = await axios.post(
+      `https://le-souk.dinamo-app.com/api/admin/users/${userId}/reset-password`,
+      passwordData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    toast.success(response.data.message);
+    return response.data;
+  } catch (err) {
+    const errorMessage =
+      err.response?.data?.message || "Failed to reset user password";
+    setError(errorMessage);
+    toast.error(errorMessage);
+    throw err;
+  }
+}
+
+  // Enhanced updateUser function with proper file upload support
+ const updateUser = async (userId, userData) => {
+  try {
+    if (!token) {
+      throw new Error("No token found. Please log in.");
+    }
+
+    const response = await axios.put(
+      `https://le-souk.dinamo-app.com/api/admin/users/${userId}`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const updatedUser = response.data.data;
+    console.log(response.data);
+    
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === userId ? { ...user, ...updatedUser } : user
+      )
+    );
+    
+    toast.success("User updated successfully.");
+    return updatedUser;
+  } catch (err) {
+    console.error('Update user error:', err);
+    const errorMessage =
+      err.response?.data?.message || "Failed to update user information";
+    setError(errorMessage);
+    toast.error(errorMessage);
+    throw err;
+  }
+};
+
+ 
+
   return {
     users,
     user,
@@ -168,7 +284,10 @@ const useUsers = () => {
     totalPages,
     toggleAdminStatus,
     deleteUser,
+    updateUser,
     getUserById,
+    verifyEmail,
+    resetPassword
   };
 };
 
