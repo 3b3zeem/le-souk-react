@@ -97,7 +97,11 @@ const AdminHero = () => {
 
   // Edit handler
   const handleEdit = (hero) => {
-    setSelectedHero(hero);
+    const safeHero = {
+      ...hero,
+      images: hero.images || { en: {}, ar: {} },
+    };
+    setSelectedHero(safeHero);
     setIsFormOpen(true);
   };
 

@@ -9,6 +9,7 @@ const useDashboard = () => {
     users_count: 0,
     products_count: 0,
   });
+  const [userStats, setUserStats] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
@@ -60,10 +61,47 @@ const useDashboard = () => {
       }
     };
 
-    fetchStats();
-  }, [language]);
+    const fetchUserStats = async () => {
+      try {
+        setLoading(true);
 
-  return { stats, loading, error };
+        if (!token) {
+            throw new Error('No authentication token found');
+          }
+
+        const response = await axios.get(
+          "https://le-souk.dinamo-app.com/api/admin/users/statistics",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Accept-Language": `${language}`,
+            },
+          }
+        );
+        console.log(response.data.data);
+        
+        setUserStats(response.data.data);
+      } catch (err) {
+        if (err.response) {
+          if (err.response.status === 401) {
+            setError('Unauthorized: Invalid or expired token');
+          } else {
+            setError('Failed to fetch User statistics');
+          }
+        } else {
+          setError(err.message);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+    fetchUserStats();
+  }, [token, language]);
+
+  return { stats, userStats, loading, error };
 };
 
 export default useDashboard;
