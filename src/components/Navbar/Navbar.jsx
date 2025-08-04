@@ -19,11 +19,9 @@ import logo from "../../assets/Images/3x/navbar.png";
 import { useUserContext } from "../../context/User/UserContext";
 import useUserProfile from "../../hooks/Profile/useProfile";
 import { useLanguage } from "../../context/Language/LanguageContext";
-import LanguageDropdown from "../Language/LanguageDropdown";
 import { useTranslation } from "react-i18next";
 import NavbarTop from "./NavbarTop";
 import NavbarBottom from "./NavbarBottom";
-import { usePackageContext } from "../../context/Package/PackageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +33,7 @@ const Navbar = () => {
   const { userData } = useUserContext();
   const { profile, logout } = useAuthContext();
   const navigate = useNavigate();
-  const { cartCount } = useCart();
+  const { cartCount, isCartLoading } = useCart();
   const { wishlistCount } = useWishlist();
   const overlayRef = useRef(null);
   const avatarRef = useRef(null);
@@ -83,8 +81,6 @@ const Navbar = () => {
     textDark: "#333333",
     bgLight: "#ffffff",
   };
-
-  // const { packages } = usePackageContext();
 
   const navLinks = [
     { path: "/", label: t("home"), isPrimary: true },
@@ -163,7 +159,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200 transition-all duration-150  bg-[#e8e4dd] hidden md:block`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-150 bg-[#e8e4dd] hidden md:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
@@ -171,7 +167,7 @@ const Navbar = () => {
           scrolled={scrolled}
           handleCartClick={handleCartClick}
           handleWishlistClick={handleWishlistClick}
-          cartCount={cartCount}
+          cartCount={isCartLoading ? 0 : cartCount}
           wishlistCount={wishlistCount}
           isLoggedIn={isLoggedIn}
           isOpenUser={isOpenUser}
@@ -184,6 +180,7 @@ const Navbar = () => {
           language={language}
           renderAdminLink={renderAdminLink}
           handleLogout={handleLogout}
+          isCartLoading={isCartLoading}
         />
         <NavbarBottom
           navLinks={navLinks}
@@ -193,7 +190,7 @@ const Navbar = () => {
           iconsProps={{
             handleCartClick,
             handleWishlistClick,
-            cartCount,
+            cartCount: isCartLoading ? 0 : cartCount,
             wishlistCount,
             isWhite: scrolled,
           }}
@@ -216,7 +213,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150  bg-[#e8e4dd] md:hidden flex items-center justify-between ${
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150 bg-[#e8e4dd] md:hidden flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
@@ -237,7 +234,7 @@ const Navbar = () => {
                 style={{ borderColor: colors.borderLight }}
               >
                 <ShoppingCart size={20} className="text-gray-500" />
-                {cartCount > 0 && (
+                {cartCount > 0 && !isCartLoading && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full px-2 py-1 text-xs z-50">
                     {cartCount}
                   </span>
@@ -276,7 +273,7 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`h-[3px] w-full bg-gray-100 absolute  left-0 -bottom-0`}
+          className={`h-[3px] w-full bg-gray-100 absolute left-0 -bottom-0`}
         >
           <div
             className="h-full bg-[#333e2c] transition-all duration-150"

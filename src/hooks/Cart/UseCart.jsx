@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "../../context/Auth/AuthContext";
-import { useCart } from "../../context/Cart/CartContext";
-import toast from "react-hot-toast";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const useCartCRUD = () => {
   const [loading, setLoading] = useState(false);
@@ -15,7 +14,6 @@ const useCartCRUD = () => {
   const [discount, setDiscount] = useState(0);
   const [couponData, setCouponData] = useState(null);
 
-  const { addItemToCart, removeItemFromCart } = useCart();
   const { token } = useAuthContext();
   const { language } = useLanguage();
   const guestId = localStorage.getItem("guest_id");
@@ -36,7 +34,7 @@ const useCartCRUD = () => {
       "https://le-souk.dinamo-app.com/api/cart",
       {
         headers: {
-          ...(guestId && { 'X-Guest-ID': guestId }),
+          ...(guestId && { "X-Guest-ID": guestId }),
           ...(token && { Authorization: `Bearer ${token}` }),
           "Accept-Language": language,
         },
@@ -46,10 +44,12 @@ const useCartCRUD = () => {
     return {
       items: response.data.data.items,
       subtotal: response.data.data.subtotal,
+      items_count: response.data.data.items_count || 0,
     };
   };
+
   const {
-    data: cartData = { items: [], subtotal: 0 },
+    data: cartData = { items: [], subtotal: 0, items_count: 0 },
     refetch: fetchCart,
     isLoading,
     isError,
@@ -58,6 +58,8 @@ const useCartCRUD = () => {
     queryKey: ["cart", token, language],
     queryFn: () => fetchCartData(token, language),
     enabled: !!token || !!guestId,
+    retry: 3,
+    retryDelay: 1000,
   });
 
   useEffect(() => {
@@ -72,6 +74,7 @@ const useCartCRUD = () => {
 
   const cartItems = cartData.items;
   const subtotal = cartData.subtotal;
+  const itemsCount = cartData.items_count;
 
   const addToCart = async (productId, quantity, productVariantId) => {
     setLoading(true);
@@ -79,11 +82,6 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      // if (!token) {
-      //   toast.error("Please log in to add items to your cart.");
-      //   return;
-      // }
-
       const payload = {
         product_id: productId,
         quantity: quantity,
@@ -97,21 +95,18 @@ const useCartCRUD = () => {
         payload,
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
       setSuccess(response.data.message);
-      
-      await addItemToCart();
       toast.success(response.data.message);
       await fetchCart();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add to cart");
-      await addItemToCart();
       throw err;
     } finally {
       setLoading(false);
@@ -124,11 +119,6 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      // if (!token) {
-      //   toast.error("Please log in to remove items to your cart.");
-      //   throw new Error("No authentication token found");
-      // }
-
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/cart/remove",
         {
@@ -136,19 +126,17 @@ const useCartCRUD = () => {
         },
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
       setSuccess(response.data.message);
-      await removeItemFromCart();
       await fetchCart();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to remove from cart");
-      await removeItemFromCart();
     } finally {
       setLoading(false);
     }
@@ -160,11 +148,6 @@ const useCartCRUD = () => {
     setSuccess(null);
 
     try {
-      // if (!token) {
-      //   toast.error("Please log in to update your cart.");
-      //   throw new Error("No authentication token found");
-      // }
-
       const formData = new FormData();
       formData.append(`cart_item_id`, productId);
       formData.append(`quantity`, newQuantity);
@@ -174,7 +157,7 @@ const useCartCRUD = () => {
         formData,
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             ...(token && { Authorization: `Bearer ${token}` }),
             "Content-Type": "multipart/form-data",
           },
@@ -201,17 +184,15 @@ const useCartCRUD = () => {
         {},
         {
           headers: {
-            ...(guestId && { 'X-Guest-ID': guestId }),
+            ...(guestId && { "X-Guest-ID": guestId }),
             "Content-Type": "application/json",
             ...(token && { Authorization: `Bearer ${token}` }),
           },
         }
       );
 
-      // setCartItems([]);
-      await removeItemFromCart();
       toast.success(response.data.message);
-       await fetchCart();
+      await fetchCart();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to clear Cart");
@@ -267,6 +248,7 @@ const useCartCRUD = () => {
     discount,
     couponValue,
     subtotal,
+    itemsCount,
     loading: loading || isLoading,
     error,
     success,

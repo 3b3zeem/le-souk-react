@@ -60,7 +60,6 @@ const ProductId = () => {
   const [mainImage, setMainImage] = useState(null);
   const [variantImages, setVariantImages] = useState([]);
   const [sliderIndex, setSliderIndex] = useState(0);
-  // const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({
     x: 0,
@@ -92,12 +91,6 @@ const ProductId = () => {
 
     scrollTo(0, 0);
   }, [productId, language]);
-
-  // useEffect(() => {
-  //   const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
 
   useEffect(() => {
     if (productDetails) {
@@ -204,25 +197,6 @@ const ProductId = () => {
   };
   const isProductInWishlist = (productId) => {
     return wishlistItems.some((item) => item.product.id === productId);
-  };
-
-  const handlePayNow = async () => {
-    if (!token) {
-      toast.error(t("noAccount"));
-      return;
-    }
-
-    try {
-      const items = [
-        {
-          product_id: productId,
-          quantity: quantity,
-        },
-      ];
-      await placeOrder(items);
-    } catch (err) {
-      toast.error(err);
-    }
   };
 
   const handleMouseMove = (e) => {
@@ -583,18 +557,6 @@ const ProductId = () => {
                 {t("noCategory")}
               </span>
             )}
-            {/* <span
-              className="font-medium text-sm sm:text-base mt-2 sm:mt-0 sm:ml-4"
-              style={{ color: colors.productTitle }}
-            >
-              {t("inStock")}:
-            </span>
-            <span
-              className="ml-2 text-sm"
-              style={{ color: colors.productName }}
-            >
-              {productDetails.total_stock}
-            </span> */}
           </div>
 
           {/* Variants */}
@@ -606,7 +568,6 @@ const ProductId = () => {
               >
                 {t("variants")}:
               </span>
-              {/* خيارات القطع أو المقاسات */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {productDetails.variants.map((variant) => {
                   const isSelected = selectedVariant?.id === variant.id;
@@ -616,17 +577,17 @@ const ProductId = () => {
                       type="button"
                       onClick={() => handleVariantSelect(variant)}
                       className={`px-4 py-2 rounded-md border font-medium transition flex items-center gap-2
-              ${
-                isSelected
-                  ? "border-[#333e2c] bg-blue-50"
-                  : "border-gray-200 bg-white"
-              }
-              ${
-                variant.stock <= 0
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:border-[#333e2c] hover:bg-blue-100"
-              }
-              focus:outline-none cursor-pointer`}
+                      ${
+                        isSelected
+                          ? "border-[#333e2c] bg-blue-50"
+                          : "border-gray-200 bg-white"
+                      }
+                      ${
+                        variant.stock <= 0
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:border-[#333e2c] hover:bg-blue-100"
+                      }
+                      focus:outline-none cursor-pointer`}
                       disabled={variant.stock <= 0}
                     >
                       {isSelected ? (
@@ -650,7 +611,6 @@ const ProductId = () => {
                 })}
               </div>
 
-              {/* تفاصيل المتغير المختار */}
               {selectedVariant && (
                 <div className="mt-4 p-4 border rounded-md bg-gray-50">
                   <div className="flex flex-col gap-2 text-gray-800">
@@ -817,19 +777,6 @@ const ProductId = () => {
                 {loadingStates.cart ? t("addingToCart") : t("addToCart")}
               </span>
             </button>
-
-            {/* <button
-              onClick={handlePayNow}
-              disabled={orderLoading}
-              className={`flex-1 py-3 rounded-md text-white font-medium cursor-pointer ${orderLoading ? "opacity-50 cursor-not-allowed" : "customEffect"
-                }`}
-              style={{ backgroundColor: colors.primary }}
-            >
-              <span className="flex justify-center items-center gap-2">
-                <CreditCard size={20} className="inline-block" />
-                {orderLoading ? t("loading") : t("payNow")}
-              </span>
-            </button> */}
 
             {productDetails?.id && (
               <button

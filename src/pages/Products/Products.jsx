@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  ShoppingCart,
-  Heart,
-  Search,
   PackageX,
-  ChevronDown,
-  CornerDownRight,
-  AlignJustify,
-  Table,
 } from "lucide-react";
 import useProducts from "../../hooks/Products/useProduct";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
@@ -21,9 +14,11 @@ import { useTranslation } from "react-i18next";
 import { useWishlist } from "../../context/WishList/WishlistContext";
 import Filters from "./Filters";
 import { useRef, useState as useLocalState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import Meta from "../../components/Meta/Meta";
 import { useSettingsContext } from "../../context/Settings/SettingsContext";
+import ListView from "./ListView";
+import GridView from "./GridView";
+import ToolbarOptions from "./ToolbarOptions";
 ring2.register();
 
 const colors = {
@@ -69,7 +64,6 @@ const Products = () => {
   const { addToCart } = useCartCRUD();
 
   // * Fetch Settings to show the Banner Image
-  // const { settings } = useSettings();
   const { settings } = useSettingsContext();
   const banner = settings.find(
     (setting) => setting.key === "products_banner_image"
@@ -389,150 +383,26 @@ const Products = () => {
           {/* Products Section */}
           <div className="w-full lg:w-3/4">
             <div className="flex flex-wrap items-start ms-3 md:items-center gap-10 md:flex-row md:justify-between mb-6">
-              {/* Search */}
-              <form
-                onSubmit={handleSearchSubmit}
-                className="relative w-[200px] focus-within:w-[300px] transition-all duration-200"
-              >
-                <input
-                  type="text"
-                  placeholder={t("search")}
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full py-3 px-4 pr-7 border text-sm focus:outline-none shadow-sm"
-                  style={{ borderColor: colors.borderLight }}
-                />
-                <span
-                  className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
-                    language === "ar" ? "left-3" : "right-3"
-                  }`}
-                  onClick={handleSearchSubmit}
-                >
-                  <Search
-                    size={15}
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  />
-                </span>
-              </form>
-
-              {/* Show Per Page Selector */}
-              <div className="flex items-center gap-2 text-base select-none">
-                <span className="text-gray-700 font-semibold">
-                  {language === "ar" ? "عرض" : "Show"} :
-                </span>
-                {[12, 18, 24, 36].map((num, idx, arr) => (
-                  <React.Fragment key={num}>
-                    <span
-                      onClick={() => {
-                        setPerPage(num);
-                        setPage(1);
-                      }}
-                      className={
-                        perPage === num
-                          ? "font-bold text-[#333e2c] cursor-pointer"
-                          : "text-gray-400 cursor-pointer hover:text-black transition-all duration-200"
-                      }
-                      style={{ userSelect: "none" }}
-                    >
-                      {num}
-                    </span>
-                    {idx < arr.length - 1 && (
-                      <span className="text-gray-300">/</span>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center gap-1 ml-4">
-                {/* List Icon */}
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-1 rounded ${
-                    viewMode === "list" ? "bg-gray-200" : "hover:bg-gray-100"
-                  }`}
-                  title="List view"
-                >
-                  <AlignJustify
-                    size={22}
-                    className={
-                      viewMode === "list"
-                        ? "text-[#333e2c] cursor-pointer"
-                        : "text-gray-400 cursor-pointer"
-                    }
-                  />
-                </button>
-                {/* Grid Icon */}
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-1 rounded ${
-                    viewMode === "grid" ? "bg-gray-200" : "hover:bg-gray-100"
-                  }`}
-                  title="Grid view"
-                >
-                  <Table
-                    size={22}
-                    className={
-                      viewMode === "grid"
-                        ? "text-[#333e2c] cursor-pointer"
-                        : "text-gray-400 cursor-pointer"
-                    }
-                  />
-                </button>
-              </div>
-
-              {/* Sort */}
-              <div className="relative w-48" ref={sortDropdownRef}>
-                <button
-                  type="button"
-                  className="flex justify-between items-center w-full py-3 px-4 rounded-lg border text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition bg-white border-gray-200 text-gray-700 appearance-none cursor-pointer"
-                  style={{ borderColor: colors.borderLight }}
-                  onClick={() => setSortDropdownOpen((open) => !open)}
-                >
-                  {
-                    sortOptions.find(
-                      (opt) => opt.value === `${sortBy}_${sortDirection}`
-                    )?.label
-                  }
-                  <ChevronDown
-                    className={`w-5 h-5 text-blue-500 absolute ${
-                      language === "ar" ? "left-3" : "right-3"
-                    } pointer-events-none ${
-                      sortDropdownOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                <AnimatePresence>
-                  {sortDropdownOpen && (
-                    <motion.ul
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.18 }}
-                      className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg"
-                    >
-                      {sortOptions.map((option) => (
-                        <li
-                          key={option.value}
-                          className={`px-4 py-2 cursor-pointer hover:bg-blue-50 transition ${
-                            `${sortBy}_${sortDirection}` === option.value
-                              ? "bg-blue-100 text-blue-700 font-semibold"
-                              : ""
-                          }`}
-                          onClick={() => {
-                            setSortDropdownOpen(false);
-                            handleSortChange({
-                              target: { value: option.value },
-                            });
-                          }}
-                        >
-                          {option.label}
-                        </li>
-                      ))}
-                    </motion.ul>
-                  )}
-                </AnimatePresence>
-              </div>
+              <ToolbarOptions
+                handleSearchSubmit={handleSearchSubmit}
+                language={language}
+                t={t}
+                searchQuery={searchQuery}
+                handleSearchChange={handleSearchChange}
+                colors={colors}
+                setPerPage={setPerPage}
+                setPage={setPage}
+                perPage={perPage}
+                setViewMode={setViewMode}
+                viewMode={viewMode}
+                sortDropdownRef={sortDropdownRef}
+                setSortDropdownOpen={setSortDropdownOpen}
+                sortOptions={sortOptions}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+                sortDropdownOpen={sortDropdownOpen}
+                handleSortChange={handleSortChange}
+              />
             </div>
 
             {loading ? (
@@ -569,428 +439,44 @@ const Products = () => {
                     // List view
                     if (viewMode === "list") {
                       return (
-                        <div
-                          key={product.id}
-                          onMouseEnter={() => setHoveredIndex(idx)}
-                          onMouseLeave={() => setHoveredIndex(null)}
-                          className="flex flex-col md:flex-row bg-white shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer relative"
-                          style={{ minHeight: 240 }}
-                          onClick={() => handleProductClick(product.id)}
-                        >
-                          {/* Discount badge */}
-                          {product.discount_percentage && (
-                            <span
-                              className="absolute"
-                              style={{
-                                top: 18,
-                                left: -38,
-                                background: "#ef233c",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                fontSize: "1rem",
-                                padding: "10px 48px",
-                                transform: "rotate(-35deg)",
-                                zIndex: 30,
-                                boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
-                                letterSpacing: "1px",
-                                borderRadius: "6px",
-                                textShadow: "0 1px 2px rgba(0,0,0,0.10)",
-                                borderTopLeftRadius: "0.5rem",
-                                borderTopRightRadius: "0.5rem",
-                              }}
-                            >
-                              -{product.discount_percentage}% {t("offer")}
-                            </span>
-                          )}
-
-                          {/* Image */}
-                          <div
-                            className="flex-shrink-0 flex items-center justify-center bg-gray-50 p-6 md:w-1/2 relative h-100"
-                            style={{ minHeight: 220 }}
-                          >
-                            <img
-                              src={
-                                hoveredIndex === idx
-                                  ? secondImage
-                                  : primaryImage
-                              }
-                              alt={product.name}
-                              loading="lazy"
-                              className="h-full w-full object-cover"
-                            />
-                          </div>
-
-                          {/* Details */}
-                          <div className="flex flex-col flex-1 p-6 gap-2 justify-center relative">
-                            {/* Name */}
-                            <h3
-                              className="text-2xl font-semibold mb-1 text-gray-800 cursor-pointer"
-                              onClick={() => handleProductClick(product.id)}
-                            >
-                              {product.name}
-                            </h3>
-
-                            {/* Categories */}
-                            <div className="text-gray-400 text-sm mb-1">
-                              {product.categories &&
-                              product.categories.length > 0
-                                ? product.categories
-                                    .map((cat) => cat.name)
-                                    .join(", ")
-                                : ""}
-                            </div>
-
-                            {/* Price */}
-                            <div className="flex items-end gap-2 mb-2">
-                              {product.on_sale === true && product.discount_value > 0 &&
-                              product.min_sale_price &&
-                              product.min_sale_price !== product.min_price ? (
-                                <div className="flex flex-col">
-                                  <span className="line-through text-gray-400 text-xs font-normal">
-                                    {product.min_price}{" "}
-                                    {language === "ar" ? "د.ك" : "KWD"}
-                                  </span>
-                                  <div className="flex items-center gap-2">
-                                    <CornerDownRight
-                                      size={20}
-                                      style={{ color: colors.primary }}
-                                    />
-                                    <span
-                                      className="text-2xl font-bold"
-                                      style={{ color: colors.primary }}
-                                    >
-                                      {product.min_sale_price}{" "}
-                                      {language === "ar" ? "د.ك" : "KWD"}
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <span
-                                  className="text-2xl font-bold"
-                                  style={{ color: colors.primary }}
-                                >
-                                  {product.min_price}{" "}
-                                  {language === "ar" ? "د.ك" : "KWD"}
-                                </span>
-                              )}
-                            </div>
-
-                            {/* Discount duration */}
-                            {product.on_sale === true && product.discount_value > 0 &&
-                              product.sale_starts_at &&
-                              product.sale_ends_at &&
-                              (() => {
-                                const start = new Date(product.sale_starts_at);
-                                const end = new Date(product.sale_ends_at);
-                                const diffTime = Math.abs(end - start);
-                                const diffDays = Math.ceil(
-                                  diffTime / (1000 * 60 * 60 * 24)
-                                );
-                                const diffMonths = Math.floor(diffDays / 30);
-                                return (
-                                  <div className="mb-2">
-                                    <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                                      {diffMonths > 0
-                                        ? t("discount_for_months", {
-                                            count: diffMonths,
-                                          })
-                                        : t("discount_for_days", {
-                                            count: diffDays,
-                                          })}
-                                    </span>
-                                  </div>
-                                );
-                              })()}
-
-                            {/* Description */}
-                            <div className="text-gray-500 text-base mb-4 line-clamp-2">
-                              {product.description}
-                            </div>
-
-                            {/* Stock */}
-                            {product.total_stock === 0 && (
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-gray-400">
-                                  {t("outOfStock")}:
-                                </span>
-                                <span className="text-xs font-semibold text-red-600">
-                                  {t("soldOut")}
-                                </span>
-                              </div>
-                            )}
-
-                            {/* wishLis & Cart */}
-                            <div className="flex justify-start items-center gap-4">
-                              {/* Wishlist Button */}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleToggleWishlist(product.id);
-                                }}
-                                disabled={loadingStates.wishlist[product.id]}
-                                className={`bg-white border border-gray-300 p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                                ${
-                                  loadingStates.wishlist[product.id]
-                                    ? "opacity-50 cursor-not-allowed"
-                                    : isProductInWishlist(product.id)
-                                    ? "bg-red-100 hover:bg-red-200"
-                                    : "hover:bg-blue-100"
-                                }
-                              `}
-                                style={{ borderColor: colors.borderLight }}
-                              >
-                                <Heart
-                                  size={22}
-                                  className={`transition ${
-                                    loadingStates.wishlist[product.id]
-                                      ? "text-gray-400"
-                                      : isProductInWishlist(product.id)
-                                      ? "text-red-500"
-                                      : "text-gray-500"
-                                  }`}
-                                  fill={
-                                    isProductInWishlist(product.id)
-                                      ? "red"
-                                      : "none"
-                                  }
-                                />
-                                <span className="ml-2 text-sm text-gray-700 font-medium hidden sm:inline">
-                                  {language === "ar"
-                                    ? "أضف إلى المفضلة"
-                                    : "Add to Wishlist"}
-                                </span>
-                              </button>
-                              {/* Cart */}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleAddToCart(product.id, 1);
-                                }}
-                                disabled={loadingStates.cart[product.id]}
-                                className={`bg-white border border-gray-300 p-2 rounded flex items-center justify-center transition duration-200 cursor-pointer
-                                  ${
-                                    loadingStates.cart[product.id]
-                                      ? "opacity-50 cursor-not-allowed"
-                                      : "hover:bg-blue-100"
-                                  }`}
-                                style={{ borderColor: colors.borderLight }}
-                              >
-                                <ShoppingCart
-                                  size={22}
-                                  className="text-gray-500"
-                                />
-                                <span className="ml-2 text-sm text-gray-700 font-medium hidden sm:inline">
-                                  {language === "ar"
-                                    ? "أضف إلى السلة"
-                                    : "Add to Cart"}
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+                        <ListView
+                          product={product}
+                          setHoveredIndex={setHoveredIndex}
+                          handleProductClick={handleProductClick}
+                          hoveredIndex={hoveredIndex}
+                          secondImage={secondImage}
+                          primaryImage={primaryImage}
+                          language={language}
+                          t={t}
+                          colors={colors}
+                          handleToggleWishlist={handleToggleWishlist}
+                          loadingStates={loadingStates}
+                          isProductInWishlist={isProductInWishlist}
+                          handleAddToCart={handleAddToCart}
+                          idx={idx}
+                        />
                       );
                     }
 
                     // Grid view
                     return (
-                      <div
-                        key={product.id}
-                        onMouseEnter={() => setHoveredIndex(idx)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                        className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col rounded"
-                        style={{
-                          borderColor: colors.borderLight,
-                        }}
-                      >
-                        <div
-                          className="relative flex justify-center items-center h-56 bg-gray-50 cursor-pointer"
-                          onClick={() => handleProductClick(product.id)}
-                        >
-                          <img
-                            src={
-                              hoveredIndex === idx ? secondImage : primaryImage
-                            }
-                            alt={product.name}
-                            loading="lazy"
-                            className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
-                          />
-                          {/* WishList */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggleWishlist(product.id);
-                            }}
-                            disabled={loadingStates.wishlist[product.id]}
-                            className={`absolute top-3 ${
-                              language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
-                              opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
-                              transition-all duration-300 delay-50 cursor-pointer
-                            ${
-                              loadingStates.wishlist[product.id]
-                                ? "opacity-50 cursor-not-allowed"
-                                : isProductInWishlist(product.id)
-                                ? "bg-red-100 hover:bg-red-200"
-                                : "hover:bg-blue-100"
-                            }`}
-                            style={{ borderColor: colors.borderLight }}
-                          >
-                            <Heart
-                              size={22}
-                              className={`transition ${
-                                loadingStates.wishlist[product.id]
-                                  ? "text-gray-400"
-                                  : isProductInWishlist(product.id)
-                                  ? "text-red-500"
-                                  : "text-gray-500"
-                              }`}
-                              fill={
-                                isProductInWishlist(product.id) ? "red" : "none"
-                              }
-                            />
-                          </button>
-                          {/* Cart */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAddToCart(product.id, 1);
-                            }}
-                            disabled={loadingStates.cart[product.id]}
-                            className={`absolute bottom-3 ${
-                              language === "ar" ? "left-3" : "right-3"
-                            } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
-                              opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
-                              transition-all duration-300 delay-150 cursor-pointer
-                            ${
-                              loadingStates.cart[product.id]
-                                ? "opacity-50 cursor-not-allowed"
-                                : "hover:bg-blue-100"
-                            }`}
-                            style={{ borderColor: colors.borderLight }}
-                          >
-                            <ShoppingCart size={22} className="text-gray-500" />
-                          </button>
-                          {/* Discount badge */}
-                          {product.discount_percentage && (
-                            <span
-                              className="absolute"
-                              style={{
-                                top: 12,
-                                left: -38,
-                                background: "#ef233c",
-                                color: "#fff",
-                                fontWeight: "bold",
-                                fontSize: "1rem",
-                                padding: "10px 48px",
-                                transform: "rotate(-35deg)",
-                                zIndex: 30,
-                                boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
-                                letterSpacing: "1px",
-                                borderRadius: "6px",
-                                textShadow: "0 1px 2px rgba(0,0,0,0.10)",
-                                borderTopLeftRadius: "0.5rem",
-                                borderTopRightRadius: "0.5rem",
-                              }}
-                            >
-                              -{product.discount_percentage}% {t("offer")}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Product Details */}
-                        <div className="flex flex-col flex-1 p-4">
-                          <h3
-                            className="text-base font-bold mb-1 truncate"
-                            style={{
-                              color: colors.productTitle,
-                              minHeight: 24,
-                            }}
-                            onClick={() => navigate(`/products/${product.id}`)}
-                          >
-                            {product.name}
-                          </h3>
-                          <p
-                            className="text-sm text-gray-500 mb-2 truncate"
-                            style={{ minHeight: 20 }}
-                          >
-                            {product.description}
-                          </p>
-
-                          {/* Price */}
-                          <div className="flex items-end gap-2 mb-2">
-                            {product.on_sale === true && product.discount_value > 0 &&
-                            product.min_sale_price &&
-                            product.min_sale_price !== product.min_price ? (
-                              <div className="flex flex-col">
-                                <span className="line-through text-gray-400 text-xs font-normal">
-                                  {product.min_price}{" "}
-                                  {language === "ar" ? "د.ك" : "KWD"}
-                                </span>
-                                <div className="flex items-center gap-2">
-                                  <CornerDownRight
-                                    size={20}
-                                    style={{ color: colors.primary }}
-                                  />
-                                  <span
-                                    className="text-lg font-bold"
-                                    style={{ color: colors.primary }}
-                                  >
-                                    {product.min_sale_price}{" "}
-                                    {language === "ar" ? "د.ك" : "KWD"}
-                                  </span>
-                                </div>
-                              </div>
-                            ) : (
-                              <span
-                                className="text-lg font-bold"
-                                style={{ color: colors.primary }}
-                              >
-                                {product.min_price}{" "}
-                                {language === "ar" ? "د.ك" : "KWD"}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Discount duration */}
-                          {product.on_sale === true && product.discount_value > 0 &&
-                            product.sale_starts_at &&
-                            product.sale_ends_at &&
-                            (() => {
-                              const start = new Date(product.sale_starts_at);
-                              const end = new Date(product.sale_ends_at);
-                              const diffTime = Math.abs(end - start);
-                              const diffDays = Math.ceil(
-                                diffTime / (1000 * 60 * 60 * 24)
-                              );
-                              const diffMonths = Math.floor(diffDays / 30);
-                              return (
-                                <div className="mb-2">
-                                  <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
-                                    {diffMonths > 0
-                                      ? t("discount_for_months", {
-                                          count: diffMonths,
-                                        })
-                                      : t("discount_for_days", {
-                                          count: diffDays,
-                                        })}
-                                  </span>
-                                </div>
-                              );
-                            })()}
-
-                          {/* Stock*/}
-                          {product.total_stock === 0 && (
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-gray-400">
-                                {t("outOfStock")}:
-                              </span>
-                              <span className="text-xs font-semibold text-red-600">
-                                {t("soldOut")}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <GridView
+                        product={product}
+                        setHoveredIndex={setHoveredIndex}
+                        handleProductClick={handleProductClick}
+                        hoveredIndex={hoveredIndex}
+                        secondImage={secondImage}
+                        primaryImage={primaryImage}
+                        language={language}
+                        t={t}
+                        colors={colors}
+                        handleToggleWishlist={handleToggleWishlist}
+                        loadingStates={loadingStates}
+                        isProductInWishlist={isProductInWishlist}
+                        handleAddToCart={handleAddToCart}
+                        idx={idx}
+                        navigate={navigate}
+                      />
                     );
                   })}
                 </div>

@@ -52,7 +52,13 @@ const NavbarTop = (props) => (
         <Logo />
         <NavbarSearch />
         <div className="flex items-center gap-4">
-          <NavbarIcons {...props} />
+          <NavbarIcons
+            handleCartClick={props.handleCartClick}
+            handleWishlistClick={props.handleWishlistClick}
+            cartCount={props.isCartLoading ? 0 : props.cartCount}
+            wishlistCount={props.wishlistCount}
+            isWhite={props.scrolled}
+          />
           <NavbarUserMenu {...props} />
         </div>
       </motion.div>

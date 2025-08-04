@@ -177,41 +177,6 @@ const Order = () => {
               ))}
             </tbody>
           </table>
-          {/* <AnimatePresence>
-              {showItemsModal && (
-                <motion.div
-                  className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <motion.div
-                    className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full"
-                    initial={{ y: -100, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -100, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h3 className="text-lg font-bold mb-4 text-gray-700">
-                      {t("orderItems")}
-                    </h3>
-                    <ul className="list-decimal list-inside space-y-1 text-gray-800">
-                      {selectedItems.map((item, index) => (
-                        <li key={index}>
-                          {item.product.name} ( x{item.quantity} )
-                        </li>
-                      ))}
-                    </ul>
-                    <button
-                      onClick={() => setShowItemsModal(false)}
-                      className="mt-6 bg-[#333e2c] text-white px-4 py-2 rounded hover:bg-blue-700 transition cursor-pointer"
-                    >
-                      {t("close")}
-                    </button>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence> */}
         </div>
       )}
     </div>

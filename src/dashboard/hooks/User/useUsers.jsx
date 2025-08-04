@@ -8,7 +8,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 const useUsers = () => {
   const [searchParams] = useSearchParams();
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState(null); // Changed from array to null
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);

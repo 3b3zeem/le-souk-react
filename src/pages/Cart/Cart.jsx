@@ -8,7 +8,6 @@ import { useTranslation } from "react-i18next";
 import { useOrder } from "../../hooks/Order/useOrder";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import Meta from "../../components/Meta/Meta";
-import Loader from "../../layouts/Loader";
 
 const colors = {
   primary: "#333e2c",
@@ -32,7 +31,6 @@ const Cart = () => {
     discount,
     couponValue,
     subtotal,
-    loading,
     error,
     success,
   } = useCartCRUD();
@@ -42,7 +40,7 @@ const Cart = () => {
   });
   const [coupon, setCoupon] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
-  const { token, profile } = useAuthContext();
+  const { profile } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -88,7 +86,6 @@ const Cart = () => {
 
     try {
       await setCartQuantity(productId, newQuantity);
-      await fetchCart();
 
       if (type === "inc") {
         toast.success("Quantity increased successfully!");
@@ -132,10 +129,6 @@ const Cart = () => {
   useEffect(() => {
     scrollTo(0, 0);
   }, []);
-
-  if (loading) {
-    return <Loader />;
-  }
 
   return (
     <React.Fragment>

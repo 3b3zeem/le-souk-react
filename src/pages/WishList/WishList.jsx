@@ -24,8 +24,7 @@ const WishList = () => {
     fetchWishlist,
     removeFromWishlist,
     clearWishlist,
-    success: wishlistSuccess,
-    loading,
+    error: wishlistError,
   } = useWishlistCRUD();
   const { addToCart } = useCartCRUD();
   const [loadingStates, setLoadingStates] = useState({
@@ -37,10 +36,10 @@ const WishList = () => {
   const { language } = useLanguage();
 
   useEffect(() => {
-    if (wishlistSuccess) {
-      toast.success(wishlistSuccess);
+    if (wishlistError) {
+      toast.error(wishlistError);
     }
-  }, [wishlistSuccess]);
+  }, [wishlistError]);
 
   const handleRemove = async (productId) => {
     setLoadingStates((prev) => ({
@@ -64,16 +63,17 @@ const WishList = () => {
   const handleAddToCart = async (productId, quantity) => {
     setLoadingStates((prev) => ({
       ...prev,
-      cart: { ...prev.cart, [productId]: true },
+      addToCart: { ...prev.addToCart, [productId]: true },
     }));
     try {
       await addToCart(productId, quantity);
     } catch (err) {
       console.error("Error adding to cart:", err);
+      toast.error(t("failedToAddToCart"));
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
-        cart: { ...prev.cart, [productId]: false },
+        addToCart: { ...prev.addToCart, [productId]: false },
       }));
     }
   };
@@ -91,20 +91,16 @@ const WishList = () => {
     scrollTo(0, 0);
   }, []);
 
-    if (loading) {
-    return <Loader />;
-  }
-
   return (
     <React.Fragment>
       <div
         className="bg-gray-200 p-10 mb-10"
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-      <Meta
-        title="My Wishlist"
-        description="View and manage your wishlist items."
-      />
+        <Meta
+          title="My Wishlist"
+          description="View and manage your wishlist items."
+        />
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1
             className="text-2xl font-bold uppercase"
@@ -162,7 +158,7 @@ const WishList = () => {
             <div className="border-b-1 border-gray-300">
               <button
                 onClick={handleClearWishlist}
-                className="px-4 py-2 bg-red-500 mb-5  text-white rounded-md customEffect cursor-pointer"
+                className="px-4 py-2 bg-red-500 mb-5 text-white rounded-md customEffect cursor-pointer"
               >
                 <span>{t("clearWishlist")}</span>
               </button>
@@ -172,6 +168,7 @@ const WishList = () => {
               <div className="lg:col-span-2 space-y-6">
                 {wishlistItems.map((item) => {
                   const isRemoving = loadingStates.remove[item.product.id] || false;
+                  const isAddingToCart = loadingStates.addToCart[item.product.id] || false;
 
                   return (
                     <div
@@ -183,6 +180,10 @@ const WishList = () => {
                         src={item.product.primary_image_url}
                         alt={item.product.name}
                         className="w-24 h-24 object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/placeholder-image.png"; // صورة احتياطية
+                        }}
                       />
                       <div className="flex-1">
                         <h2
@@ -201,13 +202,13 @@ const WishList = () => {
                           className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          {t("size")} OS
+                          {t("size")} {item.product.size || "OS"}
                         </p>
                         <p
                           className="text-sm uppercase"
                           style={{ color: colors.productName }}
                         >
-                          {t("color")} Unknown
+                          {t("color")} {item.product.color || "Unknown"}
                         </p>
                       </div>
                       <div className="flex flex-col justify-between items-center">
@@ -220,16 +221,14 @@ const WishList = () => {
                         <div className="flex flex-col gap-2">
                           <button
                             onClick={() => handleAddToCart(item.product.id, 1)}
-                            disabled={loadingStates.addToCart[item.product.id]}
-                            className={` text-white font-bold py-2 px-4 rounded cursor-pointer customEffect mt-2 ${
-                              loadingStates.addToCart[item.product.id]
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
+                            disabled={isAddingToCart}
+                            className={`text-white font-bold py-2 px-4 rounded cursor-pointer customEffect mt-2 ${
+                              isAddingToCart ? "opacity-50 cursor-not-allowed" : ""
                             }`}
                             style={{ backgroundColor: colors.primary }}
                           >
                             <span>
-                              {loadingStates.addToCart[item.product.id] ? (
+                              {isAddingToCart ? (
                                 t("addingToCart")
                               ) : (
                                 <ShoppingCart size={18} />

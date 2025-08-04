@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useWishlist } from "../../context/WishList/WishlistContext";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
 import { useLanguage } from "../../context/Language/LanguageContext";
@@ -12,7 +12,6 @@ const useWishlistCRUD = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const { token } = useAuthContext();
   const { language } = useLanguage();
-  const { addItemToWishlist, removeItemFromWishlist, fetchWishlistCount, fetchWishlistItems } = useWishlist();
 
   useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
@@ -25,38 +24,53 @@ const useWishlistCRUD = () => {
     };
   }, [language]);
 
-  const fetchWishlist = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.get(
-        "https://le-souk.dinamo-app.com/api/wishlist",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const items = Array.isArray(response.data.data?.items)
-        ? response.data.data.items
-        : [];
-
-      setWishlistItems(items);
-      return items;
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch wishlist");
-    } finally {
-      setLoading(false);
+  const fetchWishlistData = async () => {
+    if (!token) {
+      return { items: [] };
     }
+    const response = await axios.get(
+      "https://le-souk.dinamo-app.com/api/wishlist",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const items = Array.isArray(response.data.data?.items)
+      ? response.data.data.items
+      : [];
+    return { items };
   };
 
+  const {
+    data: wishlistData = { items: [] },
+    refetch: fetchWishlist,
+    isLoading: isWishlistLoading,
+    isError: isWishlistError,
+    error: wishlistError,
+  } = useQuery({
+    queryKey: ["wishlist", token, language],
+    queryFn: fetchWishlistData,
+    enabled: !!token,
+    retry: 3,
+    retryDelay: 1000,
+    onSuccess: (data) => {
+      setWishlistItems(data.items);
+    },
+    onError: (err) => {
+      setError(err.response?.data?.message || "Failed to fetch wishlist");
+    },
+  });
+
   useEffect(() => {
-    if (token) {
-      fetchWishlist();
+    setLoading(isWishlistLoading);
+    if (isWishlistError) {
+      setError(wishlistError?.response?.data?.message || "Failed to fetch wishlist");
+    } else {
+      setError(null);
     }
-  }, [language, token]);
+  }, [isWishlistLoading, isWishlistError, wishlistError]);
 
   const addToWishlist = async (productId) => {
     setLoading(true);
@@ -66,6 +80,7 @@ const useWishlistCRUD = () => {
     try {
       if (!token) {
         toast.error("Please log in to add items to your wishlist.");
+        throw new Error("User not authenticated");
       }
 
       const response = await axios.post(
@@ -82,14 +97,15 @@ const useWishlistCRUD = () => {
 
       if (message.toLowerCase().includes("already")) {
         toast.error("This product is already in your wishlist.");
+      } else {
+        toast.success(response.data.message);
       }
 
       setSuccess(response.data.message);
-      await addItemToWishlist();
+      await fetchWishlist();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to add to wishlist");
-      await addItemToWishlist();
       throw err;
     } finally {
       setLoading(false);
@@ -103,7 +119,8 @@ const useWishlistCRUD = () => {
 
     try {
       if (!token) {
-        toast.error("Please log in to add items to your wishlist.");
+        toast.error("Please log in to remove items from your wishlist.");
+        throw new Error("User not authenticated");
       }
 
       const response = await axios.post(
@@ -117,11 +134,11 @@ const useWishlistCRUD = () => {
         }
       );
       setSuccess(response.data.message);
-      await removeItemFromWishlist();
+      toast.success(response.data.message);
+      await fetchWishlist();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to remove from wishlist");
-      await removeItemFromWishlist();
       throw err;
     } finally {
       setLoading(false);
@@ -136,7 +153,7 @@ const useWishlistCRUD = () => {
     try {
       if (!token) {
         toast.error("Please log in to manage your wishlist.");
-        
+        throw new Error("User not authenticated");
       }
 
       const response = await axios.post(
@@ -151,7 +168,7 @@ const useWishlistCRUD = () => {
       );
 
       setSuccess(response.data.message);
-      toast.success(response.data.message)
+      toast.success(response.data.message);
 
       const addedItems = response.data.added || [];
       const removedItems = response.data.removed || [];
@@ -166,10 +183,11 @@ const useWishlistCRUD = () => {
         toast.success("Product removed from wishlist!");
       }
 
-      await fetchWishlistCount();
-      await fetchWishlistItems();
+      await fetchWishlist();
+      return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to toggle wishlist");
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -181,6 +199,11 @@ const useWishlistCRUD = () => {
     setSuccess(null);
 
     try {
+      if (!token) {
+        toast.error("Please log in to clear your wishlist.");
+        throw new Error("User not authenticated");
+      }
+
       const response = await axios.post(
         "https://le-souk.dinamo-app.com/api/wishlist/clear",
         {},
@@ -193,9 +216,8 @@ const useWishlistCRUD = () => {
       );
 
       setWishlistItems([]);
-      await removeItemFromWishlist();
       toast.success(response.data.message);
-
+      await fetchWishlist();
       return response.data;
     } catch (err) {
       setError(err.response?.data?.message || "Failed to clear wishlist");
@@ -211,8 +233,8 @@ const useWishlistCRUD = () => {
     fetchWishlist,
     toggleWishlist,
     clearWishlist,
-    wishlistItems,
-    loading,
+    wishlistItems: wishlistData.items,
+    loading: loading || isWishlistLoading,
     error,
     success,
   };

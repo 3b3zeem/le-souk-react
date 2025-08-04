@@ -7,8 +7,7 @@ const NavbarIcons = ({
   handleWishlistClick,
   cartCount,
   wishlistCount,
-  children,
-  isLoggedIn,
+  // children,
   isWhite = false,
 }) => (
   <div className="flex gap-4 items-center">
@@ -40,7 +39,7 @@ const NavbarIcons = ({
       )}
     </button>
 
-    {children}
+    {/* {children} */}
   </div>
 );
 
