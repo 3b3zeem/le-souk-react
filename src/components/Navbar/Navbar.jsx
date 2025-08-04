@@ -22,6 +22,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 import NavbarTop from "./NavbarTop";
 import NavbarBottom from "./NavbarBottom";
+import LanguageDropdown from "../Language/LanguageDropdown";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -290,7 +291,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black/40 z-550"
+            className="md:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
             onClick={() => setIsOpen(false)}
           >
             <motion.div
