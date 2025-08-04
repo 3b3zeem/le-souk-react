@@ -8,6 +8,7 @@ function Meta({
   keywords = "ecommerce, shop, online store",
   image = "/favicon.jpg",
   url,
+  children,
 }) {
   const location = useLocation();
   const currentUrl = url || `${window.location.origin}${location.pathname}`;
@@ -35,6 +36,8 @@ function Meta({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+
+      {children}
     </Helmet>
   );
 }

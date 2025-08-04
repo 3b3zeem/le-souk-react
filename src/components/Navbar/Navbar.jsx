@@ -273,9 +273,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        <div
-          className={`h-[3px] w-full bg-gray-100 absolute left-0 -bottom-0`}
-        >
+        <div className={`h-[3px] w-full bg-gray-100 absolute left-0 -bottom-0`}>
           <div
             className="h-full bg-[#333e2c] transition-all duration-150"
             style={{ width: `${scrollProgress}%` }}
@@ -293,14 +291,17 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
             className="md:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
             onClick={() => setIsOpen(false)}
+            dir={language === "ar" ? "rtl" : "ltr"}
           >
             <motion.div
               ref={drawerRef}
-              initial={{ x: -300 }}
+              initial={{ x: language === "ar" ? 300 : -300 }}
               animate={{ x: 0 }}
-              exit={{ x: -300 }}
+              exit={{ x: language === "ar" ? 300 : -300 }}
               transition={{ duration: 0.3 }}
-              className="h-full w-[300px] bg-[#e8e4dd] flex flex-col"
+              className={`h-full w-[300px] bg-[#e8e4dd] flex flex-col ${
+                language === "ar" ? "ml-auto" : "mr-auto"
+              }`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center p-4 border-b">

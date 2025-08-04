@@ -14,7 +14,6 @@
   "changeLanguage": "تغيير اللغة",
   "userProfile": "الملف الشخصي",
   "logout": "تسجيل الخروج",
-  "home": "الرئيسية",
   "about": "من نحن",
   "contact": "اتصل بنا",
   "products": "المنتجات",
@@ -384,7 +383,6 @@
   "shop": "المتجر",
   "search_placeholder": "ابحث عما تبحث عنه",
   "soldOut": "نفد المخزون",
-  "phone": "الهاتف المحمول",
   "enterPhoneNumber": "أدخل رقم الهاتف",
   "callUs": "اتصل بنا 7/24",
   "makeQuote": "للإستفسارات",
@@ -431,8 +429,6 @@
   "users_today": "المستخدمون اليوم",
   "basic_User_distribution": "التوزيع العام للمستخدمين",
   "uploadImage": "رفع الصورة",
-  "User Details": "تفاصيل المستخدم" ,
-  "change_status":"تغيير الحالة",
   "verify": "تحقق",
   "profile_information": "معلومات الملف الشخصي",
   "reset_password":"إعادة تعيين كلمة المرور",
@@ -442,5 +438,7 @@
   "new_password":"كلمة مرور جديدة",
   "confirm_password":"تأكيد كلمة المرور",
   "enter_password":"أدخل كلمة المرور",
-  "password_requirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وحرف كبير واحد، وحرف صغير واحد، ورقم واحد، ورمز خاص واحد."
+  "password_requirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وحرف كبير واحد، وحرف صغير واحد، ورقم واحد، ورمز خاص واحد.",
+  "home": "الرئيسية",
+  "language": "ar"
 }
