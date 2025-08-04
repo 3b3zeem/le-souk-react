@@ -12,6 +12,7 @@ const useUsers = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
+  const [meta, setMeta] = useState(null);
   const { token } = useAuthContext();
   const { language } = useLanguage();
 
@@ -29,42 +30,44 @@ const useUsers = () => {
   const page = parseInt(searchParams.get("page")) || 1;
   const search = searchParams.get("search") || "";
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      setError(null);
+  const fetchUsers = async () => {
+    setLoading(true);
+    setError(null);
 
-      try {
-        if (!token) {
-          throw new Error("No token found. Please log in.");
-        }
-
-        const params = new URLSearchParams();
-        if (page) params.append("page", page);
-        if (search) params.append("search", search);
-
-        const response = await axios.get(
-          `https://le-souk.dinamo-app.com/api/admin/users?${params.toString()}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setUsers(response.data.data.data);
-        setTotalPages(response.data.last_page || 1);
-      } catch (err) {
-        const errorMessage =
-          err.response?.data?.message || "Failed to fetch users";
-        setError(errorMessage);
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
       }
-    };
 
+      const params = new URLSearchParams();
+      if (page) params.append("page", page);
+      if (search) params.append("search", search);
+
+      const response = await axios.get(
+        `https://le-souk.dinamo-app.com/api/admin/users?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setUsers(response.data.data.data);
+      setTotalPages(response.data.data.meta.last_page || 1);
+      setMeta(response.data.data.meta);
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to fetch users";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUsers();
+    // eslint-disable-next-line
   }, [token, search, page, language]);
 
   const deleteUser = async (userId) => {
@@ -83,6 +86,7 @@ const useUsers = () => {
       );
 
       toast.success(response.data.message);
+      await fetchUsers();
       setUsers(users.filter((user) => user.id !== userId));
     } catch (err) {
       const errorMessage =
@@ -118,7 +122,7 @@ const useUsers = () => {
     }
   };
 
-  const toggleAdminStatus = async (userId, isAdmin) => {
+  const toggleAdminStatus = async (userId) => {
     try {
       if (!token) {
         throw new Error("No token found. Please log in.");
@@ -126,7 +130,7 @@ const useUsers = () => {
 
       const response = await axios.post(
         `https://le-souk.dinamo-app.com/api/admin/users/${userId}/toggle-admin`,
-        { is_admin: isAdmin },
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -147,12 +151,13 @@ const useUsers = () => {
             : user
         )
       );
-      
+
       toast.success(
         `User has been ${
           updatedStatus ? "granted" : "revoked"
         } admin access successfully.`
       );
+      await fetchUsers();
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Failed to update user admin status";
@@ -161,7 +166,7 @@ const useUsers = () => {
     }
   };
 
-  const verifyEmail = async (userId)=>{
+  const verifyEmail = async (userId) => {
     try {
       if (!token) {
         throw new Error("No token found. Please log in.");
@@ -180,101 +185,101 @@ const useUsers = () => {
       toast.success(response.data.message);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
-          user.id === userId ? { ...user, email_verification_status: "verified" } : user
+          user.id === userId
+            ? { ...user, email_verification_status: "verified" }
+            : user
         )
       );
+      await fetchUsers();
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Failed to verify email";
       setError(errorMessage);
       toast.error(errorMessage);
     }
-  }
+  };
 
-
-const resetPassword = async (userId, passwordData) => {
-  try {
-    if (!token) {
-      throw new Error("No token found. Please log in.");
-    }
-
-    // Client-side validation before sending to server
-    if (!passwordData.password || passwordData.password.length <= 6) {
-      const errorMessage = "Password must be more than 6 characters";
-      setError(errorMessage);
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    if (passwordData.password !== passwordData.password_confirmation) {
-      const errorMessage = "Passwords do not match";
-      setError(errorMessage);
-      toast.error(errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const response = await axios.post(
-      `https://le-souk.dinamo-app.com/api/admin/users/${userId}/reset-password`,
-      passwordData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+  const resetPassword = async (userId, passwordData) => {
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
       }
-    );
 
-    toast.success(response.data.message);
-    return response.data;
-  } catch (err) {
-    const errorMessage =
-      err.response?.data?.message || "Failed to reset user password";
-    setError(errorMessage);
-    toast.error(errorMessage);
-    throw err;
-  }
-}
+      if (!passwordData.password || passwordData.password.length <= 6) {
+        const errorMessage = "Password must be more than 6 characters";
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+
+      if (passwordData.password !== passwordData.password_confirmation) {
+        const errorMessage = "Passwords do not match";
+        setError(errorMessage);
+        toast.error(errorMessage);
+        throw new Error(errorMessage);
+      }
+
+      const response = await axios.post(
+        `https://le-souk.dinamo-app.com/api/admin/users/${userId}/reset-password`,
+        passwordData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      toast.success(response.data.message);
+      await fetchUsers();
+      return response.data;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to reset user password";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw err;
+    }
+  };
 
   // Enhanced updateUser function with proper file upload support
- const updateUser = async (userId, userData) => {
-  try {
-    if (!token) {
-      throw new Error("No token found. Please log in.");
-    }
-
-    const response = await axios.put(
-      `https://le-souk.dinamo-app.com/api/admin/users/${userId}`,
-      userData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+  const updateUser = async (userId, userData) => {
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
       }
-    );
 
-    const updatedUser = response.data.data;
-    console.log(response.data);
-    
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, ...updatedUser } : user
-      )
-    );
-    
-    toast.success("User updated successfully.");
-    return updatedUser;
-  } catch (err) {
-    console.error('Update user error:', err);
-    const errorMessage =
-      err.response?.data?.message || "Failed to update user information";
-    setError(errorMessage);
-    toast.error(errorMessage);
-    throw err;
-  }
-};
+      const response = await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/users/${userId}`,
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
- 
+      const updatedUser = response.data.data;
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === userId ? { ...user, ...updatedUser } : user
+        )
+      );
+
+      toast.success(response.data.message);
+      await fetchUsers();
+      return updatedUser;
+    } catch (err) {
+      console.error("Update user error:", err);
+      const errorMessage =
+        err.response?.data?.message || "Failed to update user information";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw err;
+    }
+  };
 
   return {
     users,
@@ -282,12 +287,14 @@ const resetPassword = async (userId, passwordData) => {
     loading,
     error,
     totalPages,
+    meta,
+    fetchUsers,
     toggleAdminStatus,
     deleteUser,
     updateUser,
     getUserById,
     verifyEmail,
-    resetPassword
+    resetPassword,
   };
 };
 
