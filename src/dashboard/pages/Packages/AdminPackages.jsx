@@ -10,7 +10,6 @@ import AddPackageForm from "./AddPackageForm";
 import ManageProductForm from "./ManageProductForm";
 import DropdownActions from "./DropdownActions";
 import Meta from "../../../components/Meta/Meta";
-import { usePackageContext } from "../../../context/Package/PackageContext";
 
 const AdminPackages = () => {
   const { t } = useTranslation();
@@ -36,12 +35,8 @@ const AdminPackages = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const { setPackages } = usePackageContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setPackages(packages);
-  }, [packages, setPackages]);
 
   const updateSearchParams = (newParams) => {
     const params = {};
