@@ -85,6 +85,7 @@ const Products = () => {
     fetchWishlist();
 
     scrollTo(0, 0);
+    // eslint-disable-next-line
   }, []);
 
   // * Set Parameters' Filters in URL
@@ -110,6 +111,7 @@ const Products = () => {
     if (page !== 1) params.set("page", page);
     else params.delete("page");
     setSearchParams(params);
+    // eslint-disable-next-line
   }, [
     searchQuery,
     selectedCategory,

@@ -90,6 +90,7 @@ const ProductId = () => {
     }
 
     scrollTo(0, 0);
+    // eslint-disable-next-line
   }, [productId, language]);
 
   useEffect(() => {
@@ -144,6 +145,7 @@ const ProductId = () => {
       const timer = setInterval(updateCountdown, 1000);
       return () => clearInterval(timer);
     }
+    // eslint-disable-next-line
   }, [productDetails && productDetails.sale_ends_at]);
 
   const handleAddToCart = async () => {

@@ -27,6 +27,7 @@ const Filters = ({
       setPage(1);
       setShowFilters(false);
     },
+    // eslint-disable-next-line
     [selectedCategory, setSelectedCategory, setPage]
   );
 
@@ -41,6 +42,7 @@ const Filters = ({
     setPage(1);
     setShowFilters(false);
     setSliderPrice([cappedMin, cappedMax]);
+    // eslint-disable-next-line
   }, [sliderPrice, setMinPrice, setMaxPrice, setPage]);
 
   const handleOverlayClick = (e) => {

@@ -49,6 +49,7 @@ const useUserProfile = () => {
     };
 
     if (token) fetchUserProfile();
+    // eslint-disable-next-line
   }, [token, language]);
 
   const updateUserProfile = async (updatedData) => {

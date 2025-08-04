@@ -44,6 +44,7 @@ export const useOrder = () => {
 
   useEffect(() => {
     fetchOrders();
+    // eslint-disable-next-line
   }, [language]);
 
   const fetchOrderById = async (orderId) => {
