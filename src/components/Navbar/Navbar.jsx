@@ -209,6 +209,7 @@ const Navbar = () => {
             handleLogout,
             isWhite: scrolled,
           }}
+          logoProps={{isWhite: scrolled }}
         />
       </div>
 

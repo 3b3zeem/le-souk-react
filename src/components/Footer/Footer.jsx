@@ -275,32 +275,6 @@ const Footer = () => {
                 <FaTiktok size={25} className="text-[#333e2c]" />
               </a>
             </div>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder={t("enterEmail")}
-                className={`w-full px-4 py-2 text-sm text-[#353535] focus:outline-none focus:ring-1 focus:ring-offset-green-900 transition duration-200 border border-gray-400 outline-none ${
-                  language === "ar" ? "rounded-r-md" : "rounded-l-md"
-                }`}
-                style={{
-                  backgroundColor: colors.inputBg,
-                }}
-              />
-              <button
-                className={`px-4 py-2 cursor-pointer ${
-                  language === "ar" ? "rounded-l-md" : "rounded-r-md"
-                }`}
-                style={{ backgroundColor: colors.primary }}
-              >
-                <Send
-                  size={20}
-                  className="text-white"
-                  style={{
-                    transform: language === "ar" ? "scaleX(-1)" : "none",
-                  }}
-                />
-              </button>
-            </div>
           </div>
         </div>
       </div>

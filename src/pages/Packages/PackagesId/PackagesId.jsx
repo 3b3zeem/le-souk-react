@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAdminPackages from "../../../dashboard/hooks/Packages/useAdminPackages";
 import Loader from "./../../../layouts/Loader";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Clock4 } from "lucide-react";
 import Meta from "../../../components/Meta/Meta";
+import { usePackages } from "../../../hooks/Packages/usePackages";
 
 const PackagesId = () => {
   const navigate = useNavigate();
   const { packagesId } = useParams();
-  const { details, packageDetails, loading, error } = useAdminPackages();
+  const { language } = useLanguage();
+  const { details, loading, error } = usePackages({
+    language,
+    product_id: packagesId,
+  });
   const [timeLeft, setTimeLeft] = useState(null);
   const { t } = useTranslation();
-  const { language } = useLanguage();
 
   useEffect(() => {
     if (details?.name) {
@@ -25,10 +28,11 @@ const PackagesId = () => {
   }, [details?.name, packagesId, navigate]);
 
   useEffect(() => {
-    if (packagesId) {
-      packageDetails(packagesId);
-    }
-  }, [packagesId, language]);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   useEffect(() => {
     if (details && details.starts_at && details.expires_at) {
@@ -67,16 +71,16 @@ const PackagesId = () => {
     return <Loader />;
   }
 
-  if (!details) {
+  if (error) {
+    return <div className="text-red-500 text-center">{error}</div>;
+  }
+
+  if (!loading && !details) {
     return (
       <div className="text-center text-gray-500">
         {t("No package details found.")}
       </div>
     );
-  }
-
-  if (error) {
-    return <div className="text-red-500 text-center">{error}</div>;
   }
 
   const DetailRow = ({ label, value, color = "" }) => {

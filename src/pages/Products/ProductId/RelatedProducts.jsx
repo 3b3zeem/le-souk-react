@@ -97,21 +97,20 @@ const RelatedProducts = ({ productId, language, category }) => {
           return (
             <div key={product.id} className="px-2">
               <div
-                className="relative group border rounded-md overflow-hidden bg-white hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col"
+                className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col rounded"
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 style={{
                   borderColor: colors.borderLight,
-                  
                 }}
                 onClick={() => navigate(`/products/${product.id}`)}
               >
-                <div className="relative flex justify-center items-center bg-gray-50 h-100">
+                <div className="relative flex justify-center items-center h-56 lg:h-120 bg-gray-50 cursor-pointer">
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-full object-contain p-4 transition-transform duration-200 group-hover:scale-105"
-                    style={{ maxWidth: "80%" }}
+                    className="h-full w-full object-contain lg:object-cover transition-transform duration-200 group-hover:scale-105"
+                    loading="lazy"
                   />
                   {product.discount_percentage && (
                     <span

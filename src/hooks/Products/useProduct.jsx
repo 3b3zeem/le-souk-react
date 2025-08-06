@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useLanguage } from "../../context/Language/LanguageContext";
+import { useQuery } from "@tanstack/react-query";
 
 const BASE_URL = "https://le-souk.dinamo-app.com/api/";
 
@@ -14,17 +15,8 @@ const useProducts = (
   sortBy = "id",
   sortDirection = "desc",
   inStock = null,
-  productId,
+  productId
 ) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [categories, setCategories] = useState([]);
-  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [meta, setMeta] = useState(null);
-  const [links, setLinks] = useState(null);
-
   const [productDetails, setProductDetails] = useState(null);
   const [productDetailsLoading, setProductDetailsLoading] = useState(false);
   const [productDetailsError, setProductDetailsError] = useState(null);
@@ -43,74 +35,16 @@ const useProducts = (
   }, [language]);
 
   // * Fetch categories and products
-  useEffect(() => {
-    const source = axios.CancelToken.source();
+  const fetchCategories = async (language) => {
+    const { data } = await axios.get(`${BASE_URL}categories`, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
+    return data.data;
+  };
 
-    const fetchData = async () => {
-      try {
-        if (perPage === 5 && page === 1) {
-          setLoading(true);
-        } else {
-          setLoadMoreLoading(true);
-        }
-
-        const categoriesResponse = await axios.get(BASE_URL + "categories", {
-          cancelToken: source.token,
-        });
-        setCategories(categoriesResponse.data.data);
-
-        let url = BASE_URL + "products";
-
-        // * Pagination & sorting
-        const params = new URLSearchParams();
-        params.append("per_page", perPage);
-        params.append("page", page);
-        params.append("sort_by", sortBy);
-        params.append("sort_direction", sortDirection);
-
-        if(productId) params.append("pagination", 0);
-
-        // * Filters
-        if (searchQuery) params.append("search", searchQuery);
-        if (categoryId) params.append("category_id", categoryId);
-        if (minPrice !== null) params.append("min_price", minPrice);
-        if (maxPrice !== null) params.append("max_price", maxPrice);
-        if (inStock !== null) params.append("in_stock", inStock);
-        params.append("with", "images,categories,variants");
-
-        url += `?${params.toString()}`;
-
-        const productsResponse = await axios.get(url, {
-          cancelToken: source.token,
-        });
-
-        const newProducts = productsResponse.data.data;
-        setProducts(newProducts);
-        setTotalProducts(productsResponse.data.meta?.total || 0);
-        setMeta(productsResponse.data.meta || null);
-        setLinks(productsResponse.data.links || null);
-
-        setLoading(false);
-        setLoadMoreLoading(false);
-      } catch (err) {
-        if (axios.isCancel(err)) {
-          console.log("Request canceled:", err.message);
-          return;
-        }
-        setError(err.response?.data?.message || "Failed to fetch products");
-        setLoading(false);
-        setLoadMoreLoading(false);
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      source.cancel(
-        "Request canceled due to component unmount or parameter change"
-      );
-    };
-  }, [
+  const fetchProducts = async ({
     language,
     searchQuery,
     categoryId,
@@ -122,7 +56,80 @@ const useProducts = (
     sortDirection,
     inStock,
     productId,
-  ]);
+  }) => {
+    const params = new URLSearchParams();
+    params.append("per_page", perPage);
+    params.append("page", page);
+    params.append("sort_by", sortBy);
+    params.append("sort_direction", sortDirection);
+    if (productId) params.append("pagination", 0);
+    if (searchQuery) params.append("search", searchQuery);
+    if (categoryId) params.append("category_id", categoryId);
+    if (minPrice !== null) params.append("min_price", minPrice);
+    if (maxPrice !== null) params.append("max_price", maxPrice);
+    if (inStock !== null) params.append("in_stock", inStock);
+    params.append("with", "images,categories,variants");
+
+    const url = `${BASE_URL}products?${params.toString()}`;
+
+    const { data } = await axios.get(url, {
+      headers: {
+        "Accept-Language": language,
+      },
+    });
+
+    return {
+      products: data.data,
+      meta: data.meta || null,
+      links: data.links || null,
+      total: data.meta?.total || 0,
+    };
+  };
+
+  const {
+    data: categories = [],
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useQuery({
+    queryKey: ["categories", language],
+    queryFn: () => fetchCategories(language),
+  });
+
+  const {
+    data: productsData,
+    isLoading: productsLoading,
+    error: productsError,
+  } = useQuery({
+    queryKey: [
+      "products",
+      language,
+      searchQuery,
+      categoryId,
+      minPrice,
+      maxPrice,
+      perPage,
+      page,
+      sortBy,
+      sortDirection,
+      inStock,
+      productId,
+    ],
+    queryFn: () =>
+      fetchProducts({
+        language,
+        searchQuery,
+        categoryId,
+        minPrice,
+        maxPrice,
+        perPage,
+        page,
+        sortBy,
+        sortDirection,
+        inStock,
+        productId,
+      }),
+    keepPreviousData: true,
+  });
 
   const fetchProductDetails = async (id) => {
     if (!id) return;
@@ -152,18 +159,17 @@ const useProducts = (
   }, [productId, language]);
 
   return {
-    products,
+    products: productsData?.products || [],
     categories,
-    loading,
-    loadMoreLoading,
-    error,
-    totalProducts,
-    meta,
-    links,
+    loading: productsLoading || categoriesLoading,
+    error: productsError || categoriesError,
+    totalProducts: productsData?.total || 0,
+    meta: productsData?.meta || null,
+    links: productsData?.links || null,
+    fetchProductDetails,
     productDetails,
     productDetailsLoading,
     productDetailsError,
-    fetchProductDetails,
   };
 };
 

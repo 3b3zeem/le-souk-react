@@ -49,7 +49,7 @@ const NavbarTop = (props) => (
         }`}
         style={{ zIndex: 201 }}
       >
-        <Logo />
+        <Logo isWhite={props.scrolled} showLogo={!props.scrolled} />
         <NavbarSearch />
         <div className="flex items-center gap-4">
           <NavbarIcons
