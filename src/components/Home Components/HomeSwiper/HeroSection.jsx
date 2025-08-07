@@ -112,7 +112,11 @@ const HeroSection = () => {
               <div className="w-full h-full">
                 <img
                   src={slide?.images?.[language]?.image_url || slide.image_url}
-                  alt={slide.title}
+                  alt={`${slide.title}`}
+                  rel="preload"
+                  loading="eager"
+                  width={100}
+                  height={100}
                   className="w-full h-full object-contain object-center opacity-85"
                 />
               </div>

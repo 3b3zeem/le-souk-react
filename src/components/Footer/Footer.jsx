@@ -139,8 +139,9 @@ const Footer = () => {
           <div className="flex justify-center items-center sm:items-start">
             <img
               src={logo}
-              alt={siteName || "logo"}
+              alt={`${siteName}`}
               width={250}
+              height={250}
               draggable={false}
             />
           </div>

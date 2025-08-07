@@ -1,18 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import LayOut from "../layouts/Layout.jsx";
 import { lazy, Suspense } from "react";
-import NotFound from "../components/NotFound/NotFound.jsx";
-import AuthRoute from "./AuthRoute.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import AdminProtectedRoute from "./AdminProtectedRoute.jsx";
-import CheckOut from "../pages/CheckOut/CheckOut.jsx";
-import AdminHero from "../dashboard/pages/Hero/AdminHero.jsx";
-import ResetPassword from "../pages/Auth/Reset-Password/ResetPassword.jsx";
-import EmailVerification from "../pages/Auth/Email-Verification/EmailVerification.jsx";
+
+const NotFound = lazy(() => import("../components/NotFound/NotFound.jsx"));
+const Unauthorized = lazy(() =>
+  import("../components/Unauthorized/Unauthorized.jsx")
+);
+const AuthRoute = lazy(() => import("./AuthRoute.jsx"));
+const ProtectedRoute = lazy(() => import("./ProtectedRoute.jsx"));
+const AdminProtectedRoute = lazy(() => import("./AdminProtectedRoute.jsx"));
 
 const Loader = lazy(() => import("../layouts/Loader.jsx"));
 const Home = lazy(() => import("../pages/Home/Home.jsx"));
-const About = lazy(() => import("../pages/About/About.jsx"));
 const Contact = lazy(() => import("../pages/Contact/Contact.jsx"));
 const Profile = lazy(() => import("../pages/Profile/Profile.jsx"));
 const Login = lazy(() => import("../pages/Auth/Login/Login.jsx"));
@@ -33,6 +32,13 @@ const Cart = lazy(() => import("../pages/Cart/Cart.jsx"));
 const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
 const OrderId = lazy(() => import("../pages/Profile/Order/OrderId.jsx"));
+const CheckOut = lazy(() => import("../pages/CheckOut/CheckOut.jsx"));
+const ResetPassword = lazy(() =>
+  import("../pages/Auth/Reset-Password/ResetPassword.jsx")
+);
+const EmailVerification = lazy(() =>
+  import("../pages/Auth/Email-Verification/EmailVerification.jsx")
+);
 
 // * Admin
 const AdminLayout = lazy(() => import("../dashboard/layouts/Layout.jsx"));
@@ -55,9 +61,7 @@ const AdminOrders = lazy(() =>
 );
 const Coupons = lazy(() => import("../dashboard/pages/Coupons/Coupons.jsx"));
 const Settings = lazy(() => import("../dashboard/pages/Settings/Settings.jsx"));
-const Unauthorized = lazy(() =>
-  import("../components/Unauthorized/Unauthorized.jsx")
-);
+const AdminHero = lazy(() => import("../dashboard/pages/Hero/AdminHero.jsx"));
 
 const routes = createBrowserRouter([
   {
