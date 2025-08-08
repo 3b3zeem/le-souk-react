@@ -26,6 +26,7 @@ const Up_top = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
         transition={{ duration: 0.3 }}
+        title="Arrow Up"
       >
         <ArrowUp size={25} />
       </motion.button>

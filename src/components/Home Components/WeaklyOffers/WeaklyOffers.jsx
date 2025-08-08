@@ -73,7 +73,7 @@ const OfferItem = ({ product }) => {
         {/* Deal Tag */}
         <div className="flex items-center mb-6">
           <Star className="w-5 h-5 text-orange-600 mr-3" fill="orange" />
-          <span className="text-orange-600 font-medium text-sm tracking-wide uppercase">
+          <span className="text-orange-800 font-medium text-sm tracking-wide uppercase">
             {t("deal_of_the_week")}
           </span>
         </div>
@@ -149,7 +149,7 @@ const OfferItem = ({ product }) => {
           <div className="text-sm text-gray-700">
             <span className="font-medium">{t("limited_time_offer")}</span>{" "}
             {t("the_deal_will_expire")} {`${day}/${month}/${year}`}{" "}
-            <span className="font-bold text-red-600">{t("hurry_up")}</span>
+            <span className="font-bold text-red-700">{t("hurry_up")}</span>
           </div>
         </div>
       </div>

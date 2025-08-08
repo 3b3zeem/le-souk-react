@@ -35,8 +35,8 @@ const LanguageDropdown = () => {
         onClick={toggleDropdown}
         type="button"
         className="inline-flex items-center justify-center w-full rounded border border-gray-300 bg-[#e8e4dd] px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition cursor-pointer"
+        title={`${language}`}
       >
-        {/* {language.toUpperCase()} */}
         <span className="text-gray-500">
           <Globe />
         </span>

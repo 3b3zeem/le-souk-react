@@ -14,8 +14,9 @@ const Logo = ({ isWhite, showLogo }) => {
         <img
           src={logo}
           width={isWhite ? 120 : 150}
+          height={isWhite ? 120 : 150}
           alt="logo"
-          className={`transition-all duration-200 ${
+          className={`transition-all duration-200 w-[150px] aspect-[1501/395] ${
             isWhite ? "opacity-90" : ""
           }`}
         />

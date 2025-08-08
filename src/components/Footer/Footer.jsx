@@ -265,15 +265,19 @@ const Footer = () => {
                 href="https://www.instagram.com/lesoukkuwait/"
                 target="_blank"
                 className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+                aria-label={t("instagramLabel")}
               >
                 <Instagram size={25} className="text-[#333e2c]" />
+                <span className="sr-only">{t("instagramLabel")}</span>
               </a>
               <a
                 href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
                 target="_blank"
                 className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+                aria-label={t("tiktokLabel")}
               >
                 <FaTiktok size={25} className="text-[#333e2c]" />
+                <span className="sr-only">{t("tiktokLabel")}</span>
               </a>
             </div>
           </div>

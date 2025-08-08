@@ -155,6 +155,7 @@ const SwiperSection = ({ products }) => {
     <button
       onClick={onClick}
       className="absolute -top-16 right-0 bg-white shadow-md transition-all duration-200 text-gray-700 rounded p-2 z-10 cursor-pointer"
+      title="Arrow Right"
     >
       <ChevronRight size={20} />
     </button>
@@ -164,6 +165,7 @@ const SwiperSection = ({ products }) => {
     <button
       onClick={onClick}
       className="absolute -top-16 right-12 bg-white shadow-md transition-all duration-200 text-gray-700 rounded p-2 z-10 cursor-pointer"
+      title="Arrow Left"
     >
       <ChevronLeft size={20} />
     </button>
@@ -324,6 +326,7 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
                       : colors.productName,
                 }}
                 onClick={() => setActiveTab(tab.key)}
+                title={`${tab.label}`}
               >
                 {tab.label}
               </button>
