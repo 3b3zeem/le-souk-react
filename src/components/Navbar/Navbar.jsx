@@ -160,7 +160,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200 transition-all duration-150 bg-[#e8e4dd] hidden md:block`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-150 bg-[#e8e4dd] hidden lg:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
@@ -209,20 +209,26 @@ const Navbar = () => {
             handleLogout,
             isWhite: scrolled,
           }}
-          logoProps={{isWhite: scrolled }}
+          logoProps={{ isWhite: scrolled }}
         />
       </div>
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150 bg-[#e8e4dd] md:hidden flex items-center justify-between ${
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150 bg-[#e8e4dd] lg:hidden flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <div className="text-2xl font-bold" style={{ color: colors.primary }}>
           <Link to={"/"}>
-            <img src={logo} width={150} alt="logo" />
+            <img
+              src={logo}
+              width={120}
+              height={120}
+              alt="logo"
+              className={`transition-all duration-200 w-[150px] aspect-[1501/395]`}
+            />
           </Link>
         </div>
 
