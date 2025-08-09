@@ -4,13 +4,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useHome from "../../../hooks/HomeComponents/useHome";
 import { Link, useNavigate } from "react-router-dom";
-import Loader from "../../../layouts/Loader";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import useCartCRUD from "../../../hooks/Cart/UseCart";
 import useWishlistCRUD from "../../../hooks/WishList/useWishlist";
 import { useWishlist } from "../../../context/WishList/WishlistContext";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import PackagesSkeleton from "./PackagesSkeleton";
 
 const HomePackages = () => {
   const { packages, loading, error } = useHome();
@@ -104,7 +104,7 @@ const HomePackages = () => {
     return wishlistItems.some((item) => item.product.id === productId);
   };
 
-  if (loading) return <Loader />;
+  if (loading) return <PackagesSkeleton />;
   if (error) return <div>Error: {error.message}</div>;
   if (packages?.length === 0) return null;
 

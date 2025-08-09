@@ -5,7 +5,7 @@ import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Link, useNavigate } from "react-router-dom";
-import SkeletonLoader from "../../../layouts/SkeletonLoader";
+import CategoriesSkeleton from "./CategoriesSkeleton";
 
 const Categories = () => {
   const { categories, loading, error } = useHome();
@@ -67,7 +67,7 @@ const Categories = () => {
   };
 
   if (loading) {
-    return <SkeletonLoader />;
+    return <CategoriesSkeleton />;
   }
 
   if (error) {

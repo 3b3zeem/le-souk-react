@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useHome from "../../hooks/HomeComponents/useHome";
 import { motion, AnimatePresence } from "framer-motion";
 import useCategories from "../../hooks/Categories/useCategories";
-import SkeletonLoader from "../../layouts/SkeletonLoader";
 import { useLanguage } from "../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
 
@@ -65,9 +64,7 @@ const SearchOverlay = ({ open, onClose, className = "" }) => {
                 {language === 'ar' ? 'منتجات مقترحة' : 'Suggestion products'}
               </h3>
               <div>
-                {loading ? (
-                  <SkeletonLoader />
-                ) : filteredProducts.length === 0 ? (
+                {filteredProducts.length === 0 ? (
                   <div className="text-gray-400">No products found</div>
                 ) : (
                   filteredProducts.slice(0, 6).map((product) => (

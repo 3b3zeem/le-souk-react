@@ -4,12 +4,10 @@ import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
-// import useSettings from "../../hooks/Settings/useSettings";
-
 import logo from "../../assets/Images/3x/navbar.png";
-import Loader from "./../../layouts/Loader";
 import ReadOnlyRichText from "./ReadOnlyRichText";
 import { useSettingsContext } from "../../context/Settings/SettingsContext";
+import FooterSkeleton from "./FooterSkeleton";
 
 const colors = {
   primary: "#333e2c",
@@ -67,7 +65,7 @@ const Footer = () => {
   const WorkingHoursData = getSettingNames(WorkingHoursSetting);
 
   if (loading) {
-    return <Loader />;
+    return <FooterSkeleton />;
   }
 
   if (error) {

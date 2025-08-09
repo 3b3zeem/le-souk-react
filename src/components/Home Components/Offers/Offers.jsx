@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import SkeletonLoader from "../../../layouts/SkeletonLoader";
+import OffersSkeleton from "./OffersSkeleton";
 
 const colors = {
   primary: "#333e2c",
@@ -377,7 +377,7 @@ const TabsSection = ({ products, productsPerPage = 6 }) => {
 const Offers = () => {
   const { offers, loading, error } = useHome();
 
-  if (loading) return <SkeletonLoader />;
+  if (loading) return <OffersSkeleton />;
   if (error)
     return (
       <div className="text-center text-red-500">Error: {error.message}</div>

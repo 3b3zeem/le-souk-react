@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useHome from "../../../hooks/HomeComponents/useHome";
-import Loader from "../../../layouts/Loader";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import WeeklyOfferSkeleton from "./WeeklyOfferSkeleton";
 
 const OfferItem = ({ product }) => {
   const navigate = useNavigate();
@@ -180,7 +180,12 @@ const WeaklyOffers = () => {
     arrows: false,
   };
 
-  if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="p-6 bg-gray-100 w-full">
+        <WeeklyOfferSkeleton />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (

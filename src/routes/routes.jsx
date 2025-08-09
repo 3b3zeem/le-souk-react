@@ -70,11 +70,7 @@ const routes = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={<Loader />}>
-            <Home />
-          </Suspense>
-        ),
+        element: <Home />,
       },
       {
         element: <AuthRoute />,
@@ -185,14 +181,6 @@ const routes = createBrowserRouter([
           </Suspense>
         ),
       },
-      // {
-      //   path: "about",
-      //   element: (
-      //     <Suspense fallback={<Loader />}>
-      //       <About />
-      //     </Suspense>
-      //   ),
-      // },
       {
         element: <ProtectedRoute />,
         children: [
