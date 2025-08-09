@@ -299,7 +299,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
+            className="lg:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
             onClick={() => setIsOpen(false)}
             dir={language === "ar" ? "rtl" : "ltr"}
           >
@@ -309,7 +309,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: language === "ar" ? 300 : -300 }}
               transition={{ duration: 0.3 }}
-              className={`h-full w-[300px] bg-[#e8e4dd] flex flex-col ${
+              className={`h-full md:w-[500px] w-[300px] bg-[#e8e4dd] flex flex-col ${
                 language === "ar" ? "ml-auto" : "mr-auto"
               }`}
               onClick={(e) => e.stopPropagation()}
@@ -348,11 +348,11 @@ const Navbar = () => {
                 <LanguageDropdown />
 
                 {/* User Dropdown with animation as before */}
-                <div className="cursor-pointer relative w-full">
+                <div className="cursor-pointer relative">
                   {isLoggedIn && (
                     <div
                       ref={avatarRef}
-                      className="flex items-center justify-between gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
+                      className="flex items-center justify-start gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
