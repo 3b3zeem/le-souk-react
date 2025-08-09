@@ -220,14 +220,14 @@ const Navbar = () => {
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+        <div className="w-[150px] aspect-[1501/395]" style={{ color: colors.primary }}>
           <Link to={"/"}>
             <img
               src={logo}
               width={120}
               height={120}
               alt="logo"
-              className={`transition-all duration-200 w-[150px] aspect-[1501/395]`}
+              className={`transition-all duration-200`}
             />
           </Link>
         </div>

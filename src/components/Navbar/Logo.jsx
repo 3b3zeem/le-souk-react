@@ -6,7 +6,7 @@ const Logo = ({ isWhite, showLogo }) => {
 
   return (
     <div
-      className={`flex items-center transition-all duration-200 ${
+      className={`flex items-center transition-all duration-200 w-[150px] aspect-[1501/395] ${
         isWhite ? "bg-white p-3 rounded" : ""
       }`}
     >
@@ -16,7 +16,7 @@ const Logo = ({ isWhite, showLogo }) => {
           width={isWhite ? 120 : 150}
           height={isWhite ? 120 : 150}
           alt="logo"
-          className={`transition-all duration-200 w-[150px] aspect-[1501/395] ${
+          className={`transition-all duration-200 ${
             isWhite ? "opacity-90" : ""
           }`}
         />
