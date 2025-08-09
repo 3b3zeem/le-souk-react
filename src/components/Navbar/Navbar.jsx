@@ -240,6 +240,7 @@ const Navbar = () => {
                 onClick={handleCartClick}
                 className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
+                title="Shopping Cart"
               >
                 <ShoppingCart size={20} className="text-gray-500" />
                 {cartCount > 0 && !isCartLoading && (
@@ -253,6 +254,7 @@ const Navbar = () => {
                 onClick={handleWishlistClick}
                 className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
+                title="WishList"
               >
                 <Heart size={20} className="text-gray-500" />
                 {wishlistCount > 0 && (
@@ -275,6 +277,7 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className=" focus:outline-none rounded-md cursor-pointer"
+            title="Side Menu"
           >
             <Menu size={24} />
           </button>
