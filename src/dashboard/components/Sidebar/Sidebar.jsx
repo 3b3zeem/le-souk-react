@@ -48,7 +48,7 @@ const Sidebar = () => {
       className={({ isActive }) =>
         `flex items-center gap-3 px-3 py-2 rounded transition cursor-pointer ${
           isActive
-            ? "bg-gray-800 text-blue-50 font-semibold"
+            ? "bg-[#e8e4dd] text-[#333c2e] font-semibold"
             : "hover:bg-gray-200"
         } ${className}`
       }

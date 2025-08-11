@@ -1,85 +1,55 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useSearchParams } from "react-router-dom";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import toast from "react-hot-toast";
+
+const fetchCategories = async (token, language, search, page, perPage ) => {
+  const params = new URLSearchParams();
+  if (search) params.append("search", search);
+  params.append("page", page);
+  params.append("per_page", perPage);
+  params.append("with", "parent,children,products");
+
+  const res = await axios.get(
+    `https://le-souk.dinamo-app.com/api/categories?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": language,
+      },
+    }
+  );
+
+  return {
+    categories: res.data.data,
+    totalPages: res.data.meta?.last_page || 1,
+    totalCount: res.data.meta?.total || 0,
+    currentPage: res.data.meta?.current_page || 1,
+  };
+};
 
 const useCategories = () => {
   const [searchParams] = useSearchParams();
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
   const { token } = useAuthContext();
   const { language } = useLanguage();
+  const queryClient = useQueryClient();
 
   const search = searchParams.get("search") || "";
   const page = parseInt(searchParams.get("page")) || 1;
   const perPage = parseInt(searchParams.get("per_page")) || 6;
 
-  useEffect(() => {
-    const interceptor = axios.interceptors.request.use((config) => {
-      config.headers["Accept-Language"] = language;
-      return config;
-    });
+  const { data,isLoading: loading,isError,error,} = useQuery({
+    queryKey: ["categories", { token, language, search, page, perPage }],
+    queryFn: ()=>fetchCategories(token, language, search, page, perPage),
+    enabled: !!token, 
+  });
 
-    return () => {
-      axios.interceptors.request.eject(interceptor);
-    };
-  }, [language]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        if (!token) {
-          throw new Error("No token found. Please log in.");
-        }
-
-        const params = new URLSearchParams();
-        if (search) params.append("search", search);
-        params.append("page", page);
-        params.append("per_page", perPage);
-        params.append("with", "parent,children,products");
-
-        const response = await axios.get(
-          `https://le-souk.dinamo-app.com/api/categories?${params.toString()}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setCategories(response.data.data);
-        setTotalPages(response.data.meta.last_page || 1);
-        setTotalCount(response.data.meta.total)
-        setCurrentPage(response.data.meta.current_page)
-      } catch (err) {
-        const errorMessage =
-          err.response?.data?.message || "Failed to fetch categories";
-        setError(errorMessage);
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, [language, searchParams]);
-
-  const addCategory = async (formData) => {
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
-      const response = await axios.post(
+  const addCategory = useMutation({
+    mutationFn: async (formData) => {
+      if (!token) throw new Error("No token found. Please log in.");
+      const res = await axios.post(
         "https://le-souk.dinamo-app.com/api/admin/categories",
         formData,
         {
@@ -89,27 +59,22 @@ const useCategories = () => {
           },
         }
       );
-
-      setCategories((prev) => [...prev, response.data.data]);
+      return res.data;
+    },
+    onSuccess: (data) => {
       toast.success("Category added successfully!");
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to add category";
-      toast.error(errorMessage);
-      return false;
-    }
-  };
+      queryClient.invalidateQueries(["categories"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to add category");
+    },
+  });
 
-  const editCategory = async (categoryId, formData) => {
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
+  const editCategory = useMutation({
+    mutationFn: async ({ categoryId, formData }) => {
+      if (!token) throw new Error("No token found. Please log in.");
       formData.append("_method", "PUT");
-
-      const response = await axios.post(
+      const res = await axios.post(
         `https://le-souk.dinamo-app.com/api/admin/categories/${categoryId}`,
         formData,
         {
@@ -119,59 +84,49 @@ const useCategories = () => {
           },
         }
       );
-
-      setCategories((prev) =>
-        prev.map((category) =>
-          category.id === categoryId ? response.data.data : category
-        )
-      );
+      return res.data;
+    },
+    onSuccess: () => {
       toast.success("Category updated successfully!");
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to update category";
-      toast.error(errorMessage);
-      return false;
-    }
-  };
+      queryClient.invalidateQueries(["categories"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to update category");
+    },
+  });
 
-  const deleteCategory = async (categoryId) => {
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-
+  const deleteCategory = useMutation({
+    mutationFn: async (categoryId) => {
+      if (!token) throw new Error("No token found. Please log in.");
       await axios.delete(
         `https://le-souk.dinamo-app.com/api/admin/categories/${categoryId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setCategories((prev) =>
-        prev.filter((category) => category.id !== categoryId)
-      );
+    },
+    onSuccess: () => {
       toast.success("Category deleted successfully!");
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to delete category";
-      toast.error(errorMessage);
-      return false;
-    }
-  };
+      queryClient.invalidateQueries(["categories"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to delete category");
+    },
+  });
 
   return {
-    categories,
-    addCategory,
-    editCategory,
-    deleteCategory,
+    categories: data?.categories || [],
+    totalPages: data?.totalPages || 1,
+    totalCount: data?.totalCount || 0,
+    currentPage: data?.currentPage || 1,
     loading,
-    error,
-    totalPages,
-    totalCount,
-    currentPage,
+    error: isError ? error.message : null,
     search,
     page,
+    addCategory: addCategory.mutate,
+    editCategory: (categoryId, formData) =>
+      editCategory.mutate({ categoryId, formData }),
+    deleteCategory: deleteCategory.mutate,
   };
 };
 

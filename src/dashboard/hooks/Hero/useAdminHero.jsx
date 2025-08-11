@@ -1,77 +1,59 @@
-import { useState, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useState } from "react";
+
+const perPage = 15;
+
+const fetchHeros = async ({ queryKey }) => {
+  const [_key, { token, language, page, search }] = queryKey;
+  const params = new URLSearchParams();
+  params.append("per_page", perPage);
+  params.append("page", page);
+  if (search) params.append("search", search);
+
+  const response = await axios.get(
+    `https://le-souk.dinamo-app.com/api/admin/sliders?${params.toString()}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Accept-Language": language,
+      },
+    }
+  );
+
+  return {
+    heros: Array.isArray(response.data.data)
+      ? response.data.data.map((hero) => ({
+          ...hero,
+          images: hero.images || { en: {}, ar: {} },
+        }))
+      : [],
+    totalPages: response.data.meta?.last_page || 1,
+    totalCount: response.data.meta?.total || 0,
+    currentPage: response.data.meta?.current_page || 1,
+  };
+};
 
 const useAdminHero = () => {
-  const [heros, setHeros] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const perPage = 15;
   const { token } = useAuthContext();
   const { language } = useLanguage();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const interceptor = axios.interceptors.request.use((config) => {
-      config.headers["Accept-Language"] = language;
-      return config;
-    });
-    return () => {
-      axios.interceptors.request.eject(interceptor);
-    };
-  }, [language]);
+  const {data,isLoading,isError,error,refetch} = useQuery({
+    queryKey: ["adminHeros", { token, language, page, search }],
+    queryFn: fetchHeros,
+    enabled: !!token,  
+  });
 
-  const fetchHeros = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
-      const params = new URLSearchParams();
-      params.append("per_page", perPage);
-      params.append("page", page);
-      if (search) params.append("search", search);
-      const response = await axios.get(
-        `https://le-souk.dinamo-app.com/api/admin/sliders?${params.toString()}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setHeros(
-      Array.isArray(response.data.data)
-        ? response.data.data.map((hero) => ({
-            ...hero,
-            images: hero.images || { en: {}, ar: {} },
-          }))
-        : []
-    );
-      setTotalPages(response.data.meta?.last_page || 1);
-      setTotalCount(response.data.meta?.total || 0);
-      setCurrentPage(response.data.meta?.current_page || 1);
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to fetch slider heros";
-      setError(errorMessage);
-      toast.error(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addHero = async (formData) => {
-    setLoading(true);
-    try {
-      if (!token) throw new Error("No token found. Please log in.");
-      const response = await axios.post(
+  
+  const addHeroMutation = useMutation({
+    mutationFn: async (formData) => {
+      const res = await axios.post(
         `https://le-souk.dinamo-app.com/api/admin/sliders`,
         formData,
         {
@@ -81,25 +63,21 @@ const useAdminHero = () => {
           },
         }
       );
-      toast.success(response.data.message);
-      fetchHeros();
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to add slider hero";
-      toast.error(errorMessage);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
+      return res.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries(["adminHeros"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to add slider hero");
+    },
+  });
 
-  const updateHero = async (sliderId, formData) => {
-    setLoading(true);
-    try {
-      if (!token) throw new Error("No token found. Please log in.");
+  const updateHeroMutation = useMutation({
+    mutationFn: async ({ sliderId, formData }) => {
       formData.append("_method", "PUT");
-      const response = await axios.post(
+      const res = await axios.post(
         `https://le-souk.dinamo-app.com/api/admin/sliders/${sliderId}`,
         formData,
         {
@@ -109,25 +87,20 @@ const useAdminHero = () => {
           },
         }
       );
-      toast.success(response.data.message || "Slider hero updated successfully!");
-      fetchHeros();
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to update slider hero";
-      toast.error(errorMessage);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
+      return res.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Slider hero updated successfully!");
+      queryClient.invalidateQueries(["adminHeros"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to update slider hero");
+    },
+  });
 
-  const deleteHero = async (sliderId) => {
-    setLoading(true);
-    try {
-      if (!token) {
-        throw new Error("No token found. Please log in.");
-      }
+
+  const deleteHeroMutation = useMutation({
+    mutationFn: async (sliderId) => {
       await axios.delete(
         `https://le-souk.dinamo-app.com/api/admin/sliders/${sliderId}`,
         {
@@ -136,39 +109,32 @@ const useAdminHero = () => {
           },
         }
       );
-      setHeros((prev) => prev.filter((hero) => hero.id !== sliderId));
+    },
+    onSuccess: () => {
       toast.success("Slider hero deleted successfully!");
-      return true;
-    } catch (err) {
-      const errorMessage =
-        err.response?.data?.message || "Failed to delete slider hero";
-      toast.error(errorMessage);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchHeros();
-    // eslint-disable-next-line
-  }, [token, language, page, search]);
+      queryClient.invalidateQueries(["adminHeros"]);
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to delete slider hero");
+    },
+  });
 
   return {
-    heros,
-    loading,
-    error,
-    totalPages,
-    totalCount,
-    currentPage,
+    heros: data?.heros || [],
+    totalPages: data?.totalPages || 1,
+    totalCount: data?.totalCount || 0,
+    currentPage: data?.currentPage || 1,
+    loading: isLoading,
+    error: isError ? error.message : null,
     page,
     setPage,
     search,
     setSearch,
-    refetch: fetchHeros,
-    addHero,
-    updateHero,
-    deleteHero,
+    refetch,
+    addHero: addHeroMutation.mutate,
+    updateHero: (sliderId, formData) =>
+      updateHeroMutation.mutate({ sliderId, formData }),
+    deleteHero: deleteHeroMutation.mutate,
   };
 };
 
