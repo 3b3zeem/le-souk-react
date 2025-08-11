@@ -75,7 +75,7 @@ const HeroSection = () => {
     dots: true,
     infinite: heroSliders?.length > 1,
     speed: 500,
-    slidesToShow: Math.min(heroSliders?.length, 4),
+    slidesToShow: Math.min(heroSliders?.length, 1),
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
