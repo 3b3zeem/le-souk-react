@@ -40,14 +40,8 @@ const CategoryId = () => {
         description={`Explore products in the ${category.name} category.`}
         image={category.image_url}
       />
-      <div
-        className="text-[#333e2c] text-center py-25 mb-6 h-[100vh]"
-        style={{
-          background: category.image_url
-            ? `url(${category.image_url}) center/cover no-repeat`
-            : "#e8e4dd",
-        }}
-      >
+      <div className={`mb-6 h-60 md:h-100 lg:h-[90vh] ${!category.image_url && "bg-[#e8e4dd]"}`}>
+        <img src={category.image_url} alt="CategoryId" width={150} className="w-full h-full" />
       </div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {category.products.length === 0 ? (

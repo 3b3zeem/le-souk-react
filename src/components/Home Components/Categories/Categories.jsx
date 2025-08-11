@@ -5,7 +5,7 @@ import { AlertCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { Link, useNavigate } from "react-router-dom";
-import SkeletonLoader from "../../../layouts/SkeletonLoader";
+import CategoriesSkeleton from "./CategoriesSkeleton";
 
 const Categories = () => {
   const { categories, loading, error } = useHome();
@@ -17,6 +17,7 @@ const Categories = () => {
     <button
       onClick={onClick}
       className="absolute top-1/2 -right-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      title="Arrow Right"
     >
       <ChevronRight size={20} />
     </button>
@@ -26,6 +27,7 @@ const Categories = () => {
     <button
       onClick={onClick}
       className="absolute top-1/2 -left-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      title="Arrow Left"
     >
       <ChevronLeft size={20} />
     </button>
@@ -65,7 +67,7 @@ const Categories = () => {
   };
 
   if (loading) {
-    return <SkeletonLoader />;
+    return <CategoriesSkeleton />;
   }
 
   if (error) {

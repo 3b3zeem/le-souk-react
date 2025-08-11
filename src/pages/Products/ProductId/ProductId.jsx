@@ -325,12 +325,12 @@ const ProductId = () => {
           }`}
         >
           {/* Main Image with Magnifier */}
-          <div className="relative w-full" style={{ maxWidth: 500 }}>
+          <div className="relative w-full lg:max-w-[500px] max-w-[600px]">
             <img
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[600px] lg:h-[500px] object-cover rounded cursor-zoom-in"
+              className="w-full h-[400px] sm:h-[500px] object-contain sm:object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}

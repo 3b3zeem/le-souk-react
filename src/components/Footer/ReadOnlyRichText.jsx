@@ -13,6 +13,8 @@ export default function ReadOnlyRichText({ value, dir = "ltr" }) {
   return (
     <div
       dir={dir}
+      role="region"
+      aria-label={dir === "rtl" ? "ساعات العمل" : "Working Hours"}
       style={{ height: "auto", overflow: "auto" }}
     >
       <EditorContent

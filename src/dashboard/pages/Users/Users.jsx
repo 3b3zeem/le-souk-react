@@ -9,6 +9,7 @@ import Meta from "../../../components/Meta/Meta";
 import toast from "react-hot-toast";
 import UserDetails from "./UserDetails";
 import UserEdit from "./UserEdit";
+import Loader from "./../../../layouts/Loader";
 
 const Users = () => {
   const { language } = useLanguage();
@@ -144,7 +145,7 @@ const Users = () => {
         </div>
 
         {loading ? (
-          <p className="text-center text-gray-600">{t("loading")}</p>
+          <Loader />
         ) : users?.length === 0 ? (
           <p className="text-center text-gray-600">{t("no_users")}</p>
         ) : (

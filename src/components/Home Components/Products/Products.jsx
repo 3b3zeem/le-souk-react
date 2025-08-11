@@ -43,6 +43,7 @@ const Products = () => {
     <button
       onClick={onClick}
       className="absolute top-1/2 -right-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      title="Arrow Right"
     >
       <ChevronRight size={20} />
     </button>
@@ -52,6 +53,7 @@ const Products = () => {
     <button
       onClick={onClick}
       className="absolute top-1/2 -left-4 -translate-y-1/2 bg-[#333e2c] hover:opacity-90 transition-all duration-200 text-white rounded p-2 shadow-lg z-10 cursor-pointer"
+      title="Arrow Left"
     >
       <ChevronLeft size={20} />
     </button>
@@ -247,6 +249,7 @@ const Products = () => {
                         : "hover:bg-blue-100"
                     }`}
                     style={{ borderColor: colors.borderLight }}
+                    title="WishKist"
                   >
                     <Heart
                       size={22}
@@ -278,6 +281,7 @@ const Products = () => {
                         : "hover:bg-blue-100"
                     }`}
                     style={{ borderColor: colors.borderLight }}
+                    title="Shopping Cart"
                   >
                     <ShoppingCart size={22} className="text-gray-500" />
                   </button>

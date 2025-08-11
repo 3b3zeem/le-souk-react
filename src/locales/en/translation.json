@@ -19,7 +19,7 @@
   "hello": "Hello, {{name}}",
   "categories": "Categories",
   "somethingWentWrong": "Something went wrong!",
-  "seeMore": "See More",
+  "seeMore": "All Categories",
   "allProducts": "All Products",
   "stayConnected": "Stay Connected",
   "always": "Always",
@@ -438,5 +438,7 @@
   "confirm_password":"Confirm Password",
   "password_requirements":" Password must be more than 8 characters",
   "home": "Home",
-  "language": "en"
+  "language": "en",
+  "instagramLabel": "Follow us on Instagram",
+  "tiktokLabel": "Follow us on TikTok"
 }

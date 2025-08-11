@@ -20,7 +20,7 @@
   "hello": "مرحبًا، {name}",
   "categories": "الفئات",
   "somethingWentWrong": "حدث خطأ ما!",
-  "seeMore": "عرض المزيد",
+  "seeMore": "كل الفئات",
   "allProducts": "كل المنتجات",
   "stayConnected": "ابقَ على اتصال",
   "always": "دائمًا",
@@ -440,5 +440,7 @@
   "enter_password":"أدخل كلمة المرور",
   "password_requirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، وحرف كبير واحد، وحرف صغير واحد، ورقم واحد، ورمز خاص واحد.",
   "home": "الرئيسية",
-  "language": "ar"
+  "language": "ar",
+  "instagramLabel": "تابعنا على إنستجرام",
+  "tiktokLabel": "تابعنا على تيك توك"
 }

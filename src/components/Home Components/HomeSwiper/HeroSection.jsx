@@ -3,8 +3,8 @@ import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useHero } from "../../../hooks/Hero/useHero";
-import Loader from "../../../layouts/Loader";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import HeroSkeleton from "./HeroSkeleton";
 
 const colors = {
   primary: "#333e2c",
@@ -92,7 +92,7 @@ const HeroSection = () => {
     ),
   };
 
-  if (isLoading) <Loader />;
+  if (isLoading) return <HeroSkeleton />;
 
   if (!heroSliders || heroSliders.length === 0) return null;
 
@@ -112,7 +112,10 @@ const HeroSection = () => {
               <div className="w-full h-full">
                 <img
                   src={slide?.images?.[language]?.image_url || slide.image_url}
-                  alt={slide.title}
+                  alt={`${slide.title}`}
+                  loading="lazy"
+                  width={100}
+                  height={100}
                   className="w-full h-full object-contain object-center opacity-85"
                 />
               </div>

@@ -160,7 +160,7 @@ const Navbar = () => {
     <React.Fragment>
       {/* Desktop Navigation */}
       <div
-        className={`sticky top-0 left-0 z-200 transition-all duration-150 bg-[#e8e4dd] hidden md:block`}
+        className={`sticky top-0 left-0 z-200 transition-all duration-150 bg-[#e8e4dd] hidden lg:block`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
         <NavbarTop
@@ -209,19 +209,26 @@ const Navbar = () => {
             handleLogout,
             isWhite: scrolled,
           }}
+          logoProps={{ isWhite: scrolled }}
         />
       </div>
 
       {/* Mobile Navigation */}
       <div
-        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150 bg-[#e8e4dd] md:hidden flex items-center justify-between ${
+        className={`sticky top-0 left-0 z-50 w-full transition-all duration-150 bg-[#e8e4dd] lg:hidden flex items-center justify-between ${
           scrolled ? "py-6 shadow-md" : "py-4 shadow-sm"
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="text-2xl font-bold" style={{ color: colors.primary }}>
+        <div className="w-[150px] aspect-[1501/395]" style={{ color: colors.primary }}>
           <Link to={"/"}>
-            <img src={logo} width={150} alt="logo" />
+            <img
+              src={logo}
+              width={120}
+              height={120}
+              alt="logo"
+              className={`transition-all duration-200`}
+            />
           </Link>
         </div>
 
@@ -233,6 +240,7 @@ const Navbar = () => {
                 onClick={handleCartClick}
                 className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
+                title="Shopping Cart"
               >
                 <ShoppingCart size={20} className="text-gray-500" />
                 {cartCount > 0 && !isCartLoading && (
@@ -246,6 +254,7 @@ const Navbar = () => {
                 onClick={handleWishlistClick}
                 className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
+                title="WishList"
               >
                 <Heart size={20} className="text-gray-500" />
                 {wishlistCount > 0 && (
@@ -268,6 +277,7 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className=" focus:outline-none rounded-md cursor-pointer"
+            title="Side Menu"
           >
             <Menu size={24} />
           </button>
@@ -289,7 +299,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
+            className="lg:hidden fixed inset-0 bg-black/40 z-550 cursor-pointer"
             onClick={() => setIsOpen(false)}
             dir={language === "ar" ? "rtl" : "ltr"}
           >
@@ -299,7 +309,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: language === "ar" ? 300 : -300 }}
               transition={{ duration: 0.3 }}
-              className={`h-full w-[300px] bg-[#e8e4dd] flex flex-col ${
+              className={`h-full md:w-[500px] w-[300px] bg-[#e8e4dd] flex flex-col ${
                 language === "ar" ? "ml-auto" : "mr-auto"
               }`}
               onClick={(e) => e.stopPropagation()}
@@ -338,11 +348,11 @@ const Navbar = () => {
                 <LanguageDropdown />
 
                 {/* User Dropdown with animation as before */}
-                <div className="cursor-pointer relative w-full">
+                <div className="cursor-pointer relative">
                   {isLoggedIn && (
                     <div
                       ref={avatarRef}
-                      className="flex items-center justify-between gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
+                      className="flex items-center justify-start gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">

@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import NavbarIcons from "./NavbarIcons";
 import NavbarUserMenu from "./NavbarUserMenu";
+import Logo from "./Logo";
 
 const NavbarBottom = ({
   navLinks,
@@ -10,6 +11,7 @@ const NavbarBottom = ({
   scrolled,
   iconsProps,
   userMenuProps,
+  logoProps,
 }) => (
   <div className="bg-[#333e2c]">
     <div
@@ -17,23 +19,18 @@ const NavbarBottom = ({
         scrolled ? "py-8" : "py-6"
       }`}
     >
+      <Logo {...logoProps} showLogo={scrolled} />
       <div className="flex items-center">
         {navLinks.map((link, index) => (
           <NavLink
             key={index}
             to={link.path}
             className={({ isActive }) =>
-              `${scrolled ? "mx-4" : "mx-4"} cursor-pointer font-[500] transition duration-150  b-bottom text-[.90rem]
-              ${
-                isActive
-                  ? "text-white font-[700] underline"
-                  : "text-white/80"
-              }
-              ${
-                hover === index && !isActive
-                  ? "text-white underline"
-                  : ""
-              }`
+              `${
+                scrolled ? "mx-4" : "mx-4"
+              } cursor-pointer font-[500] transition duration-150  b-bottom text-[.90rem]
+              ${isActive ? "text-white font-[700] underline" : "text-white/80"}
+              ${hover === index && !isActive ? "text-white underline" : ""}`
             }
             onMouseEnter={() => setHover(index)}
             onMouseLeave={() => setHover(null)}

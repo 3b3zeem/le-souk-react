@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useHome from "../../../hooks/HomeComponents/useHome";
-import Loader from "../../../layouts/Loader";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import { useTranslation } from "react-i18next";
+import WeeklyOfferSkeleton from "./WeeklyOfferSkeleton";
 
 const OfferItem = ({ product }) => {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const OfferItem = ({ product }) => {
         {/* Deal Tag */}
         <div className="flex items-center mb-6">
           <Star className="w-5 h-5 text-orange-600 mr-3" fill="orange" />
-          <span className="text-orange-600 font-medium text-sm tracking-wide uppercase">
+          <span className="text-orange-800 font-medium text-sm tracking-wide uppercase">
             {t("deal_of_the_week")}
           </span>
         </div>
@@ -149,7 +149,7 @@ const OfferItem = ({ product }) => {
           <div className="text-sm text-gray-700">
             <span className="font-medium">{t("limited_time_offer")}</span>{" "}
             {t("the_deal_will_expire")} {`${day}/${month}/${year}`}{" "}
-            <span className="font-bold text-red-600">{t("hurry_up")}</span>
+            <span className="font-bold text-red-700">{t("hurry_up")}</span>
           </div>
         </div>
       </div>
@@ -180,7 +180,12 @@ const WeaklyOffers = () => {
     arrows: false,
   };
 
-  if (loading) return <Loader />;
+  if (loading)
+    return (
+      <div className="p-6 bg-gray-100 w-full">
+        <WeeklyOfferSkeleton />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (

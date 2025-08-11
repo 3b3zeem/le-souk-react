@@ -7,7 +7,6 @@ const NavbarIcons = ({
   handleWishlistClick,
   cartCount,
   wishlistCount,
-  // children,
   isWhite = false,
 }) => (
   <div className="flex gap-4 items-center">
@@ -16,6 +15,7 @@ const NavbarIcons = ({
     <button
       onClick={handleCartClick}
       className="p-2 rounded border text-[#333e2c] border-gray-300 transition duration-200 cursor-pointer relative"
+      title="Shopping Cart"
     >
       <ShoppingCart
         size={20}
@@ -30,6 +30,7 @@ const NavbarIcons = ({
     <button
       onClick={handleWishlistClick}
       className="p-2 rounded border text-[#333e2c] border-gray-300 transition duration-200 cursor-pointer relative"
+      title="WishList"
     >
       <Heart size={20} className={isWhite ? "text-white" : "text-[#333e2c]"} />
       {wishlistCount > 0 && (
@@ -38,8 +39,6 @@ const NavbarIcons = ({
         </span>
       )}
     </button>
-
-    {/* {children} */}
   </div>
 );
 

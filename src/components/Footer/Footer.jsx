@@ -4,12 +4,10 @@ import { FaTiktok } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
-// import useSettings from "../../hooks/Settings/useSettings";
-
 import logo from "../../assets/Images/3x/navbar.png";
-import Loader from "./../../layouts/Loader";
 import ReadOnlyRichText from "./ReadOnlyRichText";
 import { useSettingsContext } from "../../context/Settings/SettingsContext";
+import FooterSkeleton from "./FooterSkeleton";
 
 const colors = {
   primary: "#333e2c",
@@ -67,7 +65,7 @@ const Footer = () => {
   const WorkingHoursData = getSettingNames(WorkingHoursSetting);
 
   if (loading) {
-    return <Loader />;
+    return <FooterSkeleton />;
   }
 
   if (error) {
@@ -139,8 +137,9 @@ const Footer = () => {
           <div className="flex justify-center items-center sm:items-start">
             <img
               src={logo}
-              alt={siteName || "logo"}
+              alt={`${siteName}`}
               width={250}
+              height={250}
               draggable={false}
             />
           </div>
@@ -264,42 +263,20 @@ const Footer = () => {
                 href="https://www.instagram.com/lesoukkuwait/"
                 target="_blank"
                 className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+                aria-label={t("instagramLabel")}
               >
                 <Instagram size={25} className="text-[#333e2c]" />
+                <span className="sr-only">{t("instagramLabel")}</span>
               </a>
               <a
                 href="https://www.tiktok.com/@lesoukkuwaitt?_t=ZS-8xIuzd6zmE5&_r=1"
                 target="_blank"
                 className="px-2 py-3 border border-[#333e2c] hover:bg-white transition duration-200"
+                aria-label={t("tiktokLabel")}
               >
                 <FaTiktok size={25} className="text-[#333e2c]" />
+                <span className="sr-only">{t("tiktokLabel")}</span>
               </a>
-            </div>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder={t("enterEmail")}
-                className={`w-full px-4 py-2 text-sm text-[#353535] focus:outline-none focus:ring-1 focus:ring-offset-green-900 transition duration-200 border border-gray-400 outline-none ${
-                  language === "ar" ? "rounded-r-md" : "rounded-l-md"
-                }`}
-                style={{
-                  backgroundColor: colors.inputBg,
-                }}
-              />
-              <button
-                className={`px-4 py-2 cursor-pointer ${
-                  language === "ar" ? "rounded-l-md" : "rounded-r-md"
-                }`}
-                style={{ backgroundColor: colors.primary }}
-              >
-                <Send
-                  size={20}
-                  className="text-white"
-                  style={{
-                    transform: language === "ar" ? "scaleX(-1)" : "none",
-                  }}
-                />
-              </button>
             </div>
           </div>
         </div>
