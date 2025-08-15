@@ -320,17 +320,15 @@ const ProductId = () => {
       <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
         <div
-          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col items-center ${
-            language === "ar" ? "gap-4" : "gap-0"
-          }`}
+          className={`w-full lg:w-1/2 flex flex-col items-start`}
         >
           {/* Main Image with Magnifier */}
-          <div className="relative w-full lg:max-w-[500px] max-w-[600px]">
+          <div className="relative w-full lg:max-w-[600px] max-w-[600px]">
             <img
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[400px] sm:h-[500px] object-fit sm:object-cover rounded cursor-zoom-in"
+              className="w-full h-[300px] sm:h-[600px] object-contain sm:object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
