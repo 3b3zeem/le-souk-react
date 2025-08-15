@@ -340,6 +340,7 @@ const Navbar = () => {
                     }
                     onMouseEnter={() => setHover(index)}
                     onMouseLeave={() => setHover(null)}
+                    onClick={() => setIsOpen(false)}
                   >
                     {link.label}
                   </NavLink>
