@@ -5,7 +5,6 @@ import {
   Heart,
   SearchX,
   X,
-  CornerDownLeft,
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
@@ -168,17 +167,13 @@ const ProductId = () => {
 
       await addToCart(productId, quantity, selectedVariant?.id);
     } catch (err) {
-      toast.error(err.message || "Failed to add to cart");
+      toast.error(err.response?.data?.message || "Failed to add to cart");
     } finally {
       setLoadingStates((prev) => ({ ...prev, cart: false }));
     }
   };
 
   const handleToggleWishlist = async (productId) => {
-    if (!profile) {
-      toast.error("Please log in to add items to your wishlist.");
-    }
-
     setLoadingStates((prev) => ({
       ...prev,
       wishlist: { ...prev.wishlist, [productId]: true },

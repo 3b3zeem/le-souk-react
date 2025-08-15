@@ -19,6 +19,7 @@ import { useSettingsContext } from "../../context/Settings/SettingsContext";
 import ListView from "./ListView";
 import GridView from "./GridView";
 import ToolbarOptions from "./ToolbarOptions";
+import toast from "react-hot-toast";
 ring2.register();
 
 const colors = {
@@ -198,7 +199,7 @@ const Products = () => {
     try {
       await addToCart(productId, quantity);
     } catch (err) {
-      console.error("Error adding to cart:", err);
+      toast.error(err.response?.data?.message || "Failed to add to cart");
     } finally {
       setLoadingStates((prev) => ({
         ...prev,
