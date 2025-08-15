@@ -105,11 +105,11 @@ const RelatedProducts = ({ productId, language, category }) => {
                 }}
                 onClick={() => navigate(`/products/${product.id}`)}
               >
-                <div className="relative flex justify-center items-center h-56 lg:h-120 bg-gray-50 cursor-pointer">
+                <div className="relative flex justify-center items-center h-56 lg:h-75 cursor-pointer">
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-full w-full object-contain lg:object-cover transition-transform duration-200 group-hover:scale-105"
+                    className="h-full w-full object-contain transition-transform duration-200 group-hover:scale-105"
                     loading="lazy"
                   />
                   {product.discount_percentage && (

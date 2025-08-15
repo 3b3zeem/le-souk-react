@@ -287,12 +287,14 @@ const ProductId = () => {
 
   const sliderSettings = {
     infinite: productDetails.images?.length > 1,
-    slidesToShow:  Math.min(4, productDetails.images?.length || 1),
+    slidesToShow: Math.min(2, productDetails.images?.length || 1),
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
     autoplaySpeed: 3000,
-    vertical: window.innerWidth >= 1024,
+    vertical: false,
+    centerMode: false,
+    variableWidth: true,
     beforeChange: (oldIndex, newIndex) => {
       setSliderIndex(newIndex);
       if (productDetails.images && productDetails.images[newIndex]) {
@@ -318,10 +320,8 @@ const ProductId = () => {
       <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
         <div
-          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col-reverse items-start lg:items-center ${
-            language === "ar"
-              ? "lg:flex-row-reverse gap-4"
-              : "lg:flex-row-reverse gap-0"
+          className={`lg:sticky lg:top-0 w-full lg:w-1/2 flex flex-col items-center ${
+            language === "ar" ? "gap-4" : "gap-0"
           }`}
         >
           {/* Main Image with Magnifier */}
@@ -330,7 +330,7 @@ const ProductId = () => {
               ref={imageRef}
               src={mainImage}
               alt={productDetails.name}
-              className="w-full h-[400px] sm:h-[500px] object-contain sm:object-cover rounded cursor-zoom-in"
+              className="w-full h-[400px] sm:h-[500px] object-fit sm:object-cover rounded cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               onClick={handleImageClick}
@@ -352,42 +352,33 @@ const ProductId = () => {
           </div>
 
           {/* Thumbnails Slider */}
-          <div
-            className={`lg:order-2 focus:outline-none focus:border-none max-w-[85%] md:max-w-[70%] lg:max-w-[14%] overflow-hidden mr-2`}
-          >
+          <div className="flex items-start justify-start mt-2 sm:max-w-[500px] max-w-[270px] overflow-hidden">
             {variantImages.length > 1 ? (
-              <div
-                className={`flex m-0 p-0 overflow-x-auto`}
-                style={{ gap: 0 }}
-              >
-                {variantImages.map((img, idx) => (
-                  <div key={img.id}>
-                    <img
-                      src={img.image_url}
-                      alt={`thumb-${idx}`}
-                      className={`object-cover rounded-md border cursor-pointer transition
-                        ${
-                          mainImage === img.image_url
-                            ? "ring-1 ring-[#333e2c] border-[#333e2c]"
-                            : "border-gray-300"
-                        }`}
-                      onClick={() => {
-                        setMainImage(img.image_url);
-                      }}
-                    />
-                  </div>
+              <div className="flex items-start justify-start gap-1 overflow-x-auto scrollbar-hide">
+                {productDetails.images.map((img, idx) => (
+                  <img
+                    key={img.id}
+                    src={img.image_url}
+                    alt={`thumb-${idx}`}
+                    className={`w-16 h-16 focus-within:outline-none object-cover rounded-md border cursor-pointer transition shrink-0
+                    ${
+                      mainImage === img.image_url
+                        ? "ring-1 ring-[#333e2c] border-[#333e2c]"
+                        : "border-gray-300"
+                    }`}
+                    onClick={() => setMainImage(img.image_url)}
+                  />
                 ))}
               </div>
             ) : selectedVariant ? null : (
               <Slider {...sliderSettings}>
                 {productDetails.images &&
                   productDetails.images.map((img, idx) => (
-                    <div key={img.id} className={`flex m-0 p-0 overflow-x-auto`}
-                style={{ gap: 0 }}>
+                    <div key={img.id} className="flex items-start">
                       <img
                         src={img.image_url}
                         alt={`thumb-${idx}`}
-                        className={`w-16 h-16 object-cover rounded-md border cursor-pointer transition
+                        className={`w-16 h-16 focus-within:outline-none mr-8 object-cover rounded-md border cursor-pointer transition shrink-0
                           ${
                             mainImage === img.image_url
                               ? "ring-1 ring-[#333e2c] border-[#333e2c]"
@@ -496,8 +487,9 @@ const ProductId = () => {
           </p>
 
           {/* offer duration */}
-          {productDetails && productDetails.discount_value > 0 &&
-            productDetails.sale_starts_at && 
+          {productDetails &&
+            productDetails.discount_value > 0 &&
+            productDetails.sale_starts_at &&
             productDetails.sale_ends_at &&
             timeLeft &&
             productDetails.min_sale_price && (

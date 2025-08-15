@@ -41,7 +41,7 @@ const Products = () => {
   );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(9);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("created_at");
   const [sortDirection, setSortDirection] = useState("desc");

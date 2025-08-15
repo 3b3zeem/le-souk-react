@@ -41,7 +41,7 @@ const ToolbarOptions = (props) => {
         <span className="text-gray-700 font-semibold">
           {props.language === "ar" ? "عرض" : "Show"} :
         </span>
-        {[12, 18, 24, 36].map((num, idx, arr) => (
+        {[9, 12, 18, 24].map((num, idx, arr) => (
           <React.Fragment key={num}>
             <span
               onClick={() => {
