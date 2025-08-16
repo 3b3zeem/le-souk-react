@@ -33,14 +33,14 @@ const GridView = ({
       }}
     >
       <div
-        className="relative flex justify-center items-center h-56 bg-gray-50 cursor-pointer"
+        className="relative flex justify-center items-center h-65 cursor-pointer"
         onClick={() => handleProductClick(product.id)}
       >
         <img
           src={hoveredIndex === idx ? secondImage : primaryImage}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+          className="w-full h-full lg:object-cover object-contain transition-transform duration-200 group-hover:scale-105"
         />
         {/* WishList */}
         <button

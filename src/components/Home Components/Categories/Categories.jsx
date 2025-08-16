@@ -128,7 +128,7 @@ const Categories = () => {
               <img
                 src={category.image_url}
                 alt={category.name}
-                className="w-full h-48 object-cover "
+                className="w-full lg:h-48 h-full lg:object-cover object-contain"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "/default_category.jpg";

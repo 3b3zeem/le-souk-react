@@ -19,6 +19,7 @@ import { useSettingsContext } from "../../context/Settings/SettingsContext";
 import ListView from "./ListView";
 import GridView from "./GridView";
 import ToolbarOptions from "./ToolbarOptions";
+import toast from "react-hot-toast";
 ring2.register();
 
 const colors = {
@@ -41,7 +42,7 @@ const Products = () => {
   );
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500);
-  const [perPage, setPerPage] = useState(12);
+  const [perPage, setPerPage] = useState(9);
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("created_at");
   const [sortDirection, setSortDirection] = useState("desc");
@@ -198,7 +199,7 @@ const Products = () => {
     try {
       await addToCart(productId, quantity);
     } catch (err) {
-      console.error("Error adding to cart:", err);
+      toast.error(err.response?.data?.message || "Failed to add to cart");
     } finally {
       setLoadingStates((prev) => ({
         ...prev,

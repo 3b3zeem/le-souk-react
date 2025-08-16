@@ -195,13 +195,13 @@ const Products = () => {
                 }}
               >
                 <div
-                  className="relative flex justify-center items-center bg-gray-50 h-80"
+                  className="relative flex justify-center items-center h-80"
                   onClick={() => navigate(`/products/${product.id}`)}
                 >
                   <img
                     src={hoveredIndex === idx ? secondImage : primaryImage}
                     alt={product.name}
-                    className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    className="w-full h-full lg:object-cover object-contain transition-transform duration-200 group-hover:scale-105"
                   />
                   {/* Discount badge */}
                   {product.discount_percentage && (

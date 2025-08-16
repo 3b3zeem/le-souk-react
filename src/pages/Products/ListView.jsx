@@ -26,7 +26,7 @@ const ListView = ({
       key={product.id}
       onMouseEnter={() => setHoveredIndex(idx)}
       onMouseLeave={() => setHoveredIndex(null)}
-      className="flex flex-col md:flex-row bg-white shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer relative"
+      className="flex flex-col md:flex-row items-start bg-white shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 cursor-pointer relative"
       style={{ minHeight: 240 }}
       onClick={() => handleProductClick(product.id)}
     >
@@ -58,14 +58,14 @@ const ListView = ({
 
       {/* Image */}
       <div
-        className="flex-shrink-0 flex items-center justify-center bg-gray-50 p-6 md:w-1/2 relative h-100"
+        className="md:w-1/2 w-full relative h-100"
         style={{ minHeight: 220 }}
       >
         <img
           src={hoveredIndex === idx ? secondImage : primaryImage}
           alt={product.name}
           loading="lazy"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-fit md:object-cover"
         />
       </div>
 
