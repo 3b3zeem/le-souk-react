@@ -16,10 +16,10 @@ const colors = {
 };
 
 const Order = () => {
-  const { fetchOrders, cancelOrder } = useOrder();
+  const { fetchOrders } = useOrder();
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
-  const [cancelLoading, setCancelLoading] = useState({});
+  const [paymentLoading, setPaymentLoading] = useState({});
   const { token } = useAuthContext();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -38,20 +38,22 @@ const Order = () => {
       }
     };
     loadOrders();
+    // eslint-disable-next-line
   }, [token]);
 
-  const handleCancelOrder = async (orderId) => {
-    setCancelLoading((prev) => ({ ...prev, [orderId]: true }));
+  const handleCompletePayment = async (orderId) => {
+    setPaymentLoading((prev) => ({ ...prev, [orderId]: true }));
     try {
-      await cancelOrder(orderId);
-      const updatedOrders = await fetchOrders();
-      setOrders(Array.isArray(updatedOrders) ? updatedOrders : []);
+      window.location.href = `/payment/${orderId}`;
     } catch (err) {
-      toast.error(err);
+      toast.error("Failed to process payment");
     } finally {
-      setCancelLoading((prev) => ({ ...prev, [orderId]: false }));
+      setPaymentLoading((prev) => ({ ...prev, [orderId]: false }));
     }
+
+    // Redirect to payment page instead of executing payment directly
   };
+
   return (
     <div className="w-full mx-auto bg-white p-8 shadow-md mt-6 border-t border-gray-200">
       <h2
@@ -131,7 +133,8 @@ const Order = () => {
                     className="py-3 px-4"
                     style={{ color: colors.productName }}
                   >
-                    {order.total_price} {language === "ar" ? "د.ك" : "KWD"}
+                    {order.total_price || "0.00"}{" "}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </td>
                   <td
                     className="py-3 px-4"
@@ -143,25 +146,24 @@ const Order = () => {
                   <td className="py-3 px-4 flex items-center gap-3">
                     {order.status === "pending" && (
                       <button
-                        onClick={() => handleCancelOrder(order.id)}
-                        disabled={cancelLoading[order.id]}
-                        className={`py-2 px-4 rounded customEffect text-white cursor-pointer ${
-                          cancelLoading[order.id]
-                            ? "opacity-50 cursor-not-allowed"
-                            : ""
+                        onClick={() => handleCompletePayment(order.id)}
+                        disabled={paymentLoading[order.id]}
+                        className={`text-sm py-2 px-4 text-white flex items-center gap-1 customEffect cursor-pointer rounded ${
+                          paymentLoading[order.id]
+                            ? "bg-green-500 opacity-70 cursor-not-allowed"
+                            : "bg-green-600 hover:bg-green-700"
                         }`}
-                        style={{
-                          backgroundColor: "#d01e1e",
-                        }}
                       >
-                        {cancelLoading[order.id] ? (
-                          <span className="flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            {t("cancelling")}
-                          </span>
-                        ) : (
-                          <span>{t("cancelOrder")}</span>
-                        )}
+                        <span className="flex items-center gap-1">
+                          {paymentLoading[order.id] ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              {t("processing") || "Processing..."}
+                            </>
+                          ) : (
+                            t("completePayment") || "Complete Payment"
+                          )}
+                        </span>
                       </button>
                     )}
                     <button

@@ -71,7 +71,7 @@ const OrderId = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">Total Price</p>
-              <p className="text-lg font-semibold">${order.total_price || "0.00"}</p>
+              <p className="text-lg font-semibold">{order.total_price || "0.00"} KWD</p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">Order Date</p>
@@ -104,10 +104,10 @@ const OrderId = () => {
                 >
                   {/* Product Image */}
                   <img
-                    src={item?.product?.image || "https://via.placeholder.com/150"}
+                    src={item?.product?.primary_image_url}
                     alt={item?.product?.name || "Product"}
                     className="w-24 h-24 object-cover rounded-lg"
-                    onError={(e) => (e.target.src = "https://via.placeholder.com/150")} // Fallback image
+                    onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
                   />
                   {/* Product Details */}
                   <div className="flex-1">
@@ -119,8 +119,8 @@ const OrderId = () => {
                     </p>
                     <div className="mt-2 flex items-center gap-4">
                       <p className="text-gray-700">
-                        <span className="font-medium">Price:</span> $
-                        {item?.price || "0.00"}
+                        <span className="font-medium">Price:</span>{" "}
+                        {item?.product?.min_price || item?.product?.max_price || "0.00"} KWD
                       </p>
                       <p className="text-gray-700">
                         <span className="font-medium">Quantity:</span>{" "}
@@ -128,21 +128,17 @@ const OrderId = () => {
                       </p>
                       <p className="text-gray-700">
                         <span className="font-medium">Stock:</span>{" "}
-                        {item?.product?.stock_quantity || 0}
+                        {item?.product?.total_stock || 0}
                       </p>
                     </div>
                     <div className="mt-2 flex items-center gap-2">
                       <p className="text-gray-700">
                         <span className="font-medium">In Cart:</span>{" "}
-                        {item?.product?.is_in_cart ? "Yes" : "No"}
+                        {item?.product?.user?.is_in_cart ? "Yes" : "No"}
                       </p>
                       <p className="text-gray-700">
                         <span className="font-medium">In Wishlist:</span>{" "}
-                        {item?.product?.is_in_wishlist ? "Yes" : "No"}
-                      </p>
-                      <p className="text-gray-700">
-                        <span className="font-medium">Reviewed:</span>{" "}
-                        {item?.product?.is_reviewed ? "Yes" : "No"}
+                        {item?.product?.user?.is_in_wishlist ? "Yes" : "No"}
                       </p>
                     </div>
                   </div>

@@ -641,7 +641,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* <Order /> */}
+      <Order />
     </div>
   );
 };

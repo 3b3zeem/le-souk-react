@@ -228,8 +228,7 @@ const useCartCRUD = () => {
       setCouponValue(response.data.data.coupon.formatted_value);
       return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to validate coupon");
-      throw err;
+      toast.error(err.response?.data?.message || "Failed to validate coupon");
     } finally {
       setLoading(false);
     }

@@ -33,6 +33,7 @@ const WishList = lazy(() => import("../pages/WishList/WishList.jsx"));
 const Order = lazy(() => import("../pages/Profile/Order/Order.jsx"));
 const OrderId = lazy(() => import("../pages/Profile/Order/OrderId.jsx"));
 const CheckOut = lazy(() => import("../pages/CheckOut/CheckOut.jsx"));
+const Payment = lazy(() => import("../pages/CheckOut/Payment.jsx"));
 const ResetPassword = lazy(() =>
   import("../pages/Auth/Reset-Password/ResetPassword.jsx")
 );
@@ -162,6 +163,14 @@ const routes = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <CheckOut />
+          </Suspense>
+        ),
+      },
+      {
+        path: "payment/:orderId",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <Payment />
           </Suspense>
         ),
       },

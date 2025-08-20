@@ -35,7 +35,6 @@ export const useOrder = () => {
       return response.data.data;
     } catch (error) {
       console.error(error);
-      // toast.error(error.response?.data?.message);
       throw error;
     } finally {
       setLoading(false);
@@ -69,80 +68,72 @@ export const useOrder = () => {
     }
   };
 
-  const placeOrder = async (items) => {
+  const checkoutOrder = async ({
+    shipping_address_id,
+    billing_address_id,
+    shipping_method_id = 1,
+    coupon_code = "",
+    notes = "",
+  }) => {
+    if (!token) throw new Error("Not authenticated");
     setLoading(true);
     try {
-      const formData = new FormData();
-      items.forEach((item, index) => {
-        formData.append(`items[${index}][product_id]`, item.product_id);
-        formData.append(`items[${index}][quantity]`, item.quantity);
-      });
-
       const response = await axios.post(
-        "https://le-souk.dinamo-app.com/api/orders/place",
-        formData,
+        `https://le-souk.dinamo-app.com/api/orders/checkout`,
+        {
+          shipping_address_id,
+          billing_address_id,
+          shipping_method_id,
+          ...(coupon_code ? { coupon_code } : {}),
+          ...(notes ? { notes } : {}),
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
 
-      toast.success(response.data.message);
-      return response.data;
+      return response.data?.data;
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to place order.");
+      toast.error(error.response?.data?.message || "Failed to checkout order.");
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const proceedOrder = async () => {
+  const executePayment = async (orderId, {
+    payment_method_id = 2,
+    customer_name,
+    customer_email,
+    customer_phone,
+  } = {}) => {
+    if (!token) throw new Error("Not authenticated");
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://le-souk.dinamo-app.com/api/orders/proceed",
-        {},
+        `https://le-souk.dinamo-app.com/api/orders/${orderId}/payment/execute`,
+        {
+          payment_method_id,
+          ...(customer_name ? { customer_name } : {}),
+          ...(customer_email ? { customer_email } : {}),
+          ...(customer_phone ? { customer_phone } : {}),
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
-
-      toast.success(response.data.message || "Order proceeded successfully!");
-      return response.data;
+      console.log(response.data?.data);
+      return response.data?.data;
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to proceed order.");
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const cancelOrder = async (orderId) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        `https://le-souk.dinamo-app.com/api/orders/${orderId}/cancel`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      toast.error(
+        error.response?.data?.message || "Failed to execute payment."
       );
-
-      toast.success(response.data.message || "Order cancelled successfully!");
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to cancel order.");
       throw error;
     } finally {
       setLoading(false);
@@ -152,9 +143,8 @@ export const useOrder = () => {
   return {
     fetchOrders,
     fetchOrderById,
-    placeOrder,
-    proceedOrder,
-    cancelOrder,
+    checkoutOrder,
+    executePayment,
     loading,
   };
 };
