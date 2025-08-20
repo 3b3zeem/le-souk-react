@@ -74,48 +74,74 @@ const Settings = () => {
     updateSearchParams({ search: e.target.value, page: 1 });
   };
 
-  const handleEdit = (setting) => {
-    setEditSettingKey(setting.key);
+ const handleEdit = (setting) => {
+  setEditSettingKey(setting.key);
 
-    const enTranslation = setting.translations?.find((t) => t.locale === "en");
-    const arTranslation = setting.translations?.find((t) => t.locale === "ar");
+  const enTranslation = setting.translations?.find((t) => t.locale === "en");
+  const arTranslation = setting.translations?.find((t) => t.locale === "ar");
 
-    const baseUrl = "https://le-souk.dinamo-app.com/storage/";
-    const currentEnValue = enTranslation?.value || setting.value || null;
-    const currentArValue = arTranslation?.value || setting.value || null;
-
-    setSettingData({
-      key: setting.key,
-      group: setting.group || "site",
-      type: setting.type || "text",
-      status: setting.status || "active",
-      is_public: setting.is_public !== undefined ? setting.is_public : true,
-      en_name: enTranslation?.name || setting.name || "",
-      ar_name: arTranslation?.name || "",
-      en_value: currentEnValue,
-      ar_value: currentArValue,
-      en_description: enTranslation?.description || setting.description || "",
-      ar_description: arTranslation?.description || "",
-    });
-
-    setPreviewUrls({
-      en_value:
-        currentEnValue && typeof currentEnValue === "string"
-          ? `${baseUrl}${currentEnValue}`
-          : null,
-      ar_value:
-        currentArValue && typeof currentArValue === "string"
-          ? `${baseUrl}${currentArValue}`
-          : null,
-    });
-
-    setIsOverlayOpen(true);
+  const baseUrl = "https://le-souk.dinamo-app.com/storage/";
+  
+  // Get current values with proper type handling
+  const getCurrentValue = (translation, fallback, type) => {
+    const value = translation?.value || fallback || null;
+    
+    // Handle different types appropriately
+    switch (type) {
+      case "integer":
+      case "number":
+        return value ? parseInt(value) : null;
+      case "image":
+        return value; // Keep as string for existing images
+      case "richtext":
+      case "text":
+      case "string":
+      default:
+        return value || "";
+    }
   };
+
+  const currentEnValue = getCurrentValue(enTranslation, setting.value, setting.type);
+  const currentArValue = getCurrentValue(arTranslation, setting.value, setting.type);
+
+  setSettingData({
+    key: setting.key,
+    group: setting.group || "site",
+    type: setting.type || "text",
+    status: setting.status || "active",
+    is_public: setting.is_public !== undefined ? setting.is_public : true,
+    en_name: enTranslation?.name || setting.name || "",
+    ar_name: arTranslation?.name || "",
+    en_value: currentEnValue,
+    ar_value: currentArValue,
+    en_description: enTranslation?.description || setting.description || "",
+    ar_description: arTranslation?.description || "",
+  });
+
+  // Set preview URLs only for image types
+  if (setting.type === "image") {
+    setPreviewUrls({
+      en_value: currentEnValue && typeof currentEnValue === "string" 
+        ? `${baseUrl}${currentEnValue}` 
+        : null,
+      ar_value: currentArValue && typeof currentArValue === "string" 
+        ? `${baseUrl}${currentArValue}` 
+        : null,
+    });
+  } else {
+    setPreviewUrls({
+      en_value: null,
+      ar_value: null,
+    });
+  }
+
+  setIsOverlayOpen(true);
+};
 
   const handleFileChange = (e, field) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
+      if (file.size > 5 * 1024 * 1024) {
         toast.error("File size must not exceed 5MB.");
         return;
       }
@@ -137,60 +163,111 @@ const Settings = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!settingData.en_name) {
-      toast.error(t("settings.nameRequired", "Name is required"));
-      return;
+  if (!settingData.en_name) {
+    toast.error(t("settings.nameRequired", "Name is required"));
+    return;
+  }
+
+  // Helper function to validate and convert values based on type
+  const processValue = (value, type) => {
+    if (value === null || value === undefined || value === "") {
+      return null;
     }
 
-    const baseFormData = new FormData();
-    baseFormData.append("_method", "PUT");
-    baseFormData.append("status", settingData.status);
-    baseFormData.append("is_public", settingData.is_public ? "1" : "0");
-    baseFormData.append("en[name]", settingData.en_name);
-    baseFormData.append("ar[name]", settingData.ar_name);
-    baseFormData.append("en[description]", settingData.en_description);
-    baseFormData.append("ar[description]", settingData.ar_description);
+    switch (type) {
+      case "integer":
+      case "number":
+        // Convert to integer, return null if invalid
+        const numValue = parseInt(value);
+        return isNaN(numValue) ? null : numValue;
+      
+      case "image":
+        // For images, we either have a File object (new upload) or string (existing)
+        return value instanceof File ? value : (typeof value === "string" ? value : null);
+      
+      case "richtext":
+      case "text":
+      case "string":
+      default:
+        // For text types, ensure we have a string
+        return typeof value === "string" ? value : (value ? String(value) : "");
+    }
+  };
 
+  // Process the values according to the setting type
+  const processedEnValue = processValue(settingData.en_value, settingData.type);
+  const processedArValue = processValue(settingData.ar_value, settingData.type);
+
+  // Create base form data with common fields
+  const createBaseFormData = () => {
+    const formData = new FormData();
+    formData.append("_method", "PUT");
+    formData.append("status", settingData.status);
+    formData.append("is_public", settingData.is_public ? "1" : "0");
+    formData.append("en[name]", settingData.en_name);
+    formData.append("ar[name]", settingData.ar_name);
+    formData.append("en[description]", settingData.en_description);
+    formData.append("ar[description]", settingData.ar_description);
+    return formData;
+  };
+
+  try {
     let success = true;
 
-    if (settingData.en_value instanceof File) {
-      const enFormData = new FormData();
-      enFormData.append("_method", "PUT");
-      enFormData.append("status", settingData.status);
-      enFormData.append("is_public", settingData.is_public ? "1" : "0");
-      enFormData.append("en[name]", settingData.en_name);
-      enFormData.append("ar[name]", settingData.ar_name);
-      enFormData.append("en[description]", settingData.en_description);
-      enFormData.append("ar[description]", settingData.ar_description);
-      enFormData.append("en[value]", settingData.en_value);
-      success = (await editSetting(editSettingKey, enFormData)) && success;
-    } else if (typeof settingData.en_value === "string") {
-      baseFormData.append("en[value]", settingData.en_value);
-    }
+    if (settingData.type === "image") {
+      // Handle image type separately
+      
+      // Handle English image
+      if (processedEnValue instanceof File) {
+        const enFormData = createBaseFormData();
+        enFormData.append("en[value]", processedEnValue);
+        success = (await editSetting(editSettingKey, enFormData)) && success;
+      }
 
-    if (settingData.ar_value instanceof File) {
-      const arFormData = new FormData();
-      arFormData.append("_method", "PUT");
-      arFormData.append("status", settingData.status);
-      arFormData.append("is_public", settingData.is_public ? "1" : "0");
-      arFormData.append("en[name]", settingData.en_name);
-      arFormData.append("ar[name]", settingData.ar_name);
-      arFormData.append("en[description]", settingData.en_description);
-      arFormData.append("ar[description]", settingData.ar_description);
-      arFormData.append("ar[value]", settingData.ar_value);
-      success = (await editSetting(editSettingKey, arFormData)) && success;
-    } else if (typeof settingData.ar_value === "string") {
-      baseFormData.append("ar[value]", settingData.ar_value);
-    }
+      // Handle Arabic image  
+      if (processedArValue instanceof File) {
+        const arFormData = createBaseFormData();
+        arFormData.append("ar[value]", processedArValue);
+        success = (await editSetting(editSettingKey, arFormData)) && success;
+      }
 
-    if (
-      !(settingData.en_value instanceof File) &&
-      !(settingData.ar_value instanceof File)
-    ) {
-      success = (await editSetting(editSettingKey, baseFormData)) && success;
+      // If no new files were uploaded, just update other fields
+      if (!(processedEnValue instanceof File) && !(processedArValue instanceof File)) {
+        const baseFormData = createBaseFormData();
+        // Don't send value fields if they're just string paths (existing images)
+        success = await editSetting(editSettingKey, baseFormData);
+      }
+
+    } else if (settingData.type === "integer" || settingData.type === "number") {
+      // Handle integer/number type
+      const formData = createBaseFormData();
+      
+      // Only append values that are valid numbers
+      if (processedEnValue !== null) {
+        formData.append("en[value]", processedEnValue.toString());
+      }
+      if (processedArValue !== null) {
+        formData.append("ar[value]", processedArValue.toString());
+      }
+      
+      success = await editSetting(editSettingKey, formData);
+
+    } else {
+      // Handle text, richtext, and other string types
+      const formData = createBaseFormData();
+      
+      // Append string values
+      if (processedEnValue !== null && processedEnValue !== "") {
+        formData.append("en[value]", processedEnValue);
+      }
+      if (processedArValue !== null && processedArValue !== "") {
+        formData.append("ar[value]", processedArValue);
+      }
+      
+      success = await editSetting(editSettingKey, formData);
     }
 
     if (success) {
@@ -213,8 +290,13 @@ const Settings = () => {
         ar_value: null,
       });
       setEditSettingKey(null);
+      toast.success(t("settings.updateSuccess", "Setting updated successfully"));
     }
-  };
+  } catch (error) {
+    console.error("Error updating setting:", error);
+    toast.error(t("settings.updateError", "Failed to update setting"));
+  }
+};
 
   const perPageOptions = [10, 15, 20, 50];
 
@@ -351,125 +433,136 @@ const Settings = () => {
                     />
                   </div>
 
-                  {/* En Value */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {t("settings.value", "Value")} (English)
-                    </label>
-                    {settingData.type === "image" ? (
-                      <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
-                        <label
-                          htmlFor="file-en_value"
-                          className="cursor-pointer"
-                        >
-                          {(previewUrls.en_value ||
-                            (settingData.en_value &&
-                              typeof settingData.en_value === "string")) && (
-                            <img
-                              src={previewUrls.en_value || settingData.en_value}
-                              alt="Current/Selected English Value"
-                              className="w-full h-50 object-cover mb-2 rounded"
-                            />
-                          )}
-                        </label>
-                        <input
-                          id="file-en_value"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange(e, "en_value")}
-                          className="hidden"
-                        />
-                      </div>
-                    ) : settingData.type === "richtext" ? (
-                      <div style={{ height: "200px" }}>
-                        <RichTextField
-                          value={settingData.en_value}
-                          onChange={(value) =>
-                            handleValueChange("en_value", value)
-                          }
-                          dir="ltr"
-                        />
-                      </div>
-                    ) : (
-                      <textarea
-                        value={settingData.en_value || ""}
-                        onChange={(e) =>
-                          setSettingData({
-                            ...settingData,
-                            en_value: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
-                        rows="3"
-                        placeholder={t(
-                          "settings.enterValue",
-                          "Enter setting value"
-                        )}
-                      />
-                    )}
-                  </div>
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    {t("settings.value", "Value")} (English)
+  </label>
+  {settingData.type === "image" ? (
+    <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
+      <label htmlFor="file-en_value" className="cursor-pointer">
+        {previewUrls.en_value && (
+          <img
+            src={previewUrls.en_value}
+            alt="Current/Selected English Value"
+            className="w-full h-50 object-cover mb-2 rounded"
+          />
+        )}
+        <div className="text-center py-4 text-gray-500">
+          Click to upload image
+        </div>
+      </label>
+      <input
+        id="file-en_value"
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+        onChange={(e) => handleFileChange(e, "en_value")}
+        className="hidden"
+      />
+    </div>
+  ) : settingData.type === "richtext" ? (
+    <div style={{ height: "200px" }}>
+      <RichTextField
+        value={settingData.en_value || ""}
+        onChange={(value) => handleValueChange("en_value", value)}
+        dir="ltr"
+      />
+    </div>
+  ) : settingData.type === "integer" || settingData.type === "number" ? (
+    <input
+      type="number"
+      value={settingData.en_value || ""}
+      onChange={(e) =>
+        setSettingData({
+          ...settingData,
+          en_value: e.target.value,
+        })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
+      placeholder={t("settings.enterValue", "Enter setting value")}
+    />
+  ) : (
+    <textarea
+      value={settingData.en_value || ""}
+      onChange={(e) =>
+        setSettingData({
+          ...settingData,
+          en_value: e.target.value,
+        })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
+      rows="3"
+      placeholder={t("settings.enterValue", "Enter setting value")}
+    />
+  )}
+</div>
 
-                  {/* Ar Value */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      {t("settings.value", "Value")} (Arabic)
-                    </label>
-                    {settingData.type === "image" ? (
-                      <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
-                        <label
-                          htmlFor="file-ar_value"
-                          className="cursor-pointer"
-                        >
-                          {(previewUrls.ar_value ||
-                            (settingData.ar_value &&
-                              typeof settingData.ar_value === "string")) && (
-                            <img
-                              src={previewUrls.ar_value || settingData.ar_value}
-                              alt="Current/Selected Arabic Value"
-                              className="w-full h-50 object-cover mb-2 rounded"
-                            />
-                          )}
-                        </label>
-                        <input
-                          id="file-ar_value"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange(e, "ar_value")}
-                          className="hidden"
-                        />
-                      </div>
-                    ) : settingData.type === "richtext" ? (
-                      <div
-                        className="focus:outline-none"
-                        style={{ height: "200px" }}
-                      >
-                        <RichTextField
-                          value={settingData.ar_value}
-                          onChange={(value) =>
-                            handleValueChange("ar_value", value)
-                          }
-                          dir="rtl"
-                        />
-                      </div>
-                    ) : (
-                      <textarea
-                        value={settingData.ar_value || ""}
-                        onChange={(e) =>
-                          setSettingData({
-                            ...settingData,
-                            ar_value: e.target.value,
-                          })
-                        }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
-                        rows="3"
-                        placeholder={t(
-                          "settings.enterValue",
-                          "Enter setting value"
-                        )}
-                        dir="rtl"
-                      />
-                    )}
-                  </div>
+{/* Ar Value */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    {t("settings.value", "Value")} (Arabic)
+  </label>
+  {settingData.type === "image" ? (
+    <div className="flex flex-col gap-2 border border-dashed border-[#333e2c] rounded-lg p-2">
+      <label htmlFor="file-ar_value" className="cursor-pointer">
+        {previewUrls.ar_value && (
+          <img
+            src={previewUrls.ar_value}
+            alt="Current/Selected Arabic Value"
+            className="w-full h-50 object-cover mb-2 rounded"
+          />
+        )}
+        <div className="text-center py-4 text-gray-500">
+          Click to upload image
+        </div>
+      </label>
+      <input
+        id="file-ar_value"
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+        onChange={(e) => handleFileChange(e, "ar_value")}
+        className="hidden"
+      />
+    </div>
+  ) : settingData.type === "richtext" ? (
+    <div className="focus:outline-none" style={{ height: "200px" }}>
+      <RichTextField
+        value={settingData.ar_value || ""}
+        onChange={(value) => handleValueChange("ar_value", value)}
+        dir="rtl"
+      />
+    </div>
+  ) : settingData.type === "integer" || settingData.type === "number" ? (
+    <input
+      type="number"
+      value={settingData.ar_value || ""}
+      onChange={(e) =>
+        setSettingData({
+          ...settingData,
+          ar_value: e.target.value,
+        })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition duration-200"
+      placeholder={t("settings.enterValue", "Enter setting value")}
+      dir="rtl"
+    />
+  ) : (
+    <textarea
+      value={settingData.ar_value || ""}
+      onChange={(e) =>
+        setSettingData({
+          ...settingData,
+          ar_value: e.target.value,
+        })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#333e2c] transition duration-200"
+      rows="3"
+      placeholder={t("settings.enterValue", "Enter setting value")}
+      dir="rtl"
+    />
+  )}
+</div>
+
+              
 
                   {/* En Description */}
                   <div>
