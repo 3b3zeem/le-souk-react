@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useOrder } from "../../hooks/Order/useOrder";
-import { useAuthContext } from "../../context/Auth/AuthContext";
 import Meta from "../../components/Meta/Meta";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "../../context/Auth/AuthContext";
 
 const Payment = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const { executePayment, fetchOrderById, loading: orderLoading } = useOrder();
-  const { token } = useAuthContext();
+  const { token, isLoading } = useAuthContext();
   const { t } = useTranslation();
 
   const [order, setOrder] = useState(null);
@@ -21,16 +21,14 @@ const Payment = () => {
   const [customerPhone, setCustomerPhone] = useState("");
 
   useEffect(() => {
+    if (isLoading) return;
     if (!token) {
       navigate("/login");
-      return;
-    }
-
-    if (orderId) {
+    } else if (orderId) {
       loadOrderDetails();
     }
     // eslint-disable-next-line
-  }, [orderId, token]);
+  }, [orderId, token, isLoading]);
 
   const loadOrderDetails = async () => {
     try {
@@ -86,7 +84,10 @@ const Payment = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 w-full">
-      <Meta title="Payment" />
+      <Meta
+        title={`Payment-${order.id}`}
+        description="Securely complete your payment using multiple payment methods on our checkout system."
+      />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

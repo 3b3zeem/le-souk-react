@@ -19,7 +19,6 @@ const Order = () => {
   const { fetchOrders } = useOrder();
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
-  const [paymentLoading, setPaymentLoading] = useState({});
   const { token } = useAuthContext();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -42,16 +41,7 @@ const Order = () => {
   }, [token]);
 
   const handleCompletePayment = async (orderId) => {
-    setPaymentLoading((prev) => ({ ...prev, [orderId]: true }));
-    try {
-      window.location.href = `/payment/${orderId}`;
-    } catch (err) {
-      toast.error("Failed to process payment");
-    } finally {
-      setPaymentLoading((prev) => ({ ...prev, [orderId]: false }));
-    }
-
-    // Redirect to payment page instead of executing payment directly
+    window.location.href = `/payment/${orderId}`;
   };
 
   return (
@@ -147,22 +137,12 @@ const Order = () => {
                     {order.status === "pending" && (
                       <button
                         onClick={() => handleCompletePayment(order.id)}
-                        disabled={paymentLoading[order.id]}
-                        className={`text-sm py-2 px-4 text-white flex items-center gap-1 customEffect cursor-pointer rounded ${
-                          paymentLoading[order.id]
-                            ? "bg-green-500 opacity-70 cursor-not-allowed"
-                            : "bg-green-600 hover:bg-green-700"
-                        }`}
+                        className={`text-sm py-2 px-4 text-white flex items-center gap-1 customEffect cursor-pointer rounded
+                          bg-green-600 hover:bg-green-700
+                        `}
                       >
                         <span className="flex items-center gap-1">
-                          {paymentLoading[order.id] ? (
-                            <>
-                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                              {t("processing") || "Processing..."}
-                            </>
-                          ) : (
-                            t("completePayment") || "Complete Payment"
-                          )}
+                          {t("completePayment") || "Complete Payment"}
                         </span>
                       </button>
                     )}
