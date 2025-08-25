@@ -7,7 +7,6 @@ const NavbarIcons = ({
   handleWishlistClick,
   cartCount,
   wishlistCount,
-  isWhite = false,
 }) => (
   <div className="flex gap-4 items-center">
     <LanguageDropdown />

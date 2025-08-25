@@ -29,7 +29,7 @@ const Sidebar = () => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLogout = async () => {
     await logout();
@@ -37,9 +37,9 @@ const Sidebar = () => {
       duration: 1000,
       position: "top-right",
     });
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+    // setTimeout(() => {
+    //   navigate("/login");
+    // }, 1000);
   };
 
   const SidebarItem = ({ to, icon, label, isOpen, className = "" }) => (

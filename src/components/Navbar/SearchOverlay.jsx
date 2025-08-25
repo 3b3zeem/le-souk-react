@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const SearchOverlay = ({ open, onClose, className = "" }) => {
   const [query, setQuery] = useState("");
-  const { products, loading } = useHome(10);
+  const { products } = useHome(10);
   const { categories } = useCategories(10, 0);
   const { language } = useLanguage();
   const { t } = useTranslation();

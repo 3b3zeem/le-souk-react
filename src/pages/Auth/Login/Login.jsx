@@ -11,7 +11,7 @@ import Meta from "../../../components/Meta/Meta";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { DotSpinner } from "ldrs/react";
-import 'ldrs/react/DotSpinner.css'
+import "ldrs/react/DotSpinner.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -37,13 +37,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login(email, password);
+    
     if (result) {
       toast.success("Login successful! Welcome back!", {
         duration: 1000,
         position: "top-right",
       });
       setTimeout(() => {
-        navigate("/");
+        if (result.data.user.is_admin) {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/");
+        }
       }, 1000);
     } else {
       toast.error(error || "Login failed. Please try again.", {
@@ -235,7 +240,7 @@ const Login = () => {
                     />
                     <div className="flex justify-between">
                       <button
-                      type="button"
+                        type="button"
                         onClick={() => setShowForgotModal(false)}
                         className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition"
                       >

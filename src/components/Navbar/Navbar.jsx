@@ -151,9 +151,9 @@ const Navbar = () => {
       duration: 1000,
       position: "top-right",
     });
-    setTimeout(() => {
-      navigate("/login");
-    }, 1000);
+    // setTimeout(() => {
+    //   navigate("/login");
+    // }, 1000);
     setIsOpenUser((prev) => !prev);
   };
 

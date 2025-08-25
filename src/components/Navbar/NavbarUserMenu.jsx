@@ -21,7 +21,7 @@ const NavbarUserMenu = ({
     <>
       <Link
         to="/login"
-        className={`bg-[#333e2c] text-white  border-white font-bold py-2 px-5 rounded-md me-5 cursor-pointer    transition-all duration-200 ${language === "ar" ? "me-0 ms-5" : "me-5 ms-0"}`}
+        className={`bg-[#333e2c] text-white  border-white font-bold py-2 px-5 rounded me-5 cursor-pointer customEffect ${language === "ar" ? "me-0 ms-5" : "me-5 ms-0"}`}
       >
         <span>{t("login")}</span>
       </Link>
