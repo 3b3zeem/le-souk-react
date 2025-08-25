@@ -132,12 +132,9 @@ const HomePackages = () => {
         {packages.map((pkg) => (
           <div key={pkg.id} dir={language === "ar" ? "rtl" : "ltr"}>
             <div
-              className="relative overflow-hidden flex flex-col items-center justify-end bg-white h-[85vh]"
+              className="relative overflow-hidden flex flex-col items-center justify-end bg-white h-[85vh] bg-no-repeat bg-center bg-cover"
               style={{
                 backgroundImage: `url(${pkg.image_url})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                position: "relative",
               }}
             >
               <div className="relative z-10 p-6 w-full h-full flex flex-col justify-between items-start">

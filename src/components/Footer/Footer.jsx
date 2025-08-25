@@ -254,7 +254,11 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="relative inline-block mb-1 text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:left-[45px] after:w-[60px] after:h-[2px] after:bg-white/80">
+            <h3
+              className={`relative mb-1 inline-block text-[#353535] font-bold text-2xl after:content-[''] after:absolute after:top-[36px] after:w-[60px] after:h-[2px] after:bg-white/80 ${
+                language === "ar" ? "after:-left-[45px]" : "after:left-[45px]"
+              }`}
+            >
               {t("followUs")}
               <div className="w-[30px] h-[2px] bg-[#333e2c] mb-5 mt-1"></div>
             </h3>

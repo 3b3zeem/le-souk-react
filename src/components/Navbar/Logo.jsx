@@ -7,7 +7,7 @@ const Logo = ({ isWhite, showLogo }) => {
   return (
     <div
       className={`flex items-center transition-all duration-200 w-[150px] aspect-[1501/395] ${
-        isWhite ? "bg-white p-3 rounded" : ""
+        isWhite ? "bg-[#f3f3f3] p-3 rounded" : ""
       }`}
     >
       <Link to="./">
