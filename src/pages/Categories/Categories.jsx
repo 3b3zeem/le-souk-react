@@ -7,6 +7,7 @@ import { useLanguage } from "../../context/Language/LanguageContext";
 import SkeletonLoader from "../../layouts/SkeletonLoader";
 import Meta from "../../components/Meta/Meta";
 import { useSettingsContext } from "../../context/Settings/SettingsContext";
+import CategoriesSkeleton from "../../components/Home Components/Categories/CategoriesSkeleton";
 
 const Categories = () => {
   const [page, setPage] = useState(1);
@@ -25,7 +26,7 @@ const Categories = () => {
     scrollTo(0, 0);
   }, []);
 
-  if (loading) return <SkeletonLoader />;
+  if (loading) return <CategoriesSkeleton length={8} />;
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (

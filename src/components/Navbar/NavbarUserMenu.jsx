@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, LogOut, LayoutDashboard } from "lucide-react";
+import { User, LogOut, LayoutDashboard, Barcode } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const NavbarUserMenu = ({
@@ -70,6 +70,16 @@ const NavbarUserMenu = ({
             >
               <User className="w-5 h-5" />
               {t("userProfile")}
+            </button>
+            <button
+              onClick={() => {
+                navigate("/order");
+                setIsOpenUser(false);
+              }}
+              className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
+            >
+              <Barcode className="w-5 h-5" />
+              {t("myOrder")}
             </button>
             <button
               onClick={handleLogout}

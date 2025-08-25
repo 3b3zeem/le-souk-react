@@ -22,7 +22,7 @@ const OffersSkeleton = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="p-4 border rounded-lg bg-white">
+              <div key={i} className="p-4 rounded-lg bg-white">
                 <div className="skeleton-img w-full h-32 rounded mb-3"></div>
                 <div className="skeleton-line w-3/4 h-4 mb-2"></div>
                 <div className="skeleton-line w-1/2 h-4"></div>

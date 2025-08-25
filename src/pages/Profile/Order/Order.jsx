@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import OrderSkeletonLoader from "./OrderSkeletonLoader";
 
 const colors = {
   primary: "#333e2c",
@@ -53,9 +54,7 @@ const Order = () => {
         {t("myOrders")}
       </h2>
       {ordersLoading ? (
-        <div className="text-center py-6">
-          <p className="text-gray-600">{t("loading")}</p>
-        </div>
+        <OrderSkeletonLoader />
       ) : orders.length === 0 ? (
         <div className="text-center py-6">
           <p className="text-gray-600">{t("noOrdersFound")}</p>

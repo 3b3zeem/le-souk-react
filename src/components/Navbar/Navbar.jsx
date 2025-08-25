@@ -7,6 +7,7 @@ import {
   LogOut,
   ShoppingCart,
   Heart,
+  Barcode,
 } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -193,7 +194,6 @@ const Navbar = () => {
             handleWishlistClick,
             cartCount: isCartLoading ? 0 : cartCount,
             wishlistCount,
-            isWhite: scrolled,
           }}
           userMenuProps={{
             isLoggedIn,
@@ -220,7 +220,10 @@ const Navbar = () => {
         } px-6`}
         dir={language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="w-[150px] aspect-[1501/395]" style={{ color: colors.primary }}>
+        <div
+          className="w-[150px] aspect-[1501/395]"
+          style={{ color: colors.primary }}
+        >
           <Link to={"/"}>
             <img
               src={logo}
@@ -238,7 +241,7 @@ const Navbar = () => {
             <div className={"flex justify-center gap-1 sm:gap-4"}>
               <button
                 onClick={handleCartClick}
-                className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
+                className="p-2 rounded border border-gray-300 bg-[#f3f3f3] transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
                 title="Shopping Cart"
               >
@@ -252,7 +255,7 @@ const Navbar = () => {
 
               <button
                 onClick={handleWishlistClick}
-                className="p-2 rounded border border-gray-300 hover:bg-gray-100 transition duration-200 cursor-pointer relative"
+                className="p-2 rounded border border-gray-300 bg-[#f3f3f3] transition duration-200 cursor-pointer relative"
                 style={{ borderColor: colors.borderLight }}
                 title="WishList"
               >
@@ -276,7 +279,7 @@ const Navbar = () => {
           )}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className=" focus:outline-none rounded-md cursor-pointer"
+            className=" focus:outline-none rounded-md cursor-pointer bg-[#f3f3f3] p-2"
             title="Side Menu"
           >
             <Menu size={24} />
@@ -353,7 +356,7 @@ const Navbar = () => {
                   {isLoggedIn && (
                     <div
                       ref={avatarRef}
-                      className="flex items-center justify-start gap-2 bg-[#e8e4dd] px-2 border border-gray-300 rounded"
+                      className="flex items-center justify-start gap-2 bg-[#f3f3f3] px-2 border border-gray-300 rounded"
                       onClick={() => setIsOpenUser((prev) => !prev)}
                     >
                       <div className="w-9 h-9 p-1 rounded-full bg-gray-300 flex items-center justify-center">
@@ -397,6 +400,17 @@ const Navbar = () => {
                         >
                           <User className="w-5 h-5" />
                           {t("userProfile")}
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigate("/order");
+                            setIsOpenUser(false);
+                            setIsOpen(false);
+                          }}
+                          className="flex items-center gap-3 w-full text-right px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 border-b border-gray-100"
+                        >
+                          <Barcode className="w-5 h-5" />
+                          {t("myOrder")}
                         </button>
                         <button
                           onClick={handleLogout}

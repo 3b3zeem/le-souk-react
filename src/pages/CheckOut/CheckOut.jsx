@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import AddressModal from "./AddressModal";
 import { useNavigate } from "react-router-dom";
+import { Ring } from "ldrs/react";
+import "ldrs/react/Ring.css";
 
 const CheckOut = () => {
   const { cartItems, fetchCart, subtotal } = useCartCRUD();
@@ -170,7 +172,10 @@ const CheckOut = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <Meta title="Checkout" description="Complete your purchase securely on our checkout page." />
+      <Meta
+        title="Checkout"
+        description="Complete your purchase securely on our checkout page."
+      />
       <div className="max-w-7xl mx-auto bg-white overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
           {/* Addresses, Coupon, Notes Section */}
@@ -311,7 +316,13 @@ const CheckOut = () => {
                 } text-white font-bold py-3 px-8 transition duration-300 transform hover:scale-105 mt-2 flex items-center justify-center gap-2`}
               >
                 {orderLoading ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent -full animate-spin"></div>
+                  <Ring
+                    size="25"
+                    stroke="3"
+                    bgOpacity="0"
+                    speed="2"
+                    color="white"
+                  />
                 ) : (
                   t("checkout")
                 )}

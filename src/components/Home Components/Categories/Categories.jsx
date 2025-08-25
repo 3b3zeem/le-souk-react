@@ -67,7 +67,7 @@ const Categories = () => {
   };
 
   if (loading) {
-    return <CategoriesSkeleton />;
+    return <CategoriesSkeleton length={3} />;
   }
 
   if (error) {
@@ -121,14 +121,14 @@ const Categories = () => {
         {categories.map((category) => (
           <div key={category.id} className="px-2">
             <div
-              className="border rounded-md overflow-hidden group  cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="border rounded-md overflow-hidden group cursor-pointer"
               style={{ borderColor: colors.borderLight }}
               onClick={() => navigate(`/products?category=${category.id}`)}
             >
               <img
                 src={category.image_url}
                 alt={category.name}
-                className="w-full lg:h-48 h-full lg:object-cover object-contain"
+                className="w-full lg:h-48 h-full lg:object-cover object-contain group-hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = "/default_category.jpg";

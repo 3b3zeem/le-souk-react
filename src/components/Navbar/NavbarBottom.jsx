@@ -26,9 +26,7 @@ const NavbarBottom = ({
             key={index}
             to={link.path}
             className={({ isActive }) =>
-              `${
-                scrolled ? "mx-4" : "mx-4"
-              } cursor-pointer font-[500] transition duration-150  b-bottom text-[.90rem]
+              `mx-4 cursor-pointer font-[500] transition duration-150  b-bottom text-[.90rem]
               ${isActive ? "text-white font-[700] underline" : "text-white/80"}
               ${hover === index && !isActive ? "text-white underline" : ""}`
             }

@@ -229,7 +229,7 @@ const Payment = () => {
               <button
                 onClick={handlePayment}
                 disabled={processing}
-                className={`w-full mt-6 py-3 px-4 rounded-lg font-medium text-white transition-colors cursor-pointer transition-all duration-300 ${
+                className={`w-full mt-6 py-3 px-4 rounded-lg font-medium text-white cursor-pointer transition-all duration-300 ${
                   processing
                     ? "bg-[#333e2c] opacity-70 cursor-not-allowed"
                     : "bg-[#333e2c] hover:bg-[#586450]"
