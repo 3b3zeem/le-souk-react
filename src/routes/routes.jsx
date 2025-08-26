@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import LayOut from "../layouts/Layout.jsx";
 import { lazy, Suspense } from "react";
-import PaymentProcess from "../pages/CheckOut/PaymentProcess.jsx";
+import PaymentSuccess from "../pages/CheckOut/PaymentSuccess.jsx";
+import PaymentFailed from "../pages/CheckOut/PaymentFail.jsx";
 
 const NotFound = lazy(() => import("../components/NotFound/NotFound.jsx"));
 const Unauthorized = lazy(() =>
@@ -219,10 +220,18 @@ const routes = createBrowserRouter([
             ),
           },
           {
-            path: "order/:orderId/:status",
+            path: "order/:orderId/success",
             element: (
               <Suspense fallback={<Loader />}>
-                <PaymentProcess />
+                <PaymentSuccess />
+              </Suspense>
+            ),
+          },
+          {
+            path: "order/:orderId/failed",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <PaymentFailed />
               </Suspense>
             ),
           },

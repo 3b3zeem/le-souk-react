@@ -2,24 +2,13 @@ import { useEffect } from "react";
 import confetti from "canvas-confetti";
 
 import successVideo from "../../assets/payment-success.mp4";
-import failVideo from "../../assets/payment-failed.mp4";
 import { useLanguage } from "../../context/Language/LanguageContext";
-import { Link, useLocation } from "react-router-dom";
+import Meta from "../../components/Meta/Meta";
 
-const PaymentProcess = () => {
+const PaymentSuccess = () => {
   const { language } = useLanguage();
-  const location = useLocation();
-
-  const queryParams = new URLSearchParams(location.search);
-  const paymentId = queryParams.get("paymentId");
-  const messageFromQuery = queryParams.get("message") || "Payment completed successfully";
-  const isSuccess = messageFromQuery.includes("successfully") || messageFromQuery.includes("بنجاح");
-
-  const showConfetti = isSuccess;
 
   useEffect(() => {
-    if (!showConfetti) return;
-
     const duration = 15 * 1000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -50,24 +39,16 @@ const PaymentProcess = () => {
     }, 250);
 
     return () => clearInterval(interval);
-  }, [showConfetti]);
+  }, []);
 
-  const title = isSuccess
-    ? language === "ar" ? "تم الدفع بنجاح!" : "Payment Successful!"
-    : language === "ar" ? "فشل الدفع" : "Payment Failed";
-
-  const message = messageFromQuery
-    ? decodeURIComponent(messageFromQuery.replace(/\+/g, " "))
-    : isSuccess
-    ? language === "ar"
+  const title = language === "ar" ? "تم الدفع بنجاح!" : "Payment Successful!";
+  const message =
+    language === "ar"
       ? "شكرًا لإتمام عملية الدفع. يمكنك الآن متابعة طلبك."
-      : "Thanks for completing the payment. You can now proceed with your order."
-    : language === "ar"
-    ? "حدث خطأ أثناء الدفع. يرجى المحاولة لاحقًا."
-    : "Something went wrong with the payment. Please try again later.";
+      : "Thanks for completing the payment. You can now proceed with your order.";
 
   const buttonText = language === "ar" ? "العودة للطلبات" : "Back to Orders";
-  const redirectUrl =  `http://localhost:5173/order`;
+  const redirectUrl = `http://localhost:5173/order`;
   const direction = language === "ar" ? "rtl" : "ltr";
 
   return (
@@ -75,30 +56,29 @@ const PaymentProcess = () => {
       className="flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 text-center px-4 py-10"
       dir={direction}
     >
+      <Meta title="Payment Successful" />
       <div className="bg-white p-5 rounded-xl shadow-xl max-w-lg w-full">
-        {(isSuccess || !isSuccess) && (
-          <div className="flex items-center justify-center">
-            <video
-              src={isSuccess ? successVideo : failVideo}
-              autoPlay
-              loop
-              muted
-              width={350}
-              style={{ maxWidth: "100%" }}
-            />
-          </div>
-        )}
+        <div className="flex items-center justify-center">
+          <video
+            src={successVideo}
+            autoPlay
+            loop
+            muted
+            width={350}
+            style={{ maxWidth: "100%" }}
+          />
+        </div>
         <h1 className="text-3xl font-bold text-[#333e2c] mb-4">{title}</h1>
         <p className="text-gray-700 text-lg mb-6">{message}</p>
         <a
           href={redirectUrl}
-          className="inline-block px-6 py-3 bg-[#333e2c] text-white rounded text-lg hover:bg-[#2b3425] transition duration-200"
+          className="inline-block px-6 py-3 bg-[#333e2c] text-white rounded text-lg customEffect"
         >
-          {buttonText}
+          <span>{buttonText}</span>
         </a>
       </div>
     </div>
   );
 };
 
-export default PaymentProcess;
+export default PaymentSuccess;

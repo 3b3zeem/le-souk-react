@@ -6,6 +6,7 @@ import { useAuthContext } from "../../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import OrderSkeletonLoader from "./OrderSkeletonLoader";
+import Meta from "../../../components/Meta/Meta";
 
 const colors = {
   primary: "#333e2c",
@@ -47,6 +48,7 @@ const Order = () => {
 
   return (
     <div className="w-full mx-auto bg-white p-8 shadow-md mt-6 border-t border-gray-200">
+      <Meta title="My Orders" />
       <h2
         className="text-2xl font-semibold mb-6"
         style={{ color: colors.productTitle }}

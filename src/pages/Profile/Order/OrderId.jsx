@@ -3,6 +3,7 @@ import { useOrder } from "../../../hooks/Order/useOrder";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useParams } from "react-router-dom";
+import Meta from "../../../components/Meta/Meta";
 
 const OrderId = () => {
   const { orderId } = useParams();
@@ -18,7 +19,9 @@ const OrderId = () => {
         const data = await fetchOrderById(orderId);
         setOrder(data);
       } catch (err) {
-        toast.error(err.response?.data?.message || "Failed to load order details.");
+        toast.error(
+          err.response?.data?.message || "Failed to load order details."
+        );
         setOrder(null);
       } finally {
         setOrdersLoading(false);
@@ -52,6 +55,7 @@ const OrderId = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <Meta title={`Order #${order.id} Details`} />
       <div className="max-w-4xl mx-auto">
         {/* Order Summary Card */}
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
@@ -63,7 +67,9 @@ const OrderId = () => {
               <p className="text-sm font-medium text-gray-500">Status</p>
               <p
                 className={`text-lg capitalize ${
-                  order.status === "canceled" ? "text-red-600" : "text-green-600"
+                  order.status === "canceled"
+                    ? "text-red-600"
+                    : "text-green-600"
                 }`}
               >
                 {order.status || "Unknown"}
@@ -71,7 +77,9 @@ const OrderId = () => {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">Total Price</p>
-              <p className="text-lg font-semibold">{order.total_price || "0.00"} KWD</p>
+              <p className="text-lg font-semibold">
+                {order.total_price || "0.00"} KWD
+              </p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">Order Date</p>
@@ -107,7 +115,9 @@ const OrderId = () => {
                     src={item?.product?.primary_image_url}
                     alt={item?.product?.name || "Product"}
                     className="w-24 h-24 object-cover rounded-lg"
-                    onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                    onError={(e) =>
+                      (e.target.src = "https://via.placeholder.com/150")
+                    }
                   />
                   {/* Product Details */}
                   <div className="flex-1">
@@ -115,12 +125,16 @@ const OrderId = () => {
                       {item?.product?.name || "Unknown Product"}
                     </h3>
                     <p className="text-gray-600 text-sm mt-1">
-                      {item?.product?.description || "No description available."}
+                      {item?.product?.description ||
+                        "No description available."}
                     </p>
                     <div className="mt-2 flex items-center gap-4">
                       <p className="text-gray-700">
                         <span className="font-medium">Price:</span>{" "}
-                        {item?.product?.min_price || item?.product?.max_price || "0.00"} KWD
+                        {item?.product?.min_price ||
+                          item?.product?.max_price ||
+                          "0.00"}{" "}
+                        KWD
                       </p>
                       <p className="text-gray-700">
                         <span className="font-medium">Quantity:</span>{" "}
