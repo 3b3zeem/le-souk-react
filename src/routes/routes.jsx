@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react";
 import PaymentSuccess from "../pages/CheckOut/PaymentSuccess.jsx";
 import PaymentFailed from "../pages/CheckOut/PaymentFail.jsx";
 import Country from "../dashboard/pages/Country/Country.jsx";
+import PaymentManagement from "../dashboard/pages/Payment/PaymentManagement.jsx";
 
 const NotFound = lazy(() => import("../components/NotFound/NotFound.jsx"));
 const Unauthorized = lazy(() =>
@@ -327,6 +328,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <Country />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "payment",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <PaymentManagement />
                   </Suspense>
                 ),
               },

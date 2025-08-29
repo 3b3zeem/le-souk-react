@@ -307,7 +307,7 @@ const AdminOrders = () => {
 
                           <button
                             onClick={() => openNotesModal(order.id)}
-                            className="px-2 sm:px-3 py-1 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-all text-xs sm:text-sm cursor-pointer"
+                            className="px-2 sm:px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all text-xs sm:text-sm cursor-pointer"
                           >
                             {t("update_notes")}
                           </button>
@@ -431,7 +431,7 @@ const AdminOrders = () => {
                 </button>
                 <button
                   onClick={handleSaveNotes}
-                  className="px-4 py-2 bg-purple-600 text-white rounded"
+                  className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700 transition-all duration-200"
                 >
                   {t("save")}
                 </button>

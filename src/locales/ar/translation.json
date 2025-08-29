@@ -520,5 +520,18 @@
   "Page": "الصفحة",
   "of": "من",
   "Country Management": "إدارة البلدان",
-  "ChangeActive": "تغيير الحالة"
+  "ChangeActive": "تغيير الحالة",
+  "total_fees": "إجمالي الرسوم",
+  "payment_methods": "طرق الدفع",
+  "payment_settings": "إعدادات الدفع",
+  "edit_fees": "تعديل الرسوم",
+  "fee_type": "نوع الرسوم",
+  "fee_value": "قيمة الرسوم",
+  "minimum_fee": "الحد الأدنى للرسوم",
+  "maximum_fee": "الحد الأقصى للرسوم",
+  "select_fee_type": "اختر نوع الرسوم",
+  "fixed": "ثابت",
+  "kwd": "د.ك",
+  "edit_setting": "تعديل الإعداد",
+  "payment_management": "إدارة المدفوعات و وسائل الدفع"
 }

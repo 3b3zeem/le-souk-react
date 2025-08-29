@@ -13,6 +13,7 @@ import {
   Boxes,
   Images,
   Globe,
+  CreditCard,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -139,6 +140,12 @@ const Sidebar = () => {
           to="/admin-dashboard/country"
           icon={<Globe />}
           label="country"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          to="/admin-dashboard/payment"
+          icon={<CreditCard />}
+          label="payment"
           isOpen={isOpen}
         />
         <SidebarItem

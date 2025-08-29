@@ -518,5 +518,18 @@
   "Page": "Page",
   "of": "of",
   "Country Management": "Country Management",
-  "ChangeActive": "Change Active"
+  "ChangeActive": "Change Active",
+  "total_fees": "Total Fees",
+  "payment_methods": "Payment Methods",
+  "payment_settings": "Payment Settings",
+  "edit_fees": "Edit Fees",
+  "fee_type": "Fee Type",
+  "fee_value": "Fee Value",
+  "minimum_fee": "Minimum Fee",
+  "maximum_fee": "Maximum Fee",
+  "select_fee_type": "Select Fee Type",
+  "fixed": "Fixed",
+  "kwd": "KWD",
+  "edit_setting": "Edit Setting",
+  "payment_management": "Payment Management"
 }
