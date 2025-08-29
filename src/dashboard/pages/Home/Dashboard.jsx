@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useDashboard from "../../hooks/Home/useDashboard";
-import { DollarSign, Users, Package } from "lucide-react";
+import { DollarSign, Users, Package, ShoppingCart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import Loader from "../../../layouts/Loader";
@@ -21,7 +21,9 @@ import {
 } from "recharts";
 
 const Dashboard = () => {
-  const { stats, userStats, loading, error } = useDashboard();
+  const [period, setPeriod] = useState("week");
+  const { stats, userStats, ordersStats, loading, error } =
+    useDashboard(period);
   const navigate = useNavigate();
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -67,7 +69,7 @@ const Dashboard = () => {
                   {t("total_sales")}
                 </h2>
                 <p className="text-2xl font-bold text-gray-800">
-                  ${stats.total_sales}
+                  {stats.total_sales} {language === "ar" ? "د.ك." : "KWD"}
                 </p>
               </div>
             </div>
@@ -107,6 +109,81 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Orders Stats */}
+        {ordersStats && (
+          <div className="grid grid-cols-1 gap-6 mt-8">
+            <div className="bg-white p-6 rounded-lg shadow border border-gray-100">
+              <div className="flex items-center justify-between space-x-4 mb-4">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-yellow-100 p-3 rounded-full">
+                    <ShoppingCart className="w-6 h-6 text-yellow-600" />
+                  </div>
+                  <h2 className="text-lg font-semibold text-gray-700">
+                    {t("orders_statistics")} ({t(period)})
+                  </h2>
+                </div>
+                <div className="mb-6 flex justify-end">
+                  <select
+                    value={period}
+                    onChange={(e) => setPeriod(e.target.value)}
+                    className="p-2 border rounded-lg shadow-sm bg-white text-gray-700"
+                  >
+                    <option value="today">{t("today")}</option>
+                    <option value="week">{t("week")}</option>
+                    <option value="month">{t("month")}</option>
+                    <option value="quarter">{t("quarter")}</option>
+                    <option value="year">{t("year")}</option>
+                  </select>
+                </div>
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart
+                  data={[
+                    {
+                      name: t("total_orders"),
+                      value: ordersStats.total_orders,
+                    },
+                    { name: t("pending"), value: ordersStats.pending_orders },
+                    {
+                      name: t("processing"),
+                      value: ordersStats.processing_orders,
+                    },
+                    { name: t("shipped"), value: ordersStats.shipped_orders },
+                    {
+                      name: t("delivered"),
+                      value: ordersStats.delivered_orders,
+                    },
+                    {
+                      name: t("cancelled"),
+                      value: ordersStats.cancelled_orders,
+                    },
+                    { name: t("paid"), value: ordersStats.paid_orders },
+                  ]}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="value" fill="#2563eb" />
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="mt-4 text-gray-600">
+                <p className="flex items-center gap-2">
+                  <strong>{t("total_revenue")}:</strong>{" "}
+                  {ordersStats.total_revenue.toFixed(2)}{" "}
+                  {language === "ar" ? "د.ك." : "KWD"}
+                </p>
+                <p className="flex items-center gap-2">
+                  <strong>{t("avg_order_value")}:</strong>{" "}
+                  {ordersStats.average_order_value.toFixed(2)}{" "}
+                  {language === "ar" ? "د.ك." : "KWD"}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Basic Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -217,7 +294,9 @@ const Dashboard = () => {
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
-            ) : <Loader />}
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>

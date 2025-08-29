@@ -12,6 +12,7 @@ import {
   Percent,
   Boxes,
   Images,
+  Globe,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -46,7 +47,7 @@ const Sidebar = () => {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2 rounded transition cursor-pointer ${
+        `relative group flex items-center gap-3 px-3 py-2 rounded transition cursor-pointer ${
           isActive
             ? "bg-[#e8e4dd] text-[#333c2e] font-semibold"
             : "hover:bg-gray-200"
@@ -54,7 +55,16 @@ const Sidebar = () => {
       }
     >
       {icon}
+
       {isOpen && <span className="text-sm">{t(label)}</span>}
+
+      {!isOpen && (
+        <span
+          className="absolute left-full ml-3 px-2 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-10 after:content-[''] after:absolute after:-left-4 after:top-1/2 after:-translate-y-1/2 after:border-8 after:border-transparent after:border-r-gray-800"
+        >
+          {t(label)}
+        </span>
+      )}
     </NavLink>
   );
 
@@ -62,7 +72,7 @@ const Sidebar = () => {
     <div
       className={`${
         isOpen ? "w-64" : "w-16"
-      } h-screen bg-gray-100 text-gray-900 flex flex-col transition-all duration-300 sticky top-0 border-r border-gray-300`}
+      } bg-gray-100 text-gray-900 flex flex-col transition-all duration-300 border-r border-gray-300`}
       style={{
         [language === "ar" ? "right" : "left"]: 0,
       }}
@@ -123,6 +133,12 @@ const Sidebar = () => {
           to="/admin-dashboard/orders"
           icon={<ShoppingCart />}
           label="orders"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          to="/admin-dashboard/country"
+          icon={<Globe />}
+          label="country"
           isOpen={isOpen}
         />
         <SidebarItem

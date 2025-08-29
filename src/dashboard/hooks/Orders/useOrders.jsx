@@ -51,8 +51,10 @@ const useOrders = () => {
           }
         );
 
-        setOrders(response.data.data);
-        setTotalPages(response.data.last_page || 1);
+        const { data, meta } = response.data;
+
+        setOrders(data);
+        setTotalPages(meta?.last_page || 1);
       } catch (err) {
         const errorMessage =
           err.response?.data?.message || "Failed to fetch orders";
@@ -64,7 +66,7 @@ const useOrders = () => {
     };
 
     fetchOrders();
-  }, [searchParams, token, language]);
+  }, [searchParams, token, language, page, search]);
 
   const confirmOrder = async (orderId) => {
     setLoading(true);
@@ -78,7 +80,7 @@ const useOrders = () => {
         throw new Error("Only pending orders can be confirmed");
       }
 
-      const response = await axios.post(
+      const response = await axios.patch(
         `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/confirm`,
         {},
         {
@@ -117,7 +119,7 @@ const useOrders = () => {
         throw new Error("Only pending orders can be rejected");
       }
 
-      const response = await axios.post(
+      const response = await axios.patch(
         `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/reject`,
         {},
         {
@@ -132,7 +134,7 @@ const useOrders = () => {
           order.id === orderId ? { ...order, status: "rejected" } : order
         )
       );
-      toast.success("Order rejected successfully!");
+      toast.success(response.data.message);
       return true;
     } catch (err) {
       const errorMessage =
@@ -144,10 +146,84 @@ const useOrders = () => {
     }
   };
 
+  const updateOrderStatus = async (orderId, data) => {
+    setLoading(true);
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      const response = await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/status`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId
+            ? { ...order, status: response.data.data.new_status }
+            : order
+        )
+      );
+
+      toast.success(response.data.message);
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to update order status";
+      toast.error(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateOrderNotes = async (orderId, data) => {
+    setLoading(true);
+    try {
+      if (!token) {
+        throw new Error("No token found. Please log in.");
+      }
+
+      const response = await axios.put(
+        `https://le-souk.dinamo-app.com/api/admin/orders/${orderId}/notes`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId ? { ...order, ...response.data } : order
+        )
+      );
+
+      toast.success(response.data.message);
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Failed to update order notes";
+      toast.error(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     orders,
     confirmOrder,
     rejectOrder,
+    updateOrderStatus,
+    updateOrderNotes,
     loading,
     error,
     totalPages,
