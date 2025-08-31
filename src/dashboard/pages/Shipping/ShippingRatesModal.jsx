@@ -73,7 +73,7 @@ const ShippingRatesModal = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black.40 flex backdrop-blur-sm items-center justify-center z-500"
+          className="fixed inset-0 bg-black/40 flex backdrop-blur-sm items-center justify-center z-500"
           dir={language === "ar" ? "rtl" : "ltr"}
         >
           <motion.div
