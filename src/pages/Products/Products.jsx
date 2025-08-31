@@ -246,17 +246,14 @@ const Products = () => {
       const pages = new Set();
 
       if (totalPages <= 7) {
-        // عرض كل الصفحات مباشرة
         for (let i = 1; i <= totalPages; i++) {
           pages.add(i);
         }
       } else {
-        // أول صفحتين
         pages.add(1);
 
         if (currentPage > 3) pages.add("...");
 
-        // صفحات قريبة من الحالية
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           if (i > 1 && i < totalPages) {
             pages.add(i);

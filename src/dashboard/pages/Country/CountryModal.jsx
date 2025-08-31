@@ -40,8 +40,10 @@ const CountryModal = ({
               name="code"
               value={formData.code}
               onChange={handleInputChange}
-              className="border border-gray-200 p-2 w-full bg-gray-100 cursor-not-allowed"
-              disabled
+              className={`border p-2 w-full ${
+                editingId ? "border-gray-200 bg-gray-100 cursor-not-allowed" : ""
+              }`}
+              disabled={!!editingId}
             />
           </div>
           <div>
@@ -87,7 +89,9 @@ const CountryModal = ({
             {loading ? (
               <button
                 type="submit"
-                className={`bg-blue-500 text-white px-4 py-2 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={`bg-blue-500 text-white px-4 py-2 rounded ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 disabled={loading}
               >
                 <Ring

@@ -16,7 +16,7 @@ const NavbarBottom = ({
   <div className="bg-[#333e2c]">
     <div
       className={`container mx-auto max-w-7xl flex items-center justify-between transition-all duration-150 ${
-        scrolled ? "py-8 px-10" : "py-6"
+        scrolled ? "py-8 px-10" : "py-6 px-4"
       }`}
     >
       <Logo {...logoProps} showLogo={scrolled} />

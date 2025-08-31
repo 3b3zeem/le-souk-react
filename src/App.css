@@ -8,6 +8,10 @@
   background-color: #333e2c;
 }
 
+body{
+  background-color: #f9fafb;
+}
+
 img {
   -webkit-user-drag: none;
   user-drag: none;

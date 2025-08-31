@@ -27,7 +27,7 @@ const GridView = ({
       key={product.id}
       onMouseEnter={() => setHoveredIndex(idx)}
       onMouseLeave={() => setHoveredIndex(null)}
-      className="relative group border overflow-hidden bg-white shadow-md hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col rounded"
+      className="relative group border overflow-hidden bg-white shadow hover:shadow-sm transition-shadow duration-300 cursor-pointer flex flex-col rounded"
       style={{
         borderColor: colors.borderLight,
       }}
