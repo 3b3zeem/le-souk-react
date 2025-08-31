@@ -533,5 +533,16 @@
   "fixed": "ثابت",
   "kwd": "د.ك",
   "edit_setting": "تعديل الإعداد",
-  "payment_management": "إدارة المدفوعات و وسائل الدفع"
+  "manage_shipping_methods": "إدارة طرق الشحن",
+  "payment_management": "إدارة المدفوعات و وسائل الدفع",
+  "update_shipping_rates": "تحديث أسعار الشحن",
+  "rate": "الأجرة",
+  "free_shipping_threshold": "حد الشحن المجاني",
+  "estimated_days_min": "الحد الأدنى لأيام التسليم",
+  "estimated_days_max": "الحد الأقصى لأيام التسليم",
+  "no_shipping_methods": "لا توجد طرق شحن",
+  "rates": "الأسعار",
+  "edit_rate": "تعديل السعر",
+  "add_rate": "إضافة سعر",
+  "free_above": "مجاني فوق"
 }

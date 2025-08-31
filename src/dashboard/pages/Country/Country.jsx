@@ -16,7 +16,6 @@ const Country = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
-    code: "",
     sort_order: "",
     en: { name: "" },
     ar: { name: "" },
@@ -50,7 +49,6 @@ const Country = () => {
         await createCountry(formData);
       }
       setFormData({
-        code: "",
         sort_order: "",
         en: { name: "" },
         ar: { name: "" },
@@ -85,7 +83,6 @@ const Country = () => {
 
   const openAddModal = () => {
     setFormData({
-      code: "",
       sort_order: "",
       en: { name: "" },
       ar: { name: "" },

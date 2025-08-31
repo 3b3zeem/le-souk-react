@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import toast from "react-hot-toast";
+import { useLanguage } from "../../../context/Language/LanguageContext";
 
 const baseUrl = "https://le-souk.dinamo-app.com/api/";
 
@@ -9,9 +10,11 @@ export const useCountry = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useAuthContext();
+  const { language } = useLanguage();
 
   const headers = {
     Authorization: `Bearer ${token}`,
+    "Accept-Language": language,
   };
 
   const getCountries = useCallback(
@@ -30,7 +33,7 @@ export const useCountry = () => {
         setLoading(false);
       }
     },
-    [token]
+    [token, language]
   );
 
   const createCountry = useCallback(
@@ -82,7 +85,7 @@ export const useCountry = () => {
       setLoading(true);
       try {
         const response = await axios.put(
-          `${baseUrl}admin/countries/${id}`,
+          `${baseUrl}admin/countries/${id}/status`,
           {},
           { headers }
         );

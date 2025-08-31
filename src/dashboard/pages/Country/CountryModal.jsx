@@ -40,8 +40,8 @@ const CountryModal = ({
               name="code"
               value={formData.code}
               onChange={handleInputChange}
-              className="border p-2 w-full"
-              required
+              className="border border-gray-200 p-2 w-full bg-gray-100 cursor-not-allowed"
+              disabled
             />
           </div>
           <div>

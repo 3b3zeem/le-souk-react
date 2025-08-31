@@ -199,8 +199,8 @@ const Settings = () => {
           return value instanceof File
             ? value
             : typeof value === "string"
-            ? value
-            : null;
+              ? value
+              : null;
 
         case "richtext":
         case "text":
@@ -348,14 +348,12 @@ const Settings = () => {
               onChange={handleSearch}
               placeholder={t("search_settings")}
               dir={language === "ar" ? "rtl" : "ltr"}
-              className={`w-[190px] sm:w-full focus:w-full ${
-                language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
-              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition-all duration-200 placeholder:text-gray-400`}
+              className={`w-[190px] sm:w-full focus:w-full ${language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
+                } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition-all duration-200 placeholder:text-gray-400`}
             />
             <span
-              className={`absolute top-1/2 transform -translate-y-1/2 ${
-                language === "ar" ? "right-3" : "left-3"
-              }`}
+              className={`absolute top-1/2 transform -translate-y-1/2 ${language === "ar" ? "right-3" : "left-3"
+                }`}
             >
               <Search size={17} className="text-gray-500" />
             </span>
@@ -671,9 +669,8 @@ const Settings = () => {
                     </button>
                     <button
                       type="submit"
-                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 transition-all duration-200 text-sm cursor-pointer font-medium shadow ${
-                        loading ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`px-4 py-2 bg-[#333e2c] text-white rounded-lg hover:opacity-85 transition-all duration-200 text-sm cursor-pointer font-medium shadow ${loading ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                       disabled={loading}
                     >
                       {loading ? (
@@ -811,11 +808,10 @@ const Settings = () => {
                     <button
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
-                      className={`w-8 h-8 text-sm rounded ${
-                        page === pageNum
+                      className={`w-8 h-8 text-sm rounded ${page === pageNum
                           ? "bg-[#333e2c] text-white"
                           : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      } transition-colors cursor-pointer`}
+                        } transition-colors cursor-pointer`}
                     >
                       {pageNum}
                     </button>

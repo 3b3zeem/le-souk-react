@@ -3,18 +3,19 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
+import { useSearchParams } from "react-router-dom";
 
 const BASE_URL = "https://le-souk.dinamo-app.com/api/";
 
-const usePaymentManagement = () => {
+const useShipping = () => {
   const { token } = useAuthContext();
   const { language } = useLanguage();
-  const [paymentMethods, setPaymentMethods] = useState([]);
-  const [paymentSettings, setPaymentSettings] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
+  const [supportedCountries, setSupportedCountries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
     const interceptor = axios.interceptors.request.use((config) => {
       config.headers["Accept-Language"] = language;
       return config;
@@ -25,19 +26,20 @@ const usePaymentManagement = () => {
     };
   }, [language]);
 
-  // Fetch payment methods
-  const fetchPaymentMethods = async () => {
+  // Fetch shipping methods
+  const fetchShippingMethods = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}admin/payment-management/methods`,
+        `${BASE_URL}admin/shipping-management/methods`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            
           },
         }
       );
-      setPaymentMethods(response.data.data);
+      setShippingMethods(response.data.data);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -45,19 +47,19 @@ const usePaymentManagement = () => {
       setLoading(false);
     }
   };
-  // Fetch payment settings
-  const fetchPaymentSettings = async () => {
+  // Fetch supported countries
+  const fetchSupportedCountries = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}admin/payment-management/settings`,
+        `${BASE_URL}admin/shipping-management/countries`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setPaymentSettings(response.data.data);
+      setSupportedCountries(response.data.data);
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -66,12 +68,12 @@ const usePaymentManagement = () => {
     }
   };
 
-  // Update payment method fees
-  const updatePaymentMethodFees = async (paymentMethodId, feeData) => {
+  // Update Shipping Rates
+  const updateShippingRates = async (shipping_method_id, feeData) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `${BASE_URL}admin/payment-management/methods/${paymentMethodId}/fees`,
+        `${BASE_URL}admin/shipping-management/methods/${shipping_method_id}/rates`,
         feeData,
         {
           headers: {
@@ -79,35 +81,9 @@ const usePaymentManagement = () => {
           },
         }
       );
-      setPaymentMethods(response.data.data);
+      setShippingMethods(response.data.data);
       toast.success(response.data.message || "Fees updated successfully!");
-      await fetchPaymentMethods();
-      setError(null);
-      return response.data;
-    } catch (err) {
-      toast.error(err.message);
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-  // Update payment settings
-  const updatePaymentSettings = async (settingsData) => {
-    setLoading(true);
-    try {
-      const response = await axios.put(
-        `${BASE_URL}admin/payment-management/settings`,
-        { settings: settingsData },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPaymentSettings(response.data.data);
-      toast.success(response.data.message || "Fees updated successfully!");
-      await fetchPaymentSettings();
+      await fetchShippingMethods();
       setError(null);
       return response.data;
     } catch (err) {
@@ -120,20 +96,19 @@ const usePaymentManagement = () => {
   };
 
   useEffect(() => {
-    fetchPaymentMethods();
-    fetchPaymentSettings();
+    fetchShippingMethods();
+    fetchSupportedCountries();
   }, [token, language]);
 
   return {
-    paymentMethods,
-    paymentSettings,
+    shippingMethods,
+    supportedCountries,
     loading,
     error,
-    fetchPaymentMethods,
-    fetchPaymentSettings,
-    updatePaymentMethodFees,
-    updatePaymentSettings,
+    fetchShippingMethods,
+    fetchSupportedCountries,
+    updateShippingRates,
   };
 };
 
-export default usePaymentManagement;
+export default useShipping;

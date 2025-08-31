@@ -14,6 +14,7 @@ import {
   Images,
   Globe,
   CreditCard,
+  TruckElectric,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -146,6 +147,12 @@ const Sidebar = () => {
           to="/admin-dashboard/payment"
           icon={<CreditCard />}
           label="payment"
+          isOpen={isOpen}
+        />
+        <SidebarItem
+          to="/admin-dashboard/shipping"
+          icon={<TruckElectric />}
+          label="shipping"
           isOpen={isOpen}
         />
         <SidebarItem

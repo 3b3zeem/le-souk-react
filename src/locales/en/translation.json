@@ -491,7 +491,7 @@
   "instagramLabel": "Follow us on Instagram",
   "tiktokLabel": "Follow us on TikTok",
   "myOrder": "My Orders",
-    "orders_statistics": "Orders Statistics",
+  "orders_statistics": "Orders Statistics",
   "today": "Today",
   "week": "This Week",
   "month": "This Month",
@@ -531,5 +531,16 @@
   "fixed": "Fixed",
   "kwd": "KWD",
   "edit_setting": "Edit Setting",
-  "payment_management": "Payment Management"
+  "payment_management": "Payment Management",
+  "manage_shipping_methods": "Manage your shipping methods and rates",
+  "update_shipping_rates": "Update Shipping Rates",
+  "rate": "Rate",
+  "free_shipping_threshold": "Free Shipping Threshold",
+  "estimated_days_min": "Estimated Days (Min)",
+  "estimated_days_max": "Estimated Days (Max)",
+  "no_shipping_methods": "No shipping methods found",
+  "rates": "Rates",
+  "edit_rate": "Edit Rate",
+  "add_rate": "Add Rate",
+  "free_above": "Free above"
 }

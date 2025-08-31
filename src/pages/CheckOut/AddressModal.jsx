@@ -9,6 +9,8 @@ const AddressModal = ({
   setAddressForm,
   onSave,
   savingAddress,
+  countries,
+  countryLoading,
 }) => {
   const { t } = useTranslation();
   if (!isOpen) return null;
@@ -160,28 +162,18 @@ const AddressModal = ({
                 setAddressForm({ ...addressForm, country: e.target.value })
               }
             >
-              <option value="EG">Egypt (EG)</option>
-              <option value="KW">Kuwait (KW)</option>
-              <option value="SA">Saudi Arabia (SA)</option>
-              <option value="AE">United Arab Emirates (AE)</option>
-              <option value="QA">Qatar (QA)</option>
-              <option value="BH">Bahrain (BH)</option>
-              <option value="OM">Oman (OM)</option>
-              <option value="JO">Jordan (JO)</option>
-              <option value="LB">Lebanon (LB)</option>
-              <option value="SY">Syria (SY)</option>
-              <option value="IQ">Iraq (IQ)</option>
-              <option value="PS">Palestine (PS)</option>
-              <option value="YE">Yemen (YE)</option>
-              <option value="SD">Sudan (SD)</option>
-              <option value="MA">Morocco (MA)</option>
-              <option value="DZ">Algeria (DZ)</option>
-              <option value="TN">Tunisia (TN)</option>
-              <option value="LY">Libya (LY)</option>
-              <option value="MR">Mauritania (MR)</option>
-              <option value="DJ">Djibouti (DJ)</option>
-              <option value="SO">Somalia (SO)</option>
-              <option value="KM">Comoros (KM)</option>
+              {countryLoading ? (
+                <option disabled>Loading...</option>
+              ) : (
+                <>
+                  <option value="">Select Country</option>
+                  {countries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </>
+              )}
             </select>
           </div>
 

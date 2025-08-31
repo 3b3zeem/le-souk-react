@@ -9,6 +9,7 @@ import AddressModal from "./AddressModal";
 import { useNavigate } from "react-router-dom";
 import { Ring } from "ldrs/react";
 import "ldrs/react/Ring.css";
+import useCountries from "../../hooks/Country/useCountries";
 
 const CheckOut = () => {
   const { cartItems, fetchCart, subtotal } = useCartCRUD();
@@ -21,6 +22,7 @@ const CheckOut = () => {
     loading: addressesLoading,
   } = useAddresses();
   const { checkoutOrder, loading: orderLoading } = useOrder();
+  const { countries, loading: countryLoading } = useCountries();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -386,6 +388,8 @@ const CheckOut = () => {
         setAddressForm={setAddressForm}
         onSave={handleSaveAddress}
         savingAddress={savingAddress}
+        countries={countries}
+        countryLoading={countryLoading}
       />
     </div>
   );
