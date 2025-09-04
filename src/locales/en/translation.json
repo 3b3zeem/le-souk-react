@@ -542,5 +542,6 @@
   "rates": "Rates",
   "edit_rate": "Edit Rate",
   "add_rate": "Add Rate",
-  "free_above": "Free above"
+  "free_above": "Free above",
+  "addNewAddress": "Add New Address"
 }

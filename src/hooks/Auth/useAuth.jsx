@@ -8,7 +8,7 @@ const useAuth = () => {
   const [error, setError] = useState(null);
   let guestId = localStorage.getItem("guest_id");
 
-  const register = async (username, email, password, confirmPassword) => {
+  const register = async (username, email, password, confirmPassword, phone) => {
     setLoading(true);
     setError(null);
 
@@ -26,6 +26,7 @@ const useAuth = () => {
           email,
           password,
           password_confirmation: confirmPassword,
+          phone,
         },
         {
           headers: {

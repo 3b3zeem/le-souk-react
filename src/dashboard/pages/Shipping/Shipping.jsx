@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import Meta from "../../../components/Meta/Meta";
 import Loader from "../../../layouts/Loader";
-import { SquarePen } from "lucide-react";
+import { Eye, SquarePen } from "lucide-react";
 import ShippingRatesModal from "./ShippingRatesModal";
 
 const Shipping = () => {
@@ -13,7 +13,6 @@ const Shipping = () => {
   const {
     shippingMethods,
     supportedCountries,
-    updateShippingRates,
     loading,
     error,
   } = useShipping();
@@ -91,9 +90,6 @@ const Shipping = () => {
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
                     {t("rates")}
                   </th>
-                  {/* <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
-                    {t("actions")}
-                  </th> */}
                 </tr>
               </thead>
               <tbody>
@@ -151,10 +147,10 @@ const Shipping = () => {
                               </span>
                               <button
                                 onClick={() => handleOpenModal(ship, rate)}
-                                className="p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors"
-                                title={t("edit_rate")}
+                                className="p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors cursor-pointer"
+                                title={language === 'ar' ? "عرض التفاصيل" : "Show details"}
                               >
-                                <SquarePen size={12} />
+                                <Eye size={12} />
                               </button>
                             </li>
                           ))}
@@ -168,20 +164,6 @@ const Shipping = () => {
                         </button>
                       )}
                     </td>
-                    {/* <td className="p-3">
-                      <div className="flex items-center flex-col gap-2 flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleOpenModal(ship)}
-                            className="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors flex items-center gap-2 cursor-pointer"
-                            title={t("edit", "Edit")}
-                          >
-                            <SquarePen size={14} />
-                            {t("edit")}
-                          </button>
-                        </div>
-                      </div>
-                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -194,7 +176,6 @@ const Shipping = () => {
           shippingMethod={selectedMethod}
           selectedRate={selectedRate}
           supportedCountries={supportedCountries}
-          updateShippingRates={updateShippingRates}
         />
       </div>
     </div>

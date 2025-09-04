@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -16,8 +17,8 @@ const AddressModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999] p-4">
-      <div className="bg-white w-full max-w-lg md:max-w-5xl rounded-2xl shadow-lg p-6 overflow-y-auto max-h-[90vh]">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[999] p-4">
+      <div className="bg-white w-full max-w-lg md:max-w-4xl rounded-2xl shadow-lg p-6 overflow-y-auto max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg md:text-2xl font-semibold">
@@ -25,9 +26,9 @@ const AddressModal = ({
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:bg-gray-200 p-2 rounded-full transition-all duration-300"
+            className="text-gray-500 hover:bg-gray-200 p-2 rounded transition-all duration-300 cursor-pointer"
           >
-            ✕
+            <X />
           </button>
         </div>
 

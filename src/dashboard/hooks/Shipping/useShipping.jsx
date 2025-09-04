@@ -3,7 +3,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../context/Auth/AuthContext";
 import { useLanguage } from "../../../context/Language/LanguageContext";
-import { useSearchParams } from "react-router-dom";
 
 const BASE_URL = "https://le-souk.dinamo-app.com/api/";
 
@@ -68,33 +67,6 @@ const useShipping = () => {
     }
   };
 
-  // Update Shipping Rates
-  const updateShippingRates = async (shipping_method_id, feeData) => {
-    setLoading(true);
-    try {
-      const response = await axios.put(
-        `${BASE_URL}admin/shipping-management/methods/${shipping_method_id}/rates`,
-        feeData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setShippingMethods(response.data.data);
-      toast.success(response.data.message || "Fees updated successfully!");
-      await fetchShippingMethods();
-      setError(null);
-      return response.data;
-    } catch (err) {
-      toast.error(err.message);
-      setError(err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchShippingMethods();
     fetchSupportedCountries();
@@ -107,7 +79,6 @@ const useShipping = () => {
     error,
     fetchShippingMethods,
     fetchSupportedCountries,
-    updateShippingRates,
   };
 };
 

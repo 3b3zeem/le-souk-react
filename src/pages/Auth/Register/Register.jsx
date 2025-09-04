@@ -12,6 +12,7 @@ import Meta from "../../../components/Meta/Meta";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [focusedField, setFocusedField] = useState(null);
@@ -33,7 +34,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await register(username, email, password, confirmPassword);
+    const result = await register(username, email, password, confirmPassword, phone);
     if (result) {
       toast.success("Registration successful! Welcome aboard!", {
         duration: 1000,
@@ -172,6 +173,37 @@ const Register = () => {
                 `}
               >
                 {t("email")}
+              </label>
+            </div>
+
+            <div className="relative">
+              <input
+                type="text"
+                id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:[#e8e4dd ] transition-all duration-200 ease-in-out"
+                placeholder=" "
+                onFocus={() => setFocusedField("phone")}
+                onBlur={() => setFocusedField(null)}
+              />
+              <label
+                htmlFor="phone"
+                className={`
+                  absolute transition-all duration-200
+                  ${
+                    language === "ar"
+                      ? "right-3 text-right"
+                      : "left-3 text-left"
+                  }
+                  ${
+                    focusedField === "phone" || phone
+                      ? "text-xs text-[#333e2c] -top-2 bg-white px-1"
+                      : "text-gray-400 top-3"
+                  }
+                `}
+              >
+                {t("phone")}
               </label>
             </div>
 

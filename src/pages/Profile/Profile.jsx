@@ -13,6 +13,9 @@ import { DotSpinner } from "ldrs/react";
 import "ldrs/react/DotSpinner.css";
 import toast from "react-hot-toast";
 import Loader from "./../../layouts/Loader";
+import useAddresses from "../../hooks/Addresses/useAddresses";
+import AddressModal from "../CheckOut/AddressModal";
+import useCountries from "../../hooks/Country/useCountries";
 
 const colors = {
   primary: "#333e2c",
@@ -26,6 +29,14 @@ const colors = {
 const Profile = () => {
   const { userData, loading, error, updateUserProfile, verifyEmail } =
     useUserProfile();
+  const {
+    addresses,
+    fetchAddresses,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+  } = useAddresses();
+  const { countries, loading: countryLoading } = useCountries();
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -34,6 +45,26 @@ const Profile = () => {
     address: "",
     image: null,
   });
+  const [addressForm, setAddressForm] = useState({
+    name: "",
+    type: "both",
+    address_line_1: "",
+    address_line_2: "",
+    city: "",
+    state: "",
+    postal_code: "",
+    country: "EG",
+    phone: "",
+    is_default_shipping: false,
+    is_default_billing: false,
+  });
+
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [savingAddress, setSavingAddress] = useState(false);
+
   const [updateError, setUpdateError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -132,8 +163,6 @@ const Profile = () => {
 
     const result = await verifyEmail(verification);
 
-    console.log(result);
-
     if (result) {
       toast.success(result.message || "Reset link sent to your email.", {
         duration: 1500,
@@ -149,8 +178,87 @@ const Profile = () => {
     }
   };
 
+  const openAddAddress = () => {
+    setIsEditing(false);
+    setEditingId(null);
+    setAddressForm({
+      name: "",
+      type: "both",
+      address_line_1: "",
+      address_line_2: "",
+      city: "",
+      state: "",
+      postal_code: "",
+      country: "EG",
+      phone: "",
+      is_default_shipping: false,
+      is_default_billing: false,
+    });
+    setIsAddressModalOpen(true);
+  };
+
+  const openEditAddress = (address) => {
+    setIsEditing(true);
+    setEditingId(address.id);
+    setAddressForm({
+      name: address.name || "",
+      type: address.type || "both",
+      address_line_1: address.address_line_1 || "",
+      address_line_2: address.address_line_2 || "",
+      city: address.city || "",
+      state: address.state || "",
+      postal_code: address.postal_code || "",
+      country: address.country || "EG",
+      phone: address.phone || "",
+      is_default_shipping: !!address.is_default_shipping,
+      is_default_billing: !!address.is_default_billing,
+    });
+    setIsAddressModalOpen(true);
+  };
+
+  const handleDeleteAddress = async (addressId) => {
+    try {
+      await deleteAddress(addressId);
+      if (selectedAddressId === addressId) {
+        setSelectedAddressId(null);
+      }
+    } catch (e) {
+      toast.error(
+        e?.response?.data?.message || e?.message || t("failedToDeleteAddress")
+      );
+    }
+  };
+
+  const handleSaveAddress = async () => {
+    try {
+      setSavingAddress(true);
+      const payload = { ...addressForm };
+      if (isEditing && editingId) {
+        await updateAddress(editingId, payload);
+      } else {
+        await addAddress(payload);
+      }
+      setIsAddressModalOpen(false);
+    } catch (e) {
+      toast.error(
+        e?.response?.data?.message || e?.message || t("failedToSaveAddress")
+      );
+    } finally {
+      setSavingAddress(false);
+    }
+  };
+
   useEffect(() => {
-    scrollTo(0, 0);
+    fetchAddresses();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   useEffect(() => {
@@ -204,7 +312,9 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Name */}
           <div>
             <label
               className="block text-sm font-medium mb-1"
@@ -222,6 +332,8 @@ const Profile = () => {
               {userData?.name || "Not provided"}
             </div>
           </div>
+
+          {/* Email */}
           <div>
             <label
               className="block text-sm font-medium mb-1"
@@ -239,6 +351,8 @@ const Profile = () => {
               {userData?.email || "Not provided"}
             </div>
           </div>
+
+          {/* Phone */}
           <div>
             <label
               className="block text-sm font-medium mb-1"
@@ -256,23 +370,8 @@ const Profile = () => {
               {userData?.phone || "Not provided"}
             </div>
           </div>
-          <div>
-            <label
-              className="block text-sm font-medium mb-1"
-              style={{ color: colors.productTitle }}
-            >
-              {t("address")}
-            </label>
-            <div
-              className="w-full p-3 rounded-md"
-              style={{
-                backgroundColor: colors.borderLight,
-                color: colors.productName,
-              }}
-            >
-              {userData?.address || "Not provided"}
-            </div>
-          </div>
+
+          {/* Email Verified */}
           <div>
             <div className="flex justify-between items-center">
               <label
@@ -299,6 +398,77 @@ const Profile = () => {
               }}
             >
               {userData?.email_verification_status || "Not provided"}
+            </div>
+          </div>
+
+          {/* Addresses */}
+          <div
+            className="p-4 rounded-lg border shadow-sm"
+            style={{ backgroundColor: colors.bg }}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <label
+                className="text-lg font-semibold"
+                style={{ color: colors.productTitle }}
+              >
+                {t("addresses")}
+              </label>
+
+              <button
+                onClick={openAddAddress}
+                className="block text-md font-bold mb-1 cursor-pointer hover:underline"
+                style={{ color: colors.productTitle }}
+              >
+                {addresses.length === 0
+                  ? t("addYourFirstAddress")
+                  : t("addNewAddress")}
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {addresses.map((addr) => (
+                <div
+                  key={addr.id}
+                  className="p-4 rounded-lg border flex justify-between items-start  gap-2 shadow-sm hover:shadow-md transition"
+                  style={{
+                    backgroundColor: colors.borderLight,
+                    color: colors.productName,
+                  }}
+                >
+                  <div className="flex flex-col items-start gap-2">
+                    <p className="text-sm">{addr.formatted}</p>
+
+                    {(addr.is_default_shipping || addr.is_default_billing) && (
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
+                        {addr.is_default_shipping
+                          ? t("defaultShipping")
+                          : t("defaultBilling")}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center flex-col">
+                    <button
+                      onClick={() => openEditAddress(addr)}
+                      className="text-[#333e2c] hover:underline cursor-pointer transition-all duration-300"
+                    >
+                      {t("edit")}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteAddress(addr.id)}
+                      className="text-red-600 hover:underline cursor-pointer transition-all duration-300"
+                    >
+                      {t("delete")}
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {addresses.length === 0 && (
+                <p className="text-gray-500 text-sm italic text-center">
+                  {language === "ar" ? "إضافة عنوان جديد" : "Add new address"}
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -439,25 +609,6 @@ const Profile = () => {
                     onInput={(e) =>
                       (e.target.value = e.target.value.replace(/\D/g, ""))
                     }
-                    className="w-full p-3 rounded-md border"
-                    style={{
-                      borderColor: colors.borderLight,
-                      color: colors.productName,
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-medium mb-1"
-                    style={{ color: colors.productTitle }}
-                  >
-                    {t("address")}
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
                     className="w-full p-3 rounded-md border"
                     style={{
                       borderColor: colors.borderLight,
@@ -628,6 +779,19 @@ const Profile = () => {
           </AnimatePresence>
         </div>
       )}
+
+      {/* Add Address */}
+      <AddressModal
+        isOpen={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        isEditing={isEditing}
+        addressForm={addressForm}
+        setAddressForm={setAddressForm}
+        onSave={handleSaveAddress}
+        savingAddress={savingAddress}
+        countries={countries}
+        countryLoading={countryLoading}
+      />
 
       <div className="w-full bg-white p-8 shadow-md border-t border-gray-200">
         <div className="flex justify-start items-start mb-6 gap-5">
