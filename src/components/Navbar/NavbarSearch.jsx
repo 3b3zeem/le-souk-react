@@ -7,7 +7,7 @@ import SearchOverlay from "./SearchOverlay";
 
 const NavbarSearch = () => {
   const { t } = useTranslation();
-  const { language } = useLanguage();
+  const { language } = useLanguage("en");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();

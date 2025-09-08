@@ -209,19 +209,6 @@ const AddressModal = ({
               />
               <span className="text-sm">{t("useAsDefaultShipping")}</span>
             </label>
-            <label className="inline-flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={addressForm.is_default_billing}
-                onChange={(e) =>
-                  setAddressForm({
-                    ...addressForm,
-                    is_default_billing: e.target.checked,
-                  })
-                }
-              />
-              <span className="text-sm">{t("useAsDefaultBilling")}</span>
-            </label>
           </div>
         </div>
 

@@ -125,7 +125,7 @@
   "loadingAddresses": "Loading addresses...",
   "defaultShipping": "Default Shipping",
   "defaultBilling": "Default Billing",
-  "useAsDefaultShipping": "Use as default shipping",
+  "useAsDefaultShipping": "Set the address as a permanent address for future ordering",
   "useAsDefaultBilling": "Use as default billing",
   "addressLine1": "Address Line 1",
   "addressLine2": "Address Line 2",
@@ -543,5 +543,12 @@
   "edit_rate": "Edit Rate",
   "add_rate": "Add Rate",
   "free_above": "Free above",
-  "addNewAddress": "Add New Address"
+  "addNewAddress": "Add New Address",
+  "pleaseSelectShipping": "Please select a shipping method",
+  "shippingData": "Shipping Data",
+  "paymentFees": "Fees",
+  "totalWithFees": "Total with Fees",
+  "orderTotal": "Order Total",
+  "shippingCost": "Shipping Cost",
+  "totalBeforeFees": "Total Before Fees"
 }

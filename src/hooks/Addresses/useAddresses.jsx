@@ -30,7 +30,7 @@ const useAddresses = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["addresses", token],
+    queryKey: ["addresses", token, language],
     queryFn: async () => {
       if (!token) return [];
       const res = await axios.get(BASE_URL, {

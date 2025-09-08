@@ -6,19 +6,28 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../context/Auth/AuthContext";
 
+import knet from "../../assets/knet.png";
+import visa from "../../assets/visa.png";
+
 const Payment = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
-  const { executePayment, fetchOrderById, loading: orderLoading } = useOrder();
+  const {
+    executePayment,
+    fetchOrderById,
+    GetPaymentFees,
+    loading: orderLoading,
+  } = useOrder();
   const { token, isLoading } = useAuthContext();
   const { t } = useTranslation();
 
   const [order, setOrder] = useState(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(2);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(1);
   const [processing, setProcessing] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [paymentFees, setPaymentFees] = useState({});
 
   useEffect(() => {
     if (isLoading) return;
@@ -70,6 +79,32 @@ const Payment = () => {
       setProcessing(false);
     }
   };
+
+  const loadPaymentFees = async () => {
+    try {
+      const paymentData = await GetPaymentFees(selectedPaymentMethod, orderId);
+      setPaymentFees(paymentData);
+    } catch (err) {
+      toast.error(err.response.data.message || t("failedToLoadOrderDetails"));
+    }
+  };
+
+    useEffect(() => {
+      if (!selectedPaymentMethod) return;
+  
+      const fetchPaymentFees = async () => {
+        try {
+          const OrderData = await GetPaymentFees(selectedPaymentMethod, orderId);
+  
+          setPaymentFees(OrderData);
+        } catch (error) {
+          console.error("Error calculating shipping cost:", error);
+        }
+      };
+  
+      fetchPaymentFees();
+      // eslint-disable-next-line
+    }, [selectedPaymentMethod, orderId]);
 
   if (orderLoading || !order) {
     return (
@@ -163,47 +198,17 @@ const Payment = () => {
               </h2>
 
               <div className="space-y-4">
-                {/* Knet */}
+                {/* Credit/Debit Card */}
                 <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                   <input
                     type="radio"
                     name="paymentMethod"
                     value={1}
                     checked={selectedPaymentMethod === 1}
-                    onChange={(e) =>
-                      setSelectedPaymentMethod(Number(e.target.value))
-                    }
-                    className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
-                  />
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {t("knet")}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {t("directBankTransfer")}
-                        </p>
-                      </div>
-                      <div className="w-16 h-10 bg-blue-100 rounded flex items-center justify-center">
-                        <span className="text-blue-600 font-semibold text-sm">
-                          {t("knet")}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </label>
-
-                {/* Credit/Debit Card */}
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={2}
-                    checked={selectedPaymentMethod === 2}
-                    onChange={(e) =>
-                      setSelectedPaymentMethod(Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      setSelectedPaymentMethod(Number(e.target.value));
+                      loadPaymentFees();
+                    }}
                     className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
                   />
                   <div className="ml-3 flex-1">
@@ -217,9 +222,42 @@ const Payment = () => {
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-8 h-5 bg-blue-600 rounded"></div>
-                        <div className="w-8 h-5 bg-red-600 rounded"></div>
-                        <div className="w-8 h-5 bg-yellow-600 rounded"></div>
+                        <img
+                          src={visa}
+                          alt="visa logo"
+                          width={150}
+                          height={50}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </label>
+
+                {/* Knet */}
+                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={2}
+                    checked={selectedPaymentMethod === 2}
+                    onChange={(e) => {
+                      setSelectedPaymentMethod(Number(e.target.value));
+                      loadPaymentFees();
+                    }}
+                    className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
+                  />
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">
+                          {t("knet")}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {t("directBankTransfer")}
+                        </p>
+                      </div>
+                      <div className="w-16 h-10 rounded flex items-center justify-center">
+                        <img src={knet} alt="knet logo" fill />
                       </div>
                     </div>
                   </div>
@@ -278,6 +316,30 @@ const Payment = () => {
                   {new Date(order.created_at).toLocaleDateString()}
                 </span>
               </div>
+
+              {/* Payment Fees */}
+              {paymentFees && paymentFees?.payment_method && (
+                <div className="mt-4 p-3 border rounded">
+                  <p>
+                    <strong>{t("paymentMethod")}:</strong>{" "}
+                    {paymentFees.payment_method.name}
+                  </p>
+                  <p>
+                    <strong>{t("paymentFees")}:</strong>{" "}
+                    {paymentFees.payment_method.fees}{" "}
+                    {paymentFees.order.currency}
+                  </p>
+                  <p>
+                    <strong>{t("orderTotal")}:</strong>{" "}
+                    {paymentFees.order.total_price} {paymentFees.order.currency}
+                  </p>
+                  <p>
+                    <strong>{t("totalWithFees")}:</strong>{" "}
+                    {paymentFees.payment_method.total_with_fees}{" "}
+                    {paymentFees.order.currency}
+                  </p>
+                </div>
+              )}
 
               <div className="border-t pt-4">
                 <div className="flex justify-between text-lg font-semibold">

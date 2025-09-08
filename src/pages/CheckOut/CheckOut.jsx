@@ -21,7 +21,11 @@ const CheckOut = () => {
     deleteAddress,
     loading: addressesLoading,
   } = useAddresses();
-  const { checkoutOrder, loading: orderLoading } = useOrder();
+  const {
+    checkoutOrder,
+    CalculateShippingCost,
+    loading: orderLoading,
+  } = useOrder();
   const { countries, loading: countryLoading } = useCountries();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -33,6 +37,7 @@ const CheckOut = () => {
   const [coupon, setCoupon] = useState("");
   const [notes, setNotes] = useState("");
   const [savingAddress, setSavingAddress] = useState(false);
+  const [checkOutData, setCheckOuData] = useState({});
 
   const [addressForm, setAddressForm] = useState({
     name: "",
@@ -45,7 +50,6 @@ const CheckOut = () => {
     country: "EG",
     phone: "",
     is_default_shipping: false,
-    is_default_billing: false,
   });
 
   useEffect(() => {
@@ -83,7 +87,6 @@ const CheckOut = () => {
       country: "EG",
       phone: "",
       is_default_shipping: false,
-      is_default_billing: false,
     });
     setIsAddressModalOpen(true);
   };
@@ -102,7 +105,6 @@ const CheckOut = () => {
       country: address.country || "EG",
       phone: address.phone || "",
       is_default_shipping: !!address.is_default_shipping,
-      is_default_billing: !!address.is_default_billing,
     });
     setIsAddressModalOpen(true);
   };
@@ -116,6 +118,17 @@ const CheckOut = () => {
       } else {
         await addAddress(payload);
       }
+
+      const OrderData = await CalculateShippingCost({
+        shipping_address_id: selectedAddressId,
+        billing_address_id: selectedAddressId,
+        shipping_method_id: 1,
+        coupon_code: coupon?.trim() || "",
+        notes: notes?.trim() || "",
+      });
+
+      setCheckOuData(OrderData);
+
       setIsAddressModalOpen(false);
     } catch (e) {
       toast.error(
@@ -139,6 +152,7 @@ const CheckOut = () => {
     }
   };
 
+  // Create Order
   const handleBuyNow = async () => {
     if (!selectedAddressId) {
       toast.error(t("pleaseSelectAddress"));
@@ -171,6 +185,29 @@ const CheckOut = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (!selectedAddressId) return;
+
+    const fetchShippingCost = async () => {
+      try {
+        const OrderData = await CalculateShippingCost({
+          shipping_address_id: selectedAddressId,
+          billing_address_id: selectedAddressId,
+          shipping_method_id: 1,
+          coupon_code: coupon?.trim() || "",
+          notes: notes?.trim() || "",
+        });
+
+        setCheckOuData(OrderData);
+      } catch (error) {
+        console.error("Error calculating shipping cost:", error);
+      }
+    };
+
+    fetchShippingCost();
+    // eslint-disable-next-line
+  }, [selectedAddressId, coupon, notes]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -224,11 +261,6 @@ const CheckOut = () => {
                           {addr.is_default_shipping && (
                             <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 ">
                               {t("defaultShipping")}
-                            </span>
-                          )}
-                          {addr.is_default_billing && (
-                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 ">
-                              {t("defaultBilling")}
                             </span>
                           )}
                         </div>
@@ -375,6 +407,30 @@ const CheckOut = () => {
               </>
             ) : (
               <p className="text-gray-500">{t("yourCartIsEmpty")}</p>
+            )}
+
+            {checkOutData && (
+              <div className="mt-4 space-y-2">
+                <h3 className="text-2xl font-semibold text-gray-800 border-b-2 border-[#333e2c] pb-2">
+                  {t("shippingData")}
+                </h3>
+                <p>
+                  {t("subtotal")}: {checkOutData.subtotal}{" "}
+                  {checkOutData.currency}
+                </p>
+                <p>
+                  {t("shippingCost")}: {checkOutData.shipping_cost}{" "}
+                  {checkOutData.currency}
+                </p>
+                <p>
+                  {t("discount")}: {checkOutData.discount}{" "}
+                  {checkOutData.currency}
+                </p>
+                <p>
+                  {t("totalBeforeFees")}: {checkOutData.total_before_fees}{" "}
+                  {checkOutData.currency}
+                </p>
+              </div>
             )}
           </div>
         </div>

@@ -126,7 +126,7 @@
   "loadingAddresses": "جارٍ تحميل العناوين...",
   "defaultShipping": "الشحن الافتراضي",
   "defaultBilling": "الفوترة الافتراضية",
-  "useAsDefaultShipping": "استخدم كشحن افتراضي",
+  "useAsDefaultShipping": "تثبيت العنوان كعنوان دائم في المستقبل للطلب من خلاله",
   "useAsDefaultBilling": "استخدم كفوترة افتراضية",
   "addressLine1": "سطر العنوان 1",
   "addressLine2": "سطر العنوان 2",
@@ -545,5 +545,11 @@
   "edit_rate": "تعديل السعر",
   "add_rate": "إضافة سعر",
   "free_above": "مجاني فوق",
-  "addNewAddress": "إضافة عنوان جديد"
+  "addNewAddress": "إضافة عنوان جديد",
+  "pleaseSelectShipping": "من فضلك اختر طريقة الشحن",
+  "shippingData": "بيانات الشحن",
+  "paymentFees": "الرسوم",
+  "totalWithFees": "الإجمالي مع الرسوم",
+  "orderTotal": "إجمالي الطلب",
+  "totalBeforeFees": "الإجمالي قبل الرسوم"
 }
