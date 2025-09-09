@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 import SearchOverlay from "./SearchOverlay";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const NavbarSearch = () => {
   const { t } = useTranslation();
+  const { language } = useLanguage();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,7 +34,9 @@ const NavbarSearch = () => {
         onFocus={() => setOpen(true)}
       />
       <span
-        className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer right-3`}
+        className={`absolute top-1/2 transform -translate-y-1/2 cursor-pointer ${
+          language === "ar" ? "left-3" : "right-3"
+        }`}
         onClick={handleSearch}
       >
         <Search

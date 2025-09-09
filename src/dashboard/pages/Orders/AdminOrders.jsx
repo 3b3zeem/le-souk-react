@@ -464,7 +464,7 @@ const AdminOrders = () => {
               <button
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1 || loading}
-                className="px-2 sm:px-3 py-1 border rounded-lg disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1 border border-gray-400 rounded-lg disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:bg-gray-200 transition"
               >
                 {"<"}
               </button>
@@ -472,8 +472,8 @@ const AdminOrders = () => {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`px-2 sm:px-3 py-1 border rounded-lg text-xs sm:text-sm ${
-                    page === index + 1 ? "bg-[#333e2c] text-white" : ""
+                  className={`px-2 sm:px-3 py-1 border border-gray-400 rounded-lg text-xs sm:text-sm cursor-pointer transition ${
+                    page === index + 1 ? "bg-[#333e2c] hover:bg-gray-200 text-white border hover:text-black" : "hover:bg-[#333e2c] hover:text-white"
                   }`}
                   disabled={loading}
                 >
@@ -483,7 +483,7 @@ const AdminOrders = () => {
               <button
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages || loading}
-                className="px-2 sm:px-3 py-1 border rounded-lg disabled:opacity-50 text-xs sm:text-sm"
+                className="px-2 sm:px-3 py-1 border border-gray-400 rounded-lg disabled:opacity-50 text-xs sm:text-sm cursor-pointer hover:bg-gray-200 transition"
               >
                 {">"}
               </button>
