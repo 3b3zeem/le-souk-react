@@ -40,7 +40,7 @@ const Cart = () => {
   });
   const [coupon, setCoupon] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
-  const { profile } = useAuthContext();
+  const { profile, token } = useAuthContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -114,6 +114,11 @@ const Cart = () => {
   const handleApplyCoupon = async () => {
     setCouponLoading(true);
     try {
+      if (!token) {
+        toast.error(t("pleaseLoginFirst"));
+        return;
+      }
+
       if (profile.user.is_admin === false) {
         await validateCoupon(coupon);
       } else {
@@ -122,8 +127,9 @@ const Cart = () => {
       setCoupon("");
     } catch (err) {
       toast.error(err);
+    } finally {
+      setCouponLoading(false);
     }
-    setCouponLoading(false);
   };
 
   useEffect(() => {
@@ -416,7 +422,13 @@ const Cart = () => {
                 </div>
 
                 <button
-                  onClick={() => navigate("/checkOut")}
+                  onClick={() => {
+                    if (!token) {
+                      toast.error(t("pleaseLoginFirst"));
+                      return;
+                    }
+                    navigate("/checkOut");
+                  }}
                   className={`w-full py-3 mt-4 customEffect cursor-pointer $`}
                   style={{
                     backgroundColor: colors.primary,

@@ -5,14 +5,15 @@ import Meta from "../../components/Meta/Meta";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../context/Auth/AuthContext";
-
 import knet from "../../assets/knet.png";
 import visa from "../../assets/visa.png";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const Payment = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const {
+    twoPaymentMethods,
     executePayment,
     fetchOrderById,
     GetPaymentFees,
@@ -20,16 +21,44 @@ const Payment = () => {
   } = useOrder();
   const { token, isLoading } = useAuthContext();
   const { t } = useTranslation();
+  const { language } = useLanguage("en");
 
   const [order, setOrder] = useState(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(1);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([]);
   const [processing, setProcessing] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [paymentFees, setPaymentFees] = useState({});
+  const [paymentFees, setPaymentFees] = useState(null);
 
+  //payment methods fetch
   useEffect(() => {
+    const fetchPaymentMethod = async () => {
+      try {
+        const pyMethod = await twoPaymentMethods();
+        setPaymentMethods(pyMethod);
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message || t("failedToLoadPaymentMethods")
+        );
+      }
+    };
+    fetchPaymentMethod();
+    // eslint-disable-next-line
+  }, [t, token]);
+
+  // Load order details and redirect if unauthorized
+  const loadOrderDetails = async () => {
+    try {
+      const orderData = await fetchOrderById(orderId);
+      setOrder(orderData);
+    } catch (err) {
+      toast.error(err.response?.data?.message || t("failedToLoadOrderDetails"));
+      navigate("/profile");
+    }
+  };
+    useEffect(() => {
     if (isLoading) return;
     if (!token) {
       navigate("/login");
@@ -37,16 +66,26 @@ const Payment = () => {
       loadOrderDetails();
     }
     // eslint-disable-next-line
-  }, [orderId, token, isLoading]);
+  }, [orderId, token, isLoading, navigate]);
 
-  const loadOrderDetails = async () => {
+  // Fetch payment fees when payment method changes
+  const fetchPaymentFees = async (paymentMethodId) => {
+    if (!paymentMethodId || !orderId) return;
+
     try {
-      const orderData = await fetchOrderById(orderId);
-      setOrder(orderData);
+      const paymentData = await GetPaymentFees(paymentMethodId, orderId);
+      setPaymentFees(paymentData);
     } catch (err) {
-      toast.error(err.response.data.message || t("failedToLoadOrderDetails"));
-      navigate("/profile");
+      toast.error(err.response?.data?.message || t("failedToLoadPaymentFees"));
+      setPaymentFees(null);
     }
+  };
+
+  // Handle payment method selection
+  const handlePaymentMethodChange = (e) => {
+    const methodId = Number(e.target.value);
+    setSelectedPaymentMethod(methodId);
+    fetchPaymentFees(methodId);
   };
 
   const handlePayment = async () => {
@@ -65,7 +104,6 @@ const Payment = () => {
       });
 
       const paymentUrl = paymentData?.payment_url;
-
       if (paymentUrl) {
         window.location.href = paymentUrl;
       } else {
@@ -73,38 +111,12 @@ const Payment = () => {
       }
     } catch (err) {
       toast.error(
-        err?.response?.data?.message || err?.message || t("paymentFailed")
+        err.response?.data?.message || err.message || t("paymentFailed")
       );
     } finally {
       setProcessing(false);
     }
   };
-
-  const loadPaymentFees = async () => {
-    try {
-      const paymentData = await GetPaymentFees(selectedPaymentMethod, orderId);
-      setPaymentFees(paymentData);
-    } catch (err) {
-      toast.error(err.response.data.message || t("failedToLoadOrderDetails"));
-    }
-  };
-
-    useEffect(() => {
-      if (!selectedPaymentMethod) return;
-  
-      const fetchPaymentFees = async () => {
-        try {
-          const OrderData = await GetPaymentFees(selectedPaymentMethod, orderId);
-  
-          setPaymentFees(OrderData);
-        } catch (error) {
-          console.error("Error calculating shipping cost:", error);
-        }
-      };
-  
-      fetchPaymentFees();
-      // eslint-disable-next-line
-    }, [selectedPaymentMethod, orderId]);
 
   if (orderLoading || !order) {
     return (
@@ -118,7 +130,10 @@ const Payment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 w-full">
+    <div
+      className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 w-full"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <Meta
         title={`Payment-${order.id}`}
         description="Securely complete your payment using multiple payment methods on our checkout system."
@@ -141,9 +156,7 @@ const Payment = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
                 {t("customerInformation")}
               </h2>
-
               <div className="grid grid-cols-1 gap-4">
-                {/* Name */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t("name")}
@@ -156,8 +169,6 @@ const Payment = () => {
                     placeholder={t("enterYourName")}
                   />
                 </div>
-
-                {/* Email */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t("email")}
@@ -170,8 +181,6 @@ const Payment = () => {
                     placeholder={t("enterYourEmail")}
                   />
                 </div>
-
-                {/* Phone */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t("phone")}
@@ -196,74 +205,42 @@ const Payment = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
                 {t("paymentMethod")}
               </h2>
-
               <div className="space-y-4">
-                {/* Credit/Debit Card */}
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={1}
-                    checked={selectedPaymentMethod === 1}
-                    onChange={(e) => {
-                      setSelectedPaymentMethod(Number(e.target.value));
-                      loadPaymentFees();
-                    }}
-                    className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
-                  />
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {t("creditDebitCard")}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {t("visaMastercardAmex")}
-                        </p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <img
-                          src={visa}
-                          alt="visa logo"
-                          width={150}
-                          height={50}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </label>
-
-                {/* Knet */}
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={2}
-                    checked={selectedPaymentMethod === 2}
-                    onChange={(e) => {
-                      setSelectedPaymentMethod(Number(e.target.value));
-                      loadPaymentFees();
-                    }}
-                    className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
-                  />
-                  <div className="ml-3 flex-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {t("knet")}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {t("directBankTransfer")}
-                        </p>
-                      </div>
-                      <div className="w-16 h-10 rounded flex items-center justify-center">
-                        <img src={knet} alt="knet logo" fill />
+                {paymentMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  >
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value={method.id}
+                      checked={selectedPaymentMethod === method.id}
+                      onChange={handlePaymentMethodChange}
+                      className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
+                    />
+                    <div className="ml-3 flex-1">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {method.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {method.description}
+                          </p>
+                        </div>
+                        <div className="w-16 h-10 rounded flex items-center justify-center">
+                          <img
+                            src={method.code === "kn" ? knet : visa}
+                            alt={`${method.name} logo`}
+                            className="max-w-full max-h-full"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </label>
+                  </label>
+                ))}
               </div>
-
               <button
                 onClick={handlePayment}
                 disabled={processing}
@@ -279,7 +256,9 @@ const Payment = () => {
                     {t("processingPayment")}
                   </div>
                 ) : (
-                  `${t("payNow")} ${order.total_price} KWD`
+                  `${t("payNow")} ${order.total_price} ${
+                    language === "ar" ? "د.ك" : "KWD"
+                  }`
                 )}
               </button>
             </div>
@@ -290,13 +269,11 @@ const Payment = () => {
             <h2 className="text-xl font-semibold text-gray-800 mb-6">
               {t("orderSummary")}
             </h2>
-
             <div className="space-y-4">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t("orderId")}:</span>
                 <span className="font-medium">#{order.id}</span>
               </div>
-
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t("status")}:</span>
                 <span
@@ -309,7 +286,6 @@ const Payment = () => {
                   {order.status}
                 </span>
               </div>
-
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t("date")}:</span>
                 <span className="font-medium">
@@ -318,7 +294,7 @@ const Payment = () => {
               </div>
 
               {/* Payment Fees */}
-              {paymentFees && paymentFees?.payment_method && (
+              {paymentFees?.payment_method && (
                 <div className="mt-4 p-3 border rounded">
                   <p>
                     <strong>{t("paymentMethod")}:</strong>{" "}
@@ -327,16 +303,17 @@ const Payment = () => {
                   <p>
                     <strong>{t("paymentFees")}:</strong>{" "}
                     {paymentFees.payment_method.fees}{" "}
-                    {paymentFees.order.currency}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                   <p>
                     <strong>{t("orderTotal")}:</strong>{" "}
-                    {paymentFees.order.total_price} {paymentFees.order.currency}
+                    {paymentFees.order.total_price}{" "}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                   <p>
                     <strong>{t("totalWithFees")}:</strong>{" "}
                     {paymentFees.payment_method.total_with_fees}{" "}
-                    {paymentFees.order.currency}
+                    {language === "ar" ? "د.ك" : "KWD"}
                   </p>
                 </div>
               )}
@@ -344,7 +321,9 @@ const Payment = () => {
               <div className="border-t pt-4">
                 <div className="flex justify-between text-lg font-semibold">
                   <span>{t("total")}:</span>
-                  <span>{order.total_price} KWD</span>
+                  <span>
+                    {order.total_price} {language === "ar" ? "د.ك" : "KWD"}
+                  </span>
                 </div>
               </div>
             </div>

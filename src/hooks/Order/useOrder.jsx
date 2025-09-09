@@ -147,6 +147,27 @@ export const useOrder = () => {
     }
   };
 
+  const twoPaymentMethods = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        "https://le-souk.dinamo-app.com/api/payment-methods",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const executePayment = async (
     orderId,
     {
@@ -226,6 +247,7 @@ export const useOrder = () => {
     fetchOrderById,
     CalculateShippingCost,
     checkoutOrder,
+    twoPaymentMethods,
     executePayment,
     GetPaymentFees,
     loading,

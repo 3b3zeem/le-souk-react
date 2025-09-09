@@ -550,5 +550,6 @@
   "totalWithFees": "Total with Fees",
   "orderTotal": "Order Total",
   "shippingCost": "Shipping Cost",
-  "totalBeforeFees": "Total Before Fees"
+  "totalBeforeFees": "Total Before Fees",
+  "pleaseLoginFirst": "Please, Login First"
 }

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Ring } from "ldrs/react";
 import "ldrs/react/Ring.css";
 import useCountries from "../../hooks/Country/useCountries";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const CheckOut = () => {
   const { cartItems, fetchCart, subtotal } = useCartCRUD();
@@ -28,6 +29,7 @@ const CheckOut = () => {
   } = useOrder();
   const { countries, loading: countryLoading } = useCountries();
   const { t } = useTranslation();
+  const { language } = useLanguage("en");
   const navigate = useNavigate();
 
   const [selectedAddressId, setSelectedAddressId] = useState(null);
@@ -210,7 +212,10 @@ const CheckOut = () => {
   }, [selectedAddressId, coupon, notes]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div
+      className="min-h-screen bg-gray-50 p-6"
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
       <Meta
         title="Checkout"
         description="Complete your purchase securely on our checkout page."
@@ -390,10 +395,10 @@ const CheckOut = () => {
                           {t("quantity")}: {item.quantity}
                         </p>
                         <p className="text-sm text-gray-600">
-                          {t("price")}: {item.unit_price} KWD
+                          {t("price")}: {item.unit_price} {language === "ar" ? "د.ك" : "KWD"}
                         </p>
                         <p className="text-sm text-gray-800 font-medium">
-                          {t("total")}: {item.unit_price * item.quantity} KWD
+                          {t("total")}: {item.unit_price * item.quantity} {language === "ar" ? "د.ك" : "KWD"}
                         </p>
                       </div>
                     </li>
@@ -401,7 +406,7 @@ const CheckOut = () => {
                 </ul>
                 <div className="pt-4 text-right space-y-2 text-gray-700">
                   <div className="text-lg">
-                    {t("total")}: {subtotal} KWD
+                    {t("total")}: {subtotal} {language === "ar" ? "د.ك" : "KWD"}
                   </div>
                 </div>
               </>
@@ -416,19 +421,19 @@ const CheckOut = () => {
                 </h3>
                 <p>
                   {t("subtotal")}: {checkOutData.subtotal}{" "}
-                  {checkOutData.currency}
+                  {language === "ar" ? "د.ك" : "KWD"}
                 </p>
                 <p>
                   {t("shippingCost")}: {checkOutData.shipping_cost}{" "}
-                  {checkOutData.currency}
+                  {language === "ar" ? "د.ك" : "KWD"}
                 </p>
                 <p>
                   {t("discount")}: {checkOutData.discount}{" "}
-                  {checkOutData.currency}
+                  {language === "ar" ? "د.ك" : "KWD"}
                 </p>
                 <p>
                   {t("totalBeforeFees")}: {checkOutData.total_before_fees}{" "}
-                  {checkOutData.currency}
+                  {language === "ar" ? "د.ك" : "KWD"}
                 </p>
               </div>
             )}
