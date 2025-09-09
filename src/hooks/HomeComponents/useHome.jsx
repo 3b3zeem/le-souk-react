@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useLanguage } from "../../context/Language/LanguageContext";
-import { useAuthContext } from "../../context/Auth/AuthContext";
 import { useEffect } from "react";
+import { useLanguage } from "../../context/Language/LanguageContext";
 
 const useHome = (perPage = 8) => {
-  const { language } = useLanguage();  
+  const { language } = useLanguage("en");  
   const BaseURL = "https://le-souk.dinamo-app.com/api";
 
   // Attach language header globally

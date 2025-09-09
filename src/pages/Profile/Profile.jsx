@@ -438,11 +438,9 @@ const Profile = () => {
                   <div className="flex flex-col items-start gap-2">
                     <p className="text-sm">{addr.formatted}</p>
 
-                    {(addr.is_default_shipping || addr.is_default_billing) && (
+                    {addr.is_default_shipping && (
                       <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                        {addr.is_default_shipping
-                          ? t("defaultShipping")
-                          : t("defaultBilling")}
+                        {addr.is_default_shipping && t("defaultShipping")}
                       </span>
                     )}
                   </div>

@@ -49,11 +49,9 @@ const GridView = ({
             handleToggleWishlist(product.id);
           }}
           disabled={loadingStates.wishlist[product.id]}
-          className={`absolute top-3 ${
-            language === "ar" ? "left-3" : "right-3"
-          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+          className={`absolute top-3 z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
             opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
-            transition-all duration-300 delay-50 cursor-pointer
+            transition-all duration-300 delay-50 cursor-pointer right-3
           ${
             loadingStates.wishlist[product.id]
               ? "opacity-50 cursor-not-allowed"
@@ -82,11 +80,9 @@ const GridView = ({
             handleAddToCart(product.id, 1);
           }}
           disabled={loadingStates.cart[product.id]}
-          className={`absolute bottom-3 ${
-            language === "ar" ? "left-3" : "right-3"
-          } z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
+          className={`absolute bottom-3 z-10 bg-white border border-gray-300 shadow-lg p-2 rounded flex items-center justify-center
             opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0
-            transition-all duration-300 delay-150 cursor-pointer
+            transition-all duration-300 delay-150 cursor-pointer right-3
         ${
             loadingStates.cart[product.id]
             ? "opacity-50 cursor-not-allowed"
