@@ -6,6 +6,7 @@ import PaymentFailed from "../pages/CheckOut/PaymentFail.jsx";
 import Country from "../dashboard/pages/Country/Country.jsx";
 import PaymentManagement from "../dashboard/pages/Payment/PaymentManagement.jsx";
 import Shipping from "../dashboard/pages/Shipping/Shipping.jsx";
+import OrderIdAdmin from "../dashboard/pages/Orders/OrderIdAdmin.jsx";
 
 const NotFound = lazy(() => import("../components/NotFound/NotFound.jsx"));
 const Unauthorized = lazy(() =>
@@ -321,6 +322,14 @@ const routes = createBrowserRouter([
                 element: (
                   <Suspense fallback={<Loader />}>
                     <AdminOrders />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "orders/:orderId",
+                element: (
+                  <Suspense fallback={<Loader />}>
+                    <OrderIdAdmin />
                   </Suspense>
                 ),
               },

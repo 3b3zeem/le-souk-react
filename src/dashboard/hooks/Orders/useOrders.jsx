@@ -8,6 +8,7 @@ import { useLanguage } from "../../../context/Language/LanguageContext";
 const useOrders = () => {
   const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState([]);
+  const [details, setDetails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -67,6 +68,40 @@ const useOrders = () => {
 
     fetchOrders();
   }, [searchParams, token, language, page, search]);
+
+  const fetchOrderDetails = async (order_id ,language) => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        if (!token) {
+          throw new Error("No token found. Please log in.");
+        }
+
+        const response = await axios.get(
+          `https://le-souk.dinamo-app.com/api/admin/orders/${order_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Accept-Language": language,
+            },
+          }
+        );
+
+        const data = response.data.data;
+
+        setDetails(data);
+
+        return data;
+      } catch (err) {
+        const errorMessage =
+          err.response?.data?.message || "Failed to fetch orders";
+        setError(errorMessage);
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const confirmOrder = async (orderId) => {
     setLoading(true);
@@ -220,6 +255,8 @@ const useOrders = () => {
 
   return {
     orders,
+    details,
+    fetchOrderDetails,
     confirmOrder,
     rejectOrder,
     updateOrderStatus,

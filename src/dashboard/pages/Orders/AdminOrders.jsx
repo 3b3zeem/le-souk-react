@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../../context/Language/LanguageContext";
 import useOrders from "../../hooks/Orders/useOrders";
-import { CheckCircle, XCircle, Search } from "lucide-react";
+import { CheckCircle, XCircle, Search, Eye } from "lucide-react";
 import Meta from "../../../components/Meta/Meta";
 import Loader from "../../../layouts/Loader";
 
 const AdminOrders = () => {
   const { language } = useLanguage();
   const { t } = useTranslation();
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams();
   const {
     orders,
@@ -172,6 +173,9 @@ const AdminOrders = () => {
                     {t("created_at")}
                   </th>
                   <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
+                    {t("view")}
+                  </th>
+                  <th className="p-3 text-center text-xs sm:text-sm font-semibold text-gray-700">
                     {t("actions")}
                   </th>
                 </tr>
@@ -215,6 +219,20 @@ const AdminOrders = () => {
                     </td>
                     <td className="p-3 text-xs sm:text-sm text-gray-600 text-center">
                       {new Date(order.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="p-3">
+                      <div className="flex items-center flex-col gap-2 flex-wrap">
+                        <button
+                          onClick={() => navigate(`${order.id}`)}
+                          title={t("view")}
+                          className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all text-xs sm:text-sm cursor-pointer flex items-center gap-1"
+                        >
+                          <Eye size={15} />
+                          <span className="hidden md:flex">
+                            {t("view")}
+                          </span>
+                        </button>
+                      </div>
                     </td>
                     <td className="p-3">
                       <div className="flex items-center flex-col gap-2 flex-wrap">
