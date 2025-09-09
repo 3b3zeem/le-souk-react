@@ -58,7 +58,7 @@ const Payment = () => {
       navigate("/profile");
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     if (isLoading) return;
     if (!token) {
       navigate("/login");
@@ -256,9 +256,11 @@ const Payment = () => {
                     {t("processingPayment")}
                   </div>
                 ) : (
-                  `${t("payNow")} ${order.total_price} ${
-                    language === "ar" ? "د.ك" : "KWD"
-                  }`
+                  `${t("payNow")} ${
+                    paymentFees
+                      ? paymentFees.payment_method.total_with_fees
+                      : order.total_price
+                  } ${language === "ar" ? "د.ك" : "KWD"}`
                 )}
               </button>
             </div>
@@ -293,6 +295,28 @@ const Payment = () => {
                 </span>
               </div>
 
+              <div className="border-t pt-4">
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>{t("total")}:</span>
+                  <div className="flex items-center gap-1">
+                    {paymentFees && (
+                      <span>
+                        {paymentFees?.payment_method.total_with_fees}{" "}
+                        {language === "ar" ? "د.ك" : "KWD"}
+                      </span>
+                    )}
+                    <span
+                      className={`${
+                        paymentFees ? "line-through text-gray-400 text-sm" : ""
+                      }`}
+                    >
+                      {order.total_price}{" "}
+                      {language === "ar" ? "د.ك" : "KWD"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* Payment Fees */}
               {paymentFees?.payment_method && (
                 <div className="mt-4 p-3 border rounded">
@@ -317,15 +341,6 @@ const Payment = () => {
                   </p>
                 </div>
               )}
-
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-lg font-semibold">
-                  <span>{t("total")}:</span>
-                  <span>
-                    {order.total_price} {language === "ar" ? "د.ك" : "KWD"}
-                  </span>
-                </div>
-              </div>
             </div>
 
             {/* Order Items */}
