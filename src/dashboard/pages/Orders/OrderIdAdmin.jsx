@@ -113,6 +113,42 @@ const OrderIdAdmin = () => {
           </div>
         </div>
 
+        <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            {language === "ar" ? "العنوان" : "Address"}
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+            <div className="sm:col-span-2">
+              <p className="text-sm font-medium text-gray-500">
+                {language === "ar" ? "عنوان الشحن" : "Shipping Address"}
+              </p>
+              <div className="text-lg space-y-1">
+                <p>
+                  <span className="font-medium">
+                    {language === "ar" ? "الاسم:" : "Name:"}
+                  </span>{" "}
+                  {details.shipping_address?.name ||
+                    (language === "ar" ? "غير متاح" : "N/A")}
+                </p>
+                <p>
+                  <span className="font-medium">
+                    {language === "ar" ? "العنوان:" : "Address:"}
+                  </span>{" "}
+                  {details.shipping_address?.full_address ||
+                    (language === "ar" ? "غير متاح" : "N/A")}
+                </p>
+                <p>
+                  <span className="font-medium">
+                    {language === "ar" ? "الهاتف:" : "Phone:"}
+                  </span>{" "}
+                  {details.shipping_address?.phone ||
+                    (language === "ar" ? "غير متاح" : "N/A")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* User Info Card */}
         <div className="bg-white shadow-lg rounded-lg p-6 mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">

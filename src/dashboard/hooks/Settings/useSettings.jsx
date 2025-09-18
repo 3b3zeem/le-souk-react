@@ -69,6 +69,7 @@ const useSettings = () => {
           ),
         };
       });
+      queryClient.invalidateQueries(['settings', { search, perPage, page, token, language }]);
       toast.success(response.message || 'Setting updated successfully');
       refreshSettings();
     },
@@ -109,6 +110,7 @@ const useSettings = () => {
     totalPages: data?.meta?.last_page || 1,
     total: data?.meta?.total || 0,
     perPage,
+    fetchSettings: refetch,
     handlePageChange,
     handlePerPageChange,
     editSetting: (setting_key, formData) =>

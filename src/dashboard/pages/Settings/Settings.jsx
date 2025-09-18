@@ -12,12 +12,10 @@ import {
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import Loader from "../../../layouts/Loader";
 import Meta from "../../../components/Meta/Meta";
 import { DotSpinner } from "ldrs/react";
-import StarterKit from "@tiptap/starter-kit";
 import "ldrs/react/DotSpinner.css";
 import RichTextField from "./RichTextField";
 
@@ -33,6 +31,7 @@ const Settings = () => {
     totalPages,
     total,
     perPage,
+    fetchSettings,
     handlePageChange,
     handlePerPageChange,
     editSetting,
@@ -245,6 +244,7 @@ const Settings = () => {
           const enFormData = createBaseFormData();
           enFormData.append("en[value]", processedEnValue);
           success = (await editSetting(editSettingKey, enFormData)) && success;
+          await fetchSettings();
         }
 
         // Handle Arabic image
@@ -252,6 +252,7 @@ const Settings = () => {
           const arFormData = createBaseFormData();
           arFormData.append("ar[value]", processedArValue);
           success = (await editSetting(editSettingKey, arFormData)) && success;
+          await fetchSettings();
         }
 
         // If no new files were uploaded, just update other fields
@@ -262,6 +263,7 @@ const Settings = () => {
           const baseFormData = createBaseFormData();
           // Don't send value fields if they're just string paths (existing images)
           success = await editSetting(editSettingKey, baseFormData);
+          await fetchSettings();
         }
       } else if (
         settingData.type === "integer" ||
@@ -279,6 +281,7 @@ const Settings = () => {
         }
 
         success = await editSetting(editSettingKey, formData);
+        await fetchSettings();
       } else {
         // Handle text, richtext, and other string types
         const formData = createBaseFormData();
@@ -292,6 +295,7 @@ const Settings = () => {
         }
 
         success = await editSetting(editSettingKey, formData);
+        await fetchSettings();
       }
 
       if (success) {
@@ -739,7 +743,7 @@ const Settings = () => {
                     <td className="py-3 px-4 text-sm text-gray-700">
                       {(getTranslatedField(setting, "value") || "-")
                         .toString()
-                        .slice(0, 20)}
+                        .slice(0, 30)}
                       {getTranslatedField(setting, "value")?.length > 20
                         ? "..."
                         : ""}

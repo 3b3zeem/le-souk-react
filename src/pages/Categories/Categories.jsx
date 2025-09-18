@@ -4,7 +4,6 @@ import Pagination from "./Pagination";
 import useCategories from "../../hooks/Categories/useCategories";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../context/Language/LanguageContext";
-import SkeletonLoader from "../../layouts/SkeletonLoader";
 import Meta from "../../components/Meta/Meta";
 import { useSettingsContext } from "../../context/Settings/SettingsContext";
 import CategoriesSkeleton from "../../components/Home Components/Categories/CategoriesSkeleton";

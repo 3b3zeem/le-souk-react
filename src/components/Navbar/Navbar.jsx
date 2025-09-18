@@ -61,6 +61,16 @@ const Navbar = () => {
       ) {
         setIsOpenUser(false);
       }
+
+      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     };
 
     const handleClickOutsideDrawer = (event) => {
