@@ -38,7 +38,9 @@ const Navbar = () => {
   const { cartCount, isCartLoading } = useCart();
   const { wishlistCount } = useWishlist();
   const overlayRef = useRef(null);
-  const avatarRef = useRef(null);
+  const avatarRef = useRef(null); // For NavbarTop
+  const overlayBottomRef = useRef(null);
+  const avatarBottomRef = useRef(null);
   const drawerRef = useRef(null);
   const { language } = useLanguage();
   const { t } = useTranslation();
@@ -53,40 +55,36 @@ const Navbar = () => {
   // Click outSide { Drawer && USerOverlay }
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close user menu if click outside
       if (
-        overlayRef.current &&
-        !overlayRef.current.contains(event.target) &&
-        avatarRef.current &&
-        !avatarRef.current.contains(event.target)
+        (overlayRef.current &&
+          !overlayRef.current.contains(event.target) &&
+          avatarRef.current &&
+          !avatarRef.current.contains(event.target)) ||
+        (overlayBottomRef.current &&
+          !overlayBottomRef.current.contains(event.target) &&
+          avatarBottomRef.current &&
+          !avatarBottomRef.current.contains(event.target))
       ) {
         setIsOpenUser(false);
       }
 
-      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-
-      document.addEventListener("mousedown", handleClickOutside);
-
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    };
-
-    const handleClickOutsideDrawer = (event) => {
-      if (drawerRef.current && !drawerRef.current.contains(event.target)) {
+      // Close drawer if click outside
+      if (
+        isOpen &&
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("mousedown", handleClickOutsideDrawer);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("mousedown", handleClickOutsideDrawer);
     };
-  }, [overlayRef, avatarRef, drawerRef]);
+  }, [isOpen]);
 
   const colors = {
     primary: "#333e2c",
@@ -209,8 +207,8 @@ const Navbar = () => {
             isLoggedIn,
             isOpenUser,
             setIsOpenUser,
-            overlayRef,
-            avatarRef,
+            overlayRef: overlayBottomRef,
+            avatarRef: avatarBottomRef,
             avatar,
             userName,
             t,
