@@ -105,7 +105,7 @@ const PaymentMethod = () => {
                     <button
                       onClick={() => handleOpenOverlay(method)}
                       title={t("edit")}
-                      className="px-2 sm:px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all text-xs sm:text-sm cursor-pointer"
+                      className="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all text-xs sm:text-sm cursor-pointer"
                     >
                       <Edit size={14} />
                     </button>
@@ -122,7 +122,7 @@ const PaymentMethod = () => {
           <div className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-2xl transform transition-all duration-300 scale-100">
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center justify-between">
               {t("edit_fees")}
-              <span className="text-blue-600 text-lg">
+              <span className="text-[#333e2c] text-lg">
                 {selectedMethod.name}
               </span>
             </h2>
@@ -200,13 +200,13 @@ const PaymentMethod = () => {
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
-                  className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+                  className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition cursor-pointer"
                 >
                   {t("cancel")}
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                  className="px-5 py-2.5 bg-[#333e2c] text-white rounded-lg shadow hover:bg-[#1b2714] transition cursor-pointer"
                   disabled={loading}
                 >
                   {loading ? t("saving") : t("save")}

@@ -132,7 +132,7 @@ const Users = () => {
               dir={language === "ar" ? "rtl" : "ltr"}
               className={`w-[190px] sm:w-full focus:w-full ${
                 language === "ar" ? "pr-10 pl-4" : "pl-10 pr-4"
-              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 placeholder:text-gray-400`}
+              } py-2 border border-gray-400 rounded focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition-all duration-200 placeholder:text-gray-400`}
             />
             <span
               className={`absolute top-1/2 transform -translate-y-1/2 ${
@@ -218,21 +218,26 @@ const Users = () => {
                           }
                           className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#333c2e] ${
                             user.is_admin ? "bg-[#333e2c]" : "bg-gray-300"
-                          }`}
-                          title={`${
-                            t("toggle_admin_status") || "Toggle Admin Status"
-                          }: ${user.is_admin ? "Admin" : "User"}`}
+                          } ${language === "ar" ? "rtl-toggle" : ""}`}
+                          title={`${user.is_admin ? "Admin" : "User"}`}
                         >
                           <span
                             className={`inline-block w-5 h-5 transform bg-white rounded-full transition-transform duration-200 ${
-                              user.is_admin ? "translate-x-6" : "translate-x-1"
+                              user.is_admin
+                                ? language === "ar"
+                                  ? "-translate-x-5.5"
+                                  : "translate-x-5.5"
+                                : language === "en"
+                                ? "translate-x-0.5"
+                                : "-translate-x-0.5"
                             }`}
                           />
                         </button>
                       </div>
                     </td>
                     <td className="p-3 text-center">
-                      {user.email_verification_status != "Verified" ? (
+                      {user.email_verification_status != "Verified" &&
+                      user.email_verification_status != "مؤكد" ? (
                         <>
                           <button
                             onClick={() => verifyUserEmail(user.id)}
@@ -250,17 +255,6 @@ const Users = () => {
                     <td className="p-3">
                       <div className="flex justify-center items-center gap-2 flex-wrap">
                         <button
-                          onClick={() => handleEdit(user?.id)}
-                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
-                          title={t("edit")}
-                        >
-                          <Edit size={14} />
-                          <span className="hidden sm:inline font-medium">
-                            {t("edit")}
-                          </span>
-                        </button>
-
-                        <button
                           onClick={() => getUserDetails(user?.id)}
                           className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
                           title={t("view")}
@@ -268,6 +262,17 @@ const Users = () => {
                           <SquareChartGantt size={14} />
                           <span className="hidden sm:inline font-medium">
                             {t("view")}
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => handleEdit(user?.id)}
+                          className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
+                          title={t("edit")}
+                        >
+                          <Edit size={14} />
+                          <span className="hidden sm:inline font-medium">
+                            {t("edit")}
                           </span>
                         </button>
 

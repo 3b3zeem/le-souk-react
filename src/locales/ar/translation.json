@@ -478,7 +478,7 @@
   "users_today": "المستخدمون اليوم",
   "basic_User_distribution": "التوزيع العام للمستخدمين",
   "uploadImage": "رفع الصورة",
-  "verify": "تحقق",
+  "verify": "تأكيد",
   "profile_information": "معلومات الملف الشخصي",
   "reset_password": "إعادة تعيين كلمة المرور",
   "admin_access": " حق الوصول إلى الإدارة",
@@ -577,5 +577,9 @@
   "sortOrder": "ترتيب",
   "englishName": "الاسم بالإنجليزية",
   "arabicName": "الاسم بالعربية",
-  "create": "إنشاء"
+  "create": "إنشاء",
+  "toggle_admin_status": "تبديل حالة المسؤول",
+  "ID": "الرقم التعريفي",
+  "visaMaster": "فيزا / ماستركارد",
+  "visaMasterDesc": "ادفع باستخدام بطاقة فيزا أو ماستركارد (ائتمانية أو خصم مباشر)"
 }

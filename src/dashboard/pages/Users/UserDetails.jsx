@@ -65,7 +65,7 @@ const UserDetails = ({
                       {selectedUser.name}
                     </h3>
                     <p className="text-sm text-gray-500">
-                      ID: #{selectedUser.id}
+                      {t("ID")}: {selectedUser.id}
                     </p>
                   </div>
                 </div>
@@ -96,12 +96,13 @@ const UserDetails = ({
                     </span>
                     <span
                       className={`  font-medium px-2 py-1 rounded text-xs ${
-                        selectedUser.email_verification_status === "verified"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-800"
+                        selectedUser.email_verification_status != "Verified" &&
+                        selectedUser.email_verification_status != "مؤكد"
+                          ? "bg-red-100 text-red-800"
+                          : " bg-green-100 text-green-800"
                       }`}
                     >
-                      {selectedUser.email_verification_status || "unverified"}
+                      {selectedUser.email_verification_status || "Not Verified"}
                     </span>
                   </div>
 
@@ -111,10 +112,10 @@ const UserDetails = ({
                     </span>
                     <span
                       className={` font-medium px-2 py-1 rounded text-xs ${
-                        selectedUser.admin_status_text === "admin" ||
-                        selectedUser.admin_status_text === "super_admin"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-gray-100 text-gray-800"
+                        selectedUser.admin_status_text === "Admin" ||
+                        selectedUser.admin_status_text === "مدير"
+                          ? "bg-[#e8e4dd] text-[#333e2c]"
+                          : "bg-gray-100 text-[gray-800]"
                       }`}
                     >
                       {selectedUser.admin_status_text || "user"}
@@ -137,24 +138,6 @@ const UserDetails = ({
                   {t("no_user_data") || "No user data available"}
                 </p>
               </div>
-            )}
-          </div>
-
-          {/* Modal Footer */}
-          <div className="flex gap-2 p-4 border-t">
-            <button
-              onClick={closeModal}
-              className="flex-1 px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded transition-colors cursor-pointer"
-            >
-              {t("close") || "Close"}
-            </button>
-            {selectedUser && (
-              <button
-                onClick={() => handleEdit(selectedUser.id)}
-                className="flex-1 px-3 py-2 text-md bg-[#333e2c] text-white rounded hover:bg-[#2a3325] transition-colors cursor-pointer"
-              >
-                {t("edit") || "Edit"}
-              </button>
             )}
           </div>
         </motion.div>

@@ -314,9 +314,7 @@ const ProductId = () => {
       />
       <div className="flex flex-col items-start lg:flex-row gap-6 border-b border-gray-300 py-12">
         {/* Left Section - Product Image */}
-        <div
-          className={`w-full lg:w-1/2 flex flex-col items-start`}
-        >
+        <div className={`w-full lg:w-1/2 flex flex-col items-start`}>
           {/* Main Image with Magnifier */}
           <div className="relative w-full lg:max-w-[600px] max-w-[600px]">
             <img
@@ -347,13 +345,17 @@ const ProductId = () => {
           {/* Thumbnails Slider */}
           <div className="flex items-start justify-start mt-2 sm:max-w-[500px] max-w-[270px] overflow-hidden">
             {variantImages.length > 1 ? (
-              <div className="flex items-start justify-start gap-1 overflow-x-auto scrollbar-hide">
+              <div
+                className={`flex items-start justify-start gap-1 overflow-x-auto scrollbar-hide ${
+                  language === "ar" ? "flex-row-reverse " : ""
+                }`}
+              >
                 {productDetails.images.map((img, idx) => (
                   <img
                     key={img.id}
                     src={img.image_url}
                     alt={`thumb-${idx}`}
-                    className={`w-16 h-16 focus-within:outline-none object-cover rounded-md border cursor-pointer transition shrink-0
+                    className={`w-16 h-16 focus-within:outline-none object-cover rounded-md border cursor-pointer transition 
                     ${
                       mainImage === img.image_url
                         ? "ring-1 ring-[#333e2c] border-[#333e2c]"
@@ -364,27 +366,32 @@ const ProductId = () => {
                 ))}
               </div>
             ) : selectedVariant ? null : (
-              <Slider {...sliderSettings}>
-                {productDetails.images &&
-                  productDetails.images.map((img, idx) => (
-                    <div key={img.id} className="flex items-start">
-                      <img
-                        src={img.image_url}
-                        alt={`thumb-${idx}`}
-                        className={`w-16 h-16 focus-within:outline-none mr-8 object-cover rounded-md border cursor-pointer transition shrink-0
+              <div
+                style={{ width: "70%" }}
+                className="border border-gray-300 p-2 rounded-md"
+              >
+                <Slider {...sliderSettings}>
+                  {productDetails.images &&
+                    productDetails.images.map((img, idx) => (
+                      <div key={img.id} className="flex items-start">
+                        <img
+                          src={img.image_url}
+                          alt={`thumb-${idx}`}
+                          className={`w-16 h-16 focus-within:outline-none mr-8 object-cover rounded-md border cursor-pointer transition shrink-0
                           ${
                             mainImage === img.image_url
                               ? "ring-1 ring-[#333e2c] border-[#333e2c]"
                               : "border-gray-300"
                           }`}
-                        onClick={() => {
-                          setMainImage(img.image_url);
-                          setSliderIndex(idx);
-                        }}
-                      />
-                    </div>
-                  ))}
-              </Slider>
+                          onClick={() => {
+                            setMainImage(img.image_url);
+                            setSliderIndex(idx);
+                          }}
+                        />
+                      </div>
+                    ))}
+                </Slider>
+              </div>
             )}
           </div>
         </div>

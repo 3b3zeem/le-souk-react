@@ -17,7 +17,7 @@ const PaymentManagement = () => {
       <div className="mb-4">
         <div className="flex border-b">
           <button
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium cursor-pointer ${
               activeTab === "methods"
                 ? "border-b-2 border-[#333e2c] text-[#333e2c]"
                 : "text-gray-600"
@@ -27,7 +27,7 @@ const PaymentManagement = () => {
             {t("payment_methods")}
           </button>
           <button
-            className={`px-4 py-2 font-medium ${
+            className={`px-4 py-2 font-medium cursor-pointer ${
               activeTab === "settings"
                 ? "border-b-2 border-[#333e2c] text-[#333e2c]"
                 : "text-gray-600"

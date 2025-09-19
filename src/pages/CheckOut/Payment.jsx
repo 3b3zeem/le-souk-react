@@ -24,8 +24,8 @@ const Payment = () => {
   const { language } = useLanguage("en");
 
   const [order, setOrder] = useState(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(2);
+  // const [paymentMethods, setPaymentMethods] = useState([]);
   const [processing, setProcessing] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
@@ -33,26 +33,30 @@ const Payment = () => {
   const [paymentFees, setPaymentFees] = useState(null);
 
   //payment methods fetch
-  useEffect(() => {
-    const fetchPaymentMethod = async () => {
-      try {
-        const pyMethod = await twoPaymentMethods();
-        setPaymentMethods(pyMethod);
-      } catch (err) {
-        toast.error(
-          err.response?.data?.message || t("failedToLoadPaymentMethods")
-        );
-      }
-    };
-    fetchPaymentMethod();
-    // eslint-disable-next-line
-  }, [t, token]);
+  // useEffect(() => {
+  //   const fetchPaymentMethod = async () => {
+  //     try {
+  //       const pyMethod = await twoPaymentMethods();
+  //       setPaymentMethods(pyMethod);
+  //     } catch (err) {
+  //       toast.error(
+  //         err.response?.data?.message || t("failedToLoadPaymentMethods")
+  //       );
+  //     }
+  //   };
+  //   fetchPaymentMethod();
+  //   // eslint-disable-next-line
+  // }, [t, token]);
 
   // Load order details and redirect if unauthorized
   const loadOrderDetails = async () => {
     try {
       const orderData = await fetchOrderById(orderId);
       setOrder(orderData);
+
+      if (selectedPaymentMethod) {
+        fetchPaymentFees(selectedPaymentMethod);
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || t("failedToLoadOrderDetails"));
       navigate("/profile");
@@ -205,7 +209,7 @@ const Payment = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
                 {t("paymentMethod")}
               </h2>
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 {paymentMethods.map((method) => (
                   <label
                     key={method.id}
@@ -240,6 +244,40 @@ const Payment = () => {
                     </div>
                   </label>
                 ))}
+              </div> */}
+              <div className="space-y-4">
+                <label
+                  key="Visa/MasterCard"
+                  className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                >
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={2}
+                    checked={selectedPaymentMethod === 2}
+                    onChange={handlePaymentMethodChange}
+                    className="w-4 h-4 text-[#333e2c] focus:ring-[#333e2c]"
+                  />
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className={`${language === "ar" ? "mr-3" : ""}`}>
+                        <p className="text-sm font-medium text-gray-900">
+                          {t("visaMaster")}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {t("visaMasterDesc")}
+                        </p>
+                      </div>
+                      <div className="w-16 h-10 rounded flex items-center justify-center">
+                        <img
+                          src={visa}
+                          alt={t("visaMaster")}
+                          className="max-w-full max-h-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </label>
               </div>
               <button
                 onClick={handlePayment}
@@ -310,8 +348,7 @@ const Payment = () => {
                         paymentFees ? "line-through text-gray-400 text-sm" : ""
                       }`}
                     >
-                      {order.total_price}{" "}
-                      {language === "ar" ? "د.ك" : "KWD"}
+                      {order.total_price} {language === "ar" ? "د.ك" : "KWD"}
                     </span>
                   </div>
                 </div>
