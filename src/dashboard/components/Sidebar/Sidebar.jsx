@@ -104,13 +104,13 @@ const Sidebar = () => {
         <SidebarItem
           to="/admin-dashboard/hero"
           icon={<Images />}
-          label="Hero"
+          label="hero"
           isOpen={isOpen}
         />
         <SidebarItem
           to="/admin-dashboard/users"
           icon={<Users />}
-          label="Users"
+          label="users"
           isOpen={isOpen}
         />
         <SidebarItem

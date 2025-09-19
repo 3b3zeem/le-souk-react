@@ -71,7 +71,7 @@ const Users = () => {
     }
   };
 
-  const getUserdetails = async (userId) => {
+  const getUserDetails = async (userId) => {
     setModalLoading(true);
     setIsModalOpen(true);
     try {
@@ -261,7 +261,7 @@ const Users = () => {
                         </button>
 
                         <button
-                          onClick={() => getUserdetails(user?.id)}
+                          onClick={() => getUserDetails(user?.id)}
                           className="flex items-center gap-1 px-2 sm:px-3 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-all duration-200 cursor-pointer text-xs sm:text-sm"
                           title={t("view")}
                         >

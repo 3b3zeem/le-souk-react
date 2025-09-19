@@ -249,13 +249,21 @@ const useUsers = () => {
         throw new Error("No token found. Please log in.");
       }
 
-      const response = await axios.put(
+      const formData = new FormData();
+      formData.append("_method", "PUT");
+      formData.append("name", userData.name);
+      formData.append("email", userData.email);
+      formData.append("phone", userData.phone);
+      if (userData.image instanceof File) {
+        formData.append("image", userData.image);
+      }
+
+      const response = await axios.post(
         `https://le-souk.dinamo-app.com/api/admin/users/${userId}`,
-        userData,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
           },
         }
       );

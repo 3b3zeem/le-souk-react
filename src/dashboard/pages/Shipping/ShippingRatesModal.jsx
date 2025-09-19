@@ -57,7 +57,7 @@ const ShippingRatesModal = ({
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-600 hover:text-gray-800 p-2 rounded transition-colors hover:bg-gray-200 cursor-pointer"
+                className="text-gray-600 bg-gray-100 hover:text-gray-800 p-2 rounded transition-colors hover:bg-gray-200 cursor-pointer"
               >
                 <X size={24} />
               </button>
@@ -73,7 +73,7 @@ const ShippingRatesModal = ({
                   value={formData.country_name}
                   step="0.01"
                   min="0"
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-400 rounded-md bg-gray-200 cursor-not-allowed text-gray-700"
                   disabled
                 />
               </div>
@@ -85,7 +85,7 @@ const ShippingRatesModal = ({
                   type="text"
                   name="rate"
                   value={formData.rate}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-400 rounded-md bg-gray-200 cursor-not-allowed text-gray-700"
                   disabled
                 />
               </div>
@@ -98,7 +98,7 @@ const ShippingRatesModal = ({
                   type="text"
                   name="free_shipping_threshold"
                   value={formData.free_shipping_threshold}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-400 rounded-md bg-gray-200 cursor-not-allowed text-gray-700"
                   disabled
                 />
               </div>
@@ -110,7 +110,7 @@ const ShippingRatesModal = ({
                   type="text"
                   name="estimated_days_min"
                   value={formData.estimated_days_min}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-400 rounded-md bg-gray-200 cursor-not-allowed text-gray-700"
                   disabled
                 />
               </div>
@@ -122,7 +122,7 @@ const ShippingRatesModal = ({
                   type="text"
                   name="estimated_days_max"
                   value={formData.estimated_days_max}
-                  className="w-full p-2 border rounded-md"
+                  className="w-full p-2 border border-gray-400 rounded-md bg-gray-200 cursor-not-allowed text-gray-700"
                   disabled
                 />
               </div>

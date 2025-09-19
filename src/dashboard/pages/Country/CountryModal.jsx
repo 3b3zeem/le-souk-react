@@ -1,6 +1,7 @@
 import React from "react";
 import { Ring } from "ldrs/react";
 import "ldrs/react/Ring.css";
+import { useTranslation } from "react-i18next";
 
 const CountryModal = ({
   isOpen,
@@ -11,6 +12,7 @@ const CountryModal = ({
   editingId,
   loading,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const handleInputChange = (e) => {
@@ -30,11 +32,11 @@ const CountryModal = ({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-500">
       <div className="bg-white p-6 rounded-lg w-full max-w-md">
         <h2 className="text-xl mb-4">
-          {editingId ? "Edit Country" : "Add Country"}
+          {editingId ? t("editCountry") : t("addCountry")}
         </h2>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block">Code</label>
+            <label className="block">{t("code")}</label>
             <input
               type="text"
               name="code"
@@ -47,7 +49,7 @@ const CountryModal = ({
             />
           </div>
           <div>
-            <label className="block">Sort Order</label>
+            <label className="block">{t("sortOrder")}</label>
             <input
               type="number"
               name="sort_order"
@@ -57,7 +59,7 @@ const CountryModal = ({
             />
           </div>
           <div>
-            <label className="block">English Name</label>
+            <label className="block">{t("englishName")}</label>
             <input
               type="text"
               name="en.name"
@@ -68,7 +70,7 @@ const CountryModal = ({
             />
           </div>
           <div>
-            <label className="block">Arabic Name</label>
+            <label className="block">{t("arabicName")}</label>
             <input
               type="text"
               name="ar.name"
@@ -82,14 +84,14 @@ const CountryModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-300 px-4 py-2 rounded"
+              className="bg-gray-200 px-4 py-2 rounded cursor-pointer hover:bg-gray-300 transition"
             >
-              Cancel
+              {t("cancel")}
             </button>
             {loading ? (
               <button
                 type="submit"
-                className={`bg-blue-500 text-white px-4 py-2 rounded ${
+                className={`bg-[#333e2c] text-white px-4 py-2 rounded ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 disabled={loading}
@@ -105,10 +107,10 @@ const CountryModal = ({
             ) : (
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-[#333e2c] text-white px-4 py-2 rounded cursor-pointer hover:bg-[#20281c] transition"
                 disabled={loading}
               >
-                {editingId ? "Update" : "Create"}
+                {editingId ? t("update") : t("create")}
               </button>
             )}
           </div>

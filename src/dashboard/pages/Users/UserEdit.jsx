@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTranslation } from "react-i18next";
 import { Save, X, Upload, Key, User } from "lucide-react";
 import toast from "react-hot-toast";
 import useUsers from "../../hooks/User/useUsers";
@@ -36,7 +35,7 @@ function UserEdit({
         name: selectedUser.name || "",
         email: selectedUser.email || "",
         phone: selectedUser.phone || "",
-        image: null,
+        image: selectedUser.image || null,
       });
 
       setImagePreview(selectedUser.image || null);
@@ -75,17 +74,8 @@ function UserEdit({
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // if (!file.type.startsWith("image/")) {
-      //   toast.error(
-      //     t("invalid_image_format") || "Please select a valid image file"
-      //   );
-      //   return;
-      // }
-
       if (file.size > 5 * 1024 * 1024) {
-        toast.error(
-          t("image_too_large") || "Image size should be less than 5MB"
-        );
+        toast.error(t("image_too_large") || "Image size should be less than 5MB");
         return;
       }
 
@@ -118,10 +108,6 @@ function UserEdit({
       newErrors.email = t("email_required") || "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = t("invalid_email") || "Invalid email format";
-    }
-
-    if (formData.phone && !/^[\+]?[0-9\s\-\(\)]+$/.test(formData.phone)) {
-      newErrors.phone = t("invalid_phone") || "Invalid phone number format";
     }
 
     setErrors(newErrors);
@@ -167,6 +153,13 @@ function UserEdit({
       if (error.response?.data?.errors) {
         const serverErrors = error.response.data.errors;
         setErrors(serverErrors);
+
+        if (serverErrors.image) {
+          const imageError = Array.isArray(serverErrors.image)
+            ? serverErrors.image[0]
+            : serverErrors.image;
+          toast.error(t(imageError) || imageError);
+        }
       }
 
       if (!error.response?.data?.message) {
@@ -178,7 +171,6 @@ function UserEdit({
   };
 
   const handlePasswordResetSuccess = () => {
-    // Switch back to profile tab after successful password reset
     setActiveTab("profile");
   };
 
@@ -225,10 +217,9 @@ function UserEdit({
             onClick={(e) => e.stopPropagation()}
             dir={language === "ar" ? "rtl" : "ltr"}
           >
-            {/* Tabs */}
             <div className="">
               <nav
-                className="flex space-x-8 px-6 items-center justify-between p-6 ticky top-0 rounded-t-2xl"
+                className="flex space-x-8 px-6 items-center justify-between p-6 sticky top-0 rounded-t-2xl"
                 aria-label="Tabs"
               >
                 <div className="flex gap-2 items-center border-b border-gray-200">
@@ -239,7 +230,7 @@ function UserEdit({
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         disabled={saving}
-                        className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                        className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${
                           activeTab === tab.id
                             ? "border-[#333e2c] text-[#333e2c]"
                             : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
@@ -261,19 +252,17 @@ function UserEdit({
               </nav>
             </div>
 
-            {/* Tab Content */}
             <div className="p-6">
               {activeTab === "profile" && (
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-6">
-                    {/* Profile Image Section */}
                     <div className="space-y-4">
                       <div className="flex flex-col items-start gap-6">
                         <div className="relative">
                           <img
                             src={imagePreview || "/user.png"}
-                            alt="Profile"
-                            className="w-50 h-50 rounded object-cover border-2 border-gray-200"
+                            alt={t("profile_image") || "Profile Image"}
+                            className="rounded-full object-contain border-4 border-gray-200 p-2"
                             onError={(e) => {
                               e.target.src = "/user.png";
                             }}
@@ -293,9 +282,7 @@ function UserEdit({
                         <div>
                           <label className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg cursor-pointer transition-colors">
                             <Upload size={18} />
-                            <span>
-                              {t("upload_image") || "Upload New Image"}
-                            </span>
+                            <span>{t("upload_image") || "Upload New Image"}</span>
                             <input
                               type="file"
                               accept="image/*"
@@ -308,13 +295,11 @@ function UserEdit({
                       </div>
                     </div>
 
-                    {/* Basic Information */}
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            {t("name") || "Name"}{" "}
-                            <span className="text-red-500">*</span>
+                            {t("name") || "Name"} <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="text"
@@ -338,8 +323,7 @@ function UserEdit({
 
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-2">
-                            {t("email") || "Email"}{" "}
-                            <span className="text-red-500">*</span>
+                            {t("email") || "Email"} <span className="text-red-500">*</span>
                           </label>
                           <input
                             type="email"
@@ -378,9 +362,7 @@ function UserEdit({
                                 ? "border-red-500"
                                 : "border-gray-300"
                             }`}
-                            placeholder={
-                              t("enter_phone") || "Enter phone number"
-                            }
+                            placeholder={t("enter_phone") || "Enter phone number"}
                           />
                           {errors.phone && (
                             <p className="text-red-500 text-xs mt-1">
@@ -394,20 +376,19 @@ function UserEdit({
                     </div>
                   </div>
 
-                  {/* Profile Submit Button */}
                   <div className="flex gap-3 mt-8 pt-6 border-t border-gray-200">
                     <button
                       type="button"
                       onClick={handleClose}
                       disabled={saving}
-                      className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-gray-100"
                     >
                       {t("cancel") || "Cancel"}
                     </button>
                     <button
                       type="submit"
                       disabled={saving}
-                      className="flex-1 flex items-center justify-center gap-2 px-6 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-[#2a3325] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 flex items-center justify-center gap-2 px-6 py-2 bg-[#333e2c] text-white rounded-lg hover:bg-[#2a3325] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {saving ? (
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

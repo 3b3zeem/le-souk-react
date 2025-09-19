@@ -102,7 +102,7 @@ const PaymentSettings = () => {
           <div className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-2xl transform transition-all duration-300 scale-100">
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center justify-between">
               {t("edit_setting")}
-              <span className="text-blue-600">{selectedSetting.key}</span>
+              <span className="text-[#333e2c]">{selectedSetting.key}</span>
             </h2>
 
             <form onSubmit={handleSettingUpdate} className="space-y-5">
@@ -116,7 +116,7 @@ const PaymentSettings = () => {
                     rows="4"
                     value={settingValue}
                     onChange={(e) => setSettingValue(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-[#333e2c] focus:ring focus:ring-emerald-900 transition"
                     required
                   />
                 ) : (
@@ -124,14 +124,14 @@ const PaymentSettings = () => {
                     type="text"
                     value={settingValue}
                     onChange={(e) => setSettingValue(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-[#333e2c] focus:ring focus:ring-emerald-900 transition"
                     required
                   />
                 )}
               </div>
 
               {/* Description */}
-              <div>
+              <div className="cursor-not-allowed">
                 <label className="block text-sm font-medium text-gray-600 mb-1">
                   {t("description")}
                 </label>
@@ -145,16 +145,16 @@ const PaymentSettings = () => {
                 <button
                   type="button"
                   onClick={handleCloseOverlay}
-                  className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+                  className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition cursor-pointer"
                 >
                   {t("cancel")}
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                  className="px-5 py-2.5 bg-[#333e2c] text-white rounded-lg shadow hover:bg-[#222e1b] transition cursor-pointer"
                   disabled={loading}
                 >
-                  {loading ? t("saving") : t("save")}
+                  {loading ? t("saving...") : t("save")}
                 </button>
               </div>
             </form>

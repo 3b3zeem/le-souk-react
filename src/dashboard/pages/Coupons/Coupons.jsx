@@ -115,7 +115,7 @@ const Coupons = () => {
               dir={language === "ar" ? "rtl" : "ltr"}
               className={`w-full ${
                 language === "ar" ? "pr-12 pl-4" : "pl-12 pr-4"
-              } py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 placeholder:text-gray-400 text-sm`}
+              } py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#333e2c] transition-all duration-200 placeholder:text-gray-400 text-sm`}
             />
             <span
               className={`absolute top-1/2 transform -translate-y-1/2 ${
@@ -161,8 +161,8 @@ const Coupons = () => {
             </p>
           </div>
         ) : (
-          <div className="w-full overflow-x-auto rounded-xl shadow-lg">
-            <table className="border-collapse bg-white rounded-xl w-full">
+          <div className="w-full overflow-x-auto rounded-xl">
+            <table className="bg-white rounded-xl w-full">
               <thead>
                 <tr className="bg-gray-200 text-gray-800">
                   <th className="p-4 text-center text-sm font-semibold uppercase tracking-wide">
@@ -219,7 +219,7 @@ const Coupons = () => {
                 {coupons.map((coupon) => (
                   <tr
                     key={coupon.id}
-                    className="border-b hover:bg-gray-50 transition-all duration-200"
+                    className="border-b border-gray-300 hover:bg-gray-50 transition-all duration-200"
                   >
                     <td
                       className="p-4 text-center text-sm text-gray-700"
