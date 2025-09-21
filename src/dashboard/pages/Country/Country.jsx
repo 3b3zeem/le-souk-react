@@ -21,7 +21,8 @@ const Country = () => {
     ar: { name: "" },
   });
   const [editingId, setEditingId] = useState(null);
-  const { getCountries, createCountry, updateCountry, toggleActive, loading } =
+  // createCountry,
+  const { getCountries, updateCountry, toggleActive, loading } =
     useCountry();
   const language = useLanguage();
   const { t } = useTranslation();
@@ -45,9 +46,10 @@ const Country = () => {
     try {
       if (editingId) {
         await updateCountry(editingId, formData);
-      } else {
-        await createCountry(formData);
-      }
+      } 
+      // else {
+      //   await createCountry(formData);
+      // }
       setFormData({
         sort_order: "",
         en: { name: "" },
@@ -81,15 +83,15 @@ const Country = () => {
     }
   };
 
-  const openAddModal = () => {
-    setFormData({
-      sort_order: "",
-      en: { name: "" },
-      ar: { name: "" },
-    });
-    setEditingId(null);
-    setIsModalOpen(true);
-  };
+  // const openAddModal = () => {
+  //   setFormData({
+  //     sort_order: "",
+  //     en: { name: "" },
+  //     ar: { name: "" },
+  //   });
+  //   setEditingId(null);
+  //   setIsModalOpen(true);
+  // };
 
   return (
     <div className="container mx-auto p-4">
@@ -100,7 +102,7 @@ const Country = () => {
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold mb-4">{t("Country Management")}</h1>
 
-        <button
+        {/* <button
           onClick={openAddModal}
           className="bg-[#333e2c] text-white px-4 py-2 mb-4 customEffect cursor-pointer"
         >
@@ -108,7 +110,7 @@ const Country = () => {
             <Plus />
             {t("Add Country")}
           </span>
-        </button>
+        </button> */}
       </div>
 
       <CountryModal
@@ -223,10 +225,14 @@ const Country = () => {
                       title={t("ChangeActive")}
                       disabled={loading}
                     >
-                      <XCircle size={14} />
                       <span className="hidden sm:inline font-medium">
                         {t("ChangeActive")}
                       </span>
+                      {country.is_active ? (
+                        <XCircle size={14} />
+                      ) : (
+                        <CheckCircle size={14} />
+                      )}
                     </button>
                   </div>
                 </td>

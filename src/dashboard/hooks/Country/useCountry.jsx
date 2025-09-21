@@ -36,25 +36,25 @@ export const useCountry = () => {
     [token, language]
   );
 
-  const createCountry = useCallback(
-    async (data) => {
-      setLoading(true);
-      try {
-        const response = await axios.post(`${baseUrl}admin/countries`, data, {
-          headers,
-        });
-        toast.success(response.data.message || "Country created successfully!");
-        return response.data;
-      } catch (err) {
-        toast.error(err.response?.data?.message || "Failed to create country");
-        setError(err.message);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [token]
-  );
+  // const createCountry = useCallback(
+  //   async (data) => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.post(`${baseUrl}admin/countries`, data, {
+  //         headers,
+  //       });
+  //       toast.success(response.data.message || "Country created successfully!");
+  //       return response.data;
+  //     } catch (err) {
+  //       toast.error(err.response?.data?.message || "Failed to create country");
+  //       setError(err.message);
+  //       throw err;
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   },
+  //   [token]
+  // );
 
   const updateCountry = useCallback(
     async (id, data) => {
@@ -106,7 +106,7 @@ export const useCountry = () => {
 
   return {
     getCountries,
-    createCountry,
+    // createCountry,
     updateCountry,
     toggleActive,
     loading,
