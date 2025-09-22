@@ -104,7 +104,7 @@ const ToolbarOptions = (props) => {
       <div className="relative w-48" ref={props.sortDropdownRef}>
         <button
           type="button"
-          className="flex justify-between items-center w-full py-3 px-4 rounded-lg border text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition bg-white border-gray-200 text-gray-700 appearance-none cursor-pointer"
+          className="flex justify-between items-center w-full py-3 px-4 rounded-lg border text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[#333e2ca7] focus:border-[#333e2c] transition bg-white border-gray-200 text-gray-700 appearance-none cursor-pointer"
           style={{ borderColor: props.colors.borderLight }}
           onClick={() => props.setSortDropdownOpen((open) => !open)}
         >
@@ -114,7 +114,7 @@ const ToolbarOptions = (props) => {
             )?.label
           }
           <ChevronDown
-            className={`w-5 h-5 text-blue-500 absolute ${
+            className={`w-5 h-5 text-[#333e2c] absolute ${
               props.language === "ar" ? "left-3" : "right-3"
             } pointer-events-none ${props.sortDropdownOpen ? "rotate-180" : ""}`}
           />
@@ -131,9 +131,9 @@ const ToolbarOptions = (props) => {
               {props.sortOptions.map((option) => (
                 <li
                   key={option.value}
-                  className={`px-4 py-2 cursor-pointer hover:bg-blue-50 transition ${
+                  className={`px-4 py-2 cursor-pointer hover:bg-[#f0f0f0] transition ${
                     `${props.sortBy}_${props.sortDirection}` === option.value
-                      ? "bg-blue-100 text-blue-700 font-semibold"
+                      ? "bg-[#daddd7] text-[#333e2c] font-semibold"
                       : ""
                   }`}
                   onClick={() => {
